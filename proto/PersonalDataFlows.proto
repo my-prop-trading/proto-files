@@ -21,7 +21,7 @@ enum AccountType{
     Joint = 0;
     Individual = 1;
     Company = 22
-    IntroducingBroker = 3ж
+    IntroducingBroker = 3;
 }
 
 enum SexTitle{
