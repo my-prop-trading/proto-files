@@ -20,7 +20,7 @@ message SetPersonalDataRequest{
 enum AccountType{
     Joint = 0;
     Individual = 1;
-    Company = 22
+    Company = 2;
     IntroducingBroker = 3;
 }
 
