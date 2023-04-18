@@ -1,0 +1,44 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package pd;
+
+// GET
+message GetPersonalDataRequest {
+    string Id = 1;
+}
+
+message GetPersonalDataResponse{
+    pd.PersonalDataModel PersonalDataModel = 1;
+}
+
+message SetPersonalDataRequest{
+    string Id = 1;
+    pd.PersonalDataModel PersonalDataModel = 2;
+}
+
+enum Sex{
+    NotSet=0;
+    Male =1;
+    Female=2;
+}
+
+message PersonalDataModel {
+    optional string Email = 1;
+    optional string FirstName = 2;
+    optional string LastName = 3;
+    optional string City = 4;
+    optional int64 DateOfBirth = 5;
+    optional string CountryOfResidence = 6;
+    optional string CountryOfCitizenship = 7;
+    optional string ZipCode = 8;
+    optional string Phone = 9;
+    optional string Address = 10;
+    pd.Sex Sex = 11;
+}
+
+
+service PersonalDataService {
+    rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
+    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);        
+ }

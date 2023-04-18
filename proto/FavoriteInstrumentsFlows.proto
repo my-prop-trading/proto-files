@@ -1,0 +1,37 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package favorite_instruments_flows;
+
+enum WebOrMobileGrpcModel {
+    Web = 0;
+    Mobile = 1;
+}
+
+// GET
+message GetFavoriteInstrumentsRequestModel {
+    string TraderId = 1;
+    string AccountId = 2;
+    favorite_instruments_flows.WebOrMobileGrpcModel WebOrMobile = 3;
+}
+
+message GetFavoriteInstrumentsResponseModel {
+    repeated string Instruments = 1;
+}
+
+//SET
+
+message SetFavoriteInstrumentsRequestModel {
+    string TraderId = 1;
+    string AccountId = 2;
+    favorite_instruments_flows.WebOrMobileGrpcModel WebOrMobile = 3;
+    repeated string Instruments = 4;
+}
+
+
+
+service FavoriteInstrumentsGrpcService {
+    rpc Get(favorite_instruments_flows.GetFavoriteInstrumentsRequestModel) returns (favorite_instruments_flows.GetFavoriteInstrumentsResponseModel);
+    rpc Set(favorite_instruments_flows.SetFavoriteInstrumentsRequestModel) returns (google.protobuf.Empty);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+ }

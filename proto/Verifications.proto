@@ -1,0 +1,39 @@
+syntax = "proto3";
+package verifications;
+
+message SendVerificationGrpcRequest{
+    string TraderId = 1;
+    VerificationTypeGrpc type = 2;
+}
+
+message SendVerificationGrpcResponse{
+    string Id = 1;
+    VerificationStatusGrpc status = 2;
+    int32 CodeLenth = 3;
+    int32 LifetimeSec = 4;
+    int32 TimeoutSec = 5;
+}
+
+message ConfirmVerificationGrpcRequest{
+    string TraderId = 1;
+    string Code = 2;
+}
+
+message ConfirmVerificationGrpcResponse{
+    VerificationStatusGrpc Status = 1;
+}
+
+enum VerificationStatusGrpc {
+    PENDING = 0;
+    CONFIRMED = 1;
+    FAILED = 2;
+}
+
+enum VerificationTypeGrpc {
+    EMAIL = 0;
+}
+
+service VerificationService{
+    rpc Send(SendVerificationGrpcRequest) returns (SendVerificationGrpcResponse);
+    rpc Confirm(ConfirmVerificationGrpcRequest) returns (ConfirmVerificationGrpcResponse);
+}

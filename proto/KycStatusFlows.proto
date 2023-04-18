@@ -1,0 +1,32 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package kyc;
+
+
+enum KycStatus{
+    DocsNotUploaded = 0;
+    OnVerification = 1;
+    VerifiedOk = 2;
+    ForbiddenCountry = 3;
+}
+
+
+message GetStatusRequest {
+    string ClientId = 1;
+}
+
+message GetStatusResponse {
+    kyc.KycStatus Status = 1;
+}
+
+
+message UpdateStatusRequest {
+    string ClientId = 1;
+    kyc.KycStatus Status = 2;
+}
+
+service KycStatusService {
+    rpc Get(kyc.GetStatusRequest) returns (kyc.GetStatusResponse);
+    rpc Update(kyc.UpdateStatusRequest) returns (google.protobuf.Empty);
+ }

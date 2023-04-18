@@ -1,0 +1,145 @@
+﻿syntax = "proto3";
+package report_grpc;
+
+enum ReportsFlowsClosePositionReason{
+    ClientCommand = 0;
+    StopOut = 1;
+    TakeProfit = 2;
+    StopLoss = 3;
+    ForceClose = 4;
+}
+
+enum ReportFlowsTransactionType{
+    Deposit = 0;
+    Withdrawal = 1;
+    BalanceCorrection = 2;
+    Trading = 3;
+}
+
+enum ReportsFlowsPositionSide{
+    Buy = 0;
+    Sell = 1;
+}
+
+message ReportsFlowsBidAsk{
+    string AssetPair = 1;
+    double Bid = 2;
+    double Ask = 3;
+    uint64 DateTimeUnixTimestampMilis = 4;
+}
+
+////////////////////////////////////////////////////////////
+
+message ReportFlowsOperationsGetPaginatedGrpcRequest{
+    string AccountId = 1;
+    int32 Page = 2;
+    int32 Size = 3;
+}
+
+message ReportFlowsOperationsGetInDateRangeGrpcRequest{
+    string AccountId = 1;
+    optional uint64 DateFrom = 2;
+    optional uint64 DateTo = 3;
+}
+
+////////////////////////////////////////////////////////////
+
+message ReportFlowsOperationsGetHistoryPaginatedGrpcResponse{
+    int32 Page = 1;
+    int32 Size = 2;
+    uint64 TotalItems = 3;
+    repeated ReportFlowsOperationHistoryUiItem History = 4;
+}
+
+message ReportFlowsGetHistoryPositionsPaginatedGrpcResponse{
+    int32 Page = 1;
+    int32 Size = 2;
+    uint64 TotalItems = 3;
+    repeated ReportsFlowsClosedPositionGrpcModel History = 4;
+}
+
+message ReportFlowsOperationHistoryUiItem{
+    double Amount = 1;
+    double BalanceAfterOperation = 2;
+    string Description = 3;
+    uint64 CreatedAt = 4;
+}
+
+message ReportsFlowsActivePositionGrpcModel{
+    string Id = 1;
+    string AccountId = 2;
+    string TraderId = 3;
+    string AssetPair = 4;
+    ReportsFlowsPositionSide Side = 5;
+    double InvestAmount = 6;
+    double Leverage = 7;
+    double StopOutPercent = 8;
+    string CreateProcessId = 9;
+    uint64 CreateDateUnixTimestampMilis = 10;
+    string LastUpdateProcessId = 11;
+    uint64 LastUpdateDate = 12;
+    optional double TpInProfit = 13;
+    optional double SlInProfit = 14;
+    optional double TpInAssetPrice = 15;
+    optional double SlInAssetPrice = 16;
+    double OpenPrice = 17;
+    ReportsFlowsBidAsk OpenBidAsk = 18;
+    string OpenProcessId = 19;
+    uint64 OpenDate = 20;
+}
+
+
+message ReportsFlowsClosedPositionGrpcModel{
+    string Id = 1;
+    string AccountId = 2;
+    string TraderId = 3;
+    string AssetPair = 4;
+    ReportsFlowsPositionSide Side = 5;
+    double InvestAmount = 6;
+    double Leverage = 7;
+    double StopOutPercent = 8;
+    string CreateProcessId = 9;
+    uint64 CreateDateUnixTimestampMilis = 10;
+    string LastUpdateProcessId = 11;
+    uint64 LastUpdateDate = 12;
+    optional double TpInProfit = 13;
+    optional double SlInProfit = 14;
+    optional double TpInAssetPrice = 15;
+    optional double SlInAssetPrice = 16;
+    double OpenPrice = 17;
+    ReportsFlowsBidAsk OpenBidAsk = 18;
+    string OpenProcessId = 19;
+    uint64 OpenDate = 20;
+    double Profit = 21;
+    double ClosePrice = 22;
+    ReportsFlowsBidAsk CloseBidAsk = 23;
+    string CloseProcessId = 24;
+    ReportsFlowsClosePositionReason CloseReason = 25;
+    uint64 CloseDate = 26;
+}
+
+message ReportOperationHistoryItem{
+    string Id = 1;
+    string TraderId = 2;
+    string AccountId = 3;
+    ReportFlowsTransactionType TransactionType = 4;
+    optional string ProcessId = 5;
+    double Delta = 6;
+    uint64 Date = 7;
+    optional string ReferenceTransactionId = 8;
+    double BalanceAfterOperation = 9;
+}
+
+message GetHistoryPositionsPaginatedRequest{
+    string AccountId = 1;
+    int32 Page = 2;
+    int32 Size = 3;
+}
+
+service ReportGrpcService {
+    rpc GetHistoryPaginated(ReportFlowsOperationsGetPaginatedGrpcRequest) returns (ReportFlowsOperationsGetHistoryPaginatedGrpcResponse);
+    rpc GetHistoryPositionsPaginated(ReportFlowsOperationsGetPaginatedGrpcRequest) returns (ReportFlowsGetHistoryPositionsPaginatedGrpcResponse);
+    rpc GetOperationsHistoryInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportOperationHistoryItem);
+    rpc GetActivePositionsInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportsFlowsActivePositionGrpcModel);
+    rpc GetHistoryPositionsInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportsFlowsClosedPositionGrpcModel);
+}

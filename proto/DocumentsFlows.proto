@@ -1,0 +1,39 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package docs;
+
+
+enum DocType{
+    Id = 0;
+    ProofOfAddress = 1;
+}
+
+// GET
+message GetDocumentsRequest {
+    string ClientId = 1;
+    repeated string DocIds = 2;
+    repeated DocType DocTypes = 3;
+}
+
+message DocumentModel{
+    string DocId = 1;
+    int64 UploadedAt = 2;
+    docs.DocType DocType = 3;
+    string ContentType = 4;
+    bytes Content = 5;
+}
+
+message UploadDocumentRequest{
+    string ClientId = 1;
+    docs.DocType DocType = 2;
+    string ContentType = 3;
+    bytes Content = 4;
+}
+
+
+
+service DocumentsService {
+    rpc Get(docs.GetDocumentsRequest) returns (stream docs.DocumentModel);
+    rpc Upload(docs.UploadDocumentRequest) returns (google.protobuf.Empty);
+ }

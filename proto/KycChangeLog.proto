@@ -1,0 +1,19 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package kyclog;
+
+
+
+message ChangeLog {
+    string ClientId = 1;
+    int64 Timestamp = 2;
+    string Message = 3;
+    optional string DocumentId = 4;
+    string Who = 5;
+}
+
+service KycChangeLogsService {
+    rpc Upload(stream kyclog.ChangeLog) returns (google.protobuf.Empty);
+
+ }

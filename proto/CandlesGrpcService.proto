@@ -1,0 +1,73 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package candles_grpc;
+
+enum CandleGrpcType{
+    Minute = 0;
+    Hour = 1;
+    Day = 2;
+    Month = 3;
+}
+
+message CandleGrpcModel{
+    uint64 DateKey = 1;
+    double Open = 2;
+    double Close = 3;
+    double High = 4;
+    double Low = 5;
+    double Volume = 6;
+}
+
+message GetCandlesHistoryGrpcRequest {
+    string InstrumentId = 1;
+    uint64 FromDateTime = 2;
+    uint64 ToDateTime = 3;
+    CandleGrpcType CandleType = 4;
+    bool IsBid = 5;
+}
+
+message CandlesList{
+    repeated CandleGrpcModel Candles = 1;
+}
+
+
+message GetAllCandlesGrpcRequest{
+    bool IsBid = 1;
+}
+
+
+message GetAllByInstrumentGrpcRequest{
+    bool IsBid = 1;
+    string InstrumentId = 2;
+}
+
+
+message CandleCacheList{
+    string InstrumentId = 1;
+    CandleGrpcType CandleType = 2;
+    repeated CandleGrpcModel Candles = 3;
+}
+
+message UploadCandleRequest{
+    CandleGrpcType CandleType = 1;
+    string InstrumentId = 2;
+    bool IsBid = 3;
+    repeated CandleGrpcModel Candles = 4;
+}
+
+message GetCandlesHistoryFromCacheGrpcRequest {
+    string InstrumentId = 1;
+    uint64 FromDateTime = 2;
+    uint64 ToDateTime = 3;
+    CandleGrpcType CandleType = 4;
+    bool IsBid = 5;
+}
+
+service CandlesGrpcService {
+    rpc GetCandlesByInstrumentFromDb(GetCandlesHistoryGrpcRequest) returns (stream CandleGrpcModel);    
+    rpc GetAllFromCache(GetAllCandlesGrpcRequest) returns (stream CandleCacheList);
+    rpc GetAllByInstrumentFromCache(GetAllByInstrumentGrpcRequest) returns (stream CandleCacheList);
+    rpc GetByInstrumentFromCache(GetCandlesHistoryFromCacheGrpcRequest) returns (stream CandleCacheList);
+    rpc UploadCandles(UploadCandleRequest) returns (google.protobuf.Empty);
+}

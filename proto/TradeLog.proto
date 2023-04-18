@@ -1,0 +1,36 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package trade_log;
+
+message WriterTradeLogItem{
+    int64 DateTimeMicros = 1;
+    string TraderId =2;
+    string AccountId = 3;
+    string ProcessId = 4;
+    int64 MessageId = 5;
+    string OperationId = 6;
+    string Message = 7;
+    string Data = 8;
+}
+
+message TradeLogItem {
+    int64 DateTimeMicros = 1;
+    string ProcessId = 2;
+    string Message = 3;
+    string Data = 4;
+}
+
+message ReadTradeLogRequest {
+    string TraderId = 1;
+    string AccountId = 2;
+    optional string OperationId = 3;
+    int64 DateFromMicros = 4;
+    int64 DateToMicros = 5;
+}
+
+service TradeLogGrpcService {
+    rpc Write(stream WriterTradeLogItem) returns (google.protobuf.Empty);   
+    rpc Read(ReadTradeLogRequest) returns (stream TradeLogItem);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+ }
