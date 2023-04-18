@@ -17,10 +17,18 @@ message SetPersonalDataRequest{
     pd.PersonalDataModel PersonalDataModel = 2;
 }
 
-enum Sex{
-    NotSet=0;
-    Male =1;
-    Female=2;
+enum AccountType{
+    Joint = 0;
+    Individual = 1;
+    Company = 22
+    IntroducingBroker = 3ж
+}
+
+enum SexTitle{
+    Mr = 0;
+    Ms = 1;
+    Mrs = 2;
+    Mx = 3;
 }
 
 message PersonalDataModel {
@@ -34,7 +42,8 @@ message PersonalDataModel {
     optional string ZipCode = 8;
     optional string Phone = 9;
     optional string Address = 10;
-    pd.Sex Sex = 11;
+    pd.SexTitle Sex = 11;
+    pd.AccountType AccountType = 12
 }
 
 
