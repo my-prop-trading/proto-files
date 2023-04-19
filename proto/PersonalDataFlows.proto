@@ -42,8 +42,8 @@ message PersonalDataModel {
     optional string ZipCode = 8;
     optional string Phone = 9;
     optional string Address = 10;
-    pd.SexTitle Sex = 11;
-    pd.AccountType AccountType = 12;
+    optional pd.SexTitle Sex = 11;
+    optional pd.AccountType AccountType = 12;
 }
 
 
