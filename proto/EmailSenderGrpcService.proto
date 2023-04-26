@@ -25,7 +25,7 @@ message EmailSentResponse {
     
 }
 
-service TraderCredentialsGrpcService {
+service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
