@@ -1,0 +1,32 @@
+syntax = "proto3";
+package email_sender;
+//import "google/protobuf/empty.proto";
+
+
+message EmailDestination{
+    string ProcessId = 1;
+    string Brand = 2;
+    repeated string To = 3;
+    repeated string Cc = 4;
+}
+
+message RegistrationConfirmationRequest{
+    EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message ForgotPasswordRequest {
+    EmailDestination Destination = 1;
+    string ClientId = 2;
+    string Code = 3;
+}
+
+message EmailSentResponse {
+    
+}
+
+service TraderCredentialsGrpcService {
+    rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
+}
