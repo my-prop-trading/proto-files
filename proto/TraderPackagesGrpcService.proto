@@ -21,7 +21,7 @@ message TraderPackage {
     optional int32 Phase1MinOpenedPositions = 14;
     optional double Phase1RevenueShare = 15;
     double Phase1Refund = 16;
-    repeated trader_packages.TraderPackageAttempt Phase1Attempts = 17
+    repeated trader_packages.TraderPackageAttempt Phase1Attempts = 17;
 
     double Phase2DailyDrawdown = 19;
     double Phase2OverallDrawdown = 20;
