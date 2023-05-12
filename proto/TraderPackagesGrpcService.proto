@@ -49,7 +49,7 @@ message GetAllRequest{
 }
 
 message GetAllResponse{
-  repeated trader_packages.TraderPackage = 1;
+  repeated trader_packages.TraderPackage Items = 1;
 }
 
 message SetRequest{
