@@ -61,7 +61,7 @@ message SetResponse {
 }
 
 
-service TraderCredentialsGrpcService {
+service TraderPackagesGrpcService {
     rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
     rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
 }
