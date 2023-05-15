@@ -9,7 +9,7 @@ message TraderPackage {
     double AccountBalance = 3;
     string AccountBalanceCurrency = 4;
     double Price = 5;
-    double PriceCurrency = 6;
+    string PriceCurrency = 6;
     int32 Leverage = 7;
     string Label = 8;
 
