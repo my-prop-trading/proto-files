@@ -46,6 +46,7 @@ message TraderPackageAttempt {
 }
 
 message TraderPackageFieldsOrder {
+  string TraderPackageId = 1;
   optional int32 Phase1DailyDrawdown = 9;
   optional int32 Phase1OverallDrawdown = 10;
   optional int32 Phase1TargetProfit = 11;
