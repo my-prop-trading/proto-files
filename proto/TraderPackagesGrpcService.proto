@@ -45,6 +45,33 @@ message TraderPackageAttempt {
     string PriceCurrency = 4;
 }
 
+message TraderPackageFieldsOrder {
+  optional int32 Phase1DailyDrawdown = 9;
+  optional int32 Phase1OverallDrawdown = 10;
+  optional int32 Phase1TargetProfit = 11;
+  optional int32 Phase1Duration = 12;
+  optional int32 Phase1MinTradingDays = 13;
+  optional int32 Phase1MinOpenedPositions = 14;
+  optional int32 Phase1RevenueShare = 15;
+  optional int32 Phase1Refund = 16;
+  optional int32 Phase1Attempts = 17;
+
+  optional int32 Phase2DailyDrawdown = 19;
+  optional int32 Phase2OverallDrawdown = 20;
+  optional int32 Phase2TargetProfit = 21;
+  optional int32 Phase2Duration = 22;
+  optional int32 Phase2MinTradingDays = 23;
+  optional int32 Phase2MinOpenedPositions = 24;
+  optional int32 Phase2RevenueShare = 25;
+  optional int32 Phase2Refund = 26;
+  optional int32 Phase2Attempts = 27;
+
+  optional int32 DailyDrawdown = 30;
+  optional int32 OverallDrawdown = 31;
+  optional int32 RevenueScaling = 32;
+  optional int32 TargetProfit = 33;
+}
+
 message GetAllRequest{
 }
 
@@ -60,8 +87,19 @@ message SetResponse {
   bool Success = 1;
 }
 
+message SetTraderPackageFieldsOrderRequest {
+  trader_packages.TraderPackageFieldsOrder Item = 1;
+}
+
+message SetTraderPackageFieldsOrderResponse {
+  bool Success = 1;
+}
+
 
 service TraderPackagesGrpcService {
     rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
     rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
+
+    rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
+
 }
