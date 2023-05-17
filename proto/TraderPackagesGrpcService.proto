@@ -96,11 +96,29 @@ message SetTraderPackageFieldsOrderResponse {
   bool Success = 1;
 }
 
+message DeleteRequest{
+  string TraderPackageId = 1;
+}
+
+message DeleteResponse {
+  bool Success = 1;
+}
+
+message PublishRequest{
+  string TraderPackageId = 1;
+}
+
+message PublishResponse {
+  bool Success = 1;
+}
+
 
 service TraderPackagesGrpcService {
     rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
+    rpc GetAllPublished(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
     rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
+    rpc Delete(trader_packages.DeleteRequest) returns (trader_packages.DeleteResponse);
+    rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
 
     rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
-
 }
