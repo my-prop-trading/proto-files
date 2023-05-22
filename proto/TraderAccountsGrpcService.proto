@@ -1,0 +1,54 @@
+syntax = "proto3";
+package trader_accounts;
+//import "google/protobuf/empty.proto";
+
+
+message TraderAccount {
+    string Id = 1;
+    string Title = 2;
+    int32 Phase = 3;
+    trader_accounts.TradingPlatformModel TradingPlatformModel = 4;
+    double Balance = 5;
+    string StartDate = 6;
+    string EndDate = 7;
+}
+
+enum TradingPlatformModel {
+  META_TRADER_4 = 0;
+  META_TRADER_5 = 1;
+}
+
+enum TradingPlatformModel {
+  WELLTRADE = 0;
+}
+
+message GetAllRequest{
+}
+
+message GetAllResponse{
+  repeated trader_accounts.TraderAccount Items = 1;
+}
+
+message CreateTraderAccountRequest {
+    string TradingPackageId = 1;
+    trader_accounts.TradingPlatformModel TradingPlatform = 2;
+    trader_accounts.BrokerModel BrokerModel = 3;
+    string FirstName = 4;
+    string LastName = 5;
+    string City = 6;
+    string Country = 7;
+    string ZipCode = 8;
+    string Address = 9;
+    string Phone = 10
+    optional string DiscountCode = 11;
+}
+
+message CreateTraderAccountResponse{
+  
+}
+
+
+service TraderAccountsGrpcService {
+    rpc GetAll(trader_accounts.GetAllRequest) returns (trader_accounts.GetAllResponse);
+    rpc Set(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
+}
