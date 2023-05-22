@@ -1,0 +1,37 @@
+syntax = "proto3";
+package metatrader4;
+//import "google/protobuf/empty.proto";
+
+
+message CreateAccount {
+    int64 MetatraderLogin = 1;
+    string FullName = 2;
+    string TradePassword = 3;      
+    string ViewPassword = 4; 
+    string ClientId = 5;  
+    optional string Email = 6;
+    optional string Country = 7;
+}
+
+message CreateAccountResponse {
+    int64 MetatraderLogin = 1;
+    bool Success = 2;
+}
+
+message ResetPassword {
+    int64 MetatraderLogin = 1;
+    string TradePassword = 2;      
+    optional string ViewPassword = 3; 
+}
+
+message ResetPasswordResponse {
+  bool Success = 1;
+}
+
+service Metatrader4GrpcService {
+    rpc CreateMetatraderAccount(metatrader4.CreateAccount) 
+    returns (metatrader4.CreateAccountResponse);
+
+    rpc ResetMetatraderPassword(metatrader4.ResetPassword) 
+    returns (metatrader4.ResetPasswordResponse);
+}
