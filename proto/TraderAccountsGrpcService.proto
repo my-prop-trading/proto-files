@@ -19,15 +19,15 @@ enum TradingPlatformModel {
   META_TRADER_5 = 1;
 }
 
-enum TradingPlatformModel {
+enum BrokerModel {
   WELLTRADE = 0;
 }
 
-message GetAllRequest{
+message GetByClientIdRequest{
   string ClientId = 1;
 }
 
-message GetAllResponse{
+message GetByClientIdResponse{
   repeated trader_accounts.TraderAccount Items = 1;
 }
 
@@ -41,7 +41,7 @@ message CreateTraderAccountRequest {
     string Country = 7;
     string ZipCode = 8;
     string Address = 9;
-    string Phone = 10
+    string Phone = 10;
     optional string DiscountCode = 11;
 }
 
