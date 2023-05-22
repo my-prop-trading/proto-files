@@ -29,9 +29,9 @@ message ResetPasswordResponse {
 }
 
 service Metatrader4GrpcService {
-    rpc CreateMetatraderAccount(metatrader4.CreateAccount) 
+    rpc CreateAccount(metatrader4.CreateAccount) 
     returns (metatrader4.CreateAccountResponse);
 
-    rpc ResetMetatraderPassword(metatrader4.ResetPassword) 
+    rpc ResetPassword(metatrader4.ResetPassword) 
     returns (metatrader4.ResetPasswordResponse);
 }
