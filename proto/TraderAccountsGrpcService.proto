@@ -11,6 +11,7 @@ message TraderAccount {
     double Balance = 5;
     string StartDate = 6;
     string EndDate = 7;
+    string ClientId = 8;
 }
 
 enum TradingPlatformModel {
@@ -23,6 +24,7 @@ enum TradingPlatformModel {
 }
 
 message GetAllRequest{
+  string ClientId = 1;
 }
 
 message GetAllResponse{
@@ -44,11 +46,11 @@ message CreateTraderAccountRequest {
 }
 
 message CreateTraderAccountResponse{
-  
+  string OrderId = 1;
 }
 
 
 service TraderAccountsGrpcService {
-    rpc GetAll(trader_accounts.GetAllRequest) returns (trader_accounts.GetAllResponse);
+    rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc Set(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
 }
