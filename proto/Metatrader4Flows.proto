@@ -17,12 +17,12 @@ message CreateAccountResponse {
     bool Success = 2;
 }
 
-message ResetPassword {
+message ChangePassword {
     int64 MetatraderLogin = 1;
     string NewPassword = 2;      
 }
 
-message ResetPasswordResponse {
+message ChangePasswordResponse {
   bool Success = 1;
 }
 
@@ -30,9 +30,9 @@ service Metatrader4GrpcService {
     rpc CreateAccount(metatrader4.CreateAccount) 
     returns (metatrader4.CreateAccountResponse);
 
-    rpc ResetTradePassword(metatrader4.ResetPassword) 
-    returns (metatrader4.ResetPasswordResponse);
+    rpc ChangeTradePassword(metatrader4.ChangePassword) 
+    returns (metatrader4.ChangePasswordResponse);
 
-    rpc ResetViewPassword(metatrader4.ResetPassword) 
-    returns (metatrader4.ResetPasswordResponse);
+    rpc ChangeViewPassword(metatrader4.ChangePassword) 
+    returns (metatrader4.ChangePasswordResponse);
 }
