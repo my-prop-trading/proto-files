@@ -11,7 +11,7 @@ message TraderAccount {
     double Balance = 5;
     string StartDate = 6;
     optional int64 EndDate = 7;
-    optional int64 ClientId = 8;
+    optional string ClientId = 8;
 }
 
 enum TradingPlatformModel {
