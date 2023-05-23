@@ -26,6 +26,26 @@ message ChangePasswordResponse {
   bool Success = 1;
 }
 
+message Deposit {
+    int64 MetatraderLogin = 1;
+    double Amount = 2;
+    string Comment = 2;
+}
+
+message DepositResponse {
+    bool Success = 1;
+}
+
+message Withdrawal {
+    int64 MetatraderLogin = 1;
+    double Amount = 2;
+    string Comment = 2;
+}
+
+message WithdrawalResponse {
+    bool Success = 1;
+}
+
 service Metatrader4GrpcService {
     rpc CreateAccount(metatrader4.CreateAccount) 
     returns (metatrader4.CreateAccountResponse);
@@ -35,4 +55,10 @@ service Metatrader4GrpcService {
 
     rpc ChangeViewPassword(metatrader4.ChangePassword) 
     returns (metatrader4.ChangePasswordResponse);
+
+    rpc Deposit(metatrader4.Deposit) 
+    returns (metatrader4.DepositResponse);
+
+    rpc Withdrawal(metatrader4.Withdrawal) 
+    returns (metatrader4.WithdrawalResponse);
 }
