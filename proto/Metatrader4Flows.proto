@@ -29,7 +29,7 @@ message ChangePasswordResponse {
 message Deposit {
     int64 MetatraderLogin = 1;
     double Amount = 2;
-    string Comment = 2;
+    string Comment = 3;
 }
 
 message DepositResponse {
@@ -39,7 +39,7 @@ message DepositResponse {
 message Withdrawal {
     int64 MetatraderLogin = 1;
     double Amount = 2;
-    string Comment = 2;
+    string Comment = 3;
 }
 
 message WithdrawalResponse {
