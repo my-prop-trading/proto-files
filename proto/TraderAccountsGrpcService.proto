@@ -9,9 +9,9 @@ message TraderAccount {
     int32 Phase = 3;
     trader_accounts.TradingPlatformModel TradingPlatformModel = 4;
     double Balance = 5;
-    string StartDate = 6;
+    optional int64 StartDate = 6;
     optional int64 EndDate = 7;
-    optional string ClientId = 8;
+    string ClientId = 8;
 }
 
 enum TradingPlatformModel {
