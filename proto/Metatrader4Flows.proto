@@ -4,13 +4,12 @@ package metatrader4;
 
 
 message CreateAccount {
-    int64 MetatraderLogin = 1;
-    string FullName = 2;
-    string TradePassword = 3;      
-    string ViewPassword = 4; 
-    string ClientId = 5;  
-    optional string Email = 6;
-    optional string Country = 7;
+    string FullName = 1;
+    string TradePassword = 2;      
+    string ViewPassword = 3; 
+    string ClientId = 4;  
+    optional string Email = 5;
+    optional string Country = 6;
 }
 
 message CreateAccountResponse {
@@ -20,8 +19,7 @@ message CreateAccountResponse {
 
 message ResetPassword {
     int64 MetatraderLogin = 1;
-    string TradePassword = 2;      
-    optional string ViewPassword = 3; 
+    string NewPassword = 2;      
 }
 
 message ResetPasswordResponse {
@@ -32,6 +30,9 @@ service Metatrader4GrpcService {
     rpc CreateAccount(metatrader4.CreateAccount) 
     returns (metatrader4.CreateAccountResponse);
 
-    rpc ResetPassword(metatrader4.ResetPassword) 
+    rpc ResetTradePassword(metatrader4.ResetPassword) 
+    returns (metatrader4.ResetPasswordResponse);
+
+    rpc ResetViewPassword(metatrader4.ResetPassword) 
     returns (metatrader4.ResetPasswordResponse);
 }
