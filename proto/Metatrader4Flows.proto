@@ -33,6 +33,7 @@ message Deposit {
 }
 
 message DepositResponse {
+    int64 MetatraderOrderId = 1;
     bool Success = 1;
 }
 
@@ -43,6 +44,7 @@ message Withdrawal {
 }
 
 message WithdrawalResponse {
+    int64 MetatraderOrderId = 1;
     bool Success = 1;
 }
 
