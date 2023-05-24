@@ -44,6 +44,7 @@ message CreateTraderAccountRequest {
     string Phone = 10;
     optional string DiscountCode = 11;
     string ClientId = 12;
+    string ProcessId = 13;
 }
 
 message CreateTraderAccountResponse{
