@@ -10,6 +10,7 @@ message CreateAccount {
     string ClientId = 4;  
     optional string Email = 5;
     optional string Country = 6;
+    string ProcessId = 7;
 }
 
 message CreateAccountResponse {
@@ -30,6 +31,7 @@ message Deposit {
     int64 MetatraderLogin = 1;
     double Amount = 2;
     string Comment = 3;
+    string ProcessId = 4;
 }
 
 message DepositResponse {
@@ -41,11 +43,42 @@ message Withdrawal {
     int64 MetatraderLogin = 1;
     double Amount = 2;
     string Comment = 3;
+    string ProcessId = 4;
 }
 
 message WithdrawalResponse {
     int64 MetatraderOrderId = 1;
     bool Success = 2;
+}
+
+message GetBalance {
+    int64 MetatraderLogin = 1;
+}
+
+enum LevelType 
+{ 
+    OK = 0; 
+    MARGINCALL =1; 
+    STOPOUT = 2;
+};
+
+enum MarginType 
+{ 
+    Percent = 0; 
+    Currency =1; 
+};
+
+message GetBalanceResponse {
+    string Group = 1;          // user group
+    int32 Leverage = 2;        // user leverage
+    double Balance = 3;        // balance+credit
+    double Equity = 4;         // equity
+    double OpenedLots = 5;     // lots
+    double Margin = 6;         // margin requirements
+    double MarginFree = 7;     // free margin
+    double MarginLevel = 8;    // margin level
+    MarginType MarginType = 9; // margin controlling type (percent/currency)
+    LevelType LevelType = 10;  // level type(ok/margincall/stopout)
 }
 
 service Metatrader4GrpcService {
@@ -63,4 +96,7 @@ service Metatrader4GrpcService {
 
     rpc Withdrawal(metatrader4.Withdrawal) 
     returns (metatrader4.WithdrawalResponse);
+
+    rpc GetBalance(metatrader4.GetBalance) 
+    returns (metatrader4.GetBalanceResponse);
 }
