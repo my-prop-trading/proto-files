@@ -9,8 +9,8 @@ message TraderAccount {
     int32 Phase = 3;
     trader_accounts.TradingPlatformModel TradingPlatformModel = 4;
     double Balance = 5;
-    string StartDate = 6;
-    string EndDate = 7;
+    optional int64 StartDate = 6;
+    optional int64 EndDate = 7;
     string ClientId = 8;
 }
 
@@ -43,6 +43,8 @@ message CreateTraderAccountRequest {
     string Address = 9;
     string Phone = 10;
     optional string DiscountCode = 11;
+    string ClientId = 12;
+    string ProcessId = 13;
 }
 
 message CreateTraderAccountResponse{
