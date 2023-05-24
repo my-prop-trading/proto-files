@@ -51,8 +51,22 @@ message CreateTraderAccountResponse{
   string OrderId = 1;
 }
 
+message GetTraderAccountCredentialsRequest {
+  string ClientId = 1;
+  string AccountId = 2;
+}
+
+message GetTraderAccountCredentialsResponse {
+  string ClientId = 1;
+  string AccountId = 2;
+  string TradePassword = 3;      
+  string ViewPassword = 4; 
+  int64 Login = 5;
+}
+
 
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
+    rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
 }
