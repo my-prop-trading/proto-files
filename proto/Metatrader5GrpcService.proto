@@ -1,0 +1,39 @@
+syntax = "proto3";
+package metatrader5;
+//import "google/protobuf/empty.proto";
+
+
+message CreateAccount {
+    string FullName = 1;
+    string TradePassword = 2;      
+    string ViewPassword = 3; 
+    string ClientId = 4;  
+    optional string Email = 5;
+    optional string Country = 6;
+    string ProcessId = 7;
+}
+
+message CreateAccountResponse {
+    int64 MetatraderLogin = 1;
+    bool Success = 2;
+}
+
+message ChangePassword {
+    int64 MetatraderLogin = 1;
+    string NewPassword = 2;      
+}
+
+message ChangePasswordResponse {
+  bool Success = 1;
+}
+
+service Metatrader5GrpcService {
+    rpc CreateAccount(metatrader5.CreateAccount) 
+    returns (metatrader5.CreateAccountResponse);
+
+    rpc ChangeTradePassword(metatrader5.ChangePassword) 
+    returns (metatrader5.ChangePasswordResponse);
+
+    rpc ChangeViewPassword(metatrader5.ChangePassword) 
+    returns (metatrader5.ChangePasswordResponse);
+}
