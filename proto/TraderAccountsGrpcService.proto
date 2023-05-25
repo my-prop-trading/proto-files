@@ -70,7 +70,6 @@ message GetTraderAccountCredentialsResponseBody {
   string ViewPassword = 4; 
   int64 Login = 5;
   string Server = 6;
-  trader_accounts.TraderAccountError Error = 7;
 }
 
 enum TraderAccountError {
