@@ -58,8 +58,8 @@ message GetTraderAccountCredentialsRequest {
 
 message GetTraderAccountCredentialsResponse {
   oneof response {
-    trader_accounts.GetTraderAccountCredentialsResponseBody = 1;
-    trader_accounts.TraderAccountError = 2;
+    trader_accounts.GetTraderAccountCredentialsResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
   }
 }
 
