@@ -63,6 +63,13 @@ message GetTraderAccountCredentialsResponse {
   string ViewPassword = 4; 
   int64 Login = 5;
   string Server = 6;
+  trader_accounts.TraderAccountError Error = 7;
+}
+
+enum TraderAccountError {
+  OK = 0;
+  NO_ACCOUNT = 1;
+  NO_TRADING_PACKAGE = 1;
 }
 
 
