@@ -57,6 +57,13 @@ message GetTraderAccountCredentialsRequest {
 }
 
 message GetTraderAccountCredentialsResponse {
+  oneof response {
+    trader_accounts.GetTraderAccountCredentialsResponseBody = 1;
+    trader_accounts.TraderAccountError = 2;
+  }
+}
+
+message GetTraderAccountCredentialsResponseBody {
   string ClientId = 1;
   string AccountId = 2;
   string TradePassword = 3;      
