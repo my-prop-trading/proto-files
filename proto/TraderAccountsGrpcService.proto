@@ -76,7 +76,7 @@ message GetTraderAccountCredentialsResponseBody {
 enum TraderAccountError {
   OK = 0;
   NO_ACCOUNT = 1;
-  NO_TRADING_PACKAGE = 1;
+  NO_TRADING_PACKAGE = 2;
 }
 
 
