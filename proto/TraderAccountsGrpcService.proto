@@ -12,6 +12,7 @@ message TraderAccount {
     optional int64 StartDate = 6;
     optional int64 EndDate = 7;
     string ClientId = 8;
+    string AggregatedId = 9;
 }
 
 enum TradingPlatformModel {
