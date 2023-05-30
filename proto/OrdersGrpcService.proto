@@ -70,6 +70,6 @@ enum OrdersError {
 
 
 service OrdersGrpcService {
-    rpc GetByClientId(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
+    rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 }
