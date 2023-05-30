@@ -1,0 +1,75 @@
+syntax = "proto3";
+package orders;
+//import "google/protobuf/empty.proto";
+
+enum TradingPlatformModel {
+  META_TRADER_4 = 0;
+  META_TRADER_5 = 1;
+}
+
+enum BrokerModel {
+  WELLTRADE = 0;
+}
+
+enum OrderStatus {
+  PAID = 0;
+  PENDING = 1;
+  UNPAID = 2;
+  CANCELLED = 3;
+}
+
+message Order {
+  int32 OrderNumber = 1;
+  optional int64 CreatedAt = 2;
+  double Price = 3;
+  string PriceCurrency = 4;
+  orders.OrderStatus Status = 5;
+  string ClientId = 6;
+}
+
+message CreateTraderAccountOrderRequest {
+  string TradingPackageId = 1;
+  orders.TradingPlatformModel TradingPlatform = 2;
+  orders.BrokerModel BrokerModel = 3;
+  string FirstName = 4;
+  string LastName = 5;
+  string City = 6;
+  string Country = 7;
+  string ZipCode = 8;
+  string Address = 9;
+  string Phone = 10;
+  optional string DiscountCode = 11;
+  string ProcessId = 12;
+}
+
+message CreateTraderAccountOrderResponse {
+  oneof response {
+    orders.CreateTraderAccountOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message CreateTraderAccountOrderResponseBody {
+  string OrderId = 1;
+}
+
+message GetOrdersPaginatedRequest {
+  optional string ClientId = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  repeated orders.OrderStatus Statuses = 4;
+}
+
+message GetOrdersPaginatedResponse {
+  repeated orders.Order Orders = 1;
+}
+
+enum OrdersError {
+  OK = 0;
+}
+
+
+service OrdersGrpcService {
+    rpc GetByClientId(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
+    rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
+}
