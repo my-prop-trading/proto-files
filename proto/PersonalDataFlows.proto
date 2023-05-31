@@ -12,9 +12,24 @@ message GetPersonalDataResponse{
     pd.PersonalDataModel PersonalDataModel = 1;
 }
 
+//SET
 message SetPersonalDataRequest{
     string Id = 1;
     pd.PersonalDataModel PersonalDataModel = 2;
+}
+
+// GET
+message GetOrderPersonalDataRequest {
+    string OrderId = 1;
+}
+
+message GetOrderPersonalDataResponse{
+    pd.OrderPersonalDataModel PersonalDataModel = 1;
+}
+
+//SET
+message SetOrderPersonalDataRequest{
+    pd.OrderPersonalDataModel OrderPersonalDataModel = ;
 }
 
 enum AccountType{
@@ -45,8 +60,25 @@ message PersonalDataModel {
     optional pd.AccountType AccountType = 12;
 }
 
+message OrderPersonalDataModel {
+  string OrderId = 1;
+  string ClientId = 2;
+  string ProcessId = 3;
+  string FirstName = 4;
+  string LastName = 5;
+  string City = 6;
+  string Country = 7;
+  string ZipCode = 8;
+  string Address = 9;
+  string Phone = 10;
+}
+
 
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
-    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);        
- }
+    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
+
+
+    rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
+    rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
+}
