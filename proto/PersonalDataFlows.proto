@@ -29,7 +29,8 @@ message GetOrderPersonalDataResponse{
 
 //SET
 message SetOrderPersonalDataRequest{
-    pd.OrderPersonalDataModel OrderPersonalDataModel = ;
+    string OrderId = 1;
+    pd.OrderPersonalDataModel OrderPersonalDataModel = 2;
 }
 
 enum AccountType{
@@ -61,7 +62,6 @@ message PersonalDataModel {
 }
 
 message OrderPersonalDataModel {
-  string OrderId = 1;
   string ClientId = 2;
   string ProcessId = 3;
   string FirstName = 4;
