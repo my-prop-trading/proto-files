@@ -16,6 +16,7 @@ message GetPersonalDataResponse{
 message SetPersonalDataRequest{
     string Id = 1;
     pd.PersonalDataModel PersonalDataModel = 2;
+    string ProcessId = 3;
 }
 
 // GET
@@ -31,6 +32,7 @@ message GetOrderPersonalDataResponse{
 message SetOrderPersonalDataRequest{
     string OrderId = 1;
     pd.OrderPersonalDataModel OrderPersonalDataModel = 2;
+    string ProcessId = 3;
 }
 
 enum AccountType{
@@ -63,7 +65,6 @@ message PersonalDataModel {
 
 message OrderPersonalDataModel {
   string ClientId = 2;
-  string ProcessId = 3;
   string FirstName = 4;
   string LastName = 5;
   string City = 6;
