@@ -24,7 +24,7 @@ message GetOrderPersonalDataRequest {
 }
 
 message GetOrderPersonalDataResponse{
-    pd.OrderPersonalDataModel PersonalDataModel = 1;
+    pd.OrderPersonalDataModel OrderPersonalDataModel = 1;
 }
 
 //SET
