@@ -55,30 +55,23 @@ message GetBalance {
     int64 MetatraderLogin = 1;
 }
 
-enum LevelType 
-{ 
-    OK = 0; 
-    MARGINCALL =1; 
-    STOPOUT = 2;
-};
-
-enum MarginType 
-{ 
-    Percent = 0; 
-    Currency =1; 
-};
-
 message GetBalanceResponse {
     string Group = 1;          // user group
     int32 Leverage = 2;        // user leverage
     double Balance = 3;        // balance+credit
     double Equity = 4;         // equity
-    double OpenedLots = 5;     // lots
-    double Margin = 6;         // margin requirements
-    double MarginFree = 7;     // free margin
-    double MarginLevel = 8;    // margin level
-    MarginType MarginType = 9; // margin controlling type (percent/currency)
-    LevelType LevelType = 10;  // level type(ok/margincall/stopout)
+    double Margin = 5;         // margin requirements
+    double MarginFree = 6;     // free margin
+    double MarginLevel = 7;    // margin level
+}
+
+message DisableAccount {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message DisableAccountResponse {
+    bool Success = 1;
 }
 
 service Metatrader4GrpcService {
@@ -99,4 +92,7 @@ service Metatrader4GrpcService {
 
     rpc GetBalance(metatrader4.GetBalance) 
     returns (metatrader4.GetBalanceResponse);
+
+    rpc DisableAccount(metatrader4.DisableAccount) 
+    returns (metatrader4.DisableAccountResponse);
 }
