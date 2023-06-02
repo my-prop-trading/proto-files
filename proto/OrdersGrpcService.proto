@@ -65,12 +65,58 @@ message GetOrdersPaginatedResponse {
   repeated orders.Order Orders = 1;
 }
 
+message PayForOrderRequest {
+  string OrderId = 1;
+  string ClientId = 2;
+  orders.CardDetails CardDetails = 3;
+}
+
+message CardDetails {
+  string CardNumber = 1;
+  string CardHolderName = 2;
+  string ExpiryMonth = 3;
+  string ExpiryYear = 4;
+  string Cvv = 5;
+}
+
+message PayForOrderResponse {
+  oneof response {
+    orders.PayForOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message PayForOrderResponseBody {
+}
+
+message CancelOrderRequest {
+  string OrderId = 1;
+  string ClientId = 2;
+  orders.CardDetails CardDetails = 3;
+}
+
+message CancelOrderResponse {
+  oneof response {
+    orders.CancelOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message CancelOrderResponseBody {
+}
+
 enum OrdersError {
   OK = 0;
+  PackageNotFound = 1;
 }
 
 
 service OrdersGrpcService {
-    rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
+
+    rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
+
+    rpc PayForOrder(orders.PayForOrderRequest) returns (orders.PayForOrderResponse);
+
+    rpc CancelOrder(orders.CancelOrderRequest) returns (orders.CancelOrderResponse);
 }
