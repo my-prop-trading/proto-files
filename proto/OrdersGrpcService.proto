@@ -108,6 +108,8 @@ message CancelOrderResponseBody {
 enum OrdersError {
   OK = 0;
   PackageNotFound = 1;
+  OrderNotFound = 2;
+  
 }
 
 
