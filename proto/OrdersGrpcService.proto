@@ -74,9 +74,9 @@ message PayForOrderRequest {
 message CardDetails {
   string CardNumber = 1;
   string CardHolderName = 2;
-  string ExpiryMonth = 3;
-  string ExpiryYear = 4;
-  string Cvv = 5;
+  uint32 ExpiryMonth = 3;
+  uint32 ExpiryYear = 4;
+  uint32 Cvv = 5;
 }
 
 message PayForOrderResponse {
