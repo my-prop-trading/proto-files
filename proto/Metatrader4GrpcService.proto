@@ -74,6 +74,81 @@ message DisableAccountResponse {
     bool Success = 1;
 }
 
+message GetAccountHistory {
+    int64 MetatraderLogin = 1;
+    uint64 FromDateTime = 2;
+    uint64 ToDateTime = 3;
+}
+
+enum TradeType { 
+    Buy = 0; 
+    Sell = 1; 
+    BuyLimit = 2; 
+    SellLimit = 3; 
+    BuyStop = 4; 
+    SellStop = 5; 
+    Balance = 6; 
+    Credit = 7; 
+};
+
+enum TradeState { 
+    OpenNormal = 0; 
+    OpenRemand = 1; 
+    OpenRestored = 2; 
+    ClosedNormal = 3; 
+    ClosedPartially = 4; 
+    ClosedBy = 5; 
+    Deleted = 6; 
+};
+
+enum TradeReason
+{
+    Client = 0;  // client terminal
+    Expert = 1;  // expert
+    Dealer = 2;  // dealer
+    Signal = 3;  // signal
+    Gateway = 4;  // gateway
+    Mobile = 5;  // mobile terminal
+    Web = 6;  // Web terminal
+    Api = 7;  // API
+};
+
+message AccountTradeModel {
+    int64 Id = 1;            // order ticket
+    int64 Login = 2;            // owner's login
+    string Symbol = 3;       // security
+    int64 Digits = 4;           // security precision
+    TradeType Type = 5;              // trade command
+    int64 Volume = 6;           // volume
+    uint64 OpenTime = 7;        // open time
+    TradeState State = 8;            // reserved
+    double OpenPrice = 9;       // open price
+    double Sl = 10;
+    double Tp = 11;            // stop loss & take profit
+    uint64 CloseTime = 12;       // close time
+    TradeReason Reason = 13;           // trade reason
+    double Fee = 14;       // commission
+    double Swap = 15;          // order swaps
+    double ClosePrice = 16;      // close price
+    double Profit = 17;           // profit
+    double Taxes = 18;            // taxes
+    string Comment = 19;          // comment
+    uint64 Timestamp = 20;        // timestamp
+}
+
+message GetAccountHistoryResponse {
+    repeated AccountTradeModel trades = 1;          // user group
+}
+
+message CloseAccountAllOpenPositions {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message CloseAccountAllOpenPositionsResponse {
+    bool Success = 1;
+}
+
 service Metatrader4GrpcService {
     rpc CreateAccount(metatrader4.CreateAccount) 
     returns (metatrader4.CreateAccountResponse);
@@ -95,4 +170,10 @@ service Metatrader4GrpcService {
 
     rpc DisableAccount(metatrader4.DisableAccount) 
     returns (metatrader4.DisableAccountResponse);
+
+    rpc GetAccountHistory(metatrader4.GetAccountHistory) 
+    returns (metatrader4.GetAccountHistoryResponse);
+
+    rpc CloseAccountAllOpenPositions(metatrader4.CloseAccountAllOpenPositions) 
+    returns (metatrader4.CloseAccountAllOpenPositionsResponse);
 }

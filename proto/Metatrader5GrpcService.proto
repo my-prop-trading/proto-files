@@ -74,6 +74,16 @@ message DisableAccountResponse {
     bool Success = 1;
 }
 
+
+message CloseAccountAllOpenPositions {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message CloseAccountAllOpenPositionsResponse {
+    bool Success = 1;
+}
+
 service Metatrader5GrpcService {
     rpc CreateAccount(metatrader5.CreateAccount) 
     returns (metatrader5.CreateAccountResponse);
@@ -95,4 +105,7 @@ service Metatrader5GrpcService {
 
     rpc DisableAccount(metatrader5.DisableAccount) 
     returns (metatrader5.DisableAccountResponse);
+
+    rpc CloseAccountAllOpenPositions(metatrader5.CloseAccountAllOpenPositions) 
+    returns (metatrader5.CloseAccountAllOpenPositionsResponse);
 }
