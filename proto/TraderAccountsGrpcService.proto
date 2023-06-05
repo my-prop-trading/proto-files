@@ -36,14 +36,15 @@ message CreateTraderAccountRequest {
     string TradingPackageId = 1;
     trader_accounts.TradingPlatformModel TradingPlatform = 2;
     trader_accounts.BrokerModel BrokerModel = 3;
-    string FirstName = 4;
-    string LastName = 5;
-    string City = 6;
-    string Country = 7;
-    string ZipCode = 8;
-    string Address = 9;
-    string Phone = 10;
-    optional string DiscountCode = 11;
+    // NOT USED
+    //string FirstName = 4;
+    //string LastName = 5;
+    //string City = 6;
+    //string Country = 7;
+    //string ZipCode = 8;
+    //string Address = 9;
+    //string Phone = 10;
+    //optional string DiscountCode = 11;
     string ClientId = 12;
     string ProcessId = 13;
 }
