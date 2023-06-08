@@ -94,13 +94,13 @@ message DisableAccountTraderResponse {
 }
 
 service MetatraderAccountGrpcService {
-    rpc Create(metatrader.CreateAccountRequest) 
+    rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
 
-    rpc ChangeTradePassword(metatrader.ChangeAccountPasswordRequest) 
+    rpc ChangeAccountTradePassword(metatrader.ChangeAccountPasswordRequest) 
     returns (metatrader.ChangeAccountPasswordResponse);
 
-    rpc ChangeViewPassword(metatrader.ChangeAccountPasswordRequest) 
+    rpc ChangeAccountViewPassword(metatrader.ChangeAccountPasswordRequest) 
     returns (metatrader.ChangeAccountPasswordResponse);
 
     rpc DepositAccount(metatrader.DepositAccountRequest) 
