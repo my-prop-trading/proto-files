@@ -5,7 +5,6 @@ package metatrader;
 enum MetatraderAccountError {
     Ok = 0;
     InternalError = 1;
-    AccountAlreadyExist = 2;
 }
 
 message CreateAccountRequest {
