@@ -45,11 +45,15 @@ message DepositAccountRequest {
     string ProcessId = 4;
 }
 
+message DepositAccountResponseBody {
+    int64 MetatraderOrderId = 1;
+}
+
 message DepositAccountResponse {
     oneof response {
-        int64 MetatraderOrderId = 1;
-        string Error = 2;
-    }
+        metatrader.DepositAccountResponseBody Body = 1;
+        metatrader.MetatraderAccountError Error = 2;
+    } 
 }
 
 message WithdrawalAccountRequest{
@@ -59,11 +63,16 @@ message WithdrawalAccountRequest{
     string ProcessId = 4;
 }
 
+
+message WithdrawalAccountResponseBody {
+    int64 MetatraderOrderId = 1;
+}
+
 message WithdrawalAccountResponse {
     oneof response {
-        int64 MetatraderOrderId = 1;
-        string Error = 2;
-    }
+        metatrader.WithdrawalAccountResponseBody Body = 1;
+        metatrader.MetatraderAccountError Error = 2;
+    } 
 }
 
 message GetAccountBalanceRequest {
