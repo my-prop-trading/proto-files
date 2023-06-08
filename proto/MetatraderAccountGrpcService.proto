@@ -19,9 +19,13 @@ message CreateAccountRequest {
     string ProcessId = 8;
 }
 
+message CreateAccountResponseBody {
+    int64 MetatraderLogin = 1;
+}
+
 message CreateAccountResponse {
     oneof response {
-        int64 MetatraderLogin = 1;
+        metatrader.CreateAccountResponseBody Body = 1;
         metatrader.AccountError Error = 2;
     } 
 }
