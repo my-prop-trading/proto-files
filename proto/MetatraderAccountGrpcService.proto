@@ -1,0 +1,120 @@
+syntax = "proto3";
+package metatrader;
+//import "google/protobuf/empty.proto";
+
+enum AccountError {
+    Ok = 0;
+    Failed = 1;
+    AccountAlreadyExist = 2;
+}
+
+message CreateAccountRequest {
+    string FullName = 1;
+    string TradePassword = 2;      
+    string ViewPassword = 3; 
+    string ClientId = 4;  
+    int64 Leverage = 5;  
+    optional string Email = 6;
+    optional string Country = 7;
+    string ProcessId = 8;
+}
+
+message CreateAccountResponse {
+    oneof response {
+        int64 MetatraderLogin = 1;
+        metatrader.AccountError Error = 2;
+    } 
+}
+
+message ChangeAccountPasswordRequest {
+    int64 MetatraderLogin = 1;
+    string NewPassword = 2;      
+}
+
+message ChangeAccountPasswordResponse {
+    bool Success = 1;
+}
+
+message DepositAccountRequest {
+    int64 MetatraderLogin = 1;
+    double Amount = 2;
+    string Comment = 3;
+    string ProcessId = 4;
+}
+
+message DepositAccountResponse {
+    oneof response {
+        int64 MetatraderOrderId = 1;
+        string Error = 2;
+    }
+}
+
+message WithdrawalAccountRequest{
+    int64 MetatraderLogin = 1;
+    double Amount = 2;
+    string Comment = 3;
+    string ProcessId = 4;
+}
+
+message WithdrawalAccountResponse {
+    oneof response {
+        int64 MetatraderOrderId = 1;
+        string Error = 2;
+    }
+}
+
+message GetAccountBalanceRequest {
+    int64 MetatraderLogin = 1;
+}
+
+message GetAccountBalanceResponse {
+    double Balance = 1;        // balance+credit
+    double Equity = 2;         // equity
+    double Margin = 3;         // margin requirements
+    double MarginFree = 4;     // free margin
+    double MarginLevel = 5;    // margin level
+}
+
+message CloseAccountRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message CloseAccountResponse {
+    bool Success = 1;
+}
+
+message DisableAccountTradeRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message DisableAccountTraderResponse {
+    bool Success = 1;
+}
+
+service MetatraderAccountGrpcService {
+    rpc Create(metatrader.CreateAccountRequest) 
+    returns (metatrader.CreateAccountResponse);
+
+    rpc ChangeTradePassword(metatrader.ChangeAccountPasswordRequest) 
+    returns (metatrader.ChangeAccountPasswordResponse);
+
+    rpc ChangeViewPassword(metatrader.ChangeAccountPasswordRequest) 
+    returns (metatrader.ChangeAccountPasswordResponse);
+
+    rpc DepositAccount(metatrader.DepositAccountRequest) 
+    returns (metatrader.DepositAccountResponse);
+
+    rpc WithdrawalAccount(metatrader.WithdrawalAccountRequest) 
+    returns (metatrader.WithdrawalAccountResponse);
+
+    rpc GetAccountBalance(metatrader.GetAccountBalanceRequest) 
+    returns (metatrader.GetAccountBalanceResponse);
+
+    rpc CloseAccount(metatrader.CloseAccountRequest) 
+    returns (metatrader.CloseAccountResponse);
+
+    rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
+    returns (metatrader.DisableAccountTraderResponse);
+}
