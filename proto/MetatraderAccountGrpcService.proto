@@ -2,7 +2,7 @@ syntax = "proto3";
 package metatrader;
 //import "google/protobuf/empty.proto";
 
-enum AccountError {
+enum MetatraderAccountError {
     Ok = 0;
     Failed = 1;
     AccountAlreadyExist = 2;
@@ -26,7 +26,7 @@ message CreateAccountResponseBody {
 message CreateAccountResponse {
     oneof response {
         metatrader.CreateAccountResponseBody Body = 1;
-        metatrader.AccountError Error = 2;
+        metatrader.MetatraderAccountError Error = 2;
     } 
 }
 
