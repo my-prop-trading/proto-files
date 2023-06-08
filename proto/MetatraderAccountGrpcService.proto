@@ -4,7 +4,7 @@ package metatrader;
 
 enum MetatraderAccountError {
     Ok = 0;
-    Failed = 1;
+    InternalError = 1;
     AccountAlreadyExist = 2;
 }
 
