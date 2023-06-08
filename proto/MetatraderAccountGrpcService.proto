@@ -63,7 +63,6 @@ message WithdrawalAccountRequest{
     string ProcessId = 4;
 }
 
-
 message WithdrawalAccountResponseBody {
     int64 MetatraderOrderId = 1;
 }
