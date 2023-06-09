@@ -43,6 +43,7 @@ message TraderPackageAttempt {
     string TradingPackageId = 2;
     double Price = 3;
     string PriceCurrency = 4;
+    int32 Number = 5;
 }
 
 message TraderPackageFieldsOrder {
