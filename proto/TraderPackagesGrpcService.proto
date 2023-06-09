@@ -35,7 +35,13 @@ message TraderPackage {
 
     double DailyDrawdown = 30;
     double OverallDrawdown = 31;
-    double RevenueScaling = 32;
+    
+    // RevenueScalingNOT USED
+    //double RevenueScaling = 32;
+    // RevenueScalingNOT USED
+
+    double TargetProfit = 33;
+    double RevenueShare = 34;
 }
 
 message TraderPackageAttempt {
@@ -72,6 +78,7 @@ message TraderPackageFieldsOrder {
   optional int32 OverallDrawdown = 31;
   optional int32 RevenueScaling = 32;
   optional int32 TargetProfit = 33;
+  optional int32 RevenueShare = 34;
 }
 
 message GetAllRequest{
