@@ -50,6 +50,7 @@ enum SexTitle{
 }
 
 message PersonalDataModel {
+    optional string Email = 1;
     optional string FirstName = 2;
     optional string LastName = 3;
     optional string City = 4;
