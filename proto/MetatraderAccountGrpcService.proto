@@ -155,6 +155,6 @@ service MetatraderAccountGrpcService {
     rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
     returns (metatrader.DisableAccountTraderResponse);
 
-    rpc GetAccountsBalance(stream metatrader.GetAccountsBalanceRequest) 
+    rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
     returns (stream metatrader.GetAccountsBalanceResponse);
 }
