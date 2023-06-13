@@ -104,6 +104,32 @@ message DisableAccountTraderResponse {
     bool Success = 1;
 }
 
+
+message GetAccountsBalanceRequest {
+
+}
+
+message BalanceModel {
+    int64 MetatraderLogin = 1;
+    int64 Leverage = 2;        // user leverage
+    double Balance = 3;        // balance+credit
+    double Equity = 4;         // equity
+    double Margin = 5;         // margin requirements
+    double MarginFree = 6;     // free margin
+    double MarginLevel = 7;    // margin level
+}
+
+message AccountsBalanceModel {
+    repeated BalanceModel Balances = 1;
+}
+
+message GetAccountsBalanceResponse {
+    oneof request {
+        metatrader.AccountsBalanceModel Body = 1;
+        metatrader.MetatraderAccountError Error = 2;
+    }
+}
+
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -128,4 +154,7 @@ service MetatraderAccountGrpcService {
 
     rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
     returns (metatrader.DisableAccountTraderResponse);
+
+    rpc GetAccountsBalance(stream metatrader.GetAccountsBalanceRequest) 
+    returns (stream metatrader.GetAccountsBalanceResponse);
 }
