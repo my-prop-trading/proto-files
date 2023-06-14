@@ -111,6 +111,7 @@ enum OrdersError {
   PackageNotFound = 1;
   OrderNotFound = 2;
   OrderNotPending = 3;
+  OrderNotPaid = 4;
 }
 
 
