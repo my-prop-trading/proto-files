@@ -130,6 +130,49 @@ message GetAccountsBalanceResponse {
     }
 }
 
+
+message GetAccountHistory {
+    int64 MetatraderLogin = 1;
+    uint64 FromDateTime = 2;
+    uint64 ToDateTime = 3;
+}
+
+enum TradeType { 
+    Buy = 0; 
+    Sell = 1; 
+    BuyLimit = 2; 
+    SellLimit = 3; 
+    BuyStop = 4; 
+    SellStop = 5; 
+    Balance = 6; 
+    Credit = 7; 
+};
+
+message AccountTradeModel {
+    int64 Id = 1;            // order ticket
+    int64 Login = 2;            // owner's login
+    string Symbol = 3;       // security
+    int64 Digits = 4;           // security precision
+    TradeType Type = 5;              // trade command
+    int64 Volume = 6;           // volume
+    uint64 OpenTime = 7;        // open time
+    double OpenPrice = 8;       // open price
+    double Sl = 9;
+    double Tp = 10;            // stop loss & take profit
+    uint64 CloseTime = 11;       // close time
+    double Fee = 12;             // commission
+    double Swap = 13;            // order swaps
+    double ClosePrice = 14;      // close price
+    double Profit = 15;           // profit
+    double Taxes = 16;            // taxes
+    string Comment = 17;          // comment
+    uint64 Timestamp = 18;        // timestamp
+}
+
+message GetAccountHistoryResponse {
+    repeated AccountTradeModel trades = 1;          // user group
+}
+
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -157,4 +200,8 @@ service MetatraderAccountGrpcService {
 
     rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
     returns (stream metatrader.GetAccountsBalanceResponse);
+
+    rpc GetAccountHistory(metatrader.GetAccountHistory) 
+    returns (metatrader.GetAccountHistoryResponse);
+
 }
