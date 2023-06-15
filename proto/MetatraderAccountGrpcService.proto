@@ -142,7 +142,7 @@ message AccountTradeModel {
     string Symbol = 3;       // security
     int64 Digits = 4;           // security precision
     TradeType Type = 5;              // trade command
-    int64 Volume = 6;           // volume
+    double Volume = 6;           // volume
     uint64 OpenTime = 7;        // open time
     double OpenPrice = 8;       // open price
     double Sl = 9;
