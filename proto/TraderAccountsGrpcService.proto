@@ -13,6 +13,16 @@ message TraderAccount {
     optional int64 EndDate = 7;
     string ClientId = 8;
     string AggregatedId = 9;
+    int64 CreatedAt = 10;
+    int64 UpdatedAt = 11;
+    trader_accounts.TraderAccountStatusModel Status = 12;
+}
+
+enum TraderAccountStatusModel {
+  NEW = 0;
+  ACTIVE = 1;
+  DIABLED = 2;
+  STAGE_COMPLETED = 3;
 }
 
 enum TradingPlatformModel {
