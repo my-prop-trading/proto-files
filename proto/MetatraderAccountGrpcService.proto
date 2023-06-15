@@ -119,18 +119,6 @@ message BalanceModel {
     double MarginLevel = 7;    // margin level
 }
 
-message AccountsBalanceModel {
-    repeated BalanceModel Balances = 1;
-}
-
-message GetAccountsBalanceResponse {
-    oneof response {
-        metatrader.AccountsBalanceModel Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
-    }
-}
-
-
 message GetAccountHistory {
     int64 MetatraderLogin = 1;
     uint64 FromDateTime = 2;
@@ -169,10 +157,6 @@ message AccountTradeModel {
     uint64 Timestamp = 18;        // timestamp
 }
 
-message GetAccountHistoryResponse {
-    repeated AccountTradeModel trades = 1;          // user group
-}
-
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -199,9 +183,9 @@ service MetatraderAccountGrpcService {
     returns (metatrader.DisableAccountTraderResponse);
 
     rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
-    returns (stream metatrader.GetAccountsBalanceResponse);
+    returns (stream metatrader.BalanceModel);
 
     rpc GetAccountHistory(metatrader.GetAccountHistory) 
-    returns (metatrader.GetAccountHistoryResponse);
+    returns (stream metatrader.AccountTradeModel);
 
 }
