@@ -138,7 +138,7 @@ enum TradeType {
 
 message AccountTradeModel {
     int64 Id = 1;            // order ticket
-    int64 Login = 2;            // owner's login
+    int64 MetatraderLogin = 2;            // owner's login
     string Symbol = 3;       // security
     int64 Digits = 4;           // security precision
     TradeType Type = 5;              // trade command
