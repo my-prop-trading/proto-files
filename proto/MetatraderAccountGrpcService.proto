@@ -124,7 +124,7 @@ message AccountsBalanceModel {
 }
 
 message GetAccountsBalanceResponse {
-    oneof request {
+    oneof response {
         metatrader.AccountsBalanceModel Body = 1;
         metatrader.MetatraderAccountError Error = 2;
     }
