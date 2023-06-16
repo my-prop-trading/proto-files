@@ -121,8 +121,6 @@ message BalanceModel {
 
 message GetAccountHistory {
     int64 MetatraderLogin = 1;
-    uint64 FromDateTime = 2;
-    uint64 ToDateTime = 3;
 }
 
 enum TradeType { 
