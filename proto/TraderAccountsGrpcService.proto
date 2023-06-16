@@ -90,7 +90,7 @@ message GetTraderAccIdByCredentialsLoginRequest {
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
-  repeated trader_accounts.LoginTradAccId Trader = 1;
+  repeated trader_accounts.LoginTradAccId LoginTradAccIds = 1;
 }
 
 message LoginTradAccId {
