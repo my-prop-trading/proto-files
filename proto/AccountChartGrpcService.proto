@@ -1,0 +1,22 @@
+syntax = "proto3";
+package account_chart;
+//import "google/protobuf/empty.proto";
+
+message AccountChart {
+  int64 Date = 1;
+  double Equity = 2;
+  double Balance = 3;
+}
+
+message GetByTraderAccIdRequest {
+    string TraderAccId = 1;
+    int64 StartDate = 2;
+    int64 EndDate = 3;
+}
+
+message GetByTraderAccIdResponse {
+    repeated account_chart.AccountChart AccountCharts = 1;
+}
+
+service AccountChartGrpcService {
+    rpc GetByTraderAccId(account_chart.GetByTraderAccIdRequest) returns (account_chart.GetByTraderAccIdResponse);}
