@@ -1,5 +1,6 @@
 syntax = "proto3";
 package verifications;
+import "google/protobuf/empty.proto";
 
 message SendVerificationGrpcRequest{
     string TraderId = 1;
@@ -36,4 +37,6 @@ enum VerificationTypeGrpc {
 service VerificationService{
     rpc Send(SendVerificationGrpcRequest) returns (SendVerificationGrpcResponse);
     rpc Confirm(ConfirmVerificationGrpcRequest) returns (ConfirmVerificationGrpcResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

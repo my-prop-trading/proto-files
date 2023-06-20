@@ -1,6 +1,6 @@
 syntax = "proto3";
 package trader_packages;
-//import "google/protobuf/empty.proto";
+import "google/protobuf/empty.proto";
 
 message TraderPackage {
     string Id = 1;
@@ -129,4 +129,6 @@ service TraderPackagesGrpcService {
     rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
 
     rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

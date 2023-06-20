@@ -36,4 +36,5 @@ service KeyValueFlowsGrpcService {
     rpc Set(stream keyvalue.SetKeyValueGrpcRequestModel) returns (google.protobuf.Empty);    
     rpc Delete(stream keyvalue.DeleteKeyValueGrpcRequestModel) returns (google.protobuf.Empty);    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+    
  }

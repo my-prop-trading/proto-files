@@ -1,6 +1,6 @@
 syntax = "proto3";
 package account_chart;
-//import "google/protobuf/empty.proto";
+import "google/protobuf/empty.proto";
 
 message AccountChart {
   int64 Date = 1;
@@ -19,4 +19,6 @@ message GetByTraderAccIdResponse {
 }
 
 service AccountChartGrpcService {
-    rpc GetByTraderAccId(account_chart.GetByTraderAccIdRequest) returns (account_chart.GetByTraderAccIdResponse);}
+    rpc GetByTraderAccId(account_chart.GetByTraderAccIdRequest) returns (account_chart.GetByTraderAccIdResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

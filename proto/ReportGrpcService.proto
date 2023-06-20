@@ -1,5 +1,6 @@
 ﻿syntax = "proto3";
 package report_grpc;
+import "google/protobuf/empty.proto";
 
 enum ReportsFlowsClosePositionReason{
     ClientCommand = 0;
@@ -142,4 +143,5 @@ service ReportGrpcService {
     rpc GetOperationsHistoryInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportOperationHistoryItem);
     rpc GetActivePositionsInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportsFlowsActivePositionGrpcModel);
     rpc GetHistoryPositionsInDateRange(ReportFlowsOperationsGetInDateRangeGrpcRequest) returns (stream ReportsFlowsClosedPositionGrpcModel);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

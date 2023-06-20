@@ -1,7 +1,6 @@
 syntax = "proto3";
 package metatrader4;
-//import "google/protobuf/empty.proto";
-
+import "google/protobuf/empty.proto";
 
 message CreateAccount {
     string FullName = 1;
@@ -176,4 +175,6 @@ service Metatrader4GrpcService {
 
     rpc CloseAccountAllOpenPositions(metatrader4.CloseAccountAllOpenPositions) 
     returns (metatrader4.CloseAccountAllOpenPositionsResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

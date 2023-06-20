@@ -15,5 +15,5 @@ message ChangeLog {
 
 service KycChangeLogsService {
     rpc Upload(stream kyclog.ChangeLog) returns (google.protobuf.Empty);
-
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
  }

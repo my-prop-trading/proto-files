@@ -36,4 +36,5 @@ message UploadDocumentRequest{
 service DocumentsService {
     rpc Get(docs.GetDocumentsRequest) returns (stream docs.DocumentModel);
     rpc Upload(docs.UploadDocumentRequest) returns (google.protobuf.Empty);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
  }

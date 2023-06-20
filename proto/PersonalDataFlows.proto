@@ -83,4 +83,5 @@ service PersonalDataService {
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

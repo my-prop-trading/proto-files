@@ -1,7 +1,6 @@
 syntax = "proto3";
 package email_sender;
-//import "google/protobuf/empty.proto";
-
+import "google/protobuf/empty.proto";
 
 message EmailDestination{
     string ProcessId = 1;
@@ -29,4 +28,5 @@ service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

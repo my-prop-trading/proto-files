@@ -29,4 +29,5 @@ message UpdateStatusRequest {
 service KycStatusService {
     rpc Get(kyc.GetStatusRequest) returns (kyc.GetStatusResponse);
     rpc Update(kyc.UpdateStatusRequest) returns (google.protobuf.Empty);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
  }
