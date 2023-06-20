@@ -98,6 +98,21 @@ message LoginTradAccId {
   string TraderAccId = 2;
 }
 
+message GetTraderAccountByIdRequest {
+  string TraderAccId = 1;
+}
+
+message GetTraderAccountByIdResponse {
+  oneof response {
+    trader_accounts.GetTraderAccountByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message GetTraderAccountByIdResponseBody {
+  trader_accounts.TraderAccount TraderAccount = 1;
+}
+
 enum TraderAccountError {
   OK = 0;
   NO_ACCOUNT = 1;
@@ -112,4 +127,5 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
+    rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
 }
