@@ -29,7 +29,12 @@ message CreateAccountResponse {
     } 
 }
 
-message ChangeAccountPasswordRequest {
+message ChangeAccountTradePasswordRequest {
+    int64 MetatraderLogin = 1;
+    string NewPassword = 2;      
+}
+
+message ChangeAccountViewPasswordRequest {
     int64 MetatraderLogin = 1;
     string NewPassword = 2;      
 }
@@ -159,10 +164,10 @@ service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
 
-    rpc ChangeAccountTradePassword(metatrader.ChangeAccountPasswordRequest) 
+    rpc ChangeAccountTradePassword(metatrader.ChangeAccountTradePasswordRequest) 
     returns (metatrader.ChangeAccountPasswordResponse);
 
-    rpc ChangeAccountViewPassword(metatrader.ChangeAccountPasswordRequest) 
+    rpc ChangeAccountViewPassword(metatrader.ChangeAccountViewPasswordRequest) 
     returns (metatrader.ChangeAccountPasswordResponse);
 
     rpc DepositAccount(metatrader.DepositAccountRequest) 
