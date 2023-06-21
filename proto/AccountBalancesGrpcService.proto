@@ -1,0 +1,33 @@
+syntax = "proto3";
+package account_balances;
+import "google/protobuf/empty.proto";
+
+message AccountBalance {
+  string TraderAccountId = 1;
+  int64 UpdatedAt = 2; // Assuming DateTimeAsMicroseconds is equivalent to a timestamp represented as microseconds
+  double Balance = 3;
+  double Equity = 4;
+  double Margin = 5;
+  double MarginFree = 6;
+  double MarginLevel = 7;
+}
+
+message GetByTraderAccountIdRequest {
+  string TraderAccountId = 1;
+}
+
+message GetByTraderAccountIdResponse {
+  AccountBalance AccountBalance = 1;
+}
+
+enum AccountBalanceError {
+  OK = 0;
+  NO_ACCOUNT = 1;
+}
+
+
+service AccountBalancesGrpcService {
+    rpc GetByTraderAccountId(account_balances.GetByTraderAccountIdRequest) returns (account_balances.GetByTraderAccountIdResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
