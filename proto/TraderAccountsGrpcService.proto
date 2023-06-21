@@ -15,6 +15,7 @@ message TraderAccount {
     int64 CreatedAt = 10;
     int64 UpdatedAt = 11;
     trader_accounts.TraderAccountStatusModel Status = 12;
+    double InitialBalance = 13;
 }
 
 enum TraderAccountStatusModel {
