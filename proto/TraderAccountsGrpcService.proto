@@ -90,6 +90,8 @@ message GetTraderAccountCredentialsResponseBody {
 
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated int64 Logins = 1;
+  trader_accounts.TradingPlatformModel TradingPlatform = 2;
+  trader_accounts.BrokerModel Broker = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
