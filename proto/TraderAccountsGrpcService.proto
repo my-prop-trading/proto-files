@@ -16,6 +16,9 @@ message TraderAccount {
     int64 UpdatedAt = 11;
     trader_accounts.TraderAccountStatusModel Status = 12;
     double InitialBalance = 13;
+    string InitialBalanceCurrency = 14;
+    double OverallDrawdown = 15;
+    double DailyDrawdown = 16;
 }
 
 enum TraderAccountStatusModel {
