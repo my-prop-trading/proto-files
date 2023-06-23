@@ -146,18 +146,18 @@ message AccountTradeModel {
     int64 Digits = 4;           // security precision
     TradeType Type = 5;              // trade command
     double Lots = 6;           // volume
-    uint64 OpenTime = 7;        // open time
+    int64 OpenTime = 7;        // open time
     double OpenPrice = 8;       // open price
     double Sl = 9;
     double Tp = 10;            // stop loss & take profit
-    optional uint64 CloseTime = 11;       // close time
+    optional int64 CloseTime = 11;       // close time
     double Fee = 12;             // commission
     double Swap = 13;            // order swaps
     double ClosePrice = 14;      // close price
     double Profit = 15;           // profit
     double Taxes = 16;            // taxes
     string Comment = 17;          // comment
-    uint64 Timestamp = 18;        // timestamp
+    int64 Timestamp = 18;        // timestamp
 }
 
 service MetatraderAccountGrpcService {
