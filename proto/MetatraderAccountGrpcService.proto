@@ -150,7 +150,7 @@ message AccountTradeModel {
     double OpenPrice = 8;       // open price
     double Sl = 9;
     double Tp = 10;            // stop loss & take profit
-    uint64 CloseTime = 11;       // close time
+    optional uint64 CloseTime = 11;       // close time
     double Fee = 12;             // commission
     double Swap = 13;            // order swaps
     double ClosePrice = 14;      // close price
