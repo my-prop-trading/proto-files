@@ -1,0 +1,59 @@
+syntax = "proto3";
+package account_history;
+import "google/protobuf/empty.proto";
+
+enum TradeTypeModel {
+  BUY = 0;
+  SELL = 1;
+  BUY_LIMIT = 2;
+  SELL_LIMIT = 3;
+  BUY_STOP = 4;
+  SELL_STOP = 5;
+  BALANCE = 6;
+  CREDIT = 7;
+}
+
+
+message AccountTradeModel {
+  int64 Id = 1;            
+  int64 MetatraderLogin = 4;
+  string TraderAccountId = 5;
+  string Symbol = 6;
+  int64 Digits = 7;
+  account_history.TradeTypeModel TradeType = 8;
+  double Lots = 9;
+  int64 OpenTime = 10;        
+  double OpenPrice = 11;
+  double Sl = 12;
+  double Tp = 13;
+  int64 CloseTime = 14;       
+  double Fee = 15;
+  double Swap = 16;
+  double ClosePrice = 17;
+  double Profit = 18;
+  double Taxes = 19;
+  string Comment = 20;
+  int64 Timestamp = 21;        
+}
+
+message GetByTraderAccountIdRequest {
+  string TraderAccountId = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+}
+
+message GetByTraderAccountIdResponse {
+  repeated account_history.AccountTradeModel Items = 1;
+}
+
+enum AccountHistoryError {
+  OK = 0;
+  NO_ACCOUNT = 1;
+}
+
+
+service AccountHistoryGrpcService {
+    rpc GetByTraderAccountId(account_history.GetByTraderAccountIdRequest) returns (account_history.GetByTraderAccountIdResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
