@@ -26,7 +26,7 @@ message AccountTradeModel {
   double OpenPrice = 11;
   double Sl = 12;
   double Tp = 13;
-  int64 CloseTime = 14;       
+  optional int64 CloseTime = 14;       
   double Fee = 15;
   double Swap = 16;
   double ClosePrice = 17;
