@@ -84,6 +84,10 @@ message TraderPackageFieldsOrder {
 message GetAllRequest{
 }
 
+message GetAllPublishedRequest {
+  
+}
+
 message GetAllResponse{
   repeated trader_packages.TraderPackage Items = 1;
 }
@@ -123,7 +127,7 @@ message PublishResponse {
 
 service TraderPackagesGrpcService {
     rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
-    rpc GetAllPublished(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
+    rpc GetAllPublished(trader_packages.GetAllPublishedRequest) returns (trader_packages.GetAllResponse);
     rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
     rpc Delete(trader_packages.DeleteRequest) returns (trader_packages.DeleteResponse);
     rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
