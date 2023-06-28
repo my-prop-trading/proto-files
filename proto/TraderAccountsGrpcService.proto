@@ -19,6 +19,7 @@ message TraderAccount {
     string InitialBalanceCurrency = 14;
     double OverallDrawdown = 15;
     double DailyDrawdown = 16;
+    double TargetProfit = 17;
 }
 
 enum TraderAccountStatusModel {
