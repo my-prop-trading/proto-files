@@ -20,6 +20,7 @@ message TraderAccount {
     double OverallDrawdown = 15;
     double DailyDrawdown = 16;
     double TargetProfit = 17;
+    int32 MinTradedDays = 18;
 }
 
 enum TraderAccountStatusModel {
