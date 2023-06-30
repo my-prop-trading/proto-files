@@ -1,5 +1,5 @@
 syntax = "proto3";
-package client_audit_log;
+package client_audit_logs;
 import "google/protobuf/empty.proto";
 
 enum ClientAuditLogType {
@@ -15,7 +15,7 @@ message ClientAuditLog {
   string UserId = 4;
   string NewContext = 5;
   string PrevContext = 6;
-  client_audit_log.ClientAuditLogType Type = 7;
+  client_audit_logs.ClientAuditLogType Type = 7;
 }
 
 message CreateClientAuditLogRequest {
@@ -24,18 +24,18 @@ message CreateClientAuditLogRequest {
   string UserId = 4;
   string NewContext = 5;
   string PrevContext = 6;
-  client_audit_log.ClientAuditLogType Type = 7;
+  client_audit_logs.ClientAuditLogType Type = 7;
 }
 
 message CreateClientAuditLogResponse {
   oneof response {
-    client_audit_log.CreateClientAuditLogResponseBody Body = 1;
-    client_audit_log.ClientAuditLogError Error = 2;
+    client_audit_logs.CreateClientAuditLogResponseBody Body = 1;
+    client_audit_logs.ClientAuditLogError Error = 2;
   } 
 }
 
 message CreateClientAuditLogResponseBody {
-  client_audit_log.ClientAuditLog ClientAuditLog = 1;
+  client_audit_logs.ClientAuditLog ClientAuditLog = 1;
 }
 
 message GetClientAuditLogPaginatedRequest {
@@ -58,9 +58,9 @@ enum ClientAuditLogError {
 
 
 service ClientAuditLogsGrpcService {
-    rpc CreateClientAuditLog(client_audit_log.CreateClientAuditLogRequest) returns (client_audit_log.CreateClientAuditLogResponse);
+    rpc CreateClientAuditLog(client_audit_logs.CreateClientAuditLogRequest) returns (client_audit_logs.CreateClientAuditLogResponse);
 
-    rpc GetClientAuditLogPaginated(client_audit_log.GetClientAuditLogPaginatedRequest) returns (client_audit_log.GetClientAuditLogPaginatedResponse);
+    rpc GetClientAuditLogPaginated(client_audit_logs.GetClientAuditLogPaginatedRequest) returns (client_audit_logs.GetClientAuditLogPaginatedResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
