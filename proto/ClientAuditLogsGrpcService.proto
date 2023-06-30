@@ -25,6 +25,7 @@ message CreateClientAuditLogRequest {
   string NewContext = 5;
   string PrevContext = 6;
   client_audit_logs.ClientAuditLogType Type = 7;
+  string ProcessId = 8;
 }
 
 message CreateClientAuditLogResponse {
