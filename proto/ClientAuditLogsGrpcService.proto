@@ -1,0 +1,66 @@
+syntax = "proto3";
+package client_audit_log;
+import "google/protobuf/empty.proto";
+
+enum ClientAuditLogType {
+  CHANGED_PERSONAL_DATA = 0;
+  REGISTERED = 1;
+  LOGGED_IN = 2;
+}
+
+message ClientAuditLog {
+  string Id = 1;
+  string ClientId = 2;
+  int64 CreatedAt = 3;
+  string UserId = 4;
+  string NewContext = 5;
+  string PrevContext = 6;
+  client_audit_log.ClientAuditLogType Type = 7;
+}
+
+message CreateClientAuditLogRequest {
+  string ClientId = 2;
+  int64 CreatedAt = 3;
+  string UserId = 4;
+  string NewContext = 5;
+  string PrevContext = 6;
+  client_audit_log.ClientAuditLogType Type = 7;
+}
+
+message CreateClientAuditLogResponse {
+  oneof response {
+    client_audit_log.CreateClientAuditLogResponseBody Body = 1;
+    client_audit_log.ClientAuditLogError Error = 2;
+  } 
+}
+
+message CreateClientAuditLogResponseBody {
+  client_audit_log.ClientAuditLog ClientAuditLog = 1;
+}
+
+message GetClientAuditLogPaginatedRequest {
+  optional string ClientId = 1;
+  uint64 limit = 2;
+  uint64 offset = 3;
+}
+
+message GetClientAuditLogPaginatedResponse {
+  repeated ClientAuditLog Items = 1;
+}
+
+enum ClientAuditLogError {
+  OK = 0;
+  PackageNotFound = 1;
+  OrderNotFound = 2;
+  OrderNotPending = 3;
+  OrderNotPaid = 4;
+}
+
+
+service ClientAuditLogsGrpcService {
+    rpc CreateClientAuditLog(client_audit_log.CreateClientAuditLogRequest) returns (client_audit_log.CreateClientAuditLogResponse);
+
+    rpc GetClientAuditLogPaginated(client_audit_log.GetClientAuditLogPaginatedRequest) returns (client_audit_log.GetClientAuditLogPaginatedResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
