@@ -160,6 +160,13 @@ message AccountTradeModel {
     int64 Timestamp = 18;        // timestamp
 }
 
+message GetTimeRequest {
+}
+
+message GetTimeResponse {
+    int64 ServerTime = 1;
+}
+
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -192,5 +199,7 @@ service MetatraderAccountGrpcService {
     returns (stream metatrader.AccountTradeModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    rpc GetTime(metatrader.GetTimeRequest) returns (metatrader.GetTimeResponse);
 
 }
