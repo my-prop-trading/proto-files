@@ -165,6 +165,7 @@ message GetTimeRequest {
 
 message GetTimeResponse {
     int64 ServerTime = 1;
+    int64 GmtTimeZone = 2;
 }
 
 service MetatraderAccountGrpcService {
