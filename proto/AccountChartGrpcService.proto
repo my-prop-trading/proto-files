@@ -2,10 +2,19 @@ syntax = "proto3";
 package account_chart;
 import "google/protobuf/empty.proto";
 
+message Candle {
+    double Open = 1;
+    double Close = 2;
+    double High = 3;
+    double Low = 4;
+}
+
 message AccountChart {
   int64 Date = 1;
   double Equity = 2;
   double Balance = 3;
+  account_chart.Candle EquityCandle = 4;
+  account_chart.Candle BalanceCandle = 5; 
 }
 
 message GetByTraderAccIdRequest {
