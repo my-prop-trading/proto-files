@@ -1,0 +1,7 @@
+syntax = "proto3";
+package trading_scenarios;
+import "google/protobuf/empty.proto";
+
+service TradingScenariosGrpcService {
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
