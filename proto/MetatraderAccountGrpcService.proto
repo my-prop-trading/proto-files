@@ -168,6 +168,15 @@ message GetTimeResponse {
     int64 GmtTimeZone = 2;
 }
 
+message CloseAccountPositionsRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message CloseAccountPositionsResponse {
+    bool Success = 1;
+}
+
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -203,4 +212,6 @@ service MetatraderAccountGrpcService {
 
     rpc GetTime(metatrader.GetTimeRequest) returns (metatrader.GetTimeResponse);
 
+    rpc CloseAccountPositions(metatrader.CloseAccountPositionsRequest) 
+    returns (metatrader.CloseAccountPositionsResponse);
 }
