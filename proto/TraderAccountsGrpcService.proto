@@ -126,6 +126,7 @@ enum TraderAccountError {
   NO_TRADING_PACKAGE = 2;
   UNAUTHORIZED = 3;
   NO_PERSONAL_DATA = 4;
+  TRADER_ACCOUNT_WRONG_STATUS = 5;
 }
 
 
