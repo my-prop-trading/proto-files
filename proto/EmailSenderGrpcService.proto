@@ -20,6 +20,18 @@ message ForgotPasswordRequest {
     string Code = 3;
 }
 
+message SuccesfullScenarioPhase1Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SuccesfullScenarioPhase2Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 message EmailSentResponse {
     
 }
@@ -28,5 +40,10 @@ service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase1(email_sender.SuccesfullScenarioPhase1Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase2(email_sender.SuccesfullScenarioPhase2Request) returns (email_sender.EmailSentResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
