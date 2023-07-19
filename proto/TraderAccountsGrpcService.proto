@@ -21,6 +21,7 @@ message TraderAccount {
     double DailyDrawdown = 16;
     double TargetProfit = 17;
     int32 MinTradedDays = 18;
+    string Brand = 19;
 }
 
 enum TraderAccountStatusModel {
@@ -63,6 +64,7 @@ message CreateTraderAccountRequest {
     string ClientId = 12;
     string ProcessId = 13;
     string OrderId = 14;
+    string Brand = 15;
 }
 
 message CreateTraderAccountResponse{
