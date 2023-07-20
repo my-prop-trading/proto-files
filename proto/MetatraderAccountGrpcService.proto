@@ -5,6 +5,7 @@ import "google/protobuf/empty.proto";
 enum MetatraderAccountError {
     Ok = 0;
     InternalError = 1;
+    NoSuchMetatraderLogin = 2;
 }
 
 message CreateAccountRequest {
