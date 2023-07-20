@@ -1,0 +1,41 @@
+syntax = "proto3";
+package kyc;
+import "google/protobuf/empty.proto";
+
+enum KycError {
+    Ok = 0;
+    InternalError = 1;
+}
+
+message GenerateSumsubSdkTokenRequest {
+    string TraderAccountId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message GenerateSumsubSdkTokenResponseBody {
+    string Token = 1;
+}
+
+message GenerateSumsubSdkTokenResponse {
+    oneof response {
+        kyc.GenerateSumsubSdkTokenResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
+
+enum KycOperationStatus
+{
+    KycRequired = 0;
+    KycInProgress = 1;
+    Allowed = 2;
+    AllowedWithKycAlert = 3;
+    Blocked = 4;
+}
+
+service KycStatusGrpcService {
+    rpc GenerateSumsubSdkToken(kyc.GenerateSumsubSdkTokenRequest) 
+    returns (kyc.GenerateSumsubSdkTokenResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
