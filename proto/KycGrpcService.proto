@@ -33,7 +33,7 @@ enum KycOperationStatus
     Blocked = 4;
 }
 
-service KycStatusGrpcService {
+service KycGrpcService {
     rpc GenerateSumsubSdkToken(kyc.GenerateSumsubSdkTokenRequest) 
     returns (kyc.GenerateSumsubSdkTokenResponse);
     
