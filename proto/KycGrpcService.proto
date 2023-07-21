@@ -7,19 +7,19 @@ enum KycError {
     InternalError = 1;
 }
 
-message GenerateSumsubSdkTokenRequest {
+message CreateSumsubTokenRequest {
     string TraderAccountId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
 
-message GenerateSumsubSdkTokenResponseBody {
+message CreateSumsubTokenResponseBody {
     string Token = 1;
 }
 
-message GenerateSumsubSdkTokenResponse {
+message CreateSumsubTokenResponse {
     oneof response {
-        kyc.GenerateSumsubSdkTokenResponseBody Body = 1;
+        kyc.CreateSumsubTokenResponseBody Body = 1;
         kyc.KycError Error = 2;
     } 
 }
@@ -34,7 +34,10 @@ enum KycOperationStatus
 }
 
 service KycGrpcService {
-    rpc GenerateSumsubSdkToken(kyc.GenerateSumsubSdkTokenRequest) 
+    rpc CreateSumsubToken(kyc.CreateSumsubTokenRequest) 
+    returns (kyc.CreateSumsubTokenResponse);
+    
+    rpc GetClientKycStatus(kyc.GenerateSumsubSdkTokenRequest) 
     returns (kyc.GenerateSumsubSdkTokenResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
