@@ -24,6 +24,20 @@ message CreateSumsubTokenResponse {
     } 
 }
 
+message GetClientKycStatusRequest {
+    string TraderAccountId = 1;
+}
+
+message GetClientKycStatusBody {
+    string KycOperationStatus = 1;
+}
+
+message GetClientKycStatusResponse {
+    oneof response {
+        kyc.GetClientKycStatusBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
 enum KycOperationStatus
 {
     KycRequired = 0;
@@ -37,8 +51,8 @@ service KycGrpcService {
     rpc CreateSumsubToken(kyc.CreateSumsubTokenRequest) 
     returns (kyc.CreateSumsubTokenResponse);
     
-    rpc GetClientKycStatus(kyc.GenerateSumsubSdkTokenRequest) 
-    returns (kyc.GenerateSumsubSdkTokenResponse);
+    rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
+    returns (kyc.GetClientKycStatusResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
