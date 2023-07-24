@@ -38,13 +38,12 @@ message GetClientKycStatusResponse {
         kyc.KycError Error = 2;
     } 
 }
-enum KycOperationStatus
+enum KycStatus
 {
-    KycRequired = 0;
-    KycInProgress = 1;
+    Required = 0;
+    Processing = 1;
     Allowed = 2;
-    AllowedWithKycAlert = 3;
-    Blocked = 4;
+    Blocked = 3;
 }
 
 service KycGrpcService {
