@@ -8,7 +8,7 @@ enum KycError {
 }
 
 message CreateSumsubTokenRequest {
-    string TraderAccountId = 1;
+    string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
@@ -25,7 +25,7 @@ message CreateSumsubTokenResponse {
 }
 
 message GetClientKycStatusRequest {
-    string TraderAccountId = 1;
+    string ClientId = 1;
 }
 
 message GetClientKycStatusBody {
