@@ -22,6 +22,12 @@ message TraderAccount {
     double TargetProfit = 17;
     int32 MinTradedDays = 18;
     string Brand = 19;
+    trader_accounts.TraderAccountTypeModel Type = 20;
+}
+
+enum TraderAccountTypeModel {
+  DEMO = 0;
+  LIVE = 1;
 }
 
 enum TraderAccountStatusModel {
