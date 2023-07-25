@@ -42,7 +42,7 @@ enum KycStatus
 {
     Required = 0;
     Processing = 1;
-    Allowed = 2;
+    Verified = 2;
     Blocked = 3;
 }
 
