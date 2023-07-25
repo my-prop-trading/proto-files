@@ -29,7 +29,7 @@ message GetClientKycStatusRequest {
 }
 
 message GetClientKycStatusBody {
-    KycOperationStatus Status = 1;
+    KycStatus Status = 1;
 }
 
 message GetClientKycStatusResponse {
