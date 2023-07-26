@@ -93,11 +93,31 @@ message GetAccountBalanceResponse {
 }
 
 message CloseAccountRequest {
+    option deprecated = true;
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
 }
 
 message CloseAccountResponse {
+    option deprecated = true;
+    bool Success = 1;
+}
+
+message EnableAccountRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message EnableAccountResponse {
+    bool Success = 1;
+}
+
+message DisableAccountRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message DisableAccountResponse {
     bool Success = 1;
 }
 
@@ -107,6 +127,15 @@ message DisableAccountTradeRequest {
 }
 
 message DisableAccountTraderResponse {
+    bool Success = 1;
+}
+
+message EnableAccountTradeRequest {
+    int64 MetatraderLogin = 1;
+    string ProcessId = 2;
+}
+
+message EnableAccountTraderResponse {
     bool Success = 1;
 }
 
@@ -178,6 +207,15 @@ message CloseAccountPositionsResponse {
     bool Success = 1;
 }
 
+message CloseAllPositionsRequest {
+    string ProcessId = 1;
+}
+
+message CloseAllPositionsModel {
+    int64 MetatraderLogin = 1;
+    string ClientId = 2;
+}
+
 service MetatraderAccountGrpcService {
     rpc CreateAccount(metatrader.CreateAccountRequest) 
     returns (metatrader.CreateAccountResponse);
@@ -198,10 +236,22 @@ service MetatraderAccountGrpcService {
     returns (metatrader.GetAccountBalanceResponse);
 
     rpc CloseAccount(metatrader.CloseAccountRequest) 
-    returns (metatrader.CloseAccountResponse);
+    returns (metatrader.CloseAccountResponse)
+    {
+        option deprecated = true;
+    };
 
-    rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
+    rpc EnableAccount(metatrader.EnableAccountRequest) 
+    returns (metatrader.EnableAccountResponse);
+
+    rpc DisableAccount(metatrader.DisableAccountRequest) 
+    returns (metatrader.DisableAccountResponse);
+
+    rpc EnableAccountTrade(metatrader.DisableAccountTradeRequest) 
     returns (metatrader.DisableAccountTraderResponse);
+
+    rpc DisableAccountTrade(metatrader.EnableAccountTradeRequest) 
+    returns (metatrader.EnableAccountTraderResponse);
 
     rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
     returns (stream metatrader.BalanceModel);
@@ -215,4 +265,7 @@ service MetatraderAccountGrpcService {
 
     rpc CloseAccountPositions(metatrader.CloseAccountPositionsRequest) 
     returns (metatrader.CloseAccountPositionsResponse);
+
+    rpc CloseAllPositions(metatrader.CloseAllPositionsRequest) 
+    returns (stream metatrader.CloseAllPositionsModel);
 }
