@@ -247,10 +247,10 @@ service MetatraderAccountGrpcService {
     rpc DisableAccount(metatrader.DisableAccountRequest) 
     returns (metatrader.DisableAccountResponse);
 
-    rpc EnableAccountTrade(metatrader.DisableAccountTradeRequest) 
+    rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
     returns (metatrader.DisableAccountTraderResponse);
 
-    rpc DisableAccountTrade(metatrader.EnableAccountTradeRequest) 
+    rpc EnableAccountTrade(metatrader.EnableAccountTradeRequest) 
     returns (metatrader.EnableAccountTraderResponse);
 
     rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
