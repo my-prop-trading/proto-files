@@ -6,6 +6,7 @@ enum MetatraderAccountError {
     Ok = 0;
     InternalError = 1;
     NoSuchMetatraderLogin = 2;
+    UserHasOpenPositions = 3;
 }
 
 message CreateAccountRequest {
@@ -71,6 +72,7 @@ message WithdrawalAccountRequest{
 
 message WithdrawalAccountResponseBody {
     int64 MetatraderOrderId = 1;
+    bool ErrorOnOpenPositions =2;
 }
 
 message WithdrawalAccountResponse {
