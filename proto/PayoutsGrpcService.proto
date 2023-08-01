@@ -1,0 +1,72 @@
+syntax = "proto3";
+package payouts;
+import "google/protobuf/empty.proto";
+
+message BankTransferDetailsDto {
+    string beneficiary = 1;
+    string address = 2;
+    string city = 3;
+    string country = 4;
+    string postalCode = 5;
+    string accountNumber = 6; // or IBAN
+    string swiftCode = 7;
+    string bankName = 8;
+}
+
+message CryptoWithdrawalDetailsDto {
+    string cryptocurrency = 1;
+    string network = 2;
+    string cryptoWalletAddress = 3;
+}
+
+enum PayoutStatusDto {
+    PENDING = 0;
+    SUCCESS = 1;
+    FAIL = 2;
+}
+
+message PayoutRequestDto {
+    string id = 1;
+    int64 createdAt = 2; // timestamps are typically represented as int64 in proto
+    optional int64 paidAt = 3; // optional field, represented as int64
+    string txId = 4;
+    PayoutDetailsDto paymentDetails = 5;
+    PayoutStatusDto status = 6;
+
+    double profitAmount = 7;
+    string profitCurrency = 8;
+
+    double refundFeeAmount = 9;
+    string refundFeeCurrency = 10;
+
+    double withdrawalAmount = 11;
+    string withdrawalCurrency = 12;
+
+    int64 eTag = 13;
+}
+
+// message to handle enum wrapping
+message PayoutDetailsDto {
+    oneof detail_type {
+        BankTransferDetailsDto bankTransfer = 1;
+        CryptoWithdrawalDetailsDto cryptoWithdrawal = 2;
+    }
+}
+
+message GetByClientIdRequest {
+    string clientId = 1;
+
+    int64 offset = 2;
+
+    int64 limit = 3;
+}
+
+message GetByClientIdResponse {
+    repeated PayoutRequestDto payouts = 1;
+}
+
+service TraderAccountsGrpcService {
+    rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
