@@ -68,11 +68,11 @@ message WithdrawalAccountRequest{
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
+    bool ErrorOnOpenPositions = 5;
 }
 
 message WithdrawalAccountResponseBody {
     int64 MetatraderOrderId = 1;
-    bool ErrorOnOpenPositions =2;
 }
 
 message WithdrawalAccountResponse {
