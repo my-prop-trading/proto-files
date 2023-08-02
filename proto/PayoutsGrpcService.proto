@@ -2,7 +2,7 @@ syntax = "proto3";
 package payouts;
 import "google/protobuf/empty.proto";
 
-message EmptyDetails {
+message NotSelectedDetails {
 }
 
 message BankTransferDetails {
@@ -51,7 +51,7 @@ message PayoutDetails {
     oneof detail_type {
       BankTransferDetails bankTransfer = 1;
       CryptoWithdrawalDetails cryptoWithdrawal = 2;
-      EmptyDetails = 3;
+      NotSelectedDetails notSelectedDetails = 3;
     }
 }
 
