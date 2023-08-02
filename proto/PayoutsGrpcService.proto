@@ -2,8 +2,7 @@ syntax = "proto3";
 package payouts;
 import "google/protobuf/empty.proto";
 
-message NotSelectedDetails {
-    
+message EmptyDetails {
 }
 
 message BankTransferDetails {
@@ -50,9 +49,9 @@ message PayoutRequest {
 // message to handle enum wrapping
 message PayoutDetails {
     oneof detail_type {
-      payouts.BankTransferDetails bankTransfer = 1;
-      payouts.CryptoWithdrawalDetails cryptoWithdrawal = 2;
-      payouts.NotSelectedDetails = 3;
+      BankTransferDetails bankTransfer = 1;
+      CryptoWithdrawalDetails cryptoWithdrawal = 2;
+      EmptyDetails = 3;
     }
 }
 
