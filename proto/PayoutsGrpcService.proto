@@ -63,7 +63,7 @@ message GetByClientIdResponse {
     repeated payouts.PayoutRequest payouts = 1;
 }
 
-service TraderAccountsGrpcService {
+service PayoutsGrpcService {
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
