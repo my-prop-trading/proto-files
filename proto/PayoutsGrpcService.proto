@@ -44,7 +44,7 @@ message PayoutRequest {
 }
 
 // message to handle enum wrapping
-message PayoutDetailsDto {
+message PayoutDetails {
     oneof detail_type {
       payouts.BankTransferDetails bankTransfer = 1;
       payouts.CryptoWithdrawalDetails cryptoWithdrawal = 2;
@@ -60,7 +60,7 @@ message GetByClientIdRequest {
 }
 
 message GetByClientIdResponse {
-    repeated payouts.PayoutRequestDto payouts = 1;
+    repeated payouts.PayoutRequest payouts = 1;
 }
 
 service TraderAccountsGrpcService {
