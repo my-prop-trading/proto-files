@@ -144,7 +144,7 @@ message GetPayinsPaginatedResponse {
 
 
 service OrdersGrpcService {
-    rpc GePayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
+    rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 
