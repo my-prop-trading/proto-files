@@ -115,8 +115,37 @@ enum OrdersError {
   OrderNotPaid = 4;
 }
 
+message GetPayinsPaginatedRequest {
+  optional string ClientId = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  repeated orders.OrderStatus Statuses = 4;
+  optional string OrderId = 5;
+}
+
+message Payin {
+    int64 CreatedAt = 1; // Date and time of the order creation, typically represented as int64
+    string OrderNumber = 2;      // Order number
+    string ClientId = 3;         // Client ID, can be used as a link to client profile
+    string TradingPackageTitle = 4; // Trading Package title
+    double AccountBalance = 5; // Account balance in package
+    orders.BrokerModel Broker = 6; // Broker selected for package
+    orders.TradingPlatformModel TradingPlatform = 7; // Trading platform selected for package
+    int64 PaidAt= 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
+    double Price = 9; // Price
+    string Currency = 10; // Currency
+    orders.OrderStatus Status = 11; // Status (Unpaid, Success, Pending, Canceled)
+    string TradingPackageId = 12; // Trading Package ID (should be filled for orders with status Success only)
+}
+
+message GetPayinsPaginatedResponse {
+  repeated orders.Payin Payins = 1;
+}
+
 
 service OrdersGrpcService {
+    rpc GePayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
+
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 
     rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
