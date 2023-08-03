@@ -25,34 +25,9 @@ message CreateSumsubTokenResponse {
     } 
 }
 
-message GetClientKycStatusRequest {
-    string ClientId = 1;
-}
-
-message GetClientKycStatusBody {
-    KycStatus Status = 1;
-}
-
-message GetClientKycStatusResponse {
-    oneof response {
-        sumsub.GetClientKycStatusBody Body = 1;
-        sumsub.Error Error = 2;
-    } 
-}
-enum KycStatus
-{
-    Required = 0;
-    Processing = 1;
-    Verified = 2;
-    Blocked = 3;
-}
-
 service SumsubBridge {
     rpc CreateSumsubToken(sumsub.CreateSumsubTokenRequest) 
     returns (sumsub.CreateSumsubTokenResponse);
-    
-    rpc GetClientKycStatus(sumsub.GetClientKycStatusRequest) 
-    returns (sumsub.GetClientKycStatusResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
