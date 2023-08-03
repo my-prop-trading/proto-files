@@ -2,7 +2,7 @@ syntax = "proto3";
 package sumsub;
 import "google/protobuf/empty.proto";
 
-enum KycError {
+enum Error {
     Ok = 0;
     InternalError = 1;
 }
@@ -21,7 +21,7 @@ message CreateSumsubTokenResponseBody {
 message CreateSumsubTokenResponse {
     oneof response {
         sumsub.CreateSumsubTokenResponseBody Body = 1;
-        sumsub.KycError Error = 2;
+        sumsub.Error Error = 2;
     } 
 }
 
@@ -36,7 +36,7 @@ message GetClientKycStatusBody {
 message GetClientKycStatusResponse {
     oneof response {
         sumsub.GetClientKycStatusBody Body = 1;
-        sumsub.KycError Error = 2;
+        sumsub.Error Error = 2;
     } 
 }
 enum KycStatus
@@ -47,7 +47,7 @@ enum KycStatus
     Blocked = 3;
 }
 
-service KycGrpcService {
+service SumsubBridge {
     rpc CreateSumsubToken(sumsub.CreateSumsubTokenRequest) 
     returns (sumsub.CreateSumsubTokenResponse);
     
