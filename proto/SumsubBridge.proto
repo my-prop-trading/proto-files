@@ -1,0 +1,58 @@
+syntax = "proto3";
+package kyc;
+import "google/protobuf/empty.proto";
+
+enum KycError {
+    Ok = 0;
+    InternalError = 1;
+}
+
+message CreateSumsubTokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateSumsubTokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateSumsubTokenResponse {
+    oneof response {
+        kyc.CreateSumsubTokenResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
+
+message GetClientKycStatusRequest {
+    string ClientId = 1;
+}
+
+message GetClientKycStatusBody {
+    KycStatus Status = 1;
+}
+
+message GetClientKycStatusResponse {
+    oneof response {
+        kyc.GetClientKycStatusBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
+enum KycStatus
+{
+    Required = 0;
+    Processing = 1;
+    Verified = 2;
+    Blocked = 3;
+}
+
+service KycGrpcService {
+    rpc CreateSumsubToken(kyc.CreateSumsubTokenRequest) 
+    returns (kyc.CreateSumsubTokenResponse);
+    
+    rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
+    returns (kyc.GetClientKycStatusResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
