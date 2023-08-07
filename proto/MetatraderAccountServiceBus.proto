@@ -1,6 +1,5 @@
 syntax = "proto3";
 package metatrader_service_bus;
-import "google/protobuf/empty.proto";
 
 enum TradingPlatformModel {
     Metatrader4 = 0;
