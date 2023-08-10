@@ -7,20 +7,20 @@ enum KycError {
     InternalError = 1;
 }
 
-message CreateSumsubTokenRequest {
+message CreateKycTokenRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
 
-message CreateSumsubTokenResponseBody {
+message CreateKycTokenResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
 }
 
-message CreateSumsubTokenResponse {
+message CreateKycTokenResponse {
     oneof response {
-        kyc.CreateSumsubTokenResponseBody Body = 1;
+        kyc.CreateKycTokenResponseBody Body = 1;
         kyc.KycError Error = 2;
     } 
 }
@@ -48,8 +48,8 @@ enum KycStatus
 }
 
 service KycGrpcService {
-    rpc CreateSumsubToken(kyc.CreateSumsubTokenRequest) 
-    returns (kyc.CreateSumsubTokenResponse);
+    rpc CreateKycToken(kyc.CreateKycTokenRequest) 
+    returns (kyc.CreateKycTokenResponse);
     
     rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
     returns (kyc.GetClientKycStatusResponse);
