@@ -84,19 +84,43 @@ message PayoutRequest {
 
 
 message GetByClientIdRequest {
-    string clientId = 1;
+    string ClientId = 1;
 
-    int64 offset = 2;
+    int64 Offset = 2;
 
-    int64 limit = 3;
+    int64 Limit = 3;
 }
 
 message GetByClientIdResponse {
-    repeated payouts.PayoutRequest payouts = 1;
+    repeated payouts.PayoutRequest Payouts = 1;
+}
+
+
+message CreatePayoutRequest {
+    string ClientId = 1;
+    string TraderAccountId = 2;
+    string ProcessId = 3;
+    payouts.PaymentDetails PaymentDetails = 4;
+}
+
+message CreatePayoutResponse {
+    oneof response {
+        payouts.PayoutRequest Payout = 1;
+        payouts.PayoutsGrpcServiceError Error = 2;
+    }
+}
+
+enum PayoutsGrpcServiceError {
+    INTERNAL = 0;
+    NOT_FOUND = 1;
+    UNAUTHORIZED = 2;
+    NOT_ENOUGH_BALANCE = 3;
 }
 
 service PayoutsGrpcService {
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
+
+    rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
