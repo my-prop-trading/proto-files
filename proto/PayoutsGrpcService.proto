@@ -2,58 +2,86 @@ syntax = "proto3";
 package payouts;
 import "google/protobuf/empty.proto";
 
-message NotSelectedDetails {
+enum BrokerModel {
+    WELLTRADE = 0;
 }
 
-message BankTransferDetails {
-    string beneficiary = 1;
-    string address = 2;
-    string city = 3;
-    string country = 4;
-    string postalCode = 5;
-    string accountNumber = 6; // or IBAN
-    string swiftCode = 7;
-    string bankName = 8;
-}
-
-message CryptoWithdrawalDetails {
-    string cryptocurrency = 1;
-    string network = 2;
-    string cryptoWalletAddress = 3;
+enum TradingPlatformModel {
+    META_TRADER_4 = 0;
+    META_TRADER_5 = 1;
 }
 
 enum PayoutStatus {
-    PENDING = 0;
-    SUCCESS = 1;
-    FAIL = 2;
+    Pending = 0;
+    Success = 1;
+    Fail = 2;
+}
+
+enum PayoutType {
+    RevenueShare = 0;
+    Withdrawal = 1;
+}
+
+enum TradingPlatform {
+    MetaTrader4 = 0;
+    MetaTrader5 = 1;
+}
+
+enum Broker {
+    Welltrade = 0;
+}
+
+message BankTransferDetails {
+    double ProfitAmountToBeWithdrawn = 1;
+    string Currency = 2;
+    double FeeAmountToBeWithdrawn = 3;
+    string BeneficiaryFirstName = 4;
+    string BeneficiaryLastName = 5;
+    string Address = 6;
+    string City = 7;
+    string Country = 8;
+    string PostalCode = 9;
+    string AccountNumberOrIban = 10;
+    string SwiftCode = 11;
+    string BankName = 12;
+}
+
+message CryptoWithdrawalDetails {
+    double ProfitAmountToBeWithdrawn = 1;
+    string FiatCurrency = 2;
+    double FeeAmountToBeWithdrawn = 3;
+    string Cryptocurrency = 4;
+    string Network = 5;
+    string CryptoWalletAddress = 6;
+}
+
+message NotSelectedPaymentDetails {}
+
+message PaymentDetails {
+    oneof detail {
+        payouts.NotSelectedPaymentDetails NotSelected = 1;
+        payouts.BankTransferDetails BankTransfer = 2;
+        payouts.CryptoWithdrawalDetails CryptoWithdrawal = 3;
+    }
 }
 
 message PayoutRequest {
-    string id = 1;
-    int64 createdAt = 2; // timestamps are typically represented as int64 in proto
-    optional int64 paidAt = 3; // optional field, represented as int64
-    string txId = 4;
-    payouts.PayoutDetails paymentDetails = 5;
-    payouts.PayoutStatus status = 6;
-
-    double profitAmount = 7;
-    string profitCurrency = 8;
-
-    double refundFeeAmount = 9;
-    string refundFeeCurrency = 10;
-
-    double withdrawalAmount = 11;
-    string withdrawalCurrency = 12;
+    string Id = 1;
+    int64 CreatedAt = 2;
+    int64 PaidAt = 3;
+    string TxId = 4;
+    string ClientId = 5;
+    string TraderAccountId = 6;
+    payouts.PaymentDetails PaymentDetails = 7;
+    payouts.PayoutStatus Status = 8;
+    payouts.Broker Broker = 9;
+    payouts.PayoutType PayoutType = 10;
+    payouts.TradingPlatform TradingPlatform = 11;
+    double WithdrawalAmount = 12;
+    string WithdrawalCurrency = 13;
+    int64 ETag = 14;
 }
 
-// message to handle enum wrapping
-message PayoutDetails {
-    oneof detail_type {
-      BankTransferDetails bankTransfer = 1;
-      CryptoWithdrawalDetails cryptoWithdrawal = 2;
-      NotSelectedDetails notSelectedDetails = 3;
-    }
-}
 
 message GetByClientIdRequest {
     string clientId = 1;
