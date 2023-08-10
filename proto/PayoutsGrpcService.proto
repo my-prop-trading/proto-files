@@ -101,6 +101,8 @@ message CreatePayoutRequest {
     string TraderAccountId = 2;
     string ProcessId = 3;
     payouts.PaymentDetails PaymentDetails = 4;
+    double WithdrawalAmount = 5;
+    string WithdrawalCurrency = 6;
 }
 
 message CreatePayoutResponse {
