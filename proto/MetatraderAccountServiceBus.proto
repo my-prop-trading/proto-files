@@ -17,7 +17,7 @@ message UserOpenTradeMessage
 
 message UserOpenTradeModel
 {
-    string ClientId = 1;
+    string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
     int64 PositionId = 3;
     metatrader_service_bus.TradingPlatformModel TradingPlatformType = 4;
@@ -32,7 +32,7 @@ message UserDeleteMessage
 
 message UserDeleteModel
 {
-    string ClientId = 1;
+    string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
     metatrader_service_bus.TradingPlatformModel TradingPlatformType = 4;
     metatrader_service_bus.BrokerModel BrokerType = 5;
