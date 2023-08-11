@@ -1,0 +1,7 @@
+syntax = "proto3";
+package metatrader_platfom;
+
+enum TradingPlatformModel {
+    METATRADER_4 = 0;
+    METATRADER_5 = 1;
+}

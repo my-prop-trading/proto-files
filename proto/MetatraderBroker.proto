@@ -1,0 +1,6 @@
+syntax = "proto3";
+package metatrader_broker;
+ 
+enum BrokerModel {
+    WELLTRADE = 0;
+}
