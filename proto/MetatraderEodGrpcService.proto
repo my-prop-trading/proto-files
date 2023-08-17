@@ -2,32 +2,38 @@ syntax = "proto3";
 package metatrader_eod;
 import "proto/MetatraderBroker.proto";
 import "proto/MetatraderPlatform.proto";
+import "google/protobuf/empty.proto";
 
-
-enum MetatraderEofError {
+enum EodError {
     OK = 0;
     INTERNAL_ERROR = 1;
 }
 
-message CreateSchedulerRequest {
-    SchedulerModel Scheduler = 1;
+message CreateEodSchedulerRequest {
+    EodModel Scheduler = 1;
     string ProcessId = 2;
 }
 
-message SchedulerModel {
+message EodModel {
     metatrader_platfom.TradingPlatformModel TradingPlatform = 1;
     metatrader_broker.BrokerModel Broker = 2;
     int64 StartEodTime = 3;
     int64 EndEodTime = 4;
 }
 
-message CreateSchedulerResponse {
+message CreateEodSchedulerResponse {
     oneof response {
         metatrader_eod.CreateSchedulerResponseBody Body = 1;
-        metatrader_eod.MetatraderEofError Error = 2;
+        metatrader_eod.EodError Error = 2;
     } 
 }
 
 message CreateSchedulerResponseBody {
     bool Success = 1;
+}
+
+service MetatraderEodGrpcService {
+    rpc CreateEodScheduler(metatrader_eod.CreateEodSchedulerRequest) returns (metatrader_eod.CreateEodSchedulerResponse);
+ 
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
