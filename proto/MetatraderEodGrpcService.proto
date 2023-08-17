@@ -1,0 +1,33 @@
+syntax = "proto3";
+package metatrader_eod;
+import "proto/MetatraderBroker.proto";
+import "proto/MetatraderPlatform.proto";
+
+
+enum MetatraderEofError {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+}
+
+message CreateSchedulerRequest {
+    SchedulerModel Scheduler = 1;
+    string ProcessId = 2;
+}
+
+message SchedulerModel {
+    metatrader_platfom.TradingPlatformModel TradingPlatform = 1;
+    metatrader_broker.BrokerModel Broker = 2;
+    int64 StartEodTime = 3;
+    int64 EndEodTime = 4;
+}
+
+message CreateSchedulerResponse {
+    oneof response {
+        metatrader_eod.CreateSchedulerResponseBody Body = 1;
+        metatrader_eod.MetatraderEofError Error = 2;
+    } 
+}
+
+message CreateSchedulerResponseBody {
+    bool Success = 1;
+}
