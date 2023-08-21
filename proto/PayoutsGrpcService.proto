@@ -118,7 +118,7 @@ message CreatePayoutResponse {
     }
 }
 
-message GetGetProfitWidgetRequest {
+message GetProfitWidgetRequest {
     string ClientId = 1;
 
     string TraderAccountId = 2;
@@ -143,7 +143,7 @@ service PayoutsGrpcService {
 
     rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
 
-    rpc GetProfitWidget(payouts.GetGetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
+    rpc GetProfitWidget(payouts.GetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
