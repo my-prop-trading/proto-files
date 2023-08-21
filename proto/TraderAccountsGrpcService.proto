@@ -23,6 +23,7 @@ message TraderAccount {
     int32 MinTradedDays = 18;
     string Brand = 19;
     trader_accounts.TraderAccountTypeModel Type = 20;
+    string OrderId = 21;
 }
 
 enum TraderAccountTypeModel {
