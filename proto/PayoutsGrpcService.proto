@@ -82,6 +82,12 @@ message PayoutRequest {
     int64 ETag = 14;
 }
 
+message ProfitWidget {
+    double withdrawn_profit = 1;
+    
+    double pending_profit = 2;
+}
+
 
 message GetByClientIdRequest {
     string ClientId = 1;
@@ -112,6 +118,19 @@ message CreatePayoutResponse {
     }
 }
 
+message GetGetProfitWidgetRequest {
+    string ClientId = 1;
+
+    string TraderAccountId = 2;
+}
+
+message GetProfitWidgetResponse {
+    oneof Response {
+        payouts.ProfitWidget ProfitWidget = 1;
+        payouts.PayoutsGrpcServiceError Error = 2;
+    }
+}
+
 enum PayoutsGrpcServiceError {
     INTERNAL = 0;
     NOT_FOUND = 1;
@@ -123,6 +142,8 @@ service PayoutsGrpcService {
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
 
     rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
+
+    rpc GetProfitWidget(payouts.GetGetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
