@@ -1,6 +1,8 @@
 syntax = "proto3";
 package metatrader;
 import "google/protobuf/empty.proto";
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
 
 enum MetatraderAccountError {
     Ok = 0;
@@ -18,6 +20,8 @@ message CreateAccountRequest {
     optional string Email = 6;
     optional string Country = 7;
     string ProcessId = 8;
+    metatrader_broker.BrokerModel Broker = 9;
+    metatrader_platfom.TradingPlatformModel Platform = 10;
 }
 
 message CreateAccountResponseBody {
@@ -39,6 +43,8 @@ message ChangeAccountTradePasswordRequest {
 message ChangeAccountViewPasswordRequest {
     int64 MetatraderLogin = 1;
     string NewPassword = 2;      
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message ChangeAccountPasswordResponse {
@@ -50,6 +56,8 @@ message DepositAccountRequest {
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
+    metatrader_broker.BrokerModel Broker = 5;
+    metatrader_platfom.TradingPlatformModel Platform = 6;
 }
 
 message DepositAccountResponseBody {
@@ -69,6 +77,8 @@ message WithdrawalAccountRequest{
     string Comment = 3;
     string ProcessId = 4;
     bool ErrorOnOpenPositions = 5;
+    metatrader_broker.BrokerModel Broker = 6;
+    metatrader_platfom.TradingPlatformModel Platform = 7;
 }
 
 message WithdrawalAccountResponseBody {
@@ -84,6 +94,8 @@ message WithdrawalAccountResponse {
 
 message GetAccountBalanceRequest {
     int64 MetatraderLogin = 1;
+    metatrader_broker.BrokerModel Broker = 2;
+    metatrader_platfom.TradingPlatformModel Platform = 3;
 }
 
 message GetAccountBalanceResponse {
@@ -108,6 +120,8 @@ message CloseAccountResponse {
 message EnableAccountRequest {
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message EnableAccountResponse {
@@ -117,6 +131,8 @@ message EnableAccountResponse {
 message DisableAccountRequest {
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message DisableAccountResponse {
@@ -126,6 +142,8 @@ message DisableAccountResponse {
 message DisableAccountTradeRequest {
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message DisableAccountTraderResponse {
@@ -135,6 +153,8 @@ message DisableAccountTraderResponse {
 message EnableAccountTradeRequest {
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message EnableAccountTraderResponse {
@@ -143,6 +163,8 @@ message EnableAccountTraderResponse {
 
 
 message GetAccountsBalanceRequest {
+    metatrader_broker.BrokerModel Broker = 1;
+    metatrader_platfom.TradingPlatformModel Platform = 2;
 
 }
 
@@ -203,6 +225,8 @@ message GetTimeResponse {
 message CloseAccountPositionsRequest {
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message CloseAccountPositionsResponse {
@@ -211,6 +235,8 @@ message CloseAccountPositionsResponse {
 
 message CloseAllPositionsRequest {
     string ProcessId = 1;
+    metatrader_broker.BrokerModel Broker = 2;
+    metatrader_platfom.TradingPlatformModel Platform = 3;
 }
 
 message CloseAllPositionsModel {
