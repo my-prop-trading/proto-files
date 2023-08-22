@@ -1,12 +1,15 @@
 syntax = "proto3";
 package trader_accounts;
 import "google/protobuf/empty.proto";
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
+
 
 message TraderAccount {
     string Id = 1;
     string Title = 2;
     int32 Phase = 3;
-    trader_accounts.TradingPlatformModel TradingPlatformModel = 4;
+    metatrader_platfom.TradingPlatformModel TradingPlatformModel = 4;
     double Balance = 5;
     optional int64 StartDate = 6;
     optional int64 EndDate = 7;
@@ -26,6 +29,22 @@ message TraderAccount {
     string OrderId = 21;
 }
 
+message TraderPlatformCredentials {
+  metatrader_broker.BrokerModel Broker = 1;
+
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+
+  string Windows = 3;
+
+  string Mac = 4;
+
+  string Ios = 5;
+
+  string Android = 6;
+
+  string Web = 7;
+}
+
 enum TraderAccountTypeModel {
   DEMO = 0;
   LIVE = 1;
@@ -38,15 +57,6 @@ enum TraderAccountStatusModel {
   STAGE_COMPLETED = 3;
 }
 
-enum TradingPlatformModel {
-  META_TRADER_4 = 0;
-  META_TRADER_5 = 1;
-}
-
-enum BrokerModel {
-  WELLTRADE = 0;
-}
-
 message GetByClientIdRequest{
   string ClientId = 1;
 }
@@ -57,8 +67,8 @@ message GetByClientIdResponse{
 
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
-    trader_accounts.TradingPlatformModel TradingPlatform = 2;
-    trader_accounts.BrokerModel BrokerModel = 3;
+    metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+    metatrader_broker.BrokerModel BrokerModel = 3;
     // NOT USED
     //string FirstName = 4;
     //string LastName = 5;
@@ -101,8 +111,8 @@ message GetTraderAccountCredentialsResponseBody {
 
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated int64 Logins = 1;
-  trader_accounts.TradingPlatformModel TradingPlatform = 2;
-  trader_accounts.BrokerModel Broker = 3;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  metatrader_broker.BrokerModel Broker = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
@@ -129,6 +139,20 @@ message GetTraderAccountByIdResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
 }
 
+message GetTraderPlatformCredentialsRequest {
+}
+
+message GetTraderPlatformCredentialsResponse {
+  repeated trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
+}
+
+message UpsertTraderPlatformCredentialsRequest {
+  trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
+}
+
+message UpsertTraderPlatformCredentialsResponse {
+}
+
 enum TraderAccountError {
   OK = 0;
   NO_ACCOUNT = 1;
@@ -145,6 +169,9 @@ service TraderAccountsGrpcService {
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
+
+    rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
+    rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
