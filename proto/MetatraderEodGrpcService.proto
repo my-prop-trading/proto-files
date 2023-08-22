@@ -23,12 +23,12 @@ message EodModel {
 
 message CreateEodSchedulerResponse {
     oneof response {
-        metatrader_eod.CreateSchedulerResponseBody Body = 1;
+        metatrader_eod.CreateEodSchedulerResponseBody Body = 1;
         metatrader_eod.EodError Error = 2;
     } 
 }
 
-message CreateSchedulerResponseBody {
+message CreateEodSchedulerResponseBody {
     bool Success = 1;
 }
 
