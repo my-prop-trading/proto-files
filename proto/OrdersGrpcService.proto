@@ -19,6 +19,11 @@ message Order {
   string PriceCurrency = 4;
   orders.OrderStatus Status = 5;
   string ClientId = 6;
+  string TradingPackageTitle = 7; // Trading Package title
+  double AccountBalance = 8; // Account balance in package
+  metatrader_broker.BrokerModel Broker = 9; // Broker selected for package
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 10; // Trading platform selected for package
+  int64 PaidAt= 11; 
 }
 
 message CreateTraderAccountOrderRequest {
