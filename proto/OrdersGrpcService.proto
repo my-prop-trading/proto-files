@@ -1,15 +1,8 @@
 syntax = "proto3";
 package orders;
 import "google/protobuf/empty.proto";
-
-enum TradingPlatformModel {
-  META_TRADER_4 = 0;
-  META_TRADER_5 = 1;
-}
-
-enum BrokerModel {
-  WELLTRADE = 0;
-}
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
 
 enum OrderStatus {
   SUCCESSFUL = 0;
@@ -30,8 +23,8 @@ message Order {
 
 message CreateTraderAccountOrderRequest {
   string TradingPackageId = 1;
-  orders.TradingPlatformModel TradingPlatform = 2;
-  orders.BrokerModel BrokerModel = 3;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  metatrader_broker.BrokerModel BrokerModel = 3;
   string FirstName = 4;
   string LastName = 5;
   string City = 6;
@@ -133,8 +126,8 @@ message Payin {
     string ClientId = 3;         // Client ID, can be used as a link to client profile
     string TradingPackageTitle = 4; // Trading Package title
     double AccountBalance = 5; // Account balance in package
-    orders.BrokerModel Broker = 6; // Broker selected for package
-    orders.TradingPlatformModel TradingPlatform = 7; // Trading platform selected for package
+    metatrader_broker.BrokerModel Broker = 6; // Broker selected for package
+    metatrader_platfom.TradingPlatformModel TradingPlatform = 7; // Trading platform selected for package
     int64 PaidAt= 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
     double Price = 9; // Price
     string Currency = 10; // Currency
