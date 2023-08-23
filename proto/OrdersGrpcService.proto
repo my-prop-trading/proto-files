@@ -12,10 +12,11 @@ enum BrokerModel {
 }
 
 enum OrderStatus {
-  PAID = 0;
-  PENDING = 1;
-  UNPAID = 2;
-  CANCELLED = 3;
+  SUCCESSFUL = 0;
+  UNPAID = 1;
+  CANCELLED = 2;
+  DECLINED = 3;
+  PENDING = 4;
 }
 
 message Order {
