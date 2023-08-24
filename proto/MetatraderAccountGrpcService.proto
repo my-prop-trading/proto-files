@@ -220,6 +220,8 @@ message GetTimeRequest {
 message GetTimeResponse {
     int64 ServerTime = 1;
     int64 GmtTimeZone = 2;
+    int64 StartOfDayTimeSec = 3;
+    int64 EndOfDayTimeSec = 4;
 }
 
 message CloseAccountPositionsRequest {
