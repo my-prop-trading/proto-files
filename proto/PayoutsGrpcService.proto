@@ -130,7 +130,7 @@ message GetByFiltersRequest {
 
     optional int64 ToDate = 4;
 
-    payouts.PayoutStatus Status = 5;
+    repeated payouts.PayoutStatus Status = 5;
 
     optional string TransactionId = 6;
     
