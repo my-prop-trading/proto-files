@@ -176,6 +176,7 @@ enum TraderAccountError {
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
+    rpc GetLoginByTraderAccId(trader_accounts.GetLoginByTraderAccIdRequest) returns (trader_accounts.GetLoginByTraderAccIdResponse);
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
