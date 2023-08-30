@@ -134,7 +134,7 @@ message GetByFiltersRequest {
 
     optional string TransactionId = 6;
     
-    optional payouts.PaymentMethod PaymentMethod = 7;
+    repeated payouts.PaymentMethod PaymentMethods = 7;
 
     int64 Offset = 20;
     
