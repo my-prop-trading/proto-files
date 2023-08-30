@@ -16,9 +16,9 @@ enum PayoutType {
 }
 
 enum PaymentMethod {
-    BankTransfer = 1;
-    CryptoWithdrawal = 2;
-    Both = 3;
+    BankTransfer = 0;
+    CryptoWithdrawal = 1;
+    Both = 2;
 }   
 
 message BankTransferDetails {
