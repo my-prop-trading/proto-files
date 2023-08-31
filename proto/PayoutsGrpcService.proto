@@ -1,15 +1,8 @@
 syntax = "proto3";
 package payouts;
 import "google/protobuf/empty.proto";
-
-enum BrokerModel {
-    WELLTRADE = 0;
-}
-
-enum TradingPlatformModel {
-    META_TRADER_4 = 0;
-    META_TRADER_5 = 1;
-}
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
 
 enum PayoutStatus {
     Pending = 0;
@@ -22,14 +15,11 @@ enum PayoutType {
     Withdrawal = 1;
 }
 
-enum TradingPlatform {
-    MetaTrader4 = 0;
-    MetaTrader5 = 1;
-}
-
-enum Broker {
-    Welltrade = 0;
-}
+enum PaymentMethod {
+    BankTransfer = 0;
+    CryptoWithdrawal = 1;
+    Both = 2;
+}   
 
 message BankTransferDetails {
     double ProfitAmountToBeWithdrawn = 1;
@@ -74,9 +64,9 @@ message PayoutRequest {
     string TraderAccountId = 6;
     payouts.PaymentDetails PaymentDetails = 7;
     payouts.PayoutStatus Status = 8;
-    payouts.Broker Broker = 9;
+    metatrader_broker.BrokerModel Broker = 9;
     payouts.PayoutType PayoutType = 10;
-    payouts.TradingPlatform TradingPlatform = 11;
+    metatrader_platfom.TradingPlatformModel TradingPlatform = 11;
     double WithdrawalAmount = 12;
     string WithdrawalCurrency = 13;
     int64 ETag = 14;
@@ -131,17 +121,75 @@ message GetProfitWidgetResponse {
     }
 }
 
+message GetByFiltersRequest {
+    optional string ClientId = 1;
+
+    optional string TraderAccountId = 2;
+    
+    optional int64 FromDate = 3;
+
+    optional int64 ToDate = 4;
+
+    repeated payouts.PayoutStatus Status = 5;
+
+    optional string TransactionId = 6;
+    
+    optional payouts.PaymentMethod PaymentMethod = 7;
+
+    int64 Offset = 20;
+    
+    int64 Limit = 21;
+}
+    
+message GetByFiltersResponse {
+    repeated payouts.PayoutRequest Payouts = 1;
+}
+
+message ApprovePayoutRequest {
+    string PayoutId = 1;
+
+    string ProcessId = 2;
+}
+    
+message ApprovePayoutResponse {
+     oneof response {
+        payouts.PayoutRequest Payout = 1;
+        payouts.PayoutsGrpcServiceError Error = 2;
+    }
+}
+
+message DeclinePayoutRequest {
+    string PayoutId = 1;
+
+    string ProcessId = 2;
+}
+    
+message DeclinePayoutResponse {
+     oneof response {
+        payouts.PayoutRequest Payout = 1;
+        payouts.PayoutsGrpcServiceError Error = 2;
+    }
+}
+
+
 enum PayoutsGrpcServiceError {
     INTERNAL = 0;
     NOT_FOUND = 1;
     UNAUTHORIZED = 2;
     NOT_ENOUGH_BALANCE = 3;
+    CANT_MAKE_DECISION = 4;
 }
 
 service PayoutsGrpcService {
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
 
+    rpc GetByFilters(payouts.GetByFiltersRequest) returns (payouts.GetByFiltersResponse);
+
     rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
+
+    rpc ApprovePayout(payouts.ApprovePayoutRequest) returns (payouts.ApprovePayoutResponse);
+
+    rpc DeclinePayout(payouts.DeclinePayoutRequest) returns (payouts.DeclinePayoutResponse);
 
     rpc GetProfitWidget(payouts.GetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
     
