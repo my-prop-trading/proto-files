@@ -1,15 +1,10 @@
 syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
 package metatrader_service_bus;
 
-enum TradingPlatformModel {
-    Metatrader4 = 0;
-    Metatrader5 = 1;
-}
-  
-enum BrokerModel {
-    Welltrade = 0;
-}
-  
+
 message UserOpenTradeMessage
 {
     metatrader_service_bus.UserOpenTradeModel Body = 1; 
@@ -20,8 +15,8 @@ message UserOpenTradeModel
     string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
     int64 PositionId = 3;
-    metatrader_service_bus.TradingPlatformModel TradingPlatformType = 4;
-    metatrader_service_bus.BrokerModel BrokerType = 5;
+    metatrader_platfom.TradingPlatformModel TradingPlatformType = 4;
+    metatrader_broker.BrokerModel BrokerType = 5;
     int64 OpenTime = 6;
 }
 
@@ -34,6 +29,6 @@ message UserDeleteModel
 {
     string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
-    metatrader_service_bus.TradingPlatformModel TradingPlatformType = 4;
-    metatrader_service_bus.BrokerModel BrokerType = 5;
+    metatrader_platfom.TradingPlatformModel TradingPlatformType = 3;
+    metatrader_broker.BrokerModel BrokerType = 4;
 }
