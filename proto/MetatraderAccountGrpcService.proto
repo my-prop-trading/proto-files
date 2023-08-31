@@ -37,7 +37,9 @@ message CreateAccountResponse {
 
 message ChangeAccountTradePasswordRequest {
     int64 MetatraderLogin = 1;
-    string NewPassword = 2;      
+    string NewPassword = 2;    
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;  
 }
 
 message ChangeAccountViewPasswordRequest {
@@ -110,6 +112,8 @@ message CloseAccountRequest {
     option deprecated = true;
     int64 MetatraderLogin = 1;
     string ProcessId = 2;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 message CloseAccountResponse {
@@ -180,6 +184,8 @@ message BalanceModel {
 
 message GetAccountHistory {
     int64 MetatraderLogin = 1;
+    metatrader_broker.BrokerModel Broker = 3;
+    metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
 enum TradeType { 
@@ -215,6 +221,8 @@ message AccountTradeModel {
 }
 
 message GetTimeRequest {
+    metatrader_broker.BrokerModel Broker = 1;
+    metatrader_platfom.TradingPlatformModel Platform = 2;
 }
 
 message GetTimeResponse {
