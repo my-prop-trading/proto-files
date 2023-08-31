@@ -171,6 +171,15 @@ message DeclinePayoutResponse {
     }
 }
 
+message GetPayoutsStatisticRequest {
+}
+
+message GetPayoutsStatisticResponse {
+    double ProfitToBeWithdrawn = 1;
+    double TotalCurrentUsersProfit = 2;
+    double TotallyWithdrawn = 3;
+    double PendingPayouts = 4;
+}
 
 enum PayoutsGrpcServiceError {
     INTERNAL = 0;
@@ -192,6 +201,8 @@ service PayoutsGrpcService {
     rpc DeclinePayout(payouts.DeclinePayoutRequest) returns (payouts.DeclinePayoutResponse);
 
     rpc GetProfitWidget(payouts.GetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
+
+    rpc GetPayoutsStatistic(payouts.GetPayoutsStatisticRequest) returns (payouts.GetPayoutsStatisticResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
