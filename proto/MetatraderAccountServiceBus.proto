@@ -20,6 +20,21 @@ message UserOpenTradeModel
     int64 OpenTime = 6;
 }
 
+message UserCloseTradeMessage
+{
+    metatrader_service_bus.UserCloseTradeModel Body = 1; 
+}
+
+message UserCloseTradeModel
+{
+    string TraderAccountId = 1;
+    int64 MetatraderLogin = 2;
+    int64 PositionId = 3;
+    metatrader_platfom.TradingPlatformModel TradingPlatformType = 4;
+    metatrader_broker.BrokerModel BrokerType = 5;
+    int64 OpenTime = 6;
+}
+
 message UserDeleteMessage
 {
     metatrader_service_bus.UserDeleteModel Body = 1; 
