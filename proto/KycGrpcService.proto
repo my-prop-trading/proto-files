@@ -3,8 +3,8 @@ package kyc;
 import "google/protobuf/empty.proto";
 
 enum KycError {
-    Ok = 0;
-    InternalError = 1;
+    OK = 0;
+    INTERNAL_ERROR = 1;
 }
 
 message CreateKycTokenRequest {
@@ -39,12 +39,53 @@ message GetClientKycStatusResponse {
         kyc.KycError Error = 2;
     } 
 }
+
+
 enum KycStatus
 {
     Required = 0;
     Processing = 1;
     Verified = 2;
     Blocked = 3;
+}
+
+message GetClientKycPprogressRequest {
+    string ClientId = 1;
+}
+
+message GetClientKycPprogressBody {
+    InitKycStatus InitiationPoIStatus  = 1;
+    InitKycStatus InitiationPoAStatus = 2;
+    WaitKycStatus WaitPoIStatus = 3;
+    WaitKycStatus WaitPoAStatus = 4;
+    ContractSignedStatus ContractSignStatus = 5;
+}
+
+enum InitKycStatus {
+    IKS_NOT_INIT = 0;
+    IKS_SUCCESS = 1;
+}
+
+enum WaitKycStatus {        
+    WKS_NOT_INIT = 0;
+    WKS_PENDING = 1;
+    WKS_SUCCESS = 2;
+    WKS_FAIL = 3;
+    WKS_RETRY = 4;
+}
+
+enum ContractSignedStatus
+{
+    CSS_NOT_INIT = 0;
+    CSS_PENDING = 1;
+    CSS_SUCCESS = 2;
+    CSS_STATUS_FAIL = 3;
+}
+message GetClientKycPprogressResponse {
+    oneof response {
+        kyc.GetClientKycStatusBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
 }
 
 service KycGrpcService {
@@ -54,5 +95,8 @@ service KycGrpcService {
     rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
     returns (kyc.GetClientKycStatusResponse);
     
+    rpc GetClientKycPprogress(kyc.GetClientKycPprogressRequest) 
+    returns (kyc.GetClientKycPprogressResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
