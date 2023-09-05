@@ -49,11 +49,11 @@ enum KycStatus
     Blocked = 3;
 }
 
-message GetClientKycPprogressRequest {
+message GetClientKycProgressRequest {
     string ClientId = 1;
 }
 
-message GetClientKycPprogressBody {
+message GetClientKycProgressBody {
     InitKycStatus InitiationPoIStatus  = 1;
     InitKycStatus InitiationPoAStatus = 2;
     WaitKycStatus WaitPoIStatus = 3;
@@ -81,7 +81,7 @@ enum ContractSignedStatus
     CSS_SUCCESS = 2;
     CSS_STATUS_FAIL = 3;
 }
-message GetClientKycPprogressResponse {
+message GetClientKycProgressResponse {
     oneof response {
         kyc.GetClientKycStatusBody Body = 1;
         kyc.KycError Error = 2;
@@ -95,8 +95,8 @@ service KycGrpcService {
     rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
     returns (kyc.GetClientKycStatusResponse);
     
-    rpc GetClientKycPprogress(kyc.GetClientKycPprogressRequest) 
-    returns (kyc.GetClientKycPprogressResponse);
+    rpc GetClientKycPprogress(kyc.GetClientKycProgressRequest) 
+    returns (kyc.GetClientKycProgressResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
