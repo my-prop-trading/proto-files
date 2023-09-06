@@ -181,6 +181,22 @@ message GetPayoutsStatisticResponse {
     double PendingPayouts = 4;
 }
 
+message GetPayoutsStatisticForClientRequest {
+    string ClientId = 1;
+}
+
+message GetPayoutsStatisticForClientResponse {
+    repeated payouts.TraderAccountStatistic TraderAccountStatistic = 1;
+}
+
+message TraderAccountStatistic {
+    string TraderAccountId = 1;
+
+    double ProfitToBeWithdrawn = 2;
+    double TotalCurrentUsersProfit = 3;
+    double TotallyWithdrawn = 4;
+}
+
 enum PayoutsGrpcServiceError {
     INTERNAL = 0;
     NOT_FOUND = 1;
@@ -203,6 +219,8 @@ service PayoutsGrpcService {
     rpc GetProfitWidget(payouts.GetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
 
     rpc GetPayoutsStatistic(payouts.GetPayoutsStatisticRequest) returns (payouts.GetPayoutsStatisticResponse);
+
+    rpc GetPayoutsStatisticForClient(payouts.GetPayoutsStatisticForClientRequest) returns (payouts.GetPayoutsStatisticForClientResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
