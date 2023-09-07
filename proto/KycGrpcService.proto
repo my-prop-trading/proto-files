@@ -5,6 +5,9 @@ import "google/protobuf/empty.proto";
 enum KycError {
     OK = 0;
     INTERNAL_ERROR = 1;
+    NO_TRADING_ACCOUNT = 2;
+    NO_TRADING_PACKAGE = 3; 
+    METATARDER_ERROR = 4; 
 }
 
 message ProofOfIdentityRequest {
@@ -183,9 +186,63 @@ message GetContractorsRequest {
     uint64 Limit = 1;
     uint64 Offset = 2;
     optional string ClientId = 3;
-    optional string InternalVerificationId = 4;
-    optional string SumsubVerificationId = 5;
+    optional int64 Date = 4;
 }
+
+enum ContractStatus {
+    CS_NOT_INIT = 0;
+    CS_GRANTED_LIVE_ACCOUNT = 1;
+    CS_REJECTED = 2;
+    CS_REJECTED_AND_BLOCKED = 3;
+}
+
+message ContractorModel {
+    string TradingPackageId = 1;
+    string ClientId = 2;
+    int64 SendingDate = 3;
+    bool PoI = 4;
+    bool PoA = 5;
+    bool IsSignedContractReceived = 6;
+    ContractStatus Status = 7;
+    string Comment = 8;
+    int64 CreatedAt = 9;
+    int64 UpdatedAt = 10;
+}
+
+message GetContractorsResponse {
+    repeated kyc.ContractorModel Items = 1;
+}
+
+message ContractorGrantLiveAccountRequest {
+    string TradingPackageId = 1;
+}
+
+message ContractorGrantLiveAccountResponseBody{
+    string TraderAccountId = 1;
+    int64 MetatraderLogin = 2;
+}
+
+message ContractorGrantLiveAccountResponse {
+    oneof response {
+        kyc.ContractorGrantLiveAccountResponseBody Body = 1;
+        kyc.KycError Error = 2;
+      }
+}   
+
+message ContractorCommentRequest {
+    string TradingPackageId = 1;
+    string Comment = 2;
+}
+
+message ContractorCommentResponseBody{
+}
+
+message ContractorCommentResponse {
+    oneof response {
+        kyc.ContractorGrantLiveAccountResponseBody Body = 1;
+        kyc.KycError Error = 2;
+      }
+}  
 
 service KycGrpcService {
     // From API
@@ -213,6 +270,12 @@ service KycGrpcService {
 
     rpc GetContractors(kyc.GetContractorsRequest)
     returns (kyc.GetContractorsResponse);
+
+    rpc ContractorGrantLiveAccount(kyc.ContractorGrantLiveAccountRequest)
+    returns (kyc.ContractorGrantLiveAccountResponse);
+
+    rpc ContractorComment(kyc.ContractorCommentRequest)
+    returns (kyc.ContractorCommentResponse);
 
     //Ping
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
