@@ -7,58 +7,90 @@ enum KycError {
     INTERNAL_ERROR = 1;
 }
 
-message CreateKycTokenRequest {
+message ProofClientIdentityRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
 
-message CreateKycTokenResponseBody {
+message ProofClientIdentityResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
 }
 
-message CreateKycTokenResponse {
+message ProofClientIdentityResponse {
     oneof response {
-        kyc.CreateKycTokenResponseBody Body = 1;
+        kyc.ProofClientIdentityResponseBody Body = 1;
         kyc.KycError Error = 2;
     } 
 }
 
-message GetClientKycStatusRequest {
+message RetryProofClientIdentityRequest {
     string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
 }
 
-message GetClientKycStatusBody {
-    KycStatus Status = 1;
+message RetryProofClientIdentityResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
 }
 
-message GetClientKycStatusResponse {
+message RetryProofClientIdentityResponse {
     oneof response {
-        kyc.GetClientKycStatusBody Body = 1;
+        kyc.RetryProofClientIdentityResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
+
+message ProofClientAddressRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message ProofClientAddressResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message ProofClientAddressResponse {
+    oneof response {
+        kyc.ProofClientAddressResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    } 
+}
+
+message RetryProofClientAddressRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message RetryProofClientAddressResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message RetryProofClientAddressResponse {
+    oneof response {
+        kyc.RetryProofClientAddressResponseBody Body = 1;
         kyc.KycError Error = 2;
     } 
 }
 
 
-enum KycStatus
-{
-    Required = 0;
-    Processing = 1;
-    Verified = 2;
-    Blocked = 3;
-}
-
-message GetClientKycProgressRequest {
+message GetClientVerificationProgressRequest {
     string ClientId = 1;
 }
 
-message GetClientKycProgressBody {
-    InitKycStatus InitiationPoIStatus  = 1;
-    InitKycStatus InitiationPoAStatus = 2;
-    WaitKycStatus WaitPoIStatus = 3;
-    WaitKycStatus WaitPoAStatus = 4;
-    ContractSignedStatus ContractSignStatus = 5;
+message GetClientVerificationProgressBody {
+    bool IsVerificationProgressEnabled = 1;
+    InitKycStatus InitiationPoIStatus  = 2;
+    InitKycStatus InitiationPoAStatus = 3;
+    WaitKycStatus WaitPoIStatus = 4;
+    WaitKycStatus WaitPoAStatus = 5;
+    repeated ContractModel ContractSignStatus = 6;
 }
 
 enum InitKycStatus {
@@ -72,31 +104,47 @@ enum WaitKycStatus {
     WKS_SUCCESS = 2;
     WKS_FAIL = 3;
     WKS_RETRY = 4;
-}
+} 
 
-enum ContractSignedStatus
+message ContractModel
+{
+    string ContractId = 1;
+    ContractSignStatus ContractSignStatus = 2;
+}
+enum ContractSignStatus
 {
     CSS_NOT_INIT = 0;
     CSS_PENDING = 1;
     CSS_SUCCESS = 2;
     CSS_STATUS_FAIL = 3;
 }
-message GetClientKycProgressResponse {
+message GetClientVerificationProgressResponse {
     oneof response {
-        kyc.GetClientKycStatusBody Body = 1;
+        kyc.GetClientVerificationProgressBody Body = 1;
         kyc.KycError Error = 2;
     } 
 }
 
 service KycGrpcService {
-    rpc CreateKycToken(kyc.CreateKycTokenRequest) 
-    returns (kyc.CreateKycTokenResponse);
-    
-    rpc GetClientKycStatus(kyc.GetClientKycStatusRequest) 
-    returns (kyc.GetClientKycStatusResponse);
-    
-    rpc GetClientKycPprogress(kyc.GetClientKycProgressRequest) 
-    returns (kyc.GetClientKycProgressResponse);
+    // From API
+    rpc ProofClientIdentity(kyc.ProofClientIdentityRequest) 
+    returns (kyc.ProofClientIdentityResponse);
 
+    rpc RetryProofClientIdentity(kyc.RetryProofClientIdentityRequest) 
+    returns (kyc.RetryProofClientIdentityResponse);
+
+    rpc ProofClientAddress(kyc.ProofClientAddressRequest) 
+    returns (kyc.ProofClientAddressResponse);
+
+    rpc RetryProofClientAddress(kyc.RetryProofClientIdentityRequest) 
+    returns (kyc.RetryProofClientIdentityResponse);
+
+    rpc GetClientVerificationProgress(kyc.GetClientVerificationProgressRequest) 
+    returns (kyc.GetClientVerificationProgressResponse);
+
+    //FROM Backoffice
+
+
+    //Ping
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
