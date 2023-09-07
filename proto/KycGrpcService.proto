@@ -283,9 +283,19 @@ message GetClientProofsRequest {
     uint64 Limit = 2;
     uint64 Offset = 3;
 }   
+enum ProofClientStatus{
+    PCS_NOT_REQUESTED = 0;
+    PCS_REQUESTED = 1;
+    PCS_PENDING = 2;
+    PCS_SUCCESS = 3;
+    PCS_FAIL = 4;
+    PCS_RETRY = 5;
+}
 
 message GetClientProofsResponse {
-    repeated kyc.ProofModel Items = 1;
+    ProofClientStatus PoIStatus = 1;
+    ProofClientStatus PoAStatus = 2;
+    repeated kyc.ProofModel Items = 3;
 }
 
 service KycGrpcService {
