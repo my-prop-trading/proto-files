@@ -206,6 +206,8 @@ message GetRevenueShareByFiltersRequest {
 
     optional string TransactionId = 4;
 
+    optional string ClientId = 5;
+
     int64 Offset = 20;
     
     int64 Limit = 21;
