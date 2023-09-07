@@ -197,6 +197,36 @@ message TraderAccountStatistic {
     double TotallyWithdrawn = 4;
 }
 
+message GetRevenueShareByFiltersRequest {
+    optional string TraderAccountId = 1;
+    
+    optional int64 FromDate = 2;
+
+    optional int64 ToDate = 3;
+
+    optional string TransactionId = 4;
+
+    int64 Offset = 20;
+    
+    int64 Limit = 21;
+}
+    
+message GetRevenueShareByFiltersResponse {
+    repeated payouts.RevenueShareItem Payouts = 1;
+}
+
+message RevenueShareItem {
+    string Id = 1;
+    int64 CreatedAt = 2;
+    string TxId = 3;
+    string ClientId = 4;
+    string TraderAccountId = 5;
+    string ProfitReleaseId = 6;
+    double Amount = 7;
+    string Currency = 8;
+    double RevenueSharePercent = 9;
+}
+
 enum PayoutsGrpcServiceError {
     INTERNAL = 0;
     NOT_FOUND = 1;
@@ -209,6 +239,8 @@ service PayoutsGrpcService {
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
 
     rpc GetByFilters(payouts.GetByFiltersRequest) returns (payouts.GetByFiltersResponse);
+
+    rpc GetRevenueShareByFilters(payouts.GetRevenueShareByFiltersRequest) returns (payouts.GetRevenueShareByFiltersResponse);
 
     rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
 
