@@ -25,9 +25,52 @@ message CreateSumsubTokenResponse {
     } 
 }
 
+
+message CreateSumsubPoITokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateSumsubPoITokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateSumsubPoITokenResponse {
+    oneof response {
+        sumsub.CreateSumsubPoITokenResponseBody Body = 1;
+        sumsub.Error Error = 2;
+    } 
+}
+
+message CreateSumsubPoATokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateSumsubPoATokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateSumsubPoATokenResponse {
+    oneof response {
+        sumsub.CreateSumsubPoATokenResponseBody Body = 1;
+        sumsub.Error Error = 2;
+    } 
+}
+
 service SumsubBridgeGrpcService {
     rpc CreateSumsubToken(sumsub.CreateSumsubTokenRequest) 
     returns (sumsub.CreateSumsubTokenResponse);
+
+    rpc CreateSumsubPoIToken(sumsub.CreateSumsubPoITokenRequest) 
+    returns (sumsub.CreateSumsubPoITokenResponse);
+
+    rpc CreateSumsubPoAToken(sumsub.CreateSumsubPoATokenRequest) 
+    returns (sumsub.CreateSumsubPoATokenResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
