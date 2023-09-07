@@ -102,7 +102,7 @@ enum WaitKycStatus {
 message ContractModel
 {
     string ContractId = 1;
-    ContractSignStatus ContractSignStatus = 2;
+    kyc.ContractSignStatus ContractSignStatus = 2;
 }
 
 enum ContractSignStatus
@@ -115,11 +115,11 @@ enum ContractSignStatus
 
 message GetClientVerificationProgressResponse {
     bool IsVerificationProgressEnabled = 1;
-    InitKycStatus InitiationPoIStatus  = 2;
-    InitKycStatus InitiationPoAStatus = 3;
-    WaitKycStatus WaitPoIStatus = 4;
-    WaitKycStatus WaitPoAStatus = 5;
-    repeated ContractModel ContractSignStatus = 6;
+    kyc.InitKycStatus InitiationPoIStatus  = 2;
+    kyc.InitKycStatus InitiationPoAStatus = 3;
+    kyc.WaitKycStatus WaitPoIStatus = 4;
+    kyc.WaitKycStatus WaitPoAStatus = 5;
+    repeated kyc.ContractModel ContractSignStatus = 6;
 }
 
 enum ProofStatus {
@@ -154,11 +154,11 @@ message ProofModel {
     string ApplicantId = 4;
     int64 StartDate = 5;
     int64 FinishDate = 6;
-    repeated ProofDocument Documents = 7;
-    ProofStatus Status = 8;
-    ProofResult Result = 9;
+    repeated kyc.ProofDocument Documents = 7;
+    kyc.ProofStatus Status = 8;
+    kyc.ProofResult Result = 9;
     string Comment = 10;
-    ProofType Type = 11;
+    kyc.ProofType Type = 11;
     int64 CreatedAt = 12;
     int64 UpdatedAt = 13;
 }
@@ -169,6 +169,8 @@ message GetProofsOfIdentityRequest {
     optional string ClientId = 3;
     optional string InternalVerificationId = 4;
     optional string SumsubVerificationId = 5;
+    optional kyc.ProofStatus ProofStatus = 6;
+    optional kyc.ProofResult ProofResult = 7;
 }
 
 message GetProofsOfIdentityResponse {
@@ -181,6 +183,8 @@ message GetProofsOfAddressRequest {
     optional string ClientId = 3;
     optional string InternalVerificationId = 4;
     optional string SumsubVerificationId = 5;
+    optional kyc.ProofStatus ProofStatus = 6;
+    optional kyc.ProofResult ProofResult = 7;
 }
 
 message GetProofsOfAddressResponse {
@@ -208,7 +212,7 @@ message ContractorModel {
     bool PoI = 4;
     bool PoA = 5;
     bool IsSignedContractReceived = 6;
-    ContractStatus Status = 7;
+    kyc.ContractStatus Status = 7;
     string Comment = 8;
     int64 CreatedAt = 9;
     int64 UpdatedAt = 10;
@@ -293,8 +297,8 @@ enum ProofClientStatus{
 }
 
 message GetClientProofsResponse {
-    ProofClientStatus PoIStatus = 1;
-    ProofClientStatus PoAStatus = 2;
+    kyc.ProofClientStatus PoIStatus = 1;
+    kyc.ProofClientStatus PoAStatus = 2;
     repeated kyc.ProofModel Items = 3;
 }
 
