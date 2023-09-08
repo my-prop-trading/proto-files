@@ -313,8 +313,8 @@ service KycGrpcService {
     rpc ProofOfAddress(kyc.ProofOfAddressRequest) 
     returns (kyc.ProofOfAddressResponse);
 
-    rpc RetryProofOfAddress(kyc.RetryProofOfIdentityRequest) 
-    returns (kyc.RetryProofOfIdentityResponse);
+    rpc RetryProofOfAddress(kyc.RetryProofOfAddressRequest) 
+    returns (kyc.RetryProofOfAddressResponse);
 
     rpc GetClientVerificationProgress(kyc.GetClientVerificationProgressRequest) 
     returns (kyc.GetClientVerificationProgressResponse);
