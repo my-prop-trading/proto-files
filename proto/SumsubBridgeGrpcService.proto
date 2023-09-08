@@ -26,38 +26,38 @@ message CreateSumsubTokenResponse {
 }
 
 
-message CreateSumsubPoITokenRequest {
+message CreateSumsubProofOfIdentityTokenRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
 
-message CreateSumsubPoITokenResponseBody {
+message CreateSumsubProofOfIdentityTokenResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
 }
 
-message CreateSumsubPoITokenResponse {
+message CreateSumsubProofOfIdentityTokenResponse {
     oneof response {
-        sumsub.CreateSumsubPoITokenResponseBody Body = 1;
+        sumsub.CreateSumsubProofOfIdentityTokenResponseBody Body = 1;
         sumsub.Error Error = 2;
     } 
 }
 
-message CreateSumsubPoATokenRequest {
+message CreateSumsubProofOfAddressRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
 }
 
-message CreateSumsubPoATokenResponseBody {
+message CreateSumsubProofOfAddressResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
 }
 
-message CreateSumsubPoATokenResponse {
+message CreateSumsubProofOfAddressResponse {
     oneof response {
-        sumsub.CreateSumsubPoATokenResponseBody Body = 1;
+        sumsub.CreateSumsubProofOfAddressResponseBody Body = 1;
         sumsub.Error Error = 2;
     } 
 }
@@ -66,11 +66,11 @@ service SumsubBridgeGrpcService {
     rpc CreateSumsubToken(sumsub.CreateSumsubTokenRequest) 
     returns (sumsub.CreateSumsubTokenResponse);
 
-    rpc CreateSumsubPoIToken(sumsub.CreateSumsubPoITokenRequest) 
-    returns (sumsub.CreateSumsubPoITokenResponse);
+    rpc CreateSumsubProofOfIdentityToken(sumsub.CreateSumsubProofOfIdentityTokenRequest) 
+    returns (sumsub.CreateSumsubProofOfIdentityTokenResponse);
 
-    rpc CreateSumsubPoAToken(sumsub.CreateSumsubPoATokenRequest) 
-    returns (sumsub.CreateSumsubPoATokenResponse);
+    rpc CreateSumsubProofOfAddressToken(sumsub.CreateSumsubProofOfAddressRequest) 
+    returns (sumsub.CreateSumsubProofOfAddressResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
