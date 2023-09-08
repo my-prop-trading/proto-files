@@ -248,7 +248,7 @@ message ContractorCommentResponseBody{
 
 message ContractorCommentResponse {
     oneof response {
-        kyc.ContractorGrantLiveAccountResponseBody Body = 1;
+        kyc.ContractorCommentResponseBody Body = 1;
         kyc.KycError Error = 2;
       }
 }  
