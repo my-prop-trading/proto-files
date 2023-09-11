@@ -1,0 +1,46 @@
+syntax = "proto3";
+package comments;
+import "google/protobuf/empty.proto";
+
+message Comment {
+    string Id = 1;
+    string ClientId = 2;
+    string Text = 3;
+    int64 CreatedAt = 4;
+    string CreatedBy = 5;
+}
+
+message GetByClientIdRequest {
+    string ClientId = 1;
+    
+    int64 Offset = 20;
+    int64 Limit = 21;
+}
+
+message GetByClientIdResponse {
+    repeated Comment Comments = 1;
+}
+
+message CreateCommentRequest {
+    string ClientId = 1;
+    string Text = 2;
+}
+
+message CreateCommentResponse {
+    oneof Response {
+        Comment Comment = 1;
+        CommentsGrpcServiceError Error = 2;
+    }
+}
+
+enum CommentsGrpcServiceError {
+    INTERNAL = 0;
+}
+
+service PayoutsGrpcService {
+    rpc GetByClientId(comments.GetByClientIdRequest) returns (comments.GetByClientIdResponse);
+
+    rpc CreateComment(comments.CreateCommentRequest) returns (comments.CreateCommentResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
