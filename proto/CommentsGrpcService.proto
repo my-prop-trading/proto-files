@@ -24,6 +24,8 @@ message GetByClientIdResponse {
 message CreateCommentRequest {
     string ClientId = 1;
     string Text = 2;
+    string CreatedBy = 3;
+    string ProcessId = 4;
 }
 
 message CreateCommentResponse {
