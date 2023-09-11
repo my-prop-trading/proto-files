@@ -39,7 +39,7 @@ enum CommentsGrpcServiceError {
     INTERNAL = 0;
 }
 
-service PayoutsGrpcService {
+service CommentsGrpcService {
     rpc GetByClientId(comments.GetByClientIdRequest) returns (comments.GetByClientIdResponse);
 
     rpc CreateComment(comments.CreateCommentRequest) returns (comments.CreateCommentResponse);
