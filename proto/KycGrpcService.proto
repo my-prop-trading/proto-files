@@ -206,7 +206,7 @@ enum ContractStatus {
 }
 
 message ContractorModel {
-    string TradingPackageId = 1;
+    string TraderAccountAggregatedId = 1;
     string ClientId = 2;
     int64 SendingDate = 3;
     bool PoI = 4;
@@ -223,12 +223,10 @@ message GetContractorsResponse {
 }
 
 message ContractorGrantLiveAccountRequest {
-    string TradingPackageId = 1;
+    string TraderAccountAggregatedId = 1;
 }
 
 message ContractorGrantLiveAccountResponseBody{
-    string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
 }
 
 message ContractorGrantLiveAccountResponse {
@@ -239,7 +237,7 @@ message ContractorGrantLiveAccountResponse {
 }   
 
 message ContractorCommentRequest {
-    string TradingPackageId = 1;
+    string TraderAccountAggregatedId = 1;
     string Comment = 2;
 }
 
@@ -254,7 +252,7 @@ message ContractorCommentResponse {
 }  
 
 message ContractorRejectRequest {
-    string TradingPackageId = 1;
+    string TraderAccountAggregatedId = 1;
 }
 
 message ContractorRejectResponseBody{
@@ -268,7 +266,7 @@ message ContractorRejectResponse {
 }
 
 message ContractorRejectAndBlockRequest {
-    string TradingPackageId = 1;
+    string TraderAccountAggregatedId = 1;
     string Comment = 2;
 }
 
