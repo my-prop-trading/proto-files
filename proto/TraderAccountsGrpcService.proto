@@ -3,6 +3,7 @@ package trader_accounts;
 import "google/protobuf/empty.proto";
 import "MetatraderBroker.proto";
 import "MetatraderPlatform.proto";
+import "TraderPackagesGrpcService.proto";
 
 
 message TraderAccount {
@@ -149,6 +150,21 @@ message GetTraderAccountByIdResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
 }
 
+message GetTraderAccountConditionsByIdRequest {
+  string TraderAccId = 1;
+}
+
+message GetTraderAccountConditionsByIdResponse {
+  oneof response {
+    trader_accounts.GetTraderAccountConditionsByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message GetTraderAccountConditionsByIdResponseBody {
+  trader_packages.TraderPackage TraderPackage = 1;
+}
+
 message GetTraderPlatformCredentialsRequest {
 }
 
@@ -180,6 +196,7 @@ service TraderAccountsGrpcService {
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
+    rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
 
     rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
     rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
