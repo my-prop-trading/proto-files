@@ -115,10 +115,10 @@ enum ContractSignStatus
 
 message GetClientVerificationProgressResponse {
     bool IsVerificationProgressEnabled = 1;
-    kyc.InitKycStatus InitiationPoIStatus  = 2;
-    kyc.InitKycStatus InitiationPoAStatus = 3;
-    kyc.WaitKycStatus WaitPoIStatus = 4;
-    kyc.WaitKycStatus WaitPoAStatus = 5;
+    kyc.InitKycStatus InitiationProofOfIdentityStatus  = 2;
+    kyc.InitKycStatus InitiationProofOfAddressStatus = 3;
+    kyc.WaitKycStatus WaitProofOfIdentityStatus = 4;
+    kyc.WaitKycStatus WaitProofOfAddressStatus = 5;
     repeated kyc.ContractModel ContractSignStatus = 6;
 }
 
@@ -136,8 +136,8 @@ enum ProofResult {
 }
 
 enum ProofType {
-    PT_POI = 0;
-    PT_POA = 1;
+    PROOF_OF_IDENTITY = 0;
+    PROOF_OF_ADDRESS = 1;
 }
 
 message ProofDocument{
@@ -209,8 +209,8 @@ message ContractorModel {
     string TraderAccountAggregatedId = 1;
     string ClientId = 2;
     int64 SendingDate = 3;
-    bool PoI = 4;
-    bool PoA = 5;
+    bool ProofOfIdentity = 4;
+    bool ProofOfAddress = 5;
     bool IsSignedContractReceived = 6;
     kyc.ContractStatus Status = 7;
     string Comment = 8;
@@ -295,8 +295,8 @@ enum ProofClientStatus{
 }
 
 message GetClientProofsResponse {
-    kyc.ProofClientStatus PoIStatus = 1;
-    kyc.ProofClientStatus PoAStatus = 2;
+    kyc.ProofClientStatus ProofOfIdentityStatus = 1;
+    kyc.ProofClientStatus ProofOfAddressStatus = 2;
     repeated kyc.ProofModel Items = 3;
 }
 
