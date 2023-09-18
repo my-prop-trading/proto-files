@@ -59,6 +59,7 @@ enum TraderAccountStatusModel {
 }
 
 enum BlockerType {
+  NO_BLOCKER = 0;
   BLOCK_TRADES = 1;
   BLOCK_TRADES_AND_FUTURE = 2;
   BLOCK_TRADES_AND_FUTURE_AND_CURRENT = 4;
