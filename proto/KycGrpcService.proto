@@ -87,16 +87,16 @@ message GetClientVerificationProgressRequest {
 }
 
 enum InitKycStatus {
-    IKS_NOT_INIT = 0;
-    IKS_SUCCESS = 1;
+    NOT_INIT = 0;
+    SUCCESS = 1;
 }
 
 enum WaitKycStatus {        
-    WKS_NOT_INIT = 0;
-    WKS_PENDING = 1;
-    WKS_SUCCESS = 2;
-    WKS_FAIL = 3;
-    WKS_RETRY = 4;
+    NOT_INIT = 0;
+    PENDING = 1;
+    SUCCESS = 2;
+    FAIL = 3;
+    RETRY = 4;
 } 
 
 message ContractModel
@@ -107,10 +107,10 @@ message ContractModel
 
 enum ContractSignStatus
 {
-    CSS_NOT_INIT = 0;
-    CSS_PENDING = 1;
-    CSS_SUCCESS = 2;
-    CSS_STATUS_FAIL = 3;
+    NOT_INIT = 0;
+    PENDING = 1;
+    SUCCESS = 2;
+    STATUS_FAIL = 3;
 }
 
 message GetClientVerificationProgressResponse {
@@ -123,16 +123,16 @@ message GetClientVerificationProgressResponse {
 }
 
 enum ProofStatus {
-    PS_APPROVED = 0;
-    PS_RESUBMISSION = 1;
-    PS_REJECTED = 2;
-    PS_PENDING = 3;
+    APPROVED = 0;
+    RESUBMISSION = 1;
+    REJECTED = 2;
+    PENDING = 3;
 }
 
 enum ProofResult {
-    PR_RETRY = 0;
-    PR_FINAL = 1;
-    PR_APPROVED = 2;
+    RETRY = 0;
+    FINAL = 1;
+    APPROVED = 2;
 }
 
 enum ProofType {
@@ -199,10 +199,10 @@ message GetContractorsRequest {
 }
 
 enum ContractStatus {
-    CS_NOT_INIT = 0;
-    CS_GRANTED_LIVE_ACCOUNT = 1;
-    CS_REJECTED = 2;
-    CS_REJECTED_AND_BLOCKED = 3;
+    NOT_INIT = 0;
+    GRANTED_LIVE_ACCOUNT = 1;
+    REJECTED = 2;
+    REJECTED_AND_BLOCKED = 3;
 }
 
 message ContractorModel {
@@ -286,12 +286,12 @@ message GetClientProofsRequest {
     uint64 Offset = 3;
 }   
 enum ProofClientStatus{
-    PCS_NOT_REQUESTED = 0;
-    PCS_REQUESTED = 1;
-    PCS_PENDING = 2;
-    PCS_SUCCESS = 3;
-    PCS_FAIL = 4;
-    PCS_RETRY = 5;
+    NOT_REQUESTED = 0;
+    REQUESTED = 1;
+    PENDING = 2;
+    SUCCESS = 3;
+    FAIL = 4;
+    RETRY = 5;
 }
 
 message GetClientProofsResponse {
