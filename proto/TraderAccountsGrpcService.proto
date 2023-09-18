@@ -10,7 +10,7 @@ message TraderAccount {
     string Id = 1;
     string Title = 2;
     int32 Phase = 3;
-    TradingPlatformModel TradingPlatformModel = 4;
+    metatrader_platfom.TradingPlatformModel TradingPlatformModel = 4;
     double Balance = 5;
     optional int64 StartDate = 6;
     optional int64 EndDate = 7;
@@ -18,7 +18,7 @@ message TraderAccount {
     string AggregatedId = 9;
     int64 CreatedAt = 10;
     int64 UpdatedAt = 11;
-    TraderAccountStatusModel Status = 12;
+    trader_accounts.TraderAccountStatusModel Status = 12;
     double InitialBalance = 13;
     string InitialBalanceCurrency = 14;
     double OverallDrawdown = 15;
@@ -26,14 +26,14 @@ message TraderAccount {
     double TargetProfit = 17;
     int32 MinTradedDays = 18;
     string Brand = 19;
-    TraderAccountTypeModel Type = 20;
+    trader_accounts.TraderAccountTypeModel Type = 20;
     string OrderId = 21;
 }
 
 message TraderPlatformCredentials {
-  BrokerModel Broker = 1;
+  metatrader_broker.BrokerModel Broker = 1;
 
-  TradingPlatformModel TradingPlatform = 2;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
 
   string Windows = 3;
 
@@ -63,13 +63,13 @@ message GetByClientIdRequest{
 }
 
 message GetByClientIdResponse{
-  repeated TraderAccount Items = 1;
+  repeated trader_accounts.TraderAccount Items = 1;
 }
 
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
-    TradingPlatformModel TradingPlatform = 2;
-    BrokerModel BrokerModel = 3;
+    metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+    metatrader_broker.BrokerModel BrokerModel = 3;
     // NOT USED
     //string FirstName = 4;
     //string LastName = 5;
@@ -96,8 +96,8 @@ message GetTraderAccountCredentialsRequest {
 
 message GetTraderAccountCredentialsResponse {
   oneof response {
-    GetTraderAccountCredentialsResponseBody Body = 1;
-    TraderAccountError Error = 2;
+    trader_accounts.GetTraderAccountCredentialsResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
   }
 }
 
@@ -112,8 +112,8 @@ message GetTraderAccountCredentialsResponseBody {
 
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated int64 Logins = 1;
-  TradingPlatformModel TradingPlatform = 2;
-  BrokerModel Broker = 3;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  metatrader_broker.BrokerModel Broker = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
@@ -127,12 +127,12 @@ message LoginTradAccId {
 
 message GetLoginByTraderAccIdRequest {
   repeated string TraderAccId = 1;
-  TradingPlatformModel TradingPlatform = 2;
-  BrokerModel Broker = 3;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  metatrader_broker.BrokerModel Broker = 3;
 }
 
 message GetLoginByTraderAccIdResponse {
-  repeated LoginTradAccId LoginTradAccIds = 1;
+  repeated trader_accounts.LoginTradAccId LoginTradAccIds = 1;
 }
 
 message GetTraderAccountByIdRequest {
@@ -141,13 +141,13 @@ message GetTraderAccountByIdRequest {
 
 message GetTraderAccountByIdResponse {
   oneof response {
-    GetTraderAccountByIdResponseBody Body = 1;
-    TraderAccountError Error = 2;
+    trader_accounts.GetTraderAccountByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
   }
 }
 
 message GetTraderAccountByIdResponseBody {
-  TraderAccount TraderAccount = 1;
+  trader_accounts.TraderAccount TraderAccount = 1;
 }
 
 message GetTraderAccountConditionsByIdRequest {
@@ -156,24 +156,24 @@ message GetTraderAccountConditionsByIdRequest {
 
 message GetTraderAccountConditionsByIdResponse {
   oneof response {
-    GetTraderAccountConditionsByIdResponseBody Body = 1;
-    TraderAccountError Error = 2;
+    trader_accounts.GetTraderAccountConditionsByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
   }
 }
 
 message GetTraderAccountConditionsByIdResponseBody {
-  TraderPackage TraderPackage = 1;
+  trader_packages.TraderPackage TraderPackage = 1;
 }
 
 message GetTraderPlatformCredentialsRequest {
 }
 
 message GetTraderPlatformCredentialsResponse {
-  repeated TraderPlatformCredentials TraderPlatformCredentials = 1;
+  repeated trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
 }
 
 message UpsertTraderPlatformCredentialsRequest {
-  TraderPlatformCredentials TraderPlatformCredentials = 1;
+  trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
 }
 
 message UpsertTraderPlatformCredentialsResponse {
@@ -190,24 +190,16 @@ enum TraderAccountError {
 
 
 service TraderAccountsGrpcService {
-    rpc GetByClientId(GetByClientIdRequest) 
-    returns (GetByClientIdResponse);
-    rpc GetTraderAccIdByCredentialsLogin(GetTraderAccIdByCredentialsLoginRequest) 
-    returns (GetTraderAccIdByCredentialsLoginResponse);
-    rpc GetLoginByTraderAccId(GetLoginByTraderAccIdRequest) 
-    returns (GetLoginByTraderAccIdResponse);
-    rpc CreateTraderAccount(CreateTraderAccountRequest) 
-    returns (CreateTraderAccountResponse);
-    rpc GetTraderAccountCredentials(GetTraderAccountCredentialsRequest) 
-    returns (GetTraderAccountCredentialsResponse);
-    rpc GetTraderAccountById(GetTraderAccountByIdRequest) 
-    returns (GetTraderAccountByIdResponse);
-    rpc GetTraderAccountConditionsById(GetTraderAccountConditionsByIdRequest) 
-    returns (GetTraderAccountConditionsByIdResponse);
-    rpc GetTraderPlatformCredentials(GetTraderPlatformCredentialsRequest) 
-    returns (GetTraderPlatformCredentialsResponse);
-    rpc UpsertTraderPlatformCredentials(UpsertTraderPlatformCredentialsRequest) 
-    returns (UpsertTraderPlatformCredentialsResponse);
+    rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
+    rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
+    rpc GetLoginByTraderAccId(trader_accounts.GetLoginByTraderAccIdRequest) returns (trader_accounts.GetLoginByTraderAccIdResponse);
+    rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
+    rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
+    rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
+    rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
+
+    rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
+    rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
