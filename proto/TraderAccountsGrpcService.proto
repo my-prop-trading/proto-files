@@ -188,7 +188,7 @@ message UpsertTraderPlatformCredentialsResponse {
 
 message BlockTraderAccountRequest {
   string TraderAccId = 1;
-  trader_accounts.BlockerType Type = 2;
+  trader_accounts.BlockerType BlockerType = 2;
 }
 
 message BlockTraderAccountResponse {
