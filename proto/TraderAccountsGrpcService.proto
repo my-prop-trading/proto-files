@@ -190,16 +190,16 @@ enum TraderAccountError {
 
 
 service TraderAccountsGrpcService {
-    rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
-    rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
-    rpc GetLoginByTraderAccId(trader_accounts.GetLoginByTraderAccIdRequest) returns (trader_accounts.GetLoginByTraderAccIdResponse);
-    rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
-    rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
-    rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
-    rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
+    rpc GetByClientId(GetByClientIdRequest) returns (GetByClientIdResponse);
+    rpc GetTraderAccIdByCredentialsLogin(GetTraderAccIdByCredentialsLoginRequest) returns (GetTraderAccIdByCredentialsLoginResponse);
+    rpc GetLoginByTraderAccId(GetLoginByTraderAccIdRequest) returns (GetLoginByTraderAccIdResponse);
+    rpc CreateTraderAccount(CreateTraderAccountRequest) returns (CreateTraderAccountResponse);
+    rpc GetTraderAccountCredentials(GetTraderAccountCredentialsRequest) returns (GetTraderAccountCredentialsResponse);
+    rpc GetTraderAccountById(GetTraderAccountByIdRequest) returns (GetTraderAccountByIdResponse);
+    rpc GetTraderAccountConditionsById(GetTraderAccountConditionsByIdRequest) returns (GetTraderAccountConditionsByIdResponse);
 
-    rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
-    rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
+    rpc GetTraderPlatformCredentials(GetTraderPlatformCredentialsRequest) returns (GetTraderPlatformCredentialsResponse);
+    rpc UpsertTraderPlatformCredentials(UpsertTraderPlatformCredentialsRequest) returns (UpsertTraderPlatformCredentialsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
