@@ -58,6 +58,12 @@ enum TraderAccountStatusModel {
   STAGE_COMPLETED = 3;
 }
 
+enum BlockerType {
+  BLOCK_TRADES = 1;
+  BLOCK_TRADES_AND_FUTURE = 2;
+  BLOCK_TRADES_AND_FUTURE_AND_CURRENT = 4;
+}
+
 message GetByClientIdRequest{
   string ClientId = 1;
 }
@@ -179,6 +185,21 @@ message UpsertTraderPlatformCredentialsRequest {
 message UpsertTraderPlatformCredentialsResponse {
 }
 
+message BlockTraderAccountRequest {
+  string TraderAccId = 1;
+  trader_accounts.BlockerType Type = 2;
+}
+
+message BlockTraderAccountResponse {
+}
+
+message UnBlockTraderAccountRequest {
+  string TraderAccId = 1;
+}
+
+message UnBlockTraderAccountResponse {
+}
+
 enum TraderAccountError {
   OK = 0;
   NO_ACCOUNT = 1;
@@ -200,6 +221,9 @@ service TraderAccountsGrpcService {
 
     rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
     rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
+
+    rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
+    rpc UnBlockTraderAccount(trader_accounts.UnBlockTraderAccountRequest) returns (trader_accounts.UnBlockTraderAccountResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
