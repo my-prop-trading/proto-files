@@ -235,6 +235,7 @@ enum PayoutsGrpcServiceError {
     UNAUTHORIZED = 2;
     NOT_ENOUGH_BALANCE = 3;
     CANT_MAKE_DECISION = 4;
+    BLOCKED = 5;
 }
 
 service PayoutsGrpcService {
