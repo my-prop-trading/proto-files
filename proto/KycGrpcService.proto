@@ -294,10 +294,18 @@ enum ProofClientStatus{
     PCS_RETRY = 5;
 }
 
+message PersonalDataModel {
+    string FirstName = 1;
+    string LastName = 2;
+    int64 DateOfBirth = 3;
+    string CountryOfResidence = 4;
+}
+
 message GetClientProofsResponse {
     kyc.ProofClientStatus ProofOfIdentityStatus = 1;
     kyc.ProofClientStatus ProofOfAddressStatus = 2;
     repeated kyc.ProofModel Items = 3;
+    kyc.PersonalDataModel PersonalData = 4;
 }
 
 service KycGrpcService {
