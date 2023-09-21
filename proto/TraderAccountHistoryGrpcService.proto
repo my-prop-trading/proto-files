@@ -21,7 +21,7 @@ message QueryTraderAccountHistoryLogsResponse {
     repeated TraderAccountUpdateLogDto TraderAccountUpdateLogs = 1;
 }
 
-message TraderAccountUpdateLogDto {
+message TraderAccountUpdateLog {
     string AccountId = 1;
     int32 ActionNumber = 2;
     string ClientId = 3;
