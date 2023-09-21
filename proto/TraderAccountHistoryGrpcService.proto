@@ -1,0 +1,88 @@
+syntax = "proto3";
+package trader_account_history;
+import "google/protobuf/empty.proto";
+import "MetatraderBroker.proto";
+import "MetatraderPlatform.proto";
+
+message TraderAccountHistoryLogsRequest {
+    repeated TraderAccountUpdateLogDto TraderAccountUpdateLogs = 1;
+}
+
+message TraderAccountHistoryLogsResponse {
+}
+
+message QueryTraderAccountHistoryLogsRequest {
+    // Define query parameters here if needed
+}
+
+message QueryTraderAccountHistoryLogsResponse {
+    repeated TraderAccountUpdateLogDto TraderAccountUpdateLogs = 1;
+}
+
+message TraderAccountUpdateLogDto {
+    string AccountId = 1;
+    int32 ActionNumber = 2;
+    string ClientId = 3;
+    int64 CreatedDate = 4; // Assuming microseconds as int64
+    metatrader_broker.BrokerDto Broker = 5;
+    metatrader_platfom.TradingPlatformDto TradingPlatform = 6;
+    trader_account_history.UpdateLogDetailsDto EventInfo = 7;
+}
+
+message BrokerDto {
+    // Fields for BrokerDto, using PascalCase
+}
+
+message TradingPlatformDto {
+    // Fields for TradingPlatformDto, using PascalCase
+}
+
+message PhaseDetailsDto {
+    double CurrentEquity = 1;
+    double CurrentBalance = 2;
+    double CurrentProfit = 3;
+    int32 DaysTraded = 4;
+}
+
+message EmptyPhaseDetailsDto {
+}
+
+message AccountBlockedDetailsDto {
+    string Manager = 1;
+    BlockerType BlockerType = 2;
+}
+
+enum BlockerType {
+    BlockTrades = 1;
+    BlockTradesAndFuture = 2;
+    BlockTradesAndFutureAndCurrent = 4;
+}
+
+message UpdateLogDetailsDto {
+    oneof Event {
+        trader_account_history.PhaseDetailsDto WinInPhase1 = 1;
+        trader_account_history.PhaseDetailsDto WinInPhase2 = 2;
+        trader_account_history.PhaseDetailsDto LoseInPhase1 = 3;
+        trader_account_history.PhaseDetailsDto LoseInPhase2 = 4;
+        trader_account_history.PhaseDetailsDto LoseInLive = 5;
+        trader_account_history.EmptyPhaseDetailsDto KycRequiredStatusSet = 6;
+        trader_account_history.EmptyPhaseDetailsDto Phase2AccountGranted = 7;
+        trader_account_history.EmptyPhaseDetailsDto Phase1AccountGranted = 8;
+        trader_account_history.EmptyPhaseDetailsDto LiveAccountGranted = 9;
+        trader_account_history.AccountBlockedDetailsDto AccountBlocked = 10;
+        trader_account_history.AccountBlockedDetailsDto AccountUnBlocked = 11;
+        trader_account_history.EmptyPhaseDetailsDto UserOpenedFirstPositionInPhase1 = 12;
+        trader_account_history.EmptyPhaseDetailsDto UserOpenedFirstPositionInPhase2 = 13;
+        trader_account_history.EmptyPhaseDetailsDto UserOpenedFirstPositionInLive = 14;
+    }
+}
+
+service TraderAccountService {
+    rpc InsertTraderAccountHistoryLogs(trader_account_history.TraderAccountHistoryLogsRequest) 
+    returns (trader_account_history.TraderAccountHistoryLogsResponse);
+
+    rpc QueryTraderAccountHistoryLogs(trader_account_history.QueryTraderAccountHistoryLogsRequest) 
+    returns (trader_account_history.QueryTraderAccountHistoryLogsResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
