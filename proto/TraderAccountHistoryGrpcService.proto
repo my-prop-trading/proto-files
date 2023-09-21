@@ -70,7 +70,7 @@ message UpdateLogDetails {
     }
 }
 
-service TraderAccountService {
+service TraderAccountHistoryGrpcService {
     rpc InsertTraderAccountHistoryLogs(trader_account_history.TraderAccountHistoryLogsRequest) 
     returns (trader_account_history.TraderAccountHistoryLogsResponse);
 
