@@ -5,7 +5,7 @@ import "MetatraderBroker.proto";
 import "MetatraderPlatform.proto";
 
 message TraderAccountHistoryLogsRequest {
-    repeated TraderAccountUpdateLogDto TraderAccountUpdateLogs = 1;
+    repeated TraderAccountUpdateLog TraderAccountUpdateLogs = 1;
 }
 
 message TraderAccountHistoryLogsResponse {
@@ -18,7 +18,7 @@ message QueryTraderAccountHistoryLogsRequest {
 }
 
 message QueryTraderAccountHistoryLogsResponse {
-    repeated TraderAccountUpdateLogDto TraderAccountUpdateLogs = 1;
+    repeated TraderAccountUpdateLog TraderAccountUpdateLogs = 1;
 }
 
 message TraderAccountUpdateLog {
