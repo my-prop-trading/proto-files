@@ -45,6 +45,7 @@ message AccountBlockedDetails {
 }
 
 enum BlockerType {
+    NoBlocker = 0;
     BlockTrades = 1;
     BlockTradesAndFuture = 2;
     BlockTradesAndFutureAndCurrent = 4;
