@@ -12,7 +12,9 @@ message TraderAccountHistoryLogsResponse {
 }
 
 message QueryTraderAccountHistoryLogsRequest {
-    // Define query parameters here if needed
+    string ClientId = 1;
+    uint64 Offset = 2;
+    uint64 Limit = 3;
 }
 
 message QueryTraderAccountHistoryLogsResponse {
