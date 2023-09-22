@@ -29,6 +29,7 @@ message TraderAccountUpdateLog {
     metatrader_broker.BrokerModel Broker = 5;
     metatrader_platfom.TradingPlatformModel TradingPlatform = 6;
     trader_account_history.UpdateLogDetails EventInfo = 7;
+    int32 OrderInActionNumber = 8;
 }
 
 message PhaseDetails {
