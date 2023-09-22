@@ -195,7 +195,8 @@ message GetContractorsRequest {
     uint64 Limit = 1;
     uint64 Offset = 2;
     optional string ClientId = 3;
-    optional int64 Date = 4;
+    optional int64 FromDate = 4;
+    optional int64 ToDate = 5;
 }
 
 enum ContractStatus {
