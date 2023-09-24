@@ -32,7 +32,7 @@ message SuccesfullScenarioPhase2Request {
     string TraderAccountId = 3;
 }
 
-message SendSuccessfullProofOfIdentityRequest{
+message SendSuccessfulProofOfIdentityRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -47,7 +47,7 @@ message SendFailedProofOfIdentityRequest{
     string ClientId = 2;
 }
 
-message SendSuccessfullProofOfAddressRequest{
+message SendSuccessfulProofOfAddressRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -91,13 +91,13 @@ service EmailSenderGrpcService {
 
     rpc SendSuccesfullScenarioPhase2(email_sender.SuccesfullScenarioPhase2Request) returns (email_sender.EmailSentResponse);
 
-    rpc SendSuccessfullProofOfIdentity(email_sender.SendSuccessfullProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
+    rpc SendSuccessfulProofOfIdentity(email_sender.SendSuccessfulProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendRetryProofOfIdentity(email_sender.SendRetryProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendFailedProofOfIdentity(email_sender.SendFailedProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
 
-    rpc SendSuccessfullProofOfAddress(email_sender.SendSuccessfullProofOfAddressRequest) returns (email_sender.EmailSentResponse);
+    rpc SendSuccessfulProofOfAddress(email_sender.SendSuccessfulProofOfAddressRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendRetryProofOfAddress(email_sender.SendRetryProofOfAddressRequest) returns (email_sender.EmailSentResponse);
     
