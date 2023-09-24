@@ -108,8 +108,8 @@ service EmailSenderGrpcService {
     rpc SendServiceDeniedDueToViolationTermsAndCondOnContractSigning(
         email_sender.SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest) returns (email_sender.EmailSentResponse);
     
-        rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
-        email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
+    rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
+    email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
