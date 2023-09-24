@@ -32,6 +32,52 @@ message SuccesfullScenarioPhase2Request {
     string TraderAccountId = 3;
 }
 
+message SendSuccesfullProofOfIdentityRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendRetryProofOfIdentityRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendFailedProofOfIdentityRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendSuccesfullProofOfAddressRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendRetryProofOfAddressRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}   
+
+message SendFailedProofOfAddressRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendContractToClientRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string ContractId = 3;
+}
+
+message SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 message EmailSentResponse {
     
 }
@@ -44,6 +90,26 @@ service EmailSenderGrpcService {
     rpc SendSuccesfullScenarioPhase1(email_sender.SuccesfullScenarioPhase1Request) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccesfullScenarioPhase2(email_sender.SuccesfullScenarioPhase2Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullProofOfIdentity(email_sender.SendSuccesfullProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendRetryProofOfIdentity(email_sender.SendRetryProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendFailedProofOfIdentity(email_sender.SendFailedProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullProofOfAddress(email_sender.SendSuccesfullProofOfAddressRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendRetryProofOfAddress(email_sender.SendRetryProofOfAddressRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendFailedProofOfAddress(email_sender.SendFailedProofOfAddressRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendContractToClient(email_sender.SendContractToClientRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendServiceDeniedDueToViolationTermsAndCondOnContractSigning(
+        email_sender.SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest) returns (email_sender.EmailSentResponse);
+    
+        rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
+        email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
