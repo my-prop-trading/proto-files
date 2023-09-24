@@ -32,7 +32,7 @@ message SuccesfullScenarioPhase2Request {
     string TraderAccountId = 3;
 }
 
-message SendSuccesfullProofOfIdentityRequest{
+message SendSuccessfullProofOfIdentityRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -47,7 +47,7 @@ message SendFailedProofOfIdentityRequest{
     string ClientId = 2;
 }
 
-message SendSuccesfullProofOfAddressRequest{
+message SendSuccessfullProofOfAddressRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -91,13 +91,13 @@ service EmailSenderGrpcService {
 
     rpc SendSuccesfullScenarioPhase2(email_sender.SuccesfullScenarioPhase2Request) returns (email_sender.EmailSentResponse);
 
-    rpc SendSuccesfullProofOfIdentity(email_sender.SendSuccesfullProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
+    rpc SendSuccessfullProofOfIdentity(email_sender.SendSuccessfullProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendRetryProofOfIdentity(email_sender.SendRetryProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendFailedProofOfIdentity(email_sender.SendFailedProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
 
-    rpc SendSuccesfullProofOfAddress(email_sender.SendSuccesfullProofOfAddressRequest) returns (email_sender.EmailSentResponse);
+    rpc SendSuccessfullProofOfAddress(email_sender.SendSuccessfullProofOfAddressRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendRetryProofOfAddress(email_sender.SendRetryProofOfAddressRequest) returns (email_sender.EmailSentResponse);
     
@@ -109,7 +109,7 @@ service EmailSenderGrpcService {
         email_sender.SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
-    email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
+        email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
