@@ -78,6 +78,11 @@ message SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest{
     string ClientId = 2;
 }
 
+message SendLiveAccountGrantedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 message EmailSentResponse {
     
 }
@@ -104,12 +109,14 @@ service EmailSenderGrpcService {
     rpc SendFailedProofOfAddress(email_sender.SendFailedProofOfAddressRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendContractToClient(email_sender.SendContractToClientRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendServiceDeniedDueToViolationTermsAndCondOnContractSigning(
         email_sender.SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
         email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
+    rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
+    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
