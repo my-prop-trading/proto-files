@@ -227,6 +227,7 @@ message ContractorGrantLiveAccountRequest {
     string TraderAccountAggregatedId = 1;
     string ClientId = 2;
     string ContractId = 3;
+    string OfficerId = 4;
 }
 
 message ContractorGrantLiveAccountResponseBody{
@@ -242,6 +243,7 @@ message ContractorGrantLiveAccountResponse {
 message ContractorCommentRequest {
     string TraderAccountAggregatedId = 1;
     string Comment = 2;
+    string OfficerId = 3;
 }
 
 message ContractorCommentResponseBody{
@@ -256,6 +258,7 @@ message ContractorCommentResponse {
 
 message ContractorRejectRequest {
     string TraderAccountAggregatedId = 1;
+    string OfficerId = 2;
 }
 
 message ContractorRejectResponseBody{
@@ -271,6 +274,7 @@ message ContractorRejectResponse {
 message ContractorRejectAndBlockRequest {
     string TraderAccountAggregatedId = 1;
     string Comment = 2;
+    string OfficerId = 3;
 }
 
 message ContractorRejectAndBlockResponseBody{
