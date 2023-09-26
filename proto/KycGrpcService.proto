@@ -32,6 +32,7 @@ message RetryProofOfIdentityRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
+    string Brand = 4;
 }
 
 message RetryProofOfIdentityResponseBody {
