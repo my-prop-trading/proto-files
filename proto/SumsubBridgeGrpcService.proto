@@ -66,10 +66,10 @@ message GetSumsubApplicantDataRequest {
 }
 
 message SumsubPersonalDataModel {
-    string FirstName = 1;
-    string LastName = 2;
-    int64 DateOfBirth = 3;
-    string CountryOfResidence = 4;
+    optional string FirstName = 1;
+    optional string LastName = 2;
+    optional int64 DateOfBirth = 3;
+    optional string CountryOfResidence = 4;
 }
 
 enum SumsubDocumentStatus
@@ -81,8 +81,8 @@ enum SumsubDocumentStatus
 message SumsubDocumentModel {
     string Type = 1;
     sumsub.SumsubDocumentStatus Status = 2;
-    string Number = 3;
-    string Comment = 4;
+    optional string Number = 3;
+    optional string Comment = 4;
 }
 
 message GetSumsubApplicantDataResponseBody {
