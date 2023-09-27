@@ -25,7 +25,6 @@ message CreateSumsubTokenResponse {
     } 
 }
 
-
 message CreateSumsubProofOfIdentityTokenRequest {
     string ClientId = 1;
     string Country = 2;
@@ -61,6 +60,42 @@ message CreateSumsubProofOfAddressTokenResponse {
         sumsub.Error Error = 2;
     } 
 }
+message GetApplicantDataRequest {
+    string ApplicantId = 1;
+    string ProcessId = 2;
+}
+
+message PersonalDataModel {
+    string FirstName = 1;
+    string LastName = 2;
+    int64 DateOfBirth = 3;
+    string CountryOfResidence = 4;
+}
+
+enum DocumentStatus
+{
+    VERIFIED = 0;
+    DECLINED = 1;
+}
+
+message DocumentModel {
+    string Type = 1;
+    sumsub.DocumentStatus Status = 2;
+    string Number = 3;
+    string Comment = 4;
+}
+
+message GetApplicantDataResponseBody {
+    sumsub.PersonalDataModel PersonalData = 1;
+    repeated sumsub.DocumentModel Items = 2;
+}
+
+message GetApplicantDataResponse {
+    oneof response {
+        sumsub.GetApplicantDataResponseBody Body = 1;
+        sumsub.Error Error = 2;
+    } 
+}
 
 service SumsubBridgeGrpcService {
     rpc CreateSumsubToken(sumsub.CreateSumsubTokenRequest) 
@@ -71,6 +106,9 @@ service SumsubBridgeGrpcService {
 
     rpc CreateSumsubProofOfAddressToken(sumsub.CreateSumsubProofOfAddressTokenRequest) 
     returns (sumsub.CreateSumsubProofOfAddressTokenResponse);
+
+    rpc GetApplicantData(sumsub.GetApplicantDataRequest) 
+    returns (sumsub.GetApplicantDataResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
