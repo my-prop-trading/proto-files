@@ -60,39 +60,39 @@ message CreateSumsubProofOfAddressTokenResponse {
         sumsub.Error Error = 2;
     } 
 }
-message GetApplicantDataRequest {
+message GetSumsubApplicantDataRequest {
     string ApplicantId = 1;
     string ProcessId = 2;
 }
 
-message PersonalDataModel {
+message SumsubPersonalDataModel {
     string FirstName = 1;
     string LastName = 2;
     int64 DateOfBirth = 3;
     string CountryOfResidence = 4;
 }
 
-enum DocumentStatus
+enum SumsubDocumentStatus
 {
     VERIFIED = 0;
     DECLINED = 1;
 }
 
-message DocumentModel {
+message SumsubDocumentModel {
     string Type = 1;
-    sumsub.DocumentStatus Status = 2;
+    sumsub.SumsubDocumentStatus Status = 2;
     string Number = 3;
     string Comment = 4;
 }
 
-message GetApplicantDataResponseBody {
-    sumsub.PersonalDataModel PersonalData = 1;
-    repeated sumsub.DocumentModel Items = 2;
+message GetSumsubApplicantDataResponseBody {
+    sumsub.SumsubPersonalDataModel PersonalData = 1;
+    repeated sumsub.SumsubDocumentModel Items = 2;
 }
 
-message GetApplicantDataResponse {
+message GetSumsubApplicantDataResponse {
     oneof response {
-        sumsub.GetApplicantDataResponseBody Body = 1;
+        sumsub.GetSumsubApplicantDataResponseBody Body = 1;
         sumsub.Error Error = 2;
     } 
 }
@@ -107,8 +107,8 @@ service SumsubBridgeGrpcService {
     rpc CreateSumsubProofOfAddressToken(sumsub.CreateSumsubProofOfAddressTokenRequest) 
     returns (sumsub.CreateSumsubProofOfAddressTokenResponse);
 
-    rpc GetApplicantData(sumsub.GetApplicantDataRequest) 
-    returns (sumsub.GetApplicantDataResponse);
+    rpc GetSumsubApplicantData(sumsub.GetSumsubApplicantDataRequest) 
+    returns (sumsub.GetSumsubApplicantDataResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
