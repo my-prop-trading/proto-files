@@ -1,0 +1,79 @@
+syntax = "proto3";
+package sumsub;
+
+enum SumsubNotificationType {
+    Reviewed = 0;
+    Pending = 1;
+    Created = 2;
+    OnHold = 3;
+    PersonalInfoChanged = 4;
+    Prechecked = 5;
+    Deleted = 6;
+    LevelChanged = 7;
+    VideoIdentStatusChanged = 8;
+    Reset = 9;
+    ActionPending = 10;
+    ActionReviewed = 11;
+    ActionOnHold = 12;
+    TravelRuleStatusChanged = 13;
+    WorkflowCompleted = 14;
+}
+
+enum SumsubReviewRejectStatus {
+    Final = 0;
+    Retry = 1;
+}
+
+enum SumsubProofType {
+    ProofOfAddress = 0;
+    ProofOfIdentity = 1;
+}
+
+enum SumsubReviewStatus {
+    SRS_Init = 0;
+    SRS_Pending = 1;
+    SRS_Prechecked = 2;
+    SRS_Queued = 3;
+    SRS_Completed = 4;
+    SRS_OnHold = 5;
+}
+
+message SumsubUpdateSbModel
+{
+    oneof response {
+        sumsub.UpdatedSbModel Updated = 1;
+        sumsub.CompletedSuccessfulSbModel Successful = 2;
+        sumsub.CompletedRejectedSbModel Rejected = 3;
+    } 
+}
+
+message CompletedRejectedSbModel {
+    SumsubUpdateBodySbModel Body = 1;
+    SumsubReviewRejectStatus RejectStatus = 2;
+}
+
+message CompletedSuccessfulSbModel {
+    SumsubUpdateBodySbModel Body = 1;
+}
+
+message UpdatedSbModel {
+    SumsubUpdateBodySbModel Body = 1;
+}
+
+message SumsubUpdateBodySbModel {
+
+    string ClientId = 1;
+    string VerificationId = 2;
+    string ApplicantId = 3;
+    int64 CreatedAt = 4;
+    SumsubNotificationType NotificationType = 5;
+    SumsubProofType ProofType = 6;
+    SumsubReviewStatus ReviewStatus = 7;
+}
+
+message CompletedStatusSbModel {
+    oneof response {
+        sumsub.CompletedSuccessfulSbModel Successful = 1;
+        sumsub.CompletedRejectedSbModel Rejected = 2;
+    } 
+}
