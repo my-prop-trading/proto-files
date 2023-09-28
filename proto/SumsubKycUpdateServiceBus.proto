@@ -1,5 +1,5 @@
 syntax = "proto3";
-package sumsub;
+package sumsub_service_bus;
 
 enum SumsubNotificationType {
     Reviewed = 0;
@@ -41,9 +41,9 @@ enum SumsubReviewStatus {
 message SumsubUpdateSbModel
 {
     oneof response {
-        sumsub.UpdatedSbModel Updated = 1;
-        sumsub.CompletedSuccessfulSbModel Successful = 2;
-        sumsub.CompletedRejectedSbModel Rejected = 3;
+        sumsub_service_bus.UpdatedSbModel Updated = 1;
+        sumsub_service_bus.CompletedSuccessfulSbModel Successful = 2;
+        sumsub_service_bus.CompletedRejectedSbModel Rejected = 3;
     } 
 }
 
@@ -69,11 +69,4 @@ message SumsubUpdateBodySbModel {
     SumsubNotificationType NotificationType = 5;
     SumsubProofType ProofType = 6;
     SumsubReviewStatus ReviewStatus = 7;
-}
-
-message CompletedStatusSbModel {
-    oneof response {
-        sumsub.CompletedSuccessfulSbModel Successful = 1;
-        sumsub.CompletedRejectedSbModel Rejected = 2;
-    } 
 }
