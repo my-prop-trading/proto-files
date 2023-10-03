@@ -217,10 +217,16 @@ message ContractorModel {
     bool ProofOfAddress = 5;
     bool IsSignedContractReceived = 6;
     kyc.ContractStatus Status = 7;
-    string Comment = 8;
+    repeated kyc.ContractorCommentModel Comment = 8;
     int64 CreatedAt = 9;
     int64 UpdatedAt = 10;
     string Brand = 11;
+}
+
+message ContractorCommentModel {
+    int64 CreatedAt = 1;
+    string Comment = 2;
+    string OfficerId = 3;
 }
 
 message GetContractorsResponse {
