@@ -147,6 +147,7 @@ message ProofDocument{
     bool IsVerified = 2;
     string DocumentType = 3;
     string Comment = 4;
+    string Officer = 5;
 }
 message ProofCommentModel
 {
@@ -165,7 +166,7 @@ message ProofModel {
     repeated kyc.ProofDocument Documents = 7;
     optional kyc.ProofStatus Status = 8;
     optional kyc.ProofResult Result = 9;
-    string Comment = 10;
+    optional string Comment = 10;
     kyc.ProofType Type = 11;
     int64 CreatedAt = 12;
     int64 UpdatedAt = 13;
