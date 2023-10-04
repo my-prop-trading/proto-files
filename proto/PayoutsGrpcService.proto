@@ -70,6 +70,7 @@ message PayoutRequest {
     double WithdrawalAmount = 12;
     string WithdrawalCurrency = 13;
     int64 ETag = 14;
+    double RefundFeeAmount = 15;
 }
 
 message ProfitWidget {
