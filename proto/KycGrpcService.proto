@@ -148,17 +148,23 @@ message ProofDocument{
     string DocumentType = 3;
     string Comment = 4;
 }
+message ProofCommentModel
+{
+    int64 CreatedAt = 1;
+    string Comment = 2;
+    string OfficerId = 3;    
+}
 
 message ProofModel {
-    string InternalVerificationId = 1;
-    string SumsubVerificationId = 2;
+    optional string InternalVerificationId = 1;
+    optional string SumsubVerificationId = 2;
     string ClientId = 3;
-    string ApplicantId = 4;
-    int64 StartDate = 5;
-    int64 FinishDate = 6;
+    optional string ApplicantId = 4;
+    optional int64 StartDate = 5;
+    optional int64 FinishDate = 6;
     repeated kyc.ProofDocument Documents = 7;
-    kyc.ProofStatus Status = 8;
-    kyc.ProofResult Result = 9;
+    optional kyc.ProofStatus Status = 8;
+    optional kyc.ProofResult Result = 9;
     string Comment = 10;
     kyc.ProofType Type = 11;
     int64 CreatedAt = 12;
@@ -217,10 +223,11 @@ message ContractorModel {
     bool ProofOfAddress = 5;
     bool IsSignedContractReceived = 6;
     kyc.ContractStatus Status = 7;
-    repeated kyc.ContractorCommentModel Comment = 8;
+    repeated kyc.ContractorCommentModel Comments = 8;
     int64 CreatedAt = 9;
     int64 UpdatedAt = 10;
     string Brand = 11;
+    repeated kyc.ContractorLogModel Logs = 12;
 }
 
 message ContractorCommentModel {
@@ -228,6 +235,13 @@ message ContractorCommentModel {
     string Comment = 2;
     string OfficerId = 3;
 }
+
+message ContractorLogModel {
+    int64 CreatedAt = 1;
+    string Comment = 2;
+    string OfficerId = 3;
+}
+
 
 message GetContractorsResponse {
     repeated kyc.ContractorModel Items = 1;
@@ -325,6 +339,14 @@ message GetClientProofsResponse {
     kyc.PersonalDataModel PersonalData = 4;
 }
 
+message GetClientContractsRequest {
+    string ClientId = 1;
+}
+
+message GetClientContractsResponse {
+    repeated kyc.ContractorModel Items = 1;
+}
+
 service KycGrpcService {
     // API
     rpc ProofOfIdentity(kyc.ProofOfIdentityRequest) 
@@ -367,6 +389,9 @@ service KycGrpcService {
     // Backoffice Client Panel
     rpc GetClientProofs(kyc.GetClientProofsRequest)
     returns (kyc.GetClientProofsResponse);
+
+    rpc GetClientContracts(kyc.GetClientContractsRequest)
+    returns (kyc.GetClientContractsResponse);
 
     // Ping
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
