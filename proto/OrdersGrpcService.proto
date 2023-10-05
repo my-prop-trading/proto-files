@@ -145,12 +145,30 @@ message GetPayinsPaginatedResponse {
 }
 
 
+message GetOrderRequest {
+  string OrderId = 1;
+  string ClientId = 2;
+}
+
+message GetOrderResponse {
+  oneof response {
+    orders.GetOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message GetOrderResponseBody {
+  orders.Order Order = 1;
+}
+
 service OrdersGrpcService {
     rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 
     rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
+
+    rpc GetOrder(orders.GetOrderRequest) returns (orders.GetOrderResponse);
 
     rpc PayForOrder(orders.PayForOrderRequest) returns (orders.PayForOrderResponse);
 
