@@ -219,7 +219,7 @@ enum ContractStatus {
 message ContractorModel {
     string TraderAccountAggregatedId = 1;
     string ClientId = 2;
-    int64 SendingDate = 3;
+    optional int64 SendingDate = 3;
     bool ProofOfIdentity = 4;
     bool ProofOfAddress = 5;
     bool IsSignedContractReceived = 6;
@@ -230,7 +230,7 @@ message ContractorModel {
     string Brand = 11;
     repeated kyc.ContractorLogModel Logs = 12;
 }
-
+    
 message ContractorCommentModel {
     int64 CreatedAt = 1;
     string Comment = 2;
