@@ -12,6 +12,7 @@ message EmailDestination{
 message RegistrationConfirmationRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string Code = 3;
 }
 
 message ForgotPasswordRequest {
