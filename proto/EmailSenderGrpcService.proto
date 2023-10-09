@@ -21,7 +21,7 @@ message ForgotPasswordRequest {
     string Code = 3;
 }
 
-message SendPasswordResetNotificationRequest {
+message PasswordResetNotificationRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -98,7 +98,7 @@ service EmailSenderGrpcService {
 
     rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
 
-    rpc SendPasswordResetNotification(email_sender.SendPasswordResetNotificationRequest) returns (email_sender.EmailSentResponse);
+    rpc SendPasswordResetNotification(email_sender.PasswordResetNotificationRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccesfullScenarioPhase1(email_sender.SuccesfullScenarioPhase1Request) returns (email_sender.EmailSentResponse);
 
