@@ -1,0 +1,7 @@
+syntax = "proto3";
+package confirmation_email_sender;
+import "google/protobuf/empty.proto";
+
+service ConfirmationEmailSenderGrpcService {    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
