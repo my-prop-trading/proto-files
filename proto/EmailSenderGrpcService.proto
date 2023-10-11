@@ -89,6 +89,16 @@ message SendLiveAccountGrantedRequest{
     string ClientId = 2;
 }
 
+message SendPaymentReceivedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendPaymentFailedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 message EmailSentResponse {
     
 }
@@ -125,6 +135,10 @@ service EmailSenderGrpcService {
         email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
+    
+    rpc SendPaymentReceived(email_sender.SendPaymentReceivedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendPaymentFailed(email_sender.SendPaymentFailedRequest) returns (email_sender.EmailSentResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
