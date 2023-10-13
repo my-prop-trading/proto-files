@@ -78,7 +78,7 @@ message ProfitWidget {
     
     double pending_profit = 2;
 
-    double refund_fee_ammount = 3;
+    double refund_fee_amount = 3;
 }
 
 
