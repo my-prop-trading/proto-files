@@ -243,8 +243,24 @@ message CloseAccountPositionsRequest {
     metatrader_platfom.TradingPlatformModel Platform = 4;
 }
 
+message CloseTradeModel {
+    int64 Id = 1;            
+    int64 MetatraderLogin = 2;          
+    optional string Symbol = 3;       
+    TradeType Type = 4;             
+    double Lots = 5;           
+    string Comment = 6;          
+}
+
+message CloseAccountPositionsResponseBody {
+    repeated metatrader.CloseTradeModel Trades = 1;
+}
+
 message CloseAccountPositionsResponse {
-    bool Success = 1;
+    oneof response {
+        metatrader.CloseAccountPositionsResponseBody Body = 1;
+        metatrader.MetatraderAccountError Error = 2;
+    } 
 }
 
 message CloseAllPositionsRequest {
