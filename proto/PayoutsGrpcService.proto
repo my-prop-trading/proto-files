@@ -239,6 +239,7 @@ enum PayoutsGrpcServiceError {
     NOT_ENOUGH_BALANCE = 3;
     CANT_MAKE_DECISION = 4;
     BLOCKED = 5;
+    USER_HAS_OPEN_POSITIONS = 6;
 }
 
 service PayoutsGrpcService {
