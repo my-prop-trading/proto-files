@@ -23,7 +23,8 @@ message Order {
   double AccountBalance = 8; // Account balance in package
   metatrader_broker.BrokerModel Broker = 9; // Broker selected for package
   metatrader_platfom.TradingPlatformModel TradingPlatform = 10; // Trading platform selected for package
-  optional int64 PayBy= 11; 
+  optional int64 PayBy = 11; 
+  string BrandId = 12; 
 }
 
 message CreateTraderAccountOrderRequest {
