@@ -92,11 +92,13 @@ message SendLiveAccountGrantedRequest{
 message SendPaymentReceivedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderPackagesName = 3;
 }
 
 message SendPaymentFailedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderPackagesName = 3;
 }
 
 message EmailSentResponse {
