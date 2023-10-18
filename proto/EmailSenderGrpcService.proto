@@ -38,6 +38,18 @@ message SuccesfullScenarioPhase2Request {
     string TraderAccountId = 3;
 }
 
+message SendFailedScenarioPhase1Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendFailedScenarioPhase2Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 message SendSuccessfulProofOfIdentityRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -141,6 +153,10 @@ service EmailSenderGrpcService {
     rpc SendPaymentReceived(email_sender.SendPaymentReceivedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendPaymentFailed(email_sender.SendPaymentFailedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendFailedScenarioPhase1(email_sender.SendFailedScenarioPhase1Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendFailedScenarioPhase2(email_sender.SendFailedScenarioPhase2Request) returns (email_sender.EmailSentResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
