@@ -34,6 +34,7 @@ message BankTransferDetails {
     string AccountNumberOrIban = 10;
     string SwiftCode = 11;
     string BankName = 12;
+    string RefundFeeCurrency = 13;
 }
 
 message CryptoWithdrawalDetails {
@@ -43,6 +44,7 @@ message CryptoWithdrawalDetails {
     string Cryptocurrency = 4;
     string Network = 5;
     string CryptoWalletAddress = 6;
+    string RefundFeeCurrency = 7;
 }
 
 message NotSelectedPaymentDetails {}
@@ -70,8 +72,6 @@ message PayoutRequest {
     double WithdrawalAmount = 12;
     string WithdrawalCurrency = 13;
     int64 ETag = 14;
-    double RefundFeeAmount = 15;
-    string RefundFeeCurrency = 16;
 }
 
 message ProfitWidget {
