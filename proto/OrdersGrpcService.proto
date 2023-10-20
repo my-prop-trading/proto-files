@@ -65,6 +65,8 @@ message GetOrdersPaginatedRequest {
 
 message GetOrdersPaginatedResponse {
   repeated orders.Order Orders = 1;
+
+  uint64 Total = 2;
 }
 
 message PayForOrderRequest {
