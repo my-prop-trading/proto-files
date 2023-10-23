@@ -243,7 +243,20 @@ enum PayoutsGrpcServiceError {
     USER_HAS_OPEN_POSITIONS = 6;
 }
 
+message GetByIdRequest {
+    string Id = 1;
+}
+
+message GetByIdResponse {
+    oneof response {
+        payouts.PayoutRequest Payout = 1;
+        payouts.PayoutsGrpcServiceError Error = 2;
+    }
+}
+
 service PayoutsGrpcService {
+    rpc GetById(payouts.GetByIdRequest) returns (payouts.GetByIdResponse);
+
     rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
 
     rpc GetByFilters(payouts.GetByFiltersRequest) returns (payouts.GetByFiltersResponse);
