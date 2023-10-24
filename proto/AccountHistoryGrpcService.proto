@@ -44,6 +44,8 @@ message GetByTraderAccountIdRequest {
 
 message GetByTraderAccountIdResponse {
   repeated account_history.AccountTradeModel Items = 1;
+
+  uint64 TotalCount = 2;
 }
 
 enum AccountHistoryError {
