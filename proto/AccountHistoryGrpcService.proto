@@ -44,6 +44,16 @@ message GetByTraderAccountIdRequest {
 
 message GetByTraderAccountIdResponse {
   repeated account_history.AccountTradeModel Items = 1;
+}
+
+message GetByTraderAccountIdWithTotalCountRequest {
+  string TraderAccountId = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+}
+
+message GetByTraderAccountIdWithTotalCountRResponse {
+  repeated account_history.AccountTradeModel Items = 1;
 
   uint64 TotalCount = 2;
 }
@@ -56,6 +66,8 @@ enum AccountHistoryError {
 
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(account_history.GetByTraderAccountIdRequest) returns (account_history.GetByTraderAccountIdResponse);
+
+    rpc GetByTraderAccountIdWithTotalCount(account_history.GetByTraderAccountIdWithTotalCountRequest) returns (account_history.GetByTraderAccountIdWithTotalCountRResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
