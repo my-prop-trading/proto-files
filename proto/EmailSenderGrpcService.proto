@@ -96,7 +96,12 @@ message SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest{
     string ClientId = 2;
 }
 
-message SendLiveAccountGrantedRequest{
+message SendLiveAccountGrantedRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendLiveAccountLostRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
 }
@@ -149,6 +154,8 @@ service EmailSenderGrpcService {
         email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendPaymentReceived(email_sender.SendPaymentReceivedRequest) returns (email_sender.EmailSentResponse);
 
