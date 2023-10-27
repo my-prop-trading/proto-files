@@ -266,6 +266,24 @@ message ContractorGrantLiveAccountResponse {
       }
 }   
 
+message ContractorSignContractRequest {
+    string TraderAccountAggregatedId = 1;
+    string ClientId = 2;
+    string ContractId = 3;
+    string OfficerId = 4;
+}
+
+message ContractorSignContractResponseBody{
+    ContractorModel Contract = 1;
+}
+
+message ContractorSignContractResponse {
+    oneof response {
+        kyc.ContractorSignContractResponseBody Body = 1;
+        kyc.KycError Error = 2;
+      }
+}   
+
 message ContractorCommentRequest {
     string TraderAccountAggregatedId = 1;
     string Comment = 2;
@@ -373,6 +391,9 @@ service KycGrpcService {
 
     rpc GetContractors(kyc.GetContractorsRequest)
     returns (kyc.GetContractorsResponse);
+
+    rpc ContractorSignContract(kyc.ContractorSignContractRequest)
+    returns (kyc.ContractorSignContractResponse);
 
     rpc ContractorGrantLiveAccount(kyc.ContractorGrantLiveAccountRequest)
     returns (kyc.ContractorGrantLiveAccountResponse);
