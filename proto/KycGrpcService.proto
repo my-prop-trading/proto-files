@@ -8,6 +8,7 @@ enum KycError {
     NO_TRADING_ACCOUNT = 2;
     NO_TRADING_PACKAGE = 3; 
     METATARDER_ERROR = 4; 
+    NOT_AUTHORIZED = 5; 
 }
 
 message ProofOfIdentityRequest {
