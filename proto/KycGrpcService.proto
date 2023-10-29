@@ -253,7 +253,7 @@ message GetContractorsResponse {
 message ContractorGrantLiveAccountRequest {
     string TraderAccountAggregatedId = 1;
     string ClientId = 2;
-    string ContractId = 3;
+    int64 ContractId = 3;
     string OfficerId = 4;
 }
 
@@ -270,7 +270,7 @@ message ContractorGrantLiveAccountResponse {
 message ContractorSignContractRequest {
     string TraderAccountAggregatedId = 1;
     string ClientId = 2;
-    string ContractId = 3;
+    int64 ContractId = 3;
     string OfficerId = 4;
 }
 
