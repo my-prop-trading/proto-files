@@ -230,6 +230,7 @@ message ContractorModel {
     int64 UpdatedAt = 10;
     string Brand = 11;
     repeated kyc.ContractorLogModel Logs = 12;
+    int64 ContractId = 13;
 }
     
 message ContractorCommentModel {
