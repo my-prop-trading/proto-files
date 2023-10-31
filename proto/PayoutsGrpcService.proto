@@ -89,6 +89,8 @@ message GetByClientIdRequest {
     int64 Offset = 2;
 
     int64 Limit = 3;
+
+    optional string TraderAccountId = 4;
 }
 
 message GetByClientIdResponse {
