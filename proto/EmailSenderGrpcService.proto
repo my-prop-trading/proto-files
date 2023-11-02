@@ -108,6 +108,24 @@ message SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest{
     string ClientId = 2;
 }
 
+message SendServiceDeniedDueToViolationOfOurTermsAndCondRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendServiceDeniedDueToViolationOfOurTermsAndCondFutureProfitBlockedRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendServiceDeniedDueToViolationOfOurTermsAndCondFutureAndCurrentProfitBlockedRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 message SendLiveAccountGrantedRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -168,6 +186,15 @@ service EmailSenderGrpcService {
     
     rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
         email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendServiceDeniedDueToViolationOfOurTermsAndCond(
+        email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondRequest) returns (email_sender.EmailSentResponse);
+            
+    rpc SendServiceDeniedDueToViolationOfOurTermsAndCondFutureProfitBlocked(
+        email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondFutureProfitBlockedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendServiceDeniedDueToViolationOfOurTermsAndCondFutureAndCurrentProfitBlocked(
+        email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondFutureAndCurrentProfitBlockedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
 
