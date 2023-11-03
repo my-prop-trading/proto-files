@@ -148,6 +148,18 @@ message SendPaymentFailedRequest{
     string TraderPackagesName = 3;
 }
 
+message SendPayoutSuccessRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string PayoutId = 3;
+}
+
+message SendPayoutDeclinedRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string PayoutId = 3;
+}
+
 message EmailSentResponse {
     
 }
@@ -207,6 +219,10 @@ service EmailSenderGrpcService {
     rpc SendFailedScenarioPhase1(email_sender.SendFailedScenarioPhase1Request) returns (email_sender.EmailSentResponse);
 
     rpc SendFailedScenarioPhase2(email_sender.SendFailedScenarioPhase2Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendPayoutSuccess(email_sender.SendPayoutSuccessRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendPayoutDeclined(email_sender.SendPayoutDeclinedRequest) returns (email_sender.EmailSentResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
