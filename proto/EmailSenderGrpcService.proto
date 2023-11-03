@@ -152,12 +152,14 @@ message SendPayoutSuccessRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string PayoutId = 3;
+    string TraderAccountId = 4;
 }
 
 message SendPayoutDeclinedRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string PayoutId = 3;
+    string TraderAccountId = 4;
 }
 
 message EmailSentResponse {
