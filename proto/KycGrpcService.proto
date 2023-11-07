@@ -231,6 +231,7 @@ message ContractorModel {
     string Brand = 11;
     repeated kyc.ContractorLogModel Logs = 12;
     int64 ContractId = 13;
+    optional kyc.ContractSignStatus ContractSignStatus = 14;
 }
     
 message ContractorCommentModel {
