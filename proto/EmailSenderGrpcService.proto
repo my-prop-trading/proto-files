@@ -164,6 +164,24 @@ message SendPayoutDeclinedRequest {
     string TraderAccountId = 4;
 }
 
+message SendProfitSplitDayRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string PayoutId = 3;
+    string TraderAccountId = 4;
+    double amount = 5;
+    string currency = 6;
+}
+
+message SendRevenueShareTakenRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string PayoutId = 3;
+    string TraderAccountId = 4;
+    double amount = 5;
+    string currency = 6;
+}
+
 message EmailSentResponse {
     
 }
@@ -227,6 +245,10 @@ service EmailSenderGrpcService {
     rpc SendPayoutSuccess(email_sender.SendPayoutSuccessRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendPayoutDeclined(email_sender.SendPayoutDeclinedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendProfitSplitDay(email_sender.SendProfitSplitDayRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendRevenueShareTaken(email_sender.SendRevenueShareTakenRequest) returns (email_sender.EmailSentResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
