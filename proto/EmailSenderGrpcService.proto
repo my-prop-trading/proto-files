@@ -101,11 +101,13 @@ message SendContractToClientRequest{
 message SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string ContractId = 3;
 }
 
 message SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string ContractId = 3;
 }
 
 message SendServiceDeniedDueToViolationOfOurTermsAndCondRequest{
