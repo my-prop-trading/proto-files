@@ -167,7 +167,7 @@ message SendPayoutDeclinedRequest {
 message SendProfitSplitDayRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
-    string PayoutId = 3;
+    string ProfitReleaseId = 3;
     string TraderAccountId = 4;
     double amount = 5;
     string currency = 6;
@@ -176,7 +176,7 @@ message SendProfitSplitDayRequest {
 message SendRevenueShareTakenRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
-    string PayoutId = 3;
+    string ProfitReleaseId = 3;
     string TraderAccountId = 4;
     double amount = 5;
     string currency = 6;
