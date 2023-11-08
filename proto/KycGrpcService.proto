@@ -246,9 +246,9 @@ message ContractorLogModel {
     string OfficerId = 3;
 }
 
-
 message GetContractorsResponse {
     repeated kyc.ContractorModel Items = 1;
+    uint64 TotalCount = 2;
 }
 
 message ContractorGrantLiveAccountRequest {
