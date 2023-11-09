@@ -186,6 +186,7 @@ message GetProofsOfIdentityRequest {
 
 message GetProofsOfIdentityResponse {
     repeated kyc.ProofModel Items = 1;
+    uint64 TotalCount = 2;
 }
 
 message GetProofsOfAddressRequest {
@@ -200,6 +201,7 @@ message GetProofsOfAddressRequest {
 
 message GetProofsOfAddressResponse {
     repeated kyc.ProofModel Items = 1;
+    uint64 TotalCount = 2;
 }
 
 message GetContractorsRequest {
