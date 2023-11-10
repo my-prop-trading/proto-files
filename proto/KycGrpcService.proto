@@ -114,6 +114,7 @@ enum ContractSignStatus
     CSS_PENDING = 1;
     CSS_SUCCESS = 2;
     CSS_STATUS_FAIL = 3;
+    CSS_STATUS_FAIL_AND_BLOCKED = 4;
 }
 
 message GetClientVerificationProgressResponse {
