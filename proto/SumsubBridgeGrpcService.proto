@@ -83,6 +83,8 @@ message SumsubDocumentModel {
     sumsub.SumsubDocumentStatus Status = 2;
     optional string Number = 3;
     optional string Comment = 4;
+    optional string Country = 5;
+    optional string ValidUntil = 6;
 }
 
 message GetSumsubApplicantDataResponseBody {
