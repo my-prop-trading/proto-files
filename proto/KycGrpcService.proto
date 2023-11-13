@@ -379,7 +379,7 @@ message GetClientContractsResponse {
 
 message GetIdentityInfoFromKycProviderRequest {
     string ClientId = 1;
-    optional string ApplicantId = 2;
+    string ApplicantId = 2;
 }
 
 message GetIdentityInfoFromKycProviderBody {
@@ -395,7 +395,7 @@ message GetIdentityInfoFromKycProviderResponse {
 
 message GetAddressInfoFromKycProviderRequest {
     string ClientId = 1;
-    optional string ApplicantId = 2;
+    string ApplicantId = 2;
 }
 
 message GetAddressInfoFromKycProviderBody {
