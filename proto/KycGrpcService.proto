@@ -370,13 +370,6 @@ message GetClientContractsResponse {
     repeated kyc.ContractorModel Items = 1;
 }
 
-
-// rpc GetIdentityInfoFromKycProvider(kyc.GetIdentityInfoFromKycProviderRequest)
-// returns (kyc.GetIdentityInfoFromKycProviderResponse);
-
-// rpc GetAddressInfoFromKycProvider(kyc.GetAddressInfoFromKycProviderRequest)
-// returns (kyc.GetAddressInfoFromKycProviderResponse);
-
 message GetIdentityInfoFromKycProviderRequest {
     string ClientId = 1;
     string ApplicantId = 2;
