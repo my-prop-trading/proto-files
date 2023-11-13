@@ -333,7 +333,7 @@ message ContractorRejectAndBlockResponse {
     oneof response {
         kyc.ContractorRejectAndBlockResponseBody Body = 1;
         kyc.KycError Error = 2;
-      }
+    }
 }
 
 message GetClientProofsRequest {
@@ -369,6 +369,45 @@ message GetClientContractsRequest {
 message GetClientContractsResponse {
     repeated kyc.ContractorModel Items = 1;
 }
+
+
+// rpc GetIdentityInfoFromKycProvider(kyc.GetIdentityInfoFromKycProviderRequest)
+// returns (kyc.GetIdentityInfoFromKycProviderResponse);
+
+// rpc GetAddressInfoFromKycProvider(kyc.GetAddressInfoFromKycProviderRequest)
+// returns (kyc.GetAddressInfoFromKycProviderResponse);
+
+message GetIdentityInfoFromKycProviderRequest {
+    string ClientId = 1;
+    optional string ApplicantId = 2;
+}
+
+message GetIdentityInfoFromKycProviderBody {
+
+}
+
+message GetIdentityInfoFromKycProviderResponse {
+    oneof response {
+        kyc.GetIdentityInfoFromKycProviderBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+} 
+
+message GetAddressInfoFromKycProviderRequest {
+    string ClientId = 1;
+    optional string ApplicantId = 2;
+}
+
+message GetAddressInfoFromKycProviderBody {
+
+}
+
+message GetAddressInfoFromKycProviderResponse {
+    oneof response {
+        kyc.GetAddressInfoFromKycProviderBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+} 
 
 service KycGrpcService {
     // API
@@ -412,6 +451,13 @@ service KycGrpcService {
     rpc ContractorRejectAndBlock(kyc.ContractorRejectAndBlockRequest)
     returns (kyc.ContractorRejectAndBlockResponse);
     
+    // Retry info
+    rpc GetIdentityInfoFromKycProvider(kyc.GetIdentityInfoFromKycProviderRequest)
+    returns (kyc.GetIdentityInfoFromKycProviderResponse);
+
+    rpc GetAddressInfoFromKycProvider(kyc.GetAddressInfoFromKycProviderRequest)
+    returns (kyc.GetAddressInfoFromKycProviderResponse);
+
     // Backoffice Client Panel
     rpc GetClientProofs(kyc.GetClientProofsRequest)
     returns (kyc.GetClientProofsResponse);
