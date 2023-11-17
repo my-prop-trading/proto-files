@@ -144,6 +144,8 @@ message GetByFiltersRequest {
     
     optional payouts.PaymentMethod PaymentMethod = 7;
 
+    repeated payouts.PayoutType Types = 8;
+
     int64 Offset = 20;
     
     int64 Limit = 21;
