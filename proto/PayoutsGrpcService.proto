@@ -223,6 +223,8 @@ message GetRevenueShareByFiltersRequest {
     
 message GetRevenueShareByFiltersResponse {
     repeated payouts.RevenueShareItem Payouts = 1;
+
+    double TotalAmount = 2;
 }
 
 message RevenueShareItem {
