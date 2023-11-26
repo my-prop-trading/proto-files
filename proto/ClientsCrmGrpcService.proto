@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package usermanagement;
+package clients_crm;
 
 // Enumerations for various statuses
 
@@ -49,9 +49,9 @@ message UserProfile {
     string country_reg_ip = 11;
     string country_poi = 12;
     string country_poa = 13;
-    POIStatus poi_status = 14;
-    POAStatus poa_status = 15;
-    KYCStatus kyc_status = 16;
+    clients_crm.POIStatus poi_status = 14;
+    clients_crm.POAStatus poa_status = 15;
+    clients_crm.KYCStatus kyc_status = 16;
 }
 
 // Service for user profile operations
@@ -98,22 +98,22 @@ message SearchUserProfilesRequest {
     optional string country_reg_ip = 11;
     optional string country_poi = 12;
     optional string country_poa = 13;
-    optional POIStatus poi_status = 14;
-    optional POAStatus poa_status = 15;
-    optional KYCStatus kyc_status = 16;
+    optional clients_crm.POIStatus poi_status = 14;
+    optional clients_crm.POAStatus poa_status = 15;
+    optional clients_crm.KYCStatus kyc_status = 16;
 }
 
 message SearchUserProfilesResponse {
-    repeated UserProfile user_profiles = 1; // List of user profiles matching the search criteria
+    repeated clients_crm.UserProfile user_profiles = 1; // List of user profiles matching the search criteria
 }
 
 // Request and Response messages for CRM Status management
 message CreateCRMStatusRequest {
-    CRMStatus status = 1;
+    clients_crm.CRMStatus status = 1;
 }
 
 message CreateCRMStatusResponse {
-    CRMStatus status = 1; // The created CRM status
+    clients_crm.CRMStatus status = 1; // The created CRM status
 }
 
 message RemoveCRMStatusRequest {
@@ -121,5 +121,5 @@ message RemoveCRMStatusRequest {
 }
 
 message ListCRMStatusesResponse {
-    repeated CRMStatus statuses = 1; // List of all CRM statuses
+    repeated clients_crm.CRMStatus statuses = 1; // List of all CRM statuses
 }
