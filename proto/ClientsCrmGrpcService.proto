@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+import "google/protobuf/empty.proto";
 package clients_crm;
 
 // Enumerations for various statuses
@@ -63,7 +63,7 @@ service ClientsCrmGrpcService {
     // Methods for CRM Status management
     rpc CreateCRMStatus(CreateCRMStatusRequest) returns (CreateCRMStatusResponse);
     rpc RemoveCRMStatus(RemoveCRMStatusRequest) returns (google.protobuf.Empty);
-    rpc ListCRMStatuses(google.protobuf.Empty) returns (ListCRMStatusesResponse);
+    rpc ListCRMStatuses(ListCRMStatusesRequest) returns (ListCRMStatusesResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
@@ -118,6 +118,9 @@ message CreateCRMStatusResponse {
 
 message RemoveCRMStatusRequest {
     int64 id = 1; // ID of the CRM status to remove
+}
+
+message ListCRMStatusesRequest {
 }
 
 message ListCRMStatusesResponse {
