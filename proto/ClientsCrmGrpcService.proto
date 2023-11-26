@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package usermanagement;
+
+// Enumerations for various statuses
+
+message CRMStatus {
+    int64 id = 1;         // Unique identifier for the CRM status
+    string name = 2;      // Name or description of the CRM status
+}
+
+enum POIStatus {
+    POI_NONE = 0;
+    POI_REQUESTED = 1;
+    POI_RETRY = 2;
+    POI_REJECTED = 3;
+    POI_SUCCESS = 4;
+}
+
+enum POAStatus {
+    POA_NONE = 0;
+    POA_REQUESTED = 1;
+    POA_RETRY = 2;
+    POA_REJECTED = 3;
+    POA_SUCCESS = 4;
+}
+
+enum KYCStatus {
+    KYC_NONE = 0;
+    KYC_REQUESTED = 1;
+    KYC_RETRY = 2;
+    KYC_REJECTED = 3;
+    KYC_SUCCESS = 4;
+    KYC_PARTIAL = 5;
+}
+
+// Define a User Profile message
+message UserProfile {
+    string client_id = 1; // Link to the user’s client profile
+    int64 registration_date = 2; // Unix timestamp
+    int64 crm_status = 3;
+    string first_name_reg = 4;
+    string last_name_reg = 5;
+    string first_name_kyc = 6;
+    string last_name_kyc = 7;
+    string email = 8;
+    string manager = 9; // Manager's name or ID
+    string country_reg = 10;
+    string country_reg_ip = 11;
+    string country_poi = 12;
+    string country_poa = 13;
+    POIStatus poi_status = 14;
+    POAStatus poa_status = 15;
+    KYCStatus kyc_status = 16;
+}
+
+// Service for user profile operations
+service ClientsCrmGrpcService {
+    rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
+    rpc SetUserProfile(SetUserProfileRequest) returns (google.protobuf.Empty);
+    rpc SearchUserProfiles(SearchUserProfilesRequest) returns (SearchUserProfilesResponse);
+
+    // Methods for CRM Status management
+    rpc CreateCRMStatus(CreateCRMStatusRequest) returns (CreateCRMStatusResponse);
+    rpc RemoveCRMStatus(RemoveCRMStatusRequest) returns (google.protobuf.Empty);
+    rpc ListCRMStatuses(google.protobuf.Empty) returns (ListCRMStatusesResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+// Request and Response messages
+message GetUserProfileRequest {
+    string client_id = 1;
+}
+
+message GetUserProfileResponse {
+    UserProfile user_profile = 1;
+}
+
+message SetUserProfileRequest {
+    string client_id = 1;
+    UserProfile user_profile = 2;
+}
+
+// Request and Response messages for SearchUserProfiles
+message SearchUserProfilesRequest {
+    // Filters (all optional, allowing for flexible search queries)
+    optional int64 registration_date_from = 1;
+    optional int64 registration_date_to = 2;
+    optional int64 crm_status = 3;
+    optional string first_name_reg = 4;
+    optional string last_name_reg = 5;
+    optional string first_name_kyc = 6;
+    optional string last_name_kyc = 7;
+    optional string email = 8;
+    optional string manager = 9;
+    optional string country_reg = 10;
+    optional string country_reg_ip = 11;
+    optional string country_poi = 12;
+    optional string country_poa = 13;
+    optional POIStatus poi_status = 14;
+    optional POAStatus poa_status = 15;
+    optional KYCStatus kyc_status = 16;
+}
+
+message SearchUserProfilesResponse {
+    repeated UserProfile user_profiles = 1; // List of user profiles matching the search criteria
+}
+
+// Request and Response messages for CRM Status management
+message CreateCRMStatusRequest {
+    CRMStatus status = 1;
+}
+
+message CreateCRMStatusResponse {
+    CRMStatus status = 1; // The created CRM status
+}
+
+message RemoveCRMStatusRequest {
+    int64 id = 1; // ID of the CRM status to remove
+}
+
+message ListCRMStatusesResponse {
+    repeated CRMStatus statuses = 1; // List of all CRM statuses
+}
