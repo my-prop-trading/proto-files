@@ -61,7 +61,7 @@ message UserProfile {
 // Service for user profile operations
 service ClientsCrmGrpcService {
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
-    rpc SetUserProfile(SetUserProfileRequest) returns (google.protobuf.Empty);
+    rpc SetUserProfile(SetUserProfileRequest) returns (SetUserProfileResponse);
     rpc SearchUserProfiles(SearchUserProfilesRequest) returns (SearchUserProfilesResponse);
 
     // Methods for CRM Status management
