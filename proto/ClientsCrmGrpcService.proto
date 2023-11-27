@@ -82,6 +82,9 @@ message SetUserProfileRequest {
     UserProfile user_profile = 2;
 }
 
+message SetUserProfileResponse {
+}
+
 // Request and Response messages for SearchUserProfiles
 message SearchUserProfilesRequest {
     // Filters (all optional, allowing for flexible search queries)
