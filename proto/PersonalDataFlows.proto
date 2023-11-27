@@ -64,6 +64,11 @@ message PersonalDataModel {
     optional pd.AccountType AccountType = 12;
 }
 
+message PersonalDataModelWithId {
+    string Id = 1;
+    pd.PersonalDataModel PersonalDataModel = 2;
+}
+
 message OrderPersonalDataModel {
   string ClientId = 2;
   string FirstName = 4;
@@ -75,11 +80,20 @@ message OrderPersonalDataModel {
   string Phone = 10;
 }
 
+message GetListRequest {
+    uint64 offest = 1;
+    uint64 limit = 2;
+}
+
+message GetListResponse {
+    repeated pd.PersonalDataModelWithId Items = 1;
+}
 
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
 
+    rpc GetList(pd.GetListRequest) returns (pd.GetListResponse);
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
