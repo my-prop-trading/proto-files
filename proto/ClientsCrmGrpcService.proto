@@ -14,19 +14,21 @@ enum CrmServiceError {
 }
 
 enum POIStatus {
-    POI_NONE = 0;
+    POI_NOT_REQUESTED = 0;
     POI_REQUESTED = 1;
-    POI_RETRY = 2;
-    POI_REJECTED = 3;
-    POI_SUCCESS = 4;
+    POI_PENDING = 2;
+    POI_SUCCESS = 3;
+    POI_FAIL = 4;
+    POI_RETRY = 5;
 }
 
 enum POAStatus {
-    POA_NONE = 0;
+    POA_NOT_REQUESTED = 0;
     POA_REQUESTED = 1;
-    POA_RETRY = 2;
-    POA_REJECTED = 3;
-    POA_SUCCESS = 4;
+    POA_PENDING = 2;
+    POA_SUCCESS = 3;
+    POA_FAIL = 4;
+    POA_RETRY = 5;
 }
 
 enum KYCStatus {
