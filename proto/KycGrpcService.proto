@@ -353,6 +353,8 @@ message PersonalDataModel {
     string LastName = 2;
     int64 DateOfBirth = 3;
     string CountryOfResidence = 4;
+    string CountryProofOfIdentity = 5;
+    string CountryProofOfAddres = 6;
 }
 
 message GetClientProofsResponse {
