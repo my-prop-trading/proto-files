@@ -110,6 +110,9 @@ message SearchUserProfilesRequest {
     optional clients_crm.POIStatus poi_status = 14;
     optional clients_crm.POAStatus poa_status = 15;
     optional clients_crm.KYCStatus kyc_status = 16;
+
+    uint64 limit = 17; // Maximum number of results to return
+    uint64 offset = 18; // Offset of the first result to return
 }
 
 message SearchUserProfilesResponse {
