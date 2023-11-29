@@ -113,6 +113,8 @@ message SearchUserProfilesRequest {
 
     uint64 limit = 17; // Maximum number of results to return
     uint64 offset = 18; // Offset of the first result to return
+
+    optional string client_id = 19; // Client ID to search for
 }
 
 message SearchUserProfilesResponse {
