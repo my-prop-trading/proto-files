@@ -151,6 +151,14 @@ message ProofDocument{
     string Comment = 4;
     string Officer = 5;
 }
+
+message DocumentModel{
+    kyc.ProofType VerificationStep = 1;
+    string Id = 2;
+    string Type = 3;
+    string Status = 4;
+}
+
 message ProofCommentModel
 {
     int64 CreatedAt = 1;
@@ -352,7 +360,7 @@ message PersonalDataModel {
     string FirstName = 1;
     string LastName = 2;
     int64 DateOfBirth = 3;
-    string CountryOfResidence = 4 [deprecated = true];
+    string CountryOfResidence = 4;
     string CountryProofOfIdentity = 5;
     string CountryProofOfAddress = 6;
 }
@@ -370,6 +378,14 @@ message GetClientContractsRequest {
 
 message GetClientContractsResponse {
     repeated kyc.ContractorModel Items = 1;
+}
+
+message GetClientDocumentsRequest {
+    string ClientId = 1;
+}
+
+message GetClientDocumentsResponse {
+    repeated kyc.DocumentModel Items = 1;
 }
 
 message GetIdentityInfoFromKycProviderRequest {
@@ -459,6 +475,9 @@ service KycGrpcService {
 
     rpc GetClientContracts(kyc.GetClientContractsRequest)
     returns (kyc.GetClientContractsResponse);
+
+    rpc GetClientDocuments(kyc.GetClientDocumentsRequest)
+    returns (kyc.GetClientDocumentsResponse);
 
     // Ping
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
