@@ -352,9 +352,9 @@ message PersonalDataModel {
     string FirstName = 1;
     string LastName = 2;
     int64 DateOfBirth = 3;
-    string CountryOfResidence = 4;
+    string CountryOfResidence = 4 [deprecated = true];
     string CountryProofOfIdentity = 5;
-    string CountryProofOfAddres = 6;
+    string CountryProofOfAddress = 6;
 }
 
 message GetClientProofsResponse {
