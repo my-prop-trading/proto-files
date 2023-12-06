@@ -88,14 +88,10 @@ message SetResponse {
 }
 
 service TradingPlatformSettingsGrpcService {
-  rpc GetAll(trading_platfom_settings.GetAllRequest) 
-    returns (trading_platfom_settings.GetAllResponse);
-  rpc Get(trading_platfom_settings.GetRequest) 
-    returns (trading_platfom_settings.GetResponse);
-  rpc ResolveTradingPlatformId(trading_platfom_settings.ResolveTradingPlatformIdRequest)
-    returns (ResolveTradingPlatformIdResponse);
-  rpc Set(trading_platfom_settings.SetRequest) 
-    returns (trading_platfom_settings.SetResponse);
+  rpc GetAll(GetAllRequest) returns (GetAllResponse);
+  rpc Get(GetRequest) returns (trading_platfom_settings.GetResponse);
+  rpc ResolveTradingPlatformId(ResolveTradingPlatformIdRequest) returns (ResolveTradingPlatformIdResponse);
+  rpc Set(SetRequest) returns (SetResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
