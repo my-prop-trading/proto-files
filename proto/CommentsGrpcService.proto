@@ -2,12 +2,20 @@ syntax = "proto3";
 package comments;
 import "google/protobuf/empty.proto";
 
+enum EntityType {
+    Client = 0;
+    Payout = 1;
+    AggregatedTraderAccount = 2;
+}
+
 message Comment {
     string Id = 1;
     string ClientId = 2;
     string Text = 3;
     int64 CreatedAt = 4;
     string CreatedBy = 5;
+    comments.EntityType EntityType = 6;
+    string EntityId = 7;
 }
 
 message GetByClientIdRequest {
@@ -21,11 +29,23 @@ message GetByClientIdResponse {
     repeated Comment Comments = 1;
 }
 
+message GetByEntityIdRequest {
+    string EntityId = 1;
+    
+    int64 Offset = 20;
+    int64 Limit = 21;
+}
+
+message GetByEntityIdResponse {
+    repeated Comment Comments = 1;
+}
+
 message CreateCommentRequest {
     string ClientId = 1;
     string Text = 2;
     string CreatedBy = 3;
     string ProcessId = 4;
+    string EntityId = 7;
 }
 
 message CreateCommentResponse {
@@ -41,6 +61,8 @@ enum CommentsGrpcServiceError {
 
 service CommentsGrpcService {
     rpc GetByClientId(comments.GetByClientIdRequest) returns (comments.GetByClientIdResponse);
+
+    rpc GetByEntityId(comments.GetByEntityIdRequest) returns (comments.GetByEntityIdResponse);
 
     rpc CreateComment(comments.CreateCommentRequest) returns (comments.CreateCommentResponse);
     
