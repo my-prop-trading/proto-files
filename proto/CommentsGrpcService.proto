@@ -47,6 +47,7 @@ message CreateCommentRequest {
     string CreatedBy = 3;
     string ProcessId = 4;
     string EntityId = 7;
+    comments.EntityType EntityType = 8;
 }
 
 message CreateCommentResponse {
