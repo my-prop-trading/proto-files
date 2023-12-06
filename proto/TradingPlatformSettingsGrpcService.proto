@@ -1,0 +1,101 @@
+syntax = "proto3";
+package trading_platfom_settings;
+import "google/protobuf/empty.proto";
+
+message BrandSettings {
+    Broker Broker = 1;
+    Links Links = 2;
+}
+
+message Broker {
+    string Name = 1;
+    string Type = 2;
+    string CompatibleName = 3;
+    string Caption = 4;
+    bool Enabled = 5;
+}
+
+message Links {
+    string Windows = 1;
+    string Mac = 2;
+    string Ios = 3;
+    string Android = 4;
+    string Web = 5;
+}
+
+message LiveAccountSettings {
+    string PartitionKey = 1;
+    string RowKey = 2;
+}
+
+message TechSettings {
+    string Server = 1;
+    string ManagerLogin = 2;
+    string Password = 3;
+    uint32 ReconnectTimeout = 4;
+    string DefaultGroup = 5;
+    string ArchiveGroup = 6;
+    AccountsRanges AccountsRanges = 7;
+}
+
+
+message AccountsRanges {
+    bool UseRange = 1;
+    uint64 Min = 2;
+    uint64 Max = 3;
+}
+
+message TradingPlatformSettingsModel {
+    uint32 Id = 1;
+    uint32 TradingPlatformId = 2;
+    BrandSettings BrandSettings = 3;
+    LiveAccountSettings LiveAccountSettings = 4;
+    TechSettings TechSettings = 5;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+  repeated TradingPlatformSettingsModel Items = 1;
+}
+
+message GetRequest {
+  uint32 Id = 1;
+  uint32 TradingPlatformId = 2;
+}
+
+message GetResponse {
+  TradingPlatformSettingsModel Settings = 1;
+}
+
+message ResolveTradingPlatformIdRequest {
+  string BrokerName = 1;
+  string BrokerType = 2;
+  uint32 TradingPlatformId = 3;
+}
+
+message ResolveTradingPlatformIdResponse {
+  uint32 Id = 1;
+}
+
+message SetRequest {
+  TradingPlatformSettingsModel Item = 1;
+}
+
+message SetResponse {
+
+}
+
+service TradingPlatformSettingsGrpcService {
+  rpc GetAll(trading_platfom_settings.GetAllRequest) 
+    returns (trading_platfom_settings.GetAllResponse);
+  rpc Get(trading_platfom_settings.GetRequest) 
+    returns (trading_platfom_settings.GetResponse);
+  rpc ResolveTradingPlatformId(trading_platfom_settings.ResolveTradingPlatformIdRequest)
+    returns (ResolveTradingPlatformIdResponse);
+  rpc Set(trading_platfom_settings.SetRequest) 
+    returns (trading_platfom_settings.SetResponse);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
