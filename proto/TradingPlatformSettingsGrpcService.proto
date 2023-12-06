@@ -1,5 +1,5 @@
 syntax = "proto3";
-package trading_platfom_settings;
+package trading_platform_settings;
 import "google/protobuf/empty.proto";
 
 message BrandSettings {
