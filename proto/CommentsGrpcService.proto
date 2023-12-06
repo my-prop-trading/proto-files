@@ -31,6 +31,7 @@ message GetByClientIdResponse {
 
 message GetByEntityIdRequest {
     string EntityId = 1;
+    comments.EntityType EntityType = 2;
     
     int64 Offset = 20;
     int64 Limit = 21;
