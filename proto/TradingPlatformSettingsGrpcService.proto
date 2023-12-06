@@ -89,7 +89,7 @@ message SetResponse {
 
 service TradingPlatformSettingsGrpcService {
   rpc GetAll(GetAllRequest) returns (GetAllResponse);
-  rpc Get(GetRequest) returns (trading_platfom_settings.GetResponse);
+  rpc Get(GetRequest) returns (GetResponse);
   rpc ResolveTradingPlatformId(ResolveTradingPlatformIdRequest) returns (ResolveTradingPlatformIdResponse);
   rpc Set(SetRequest) returns (SetResponse);
 
