@@ -2,6 +2,16 @@ syntax = "proto3";
 package trading_platform_settings;
 import "google/protobuf/empty.proto";
 
+enum TradingPlatform {
+  METATRADER_4 = 0;
+  METATRADER_5 = 1;
+}
+
+enum TradingType {
+  DEMO = 0;
+  LIVE = 1;
+}
+
 message BrandSettings {
     Broker Broker = 1;
     Links Links = 2;
@@ -9,7 +19,7 @@ message BrandSettings {
 
 message Broker {
     string Name = 1;
-    string Type = 2;
+    TradingType Type = 2;
     string CompatibleName = 3;
     string Caption = 4;
     bool Enabled = 5;
@@ -47,7 +57,7 @@ message AccountsRanges {
 
 message TradingPlatformSettingsModel {
     uint32 Id = 1;
-    uint32 TradingPlatformId = 2;
+    TradingPlatform TradingPlatformId = 2;
     BrandSettings BrandSettings = 3;
     LiveAccountSettings LiveAccountSettings = 4;
     TechSettings TechSettings = 5;
@@ -62,7 +72,7 @@ message GetAllResponse {
 
 message GetRequest {
   uint32 Id = 1;
-  uint32 TradingPlatformId = 2;
+  TradingPlatform TradingPlatformId = 2;
 }
 
 message GetResponse {
@@ -71,8 +81,8 @@ message GetResponse {
 
 message ResolveTradingPlatformIdRequest {
   string BrokerName = 1;
-  string BrokerType = 2;
-  uint32 TradingPlatformId = 3;
+  TradingType TradingType = 2;
+  TradingPlatform TradingPlatformId = 3;
 }
 
 message ResolveTradingPlatformIdResponse {
