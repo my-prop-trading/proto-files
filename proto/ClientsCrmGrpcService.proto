@@ -71,6 +71,10 @@ service ClientsCrmGrpcService {
     rpc RemoveCRMStatus(RemoveCRMStatusRequest) returns (RemoveCRMStatusResponse);
     rpc ListCRMStatuses(ListCRMStatusesRequest) returns (ListCRMStatusesResponse);
 
+    //Methods for user profile field order
+    rpc GetUserProfileVisibleFields(GetUserProfileVisibleFieldsRequest) returns (GetUserProfileVisibleFieldsResponse);
+    rpc SetUserProfileVisibleFields(SetUserProfileVisibleFieldsRequest) returns (SetUserProfileVisibleFieldsResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
@@ -143,4 +147,42 @@ message ListCRMStatusesRequest {
 
 message ListCRMStatusesResponse {
     repeated clients_crm.CRMStatus statuses = 1; // List of all CRM statuses
+}
+
+// Request and Response messages for user profile field order
+message GetUserProfileVisibleFieldsRequest {
+    string officer_id = 1;
+}
+
+message UserProfileVisibleFields {
+    bool registration_date_from = 1;
+    bool registration_date_to = 2;
+    bool crm_status = 3;
+    bool first_name_reg = 4;
+    bool last_name_reg = 5;
+    bool first_name_kyc = 6;
+    bool last_name_kyc = 7;
+    bool email = 8;
+    bool manager = 9;
+    bool country_reg = 10;
+    bool country_reg_ip = 11;
+    bool country_poi = 12;
+    bool country_poa = 13;
+    bool poi_status = 14;
+    bool poa_status = 15;
+    bool kyc_status = 16;
+
+    bool client_id = 19; // Client ID to search for
+}
+
+message GetUserProfileVisibleFieldsResponse {
+    optional UserProfileVisibleFields user_profile_visible_fields = 1;
+}
+
+message SetUserProfileVisibleFieldsRequest {
+    string officer_id = 1;
+    UserProfileVisibleFields user_profile_visible_fields = 2;
+}
+
+message SetUserProfileVisibleFieldsResponse {
 }
