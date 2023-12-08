@@ -75,6 +75,14 @@ service ClientsCrmGrpcService {
     rpc GetUserProfileVisibleFields(GetUserProfileVisibleFieldsRequest) returns (GetUserProfileVisibleFieldsResponse);
     rpc SetUserProfileVisibleFields(SetUserProfileVisibleFieldsRequest) returns (SetUserProfileVisibleFieldsResponse);
 
+    //Templates
+    rpc SaveReportTemplate(SaveReportTemplateRequest) returns (SaveReportTemplateResponse);
+    // Retrieve a list of saved report templates.
+    rpc GetReportTemplates(GetReportTemplatesRequest) returns (GetReportTemplatesResponse);
+    // Delete a report template.
+    rpc DeleteReportTemplate(DeleteReportTemplateRequest) returns (DeleteReportTemplateResponse);
+
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
@@ -185,4 +193,59 @@ message SetUserProfileVisibleFieldsRequest {
 }
 
 message SetUserProfileVisibleFieldsResponse {
+}
+
+// Request message for saving a report template.
+message SaveReportTemplateRequest {
+  string officer_id = 1;
+  UserProfileReportTemplate report_template = 3;
+}
+
+// Response message for saving a report template.
+message SaveReportTemplateResponse {
+}
+
+// Request message for retrieving report templates.
+message GetReportTemplatesRequest {
+  string officer_id = 1;
+}
+
+// Response message for retrieving report templates.
+message GetReportTemplatesResponse {
+  repeated UserProfileReportTemplate templates = 1;
+}
+
+// Request message for deleting a report template.
+message DeleteReportTemplateRequest {
+  string title = 1;
+  string officer_id = 2;
+}
+
+// Response message for deleting a report template.
+message DeleteReportTemplateResponse {
+}
+
+// A report template.
+message UserProfileReportTemplate {
+  optional int64 registration_date_from = 1;
+  optional int64 registration_date_to = 2;
+  optional int64 crm_status = 3;
+  optional string first_name_reg = 4;
+  optional string last_name_reg = 5;
+  optional string first_name_kyc = 6;
+  optional string last_name_kyc = 7;
+  optional string email = 8;
+  optional string manager = 9;
+  optional string country_reg = 10;
+  optional string country_reg_ip = 11;
+  optional string country_poi = 12;
+  optional string country_poa = 13;
+  optional clients_crm.POIStatus poi_status = 14;
+  optional clients_crm.POAStatus poa_status = 15;
+  optional clients_crm.KYCStatus kyc_status = 16;
+
+  optional string client_id = 19; // Client ID to search for
+
+  string title = 31;
+  
 }
