@@ -23,6 +23,7 @@ message Broker {
     string CompatibleName = 3;
     string Caption = 4;
     bool Enabled = 5;
+    string IconUrl = 6;
 }
 
 message Links {
