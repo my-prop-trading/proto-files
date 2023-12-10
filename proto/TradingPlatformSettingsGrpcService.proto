@@ -57,7 +57,7 @@ message AccountsRanges {
 }
 
 message TradingPlatformSettingsModel {
-    uint32 Id = 1;
+    int32 Id = 1;
     TradingPlatform TradingPlatformId = 2;
     BrandSettings BrandSettings = 3;
     LiveAccountSettings LiveAccountSettings = 4;
