@@ -72,7 +72,7 @@ message GetAllResponse {
 }
 
 message GetRequest {
-  uint32 Id = 1;
+  int32 Id = 1;
   TradingPlatform TradingPlatformId = 2;
 }
 
@@ -87,7 +87,7 @@ message ResolveTradingPlatformIdRequest {
 }
 
 message ResolveTradingPlatformIdResponse {
-  uint32 Id = 1;
+  int32 Id = 1;
 }
 
 message SetRequest {
