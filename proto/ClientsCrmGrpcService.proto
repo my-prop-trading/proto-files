@@ -40,6 +40,35 @@ enum KYCStatus {
     KYC_PARTIAL = 5;
 }
 
+enum SortOrder {
+    ASC = 0;
+    DESC = 1;
+}
+
+enum UserProfileField {
+    CLIENT_ID = 0;
+    REGISTRATION_DATE = 1;
+    CRM_STATUS = 3;
+    FIRST_NAME_REG = 4;
+    LAST_NAME_REG = 5;
+    FIRST_NAME_KYC = 6;
+    LAST_NAME_KYC = 7;
+    EMAIL = 8;
+    MANAGER = 9;
+    COUNTRY_REG = 10;
+    COUNTRY_REG_IP = 11;
+    COUNTRY_POI = 12;
+    COUNTRY_POA = 13;
+    POI_STATUS = 14;
+    POA_STATUS = 15;
+    KYC_STATUS = 16;
+}
+
+message UserProfileFieldSortOrder {
+    UserProfileField field = 1;
+    SortOrder order = 2;
+}
+
 // Define a User Profile message
 message UserProfile {
     string client_id = 1; // Link to the user’s client profile
@@ -127,6 +156,8 @@ message SearchUserProfilesRequest {
     uint64 offset = 18; // Offset of the first result to return
 
     optional string client_id = 19; // Client ID to search for
+
+    repeated UserProfileFieldSortOrder order_by = 20; // List of fields to order by
 }
 
 message SearchUserProfilesResponse {
@@ -252,5 +283,5 @@ message UserProfileFieldsTemplate {
 message UserProfileReportTemplate {
     UserProfileFieldsTemplate template = 1;
     UserProfileVisibleFields visible_fields = 2;
-
-  }
+    repeated UserProfileFieldSortOrder order_by = 3;
+}
