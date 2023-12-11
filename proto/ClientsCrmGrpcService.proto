@@ -226,7 +226,7 @@ message DeleteReportTemplateResponse {
 }
 
 // A report template.
-message UserProfileReportTemplate {
+message UserProfileFieldsTemplate {
   optional int64 registration_date_from = 1;
   optional int64 registration_date_to = 2;
   optional int64 crm_status = 3;
@@ -247,5 +247,10 @@ message UserProfileReportTemplate {
   optional string client_id = 19; // Client ID to search for
 
   string title = 31;
-  
 }
+
+message UserProfileReportTemplate {
+    UserProfileFieldsTemplate template = 1;
+    UserProfileVisibleFields visible_fields = 2;
+
+  }
