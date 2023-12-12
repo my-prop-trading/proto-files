@@ -11,6 +11,7 @@ message CRMStatus {
 
 enum CrmServiceError {
     TECH_ERROR = 0;
+    MAX_TEMPLATES_REACHED = 1;
 }
 
 enum POIStatus {
@@ -234,6 +235,10 @@ message SaveReportTemplateRequest {
 
 // Response message for saving a report template.
 message SaveReportTemplateResponse {
+    oneof response {
+        UserProfileReportTemplate report_template = 1;
+        CrmServiceError error = 2;
+    }
 }
 
 // Request message for retrieving report templates.
