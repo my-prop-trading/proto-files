@@ -15,6 +15,7 @@ enum CrmServiceError {
     CRM_STATUS_NOT_FOUND = 2;
     CRM_STATUS_ALREADY_EXISTS = 3;
     CRM_STATUS_HAS_CLIENTS = 4;
+    CRM_STATUS_HAS_NO_NAME = 5;
 }
 
 enum POIStatus {
