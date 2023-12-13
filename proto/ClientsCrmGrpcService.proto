@@ -105,6 +105,8 @@ service ClientsCrmGrpcService {
     rpc UpdateCRMStatus(UpdateCRMStatusRequest) returns (UpdateCRMStatusResponse);
     rpc RemoveCRMStatus(RemoveCRMStatusRequest) returns (RemoveCRMStatusResponse);
     rpc ListCRMStatuses(ListCRMStatusesRequest) returns (ListCRMStatusesResponse);
+    // Meth
+    rpc GetDefaultCRMStatus(GetDefaultCRMStatusRequest) returns (GetDefaultCRMStatusResponse);
     rpc SetDefaultCRMStatus(SetDefaultCRMStatusRequest) returns (SetDefaultCRMStatusResponse);
 
     //Methods for user profile field order
@@ -192,6 +194,14 @@ message SetDefaultCRMStatusResponse {
         clients_crm.CRMStatus status = 1; // Default CRM status
         CrmServiceError error = 2;
     }
+}
+
+message GetDefaultCRMStatusRequest {
+    int64 id = 1;
+}
+
+message GetDefaultCRMStatusResponse {
+    clients_crm.CRMStatus status = 1; // Default CRM status
 }
 
 message UpdateCRMStatusRequest {
