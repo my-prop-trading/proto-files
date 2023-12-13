@@ -12,6 +12,8 @@ message CRMStatus {
 enum CrmServiceError {
     TECH_ERROR = 0;
     MAX_TEMPLATES_REACHED = 1;
+    CRM_STATUS_NOT_FOUND = 2;
+    CRM_STATUS_ALREADY_EXISTS = 3;
 }
 
 enum POIStatus {
@@ -98,6 +100,7 @@ service ClientsCrmGrpcService {
 
     // Methods for CRM Status management
     rpc CreateCRMStatus(CreateCRMStatusRequest) returns (CreateCRMStatusResponse);
+    rpc UpdateCRMStatus(UpdateCRMStatusRequest) returns (UpdateCRMStatusResponse);
     rpc RemoveCRMStatus(RemoveCRMStatusRequest) returns (RemoveCRMStatusResponse);
     rpc ListCRMStatuses(ListCRMStatusesRequest) returns (ListCRMStatusesResponse);
 
@@ -167,11 +170,25 @@ message SearchUserProfilesResponse {
 
 // Request and Response messages for CRM Status management
 message CreateCRMStatusRequest {
-    clients_crm.CRMStatus status = 1;
+    string name = 1;
 }
 
 message CreateCRMStatusResponse {
-    clients_crm.CRMStatus status = 1; // The created CRM status
+    oneof response {
+        clients_crm.CRMStatus status = 1; // The created CRM status
+        CrmServiceError error = 2;
+    }
+}
+
+message UpdateCRMStatusRequest {
+    clients_crm.CRMStatus status = 1;
+}
+
+message UpdateCRMStatusResponse {
+    oneof response {
+        clients_crm.CRMStatus status = 1; // The created CRM status
+        CrmServiceError error = 2;
+    }
 }
 
 message RemoveCRMStatusRequest {
@@ -179,7 +196,10 @@ message RemoveCRMStatusRequest {
 }
 
 message RemoveCRMStatusResponse {
-    int64 id = 1; // ID of the CRM status to remove
+    oneof response {
+        int64 id = 1; // ID of the CRM status that was removed
+        CrmServiceError error = 2;
+    }
 }
 
 message ListCRMStatusesRequest {
