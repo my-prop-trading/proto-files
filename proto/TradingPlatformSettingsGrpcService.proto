@@ -98,11 +98,43 @@ message SetResponse {
 
 }
 
+message GetGetBrokersRequest {
+}
+
+message GetBrokersResponse {
+  repeated BrokerModel Items = 1;
+}
+
+message BrokerModel {
+  string Name = 1;
+  int32 Id = 2;
+  int32 IconUrl = 3;
+  bool Enabled = 4;
+  repeated DefaultPlatformModel SitePlatforms = 5;
+  repeated FullPlatformModel Platforms= 6;
+}
+
+message DefaultPlatformModel {
+  int32 Id = 1;
+  string Name = 2;
+  Links Links = 3;
+}
+
+message FullPlatformModel {
+  int32 Id = 1;
+  TradingPlatform TradingPlatform = 2;
+  TradingType Type = 3;
+  Links Links = 4;
+  TechSettings TechSettings = 5;
+  string CompatibleName = 6;
+}
+
 service TradingPlatformSettingsGrpcService {
   rpc GetAll(GetAllRequest) returns (GetAllResponse);
   rpc Get(GetRequest) returns (GetResponse);
   rpc ResolveTradingPlatformId(ResolveTradingPlatformIdRequest) returns (ResolveTradingPlatformIdResponse);
   rpc Set(SetRequest) returns (SetResponse);
+  rpc GetBrokers(GetGetBrokersRequest) returns (GetBrokersResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
