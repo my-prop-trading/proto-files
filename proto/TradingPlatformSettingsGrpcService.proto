@@ -122,11 +122,11 @@ message DefaultPlatformModel {
 
 message FullPlatformModel {
   int32 Id = 1;
-  TradingPlatform TradingPlatform = 2;
-  TradingType Type = 3;
-  Links Links = 4;
-  TechSettings TechSettings = 5;
-  string CompatibleName = 6;
+  string Name = 2;
+  TradingPlatform TradingPlatform = 3;
+  TradingType Type = 4;
+  Links Links = 5;
+  TechSettings TechSettings = 6;
 }
 
 service TradingPlatformSettingsGrpcService {
