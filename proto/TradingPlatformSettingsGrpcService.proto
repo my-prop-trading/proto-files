@@ -88,6 +88,21 @@ message PlatformSettingsModel {
   TechSettings TechSettings = 4;
 }
 
+message BrokerShortInfoModel {
+  int32 Id = 1;
+  string Name = 2;
+  bool Enabled = 3;
+  string IconUrl = 4;
+  PlatformShortModel MetaTrader4 = 5;
+  PlatformShortModel MetaTrader5 = 6;
+}
+
+message PlatformShortModel {
+  int32 Id = 1;
+  bool Enabled = 2;
+  TradingPlatform Platform = 3;
+}
+
 message GetAllRequest {
 }
 
@@ -129,12 +144,20 @@ message GetBrokersResponse {
   repeated BrokerSettingsModel Items = 1;
 }
 
+message GetBrokersShortInfoRequest {
+}
+
+message GetBrokersShortInfoResponse {
+  repeated BrokerShortInfoModel Items = 1;
+}
+
 service TradingPlatformSettingsGrpcService {
   rpc GetAll(GetAllRequest) returns (GetAllResponse);
   rpc Get(GetRequest) returns (GetResponse);
   rpc ResolveTradingPlatformId(ResolveTradingPlatformIdRequest) returns (ResolveTradingPlatformIdResponse);
   rpc Set(SetRequest) returns (SetResponse);
   rpc GetBrokers(GetGetBrokersRequest) returns (GetBrokersResponse);
+  rpc GetBrokersShortInfo(GetBrokersShortInfoRequest) returns (GetBrokersShortInfoResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
