@@ -64,6 +64,30 @@ message TradingPlatformSettingsModel {
     TechSettings TechSettings = 5;
 }
 
+message BrokerSettingsModel {
+  int32 Id = 1;
+  string Name = 2;
+  bool Enabled = 3;
+  string IconUrl = 4;
+  PlatformModel MetaTrader4 = 5;
+  PlatformModel MetaTrader5 = 6;
+}
+
+message PlatformModel {
+  bool Enabled = 1;
+  TradingPlatform Platform = 2;
+  Links Links = 3;
+  PlatformSettingsModel Demo = 4;
+  PlatformSettingsModel Live = 5;
+}
+
+message PlatformSettingsModel {
+  string Name = 1;
+  int32 Id = 2;
+  TradingType Type = 3;
+  TechSettings TechSettings = 4;
+}
+
 message GetAllRequest {
 }
 
@@ -102,31 +126,7 @@ message GetGetBrokersRequest {
 }
 
 message GetBrokersResponse {
-  repeated BrokerModel Items = 1;
-}
-
-message BrokerModel {
-  string Name = 1;
-  int32 Id = 2;
-  int32 IconUrl = 3;
-  bool Enabled = 4;
-  repeated DefaultPlatformModel SitePlatforms = 5;
-  repeated FullPlatformModel Platforms= 6;
-}
-
-message DefaultPlatformModel {
-  int32 Id = 1;
-  string Name = 2;
-  Links Links = 3;
-}
-
-message FullPlatformModel {
-  int32 Id = 1;
-  string Name = 2;
-  TradingPlatform TradingPlatform = 3;
-  TradingType Type = 4;
-  Links Links = 5;
-  TechSettings TechSettings = 6;
+  repeated BrokerSettingsModel Items = 1;
 }
 
 service TradingPlatformSettingsGrpcService {
