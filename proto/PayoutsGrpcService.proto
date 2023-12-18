@@ -196,7 +196,6 @@ message GetPayoutsStatisticResponse {
     double TotallyWithdrawn = 3;
     double PendingPayouts = 4;
     double FeeToBeRefunded = 5;
-    double TotallyWithdrawnFromThePlatform = 6;
 }
 
 message GetPayoutsStatisticForClientRequest {
