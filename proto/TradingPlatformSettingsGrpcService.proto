@@ -91,9 +91,8 @@ message PlatformSettingsModel {
 message BrokerShortInfoModel {
   int32 Id = 1;
   string Name = 2;
-  bool Enabled = 3;
-  string IconUrl = 4;
-  repeated PlatformShortModel Platforms = 5;
+  string IconUrl = 3;
+  repeated PlatformShortModel Platforms = 4;
 }
 
 message PlatformShortModel {
