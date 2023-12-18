@@ -93,14 +93,12 @@ message BrokerShortInfoModel {
   string Name = 2;
   bool Enabled = 3;
   string IconUrl = 4;
-  PlatformShortModel MetaTrader4 = 5;
-  PlatformShortModel MetaTrader5 = 6;
+  repeated PlatformShortModel Platforms = 5;
 }
 
 message PlatformShortModel {
   int32 Id = 1;
-  bool Enabled = 2;
-  TradingPlatform Platform = 3;
+  string Name = 3;
 }
 
 message GetAllRequest {
