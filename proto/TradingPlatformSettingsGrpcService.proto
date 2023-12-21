@@ -86,6 +86,7 @@ message PlatformSettingsModel {
   int32 Id = 2;
   TradingType Type = 3;
   TechSettings TechSettings = 4;
+  string ClientServerAddress = 5;
 }
 
 message BrokerShortInfoModel {
