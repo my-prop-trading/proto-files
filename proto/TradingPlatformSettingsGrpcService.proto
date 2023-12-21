@@ -89,8 +89,7 @@ message GetAllResponse {
 }
 
 message GetRequest {
-  int32 Id = 1;
-  TradingPlatform TradingPlatformId = 2;
+  int32 BrokerId = 1;
 }
 
 message GetResponse {
@@ -134,7 +133,6 @@ service TradingPlatformSettingsGrpcService {
   rpc Get(GetRequest) returns (GetResponse);
   rpc ResolveTradingPlatformId(ResolveTradingPlatformIdRequest) returns (ResolveTradingPlatformIdResponse);
   rpc Set(SetRequest) returns (SetResponse);
-  rpc GetBrokers(GetGetBrokersRequest) returns (GetBrokersResponse);
   rpc GetBrokersShortInfo(GetBrokersShortInfoRequest) returns (GetBrokersShortInfoResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
