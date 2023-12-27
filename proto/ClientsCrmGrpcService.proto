@@ -7,6 +7,7 @@ package clients_crm;
 message CRMStatus {
     int64 id = 1;         // Unique identifier for the CRM status
     string name = 2;      // Name or description of the CRM status
+    bool has_clients = 3; // Check if there are clients with this status
 }
 
 enum CrmServiceError {
