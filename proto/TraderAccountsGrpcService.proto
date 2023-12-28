@@ -213,15 +213,15 @@ enum TraderAccountError {
   TRADER_ACCOUNT_WRONG_STATUS = 5;
 }
 
-message GetBlockedTraderAccountRequest {
+message GetBlockedTraderAccountsRequest {
   string ClientId = 1;
 }
 
-message GetBlockedTraderAccountResponse {
-  repeated trader_accounts.GetBlockedTraderAccountResponseBody Items = 1;
+message GetBlockedTraderAccountsResponse {
+  repeated trader_accounts.GetBlockedTraderAccountsResponseBody Items = 1;
 }
 
-message GetBlockedTraderAccountResponseBody {
+message GetBlockedTraderAccountsResponseBody {
   string TraderAccId = 1;
   trader_accounts.BlockerType BlockerType = 2;
 }
@@ -238,7 +238,7 @@ service TraderAccountsGrpcService {
     rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
     rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
 
-    rpc GetBlockedTraderAccount(trader_accounts.GetBlockedTraderAccountRequest) returns (trader_accounts.GetBlockedTraderAccountResponse);
+    rpc GetBlockedTraderAccounts(trader_accounts.GetBlockedTraderAccountsRequest) returns (trader_accounts.GetBlockedTraderAccountsResponse);
     rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
     rpc UnBlockTraderAccount(trader_accounts.UnBlockTraderAccountRequest) returns (trader_accounts.UnBlockTraderAccountResponse);
 
