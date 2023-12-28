@@ -54,8 +54,9 @@ enum TraderAccountTypeModel {
 enum TraderAccountStatusModel {
   NEW = 0;
   ACTIVE = 1;
-  DIABLED = 2;
+  DISABLED = 2;
   STAGE_COMPLETED = 3;
+  BLOCKED = 4;
 }
 
 enum BlockerType {
