@@ -28,6 +28,7 @@ message TraderAccount {
     string Brand = 19;
     trader_accounts.TraderAccountTypeModel Type = 20;
     string OrderId = 21;
+    trader_accounts.BlockerType BlockerType = 22;
 }
 
 message TraderPlatformCredentials {
