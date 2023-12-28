@@ -218,7 +218,7 @@ message GetBlockedTraderAccountRequest {
 }
 
 message GetBlockedTraderAccountResponse {
-  repeated trader_accounts.GetBlockedTraderAccountResponseBody Body = 1;
+  repeated trader_accounts.GetBlockedTraderAccountResponseBody Items = 1;
 }
 
 message GetBlockedTraderAccountResponseBody {
