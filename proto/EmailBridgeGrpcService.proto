@@ -1,0 +1,65 @@
+syntax = "proto3";
+package email_bridge;
+import "google/protobuf/empty.proto";
+
+// Define the protobuf enum
+enum EmailType {
+    REGISTRATION_CONFIRMATION = 0;
+    FORGOT_PASSWORD = 1;
+    PASSWORD_RESET_NOTIFICATION = 2;
+    SUCCESSFUL_SCENARIO_PHASE1 = 3;
+    SUCCESSFUL_SCENARIO_PHASE2 = 4;
+    SUCCESSFUL_SCENARIO_PHASE2_KYC_REQUIRED = 5;
+    SUCCESSFUL_SCENARIO_PHASE2_CONTRACT_REQUIRED = 6;
+    SUCCESSFUL_PROOF_OF_IDENTITY = 7;
+    RETRY_PROOF_OF_IDENTITY = 8;
+    FAILED_PROOF_OF_IDENTITY = 9;
+    SUCCESSFUL_PROOF_OF_ADDRESS = 10;
+    RETRY_PROOF_OF_ADDRESS = 11;
+    FAILED_PROOF_OF_ADDRESS = 12;
+    CONTRACT_TO_CLIENT = 13;
+    SERVICE_DENIED_DUE_TO_VIOLATION_TERMS_AND_COND_ON_CONTRACT_SIGNING = 14;
+    SERVICE_DENIED_ON_ALL_ACCOUNTS_DUE_TO_VIOLATION_TERMS_AND_COND = 15;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND = 16;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND_FUTURE_PROFIT_BLOCKED = 17;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND_FUTURE_AND_CURRENT_PROFIT_BLOCKED = 18;
+    LIVE_ACCOUNT_GRANTED = 19;
+    LIVE_ACCOUNT_LOST = 20;
+    PAYMENT_RECEIVED = 21;
+    PAYMENT_FAILED = 22;
+    FAILED_SCENARIO_PHASE1 = 23;
+    FAILED_SCENARIO_PHASE2 = 24;
+    PAYOUT_SUCCESS = 25;
+    PAYOUT_DECLINED = 26;
+    PROFIT_SPLIT_DAY = 27;
+    REVENUE_SHARE_TAKEN = 28;
+}
+
+enum Error {
+    Ok = 0;
+    InternalError = 1;
+}
+
+message SendEmailRequest {
+    repeated string EmailTo = 1;
+    EmailType EmailType = 2;
+    string Subject = 3;
+    string ProcessId = 4;
+}
+
+message SendEmailResponseBody {
+}
+
+message SendEmailResponse {
+    oneof response {
+        email_bridge.SendEmailResponseBody Body = 1;
+        email_bridge.Error Error = 2;
+    } 
+}
+
+service EmailBridgeGrpcService {
+    rpc SendEmail(email_bridge.SendEmailRequest) 
+    returns (email_bridge.SendEmailResponseBody);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
