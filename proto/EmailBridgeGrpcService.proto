@@ -36,41 +36,40 @@ enum EmailType {
 }
 
 enum Error {
-    Ok = 0;
-    InternalError = 1;
+    OK = 0;
+    INTERNAL_ERROR = 1;
 }
 
-
-message KeyValue {
-    string key = 1;
-    string value = 2;
+message PlaceholderKeyValue {
+    string Key = 1;
+    string Value = 2;
 }
 
-message StringMap {
-    repeated KeyValue Items = 1;
+message PlaceholderMap {
+    repeated PlaceholderKeyValue Items = 1;
 }
 
-message SendEmailRequest {
+message SendTemplateRequest {
     repeated string EmailTo = 1;
     EmailType EmailType = 2;
     string Subject = 3;
-    optional StringMap Placeholders = 4;
+    optional PlaceholderMap Placeholders = 4;
     string ProcessId = 5;
 }
 
-message SendEmailResponseBody {
+message SendTemplateResponseBody {
 }
 
-message SendEmailResponse {
+message SendTemplateResponse {
     oneof response {
-        email_bridge.SendEmailResponseBody Body = 1;
+        email_bridge.SendTemplateResponseBody Body = 1;
         email_bridge.Error Error = 2;
     } 
 }
 
 service EmailBridgeGrpcService {
-    rpc SendEmail(email_bridge.SendEmailRequest) 
-    returns (email_bridge.SendEmailResponse);
+    rpc SendTemplate(email_bridge.SendTemplateRequest) 
+    returns (email_bridge.SendTemplateResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
