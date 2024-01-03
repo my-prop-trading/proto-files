@@ -55,6 +55,7 @@ message SendTemplateRequest {
     string Subject = 3;
     optional PlaceholderMap Placeholders = 4;
     string ProcessId = 5;
+    string Language = 6;
 }
 
 message SendTemplateResponseBody {
