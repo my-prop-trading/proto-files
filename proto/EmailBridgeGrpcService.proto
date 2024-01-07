@@ -55,6 +55,7 @@ message SendTemplateRequest {
     repeated string EmailBcc = 7;
     repeated PlaceholderKeyValue Placeholders = 8;
     string ProcessId = 9;
+    string Language = 10;
 }
 
 message SendTemplateResponseBody {
