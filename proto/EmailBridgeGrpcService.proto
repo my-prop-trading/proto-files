@@ -47,15 +47,14 @@ message PlaceholderKeyValue {
 
 message SendTemplateRequest {
     string EmailFrom = 1;
-    string TemplateId = 2;
-    string Subject = 3;
-    EmailType EmailType = 4;
-    repeated string EmailTo = 5;
-    repeated string EmailCc = 6;
-    repeated string EmailBcc = 7;
-    repeated PlaceholderKeyValue Placeholders = 8;
-    string ProcessId = 9;
-    string Language = 10;
+    string Subject = 2;
+    EmailType EmailType = 3;
+    repeated string EmailTo = 4;
+    repeated string EmailCc = 5;
+    repeated string EmailBcc = 6;
+    repeated PlaceholderKeyValue Placeholders = 7;
+    string ProcessId = 8;
+    string Language = 9;
 }
 
 message SendTemplateResponseBody {
