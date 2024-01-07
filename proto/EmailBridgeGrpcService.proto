@@ -45,17 +45,16 @@ message PlaceholderKeyValue {
     string Value = 2;
 }
 
-message PlaceholderMap {
-    repeated PlaceholderKeyValue Items = 1;
-}
-
 message SendTemplateRequest {
-    repeated string EmailTo = 1;
-    EmailType EmailType = 2;
+    string EmailFrom = 1;
+    string TemplateId = 2;
     string Subject = 3;
-    optional PlaceholderMap Placeholders = 4;
-    string ProcessId = 5;
-    string Language = 6;
+    EmailType EmailType = 4;
+    repeated string EmailTo = 5;
+    repeated string EmailCc = 6;
+    repeated string EmailBcc = 7;
+    repeated PlaceholderKeyValue Placeholders = 8;
+    string ProcessId = 9;
 }
 
 message SendTemplateResponseBody {
