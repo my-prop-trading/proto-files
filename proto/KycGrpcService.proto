@@ -243,6 +243,7 @@ message ContractorModel {
     repeated kyc.ContractorLogModel Logs = 12;
     int64 ContractId = 13;
     optional kyc.ContractSignStatus SignStatus = 14;
+    string Id = 15;
 }
     
 message ContractorCommentModel {

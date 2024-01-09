@@ -1,49 +1,59 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
-import "MetatraderBroker.proto";
-import "MetatraderPlatform.proto";
 package metatrader_service_bus;
 
-
-message UserOpenTradeMessage
-{
-    metatrader_service_bus.UserOpenTradeModel Body = 1; 
+enum TradingPlatformType {
+    METATRADER_4 = 0;
+    METATRADER_5 = 1;
 }
 
-message UserOpenTradeModel
+enum AccountEventType {
+    ACCOUNT_CREATED = 0;
+    ACCOUNT_DELETED = 1;
+    ACCOUNT_DISABLED = 2;
+    ACCOUNT_ENABLED = 3;
+    ACCOUNT_TRADE_DISABLED = 4;
+    ACCOUNT_TRADE_ENABLED = 5;
+}
+
+enum AccountType {
+    DEMO = 0;
+    LIVE = 1;
+}
+
+enum PositionEventType {
+    POSITION_OPENED = 0;
+    POSITION_UPDATED = 1;
+    POSITION_CLOSED = 2;
+}
+
+message MetatraderAccountBodySbModel {
+    string TraderAccountId = 1;
+    int64 MetatraderLogin = 2;
+    TradingPlatformType TradingPlatformType = 3;
+    AccountType AccountType = 4;
+    int32 BrokerId = 5;
+    int32 TradingPlatformId = 6;
+    AccountEventType EventType = 7;
+}
+
+message MetatraderAccountMessage
 {
+    MetatraderAccountBodySbModel Body = 1; 
+}
+
+message MetatraderPositionBodySbModel {
     string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
     int64 PositionId = 3;
-    metatrader_platfom.TradingPlatformModel TradingPlatformType = 4;
-    metatrader_broker.BrokerModel BrokerType = 5;
-    int64 OpenTime = 6;
+    TradingPlatformType TradingPlatformType = 4;
+    AccountType AccountType = 5;
+    int32 BrokerId = 6;
+    int32 TradingPlatformId = 7;
+    PositionEventType EventType = 8;
+    int64 Time = 9;
 }
 
-message UserCloseTradeMessage
+message MetatraderPositionMessage
 {
-    metatrader_service_bus.UserCloseTradeModel Body = 1; 
-}
-
-message UserCloseTradeModel
-{
-    string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
-    int64 PositionId = 3;
-    metatrader_platfom.TradingPlatformModel TradingPlatformType = 4;
-    metatrader_broker.BrokerModel BrokerType = 5;
-    int64 OpenTime = 6;
-}
-
-message UserDeleteMessage
-{
-    metatrader_service_bus.UserDeleteModel Body = 1; 
-}
-
-message UserDeleteModel
-{
-    string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
-    metatrader_platfom.TradingPlatformModel TradingPlatformType = 3;
-    metatrader_broker.BrokerModel BrokerType = 4;
+    MetatraderPositionBodySbModel Body = 1; 
 }
