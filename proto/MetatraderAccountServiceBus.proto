@@ -8,11 +8,8 @@ enum TradingPlatformType {
 
 enum AccountEventType {
     ACCOUNT_CREATED = 0;
-    ACCOUNT_DELETED = 1;
-    ACCOUNT_DISABLED = 2;
-    ACCOUNT_ENABLED = 3;
-    ACCOUNT_TRADE_DISABLED = 4;
-    ACCOUNT_TRADE_ENABLED = 5;
+    ACCOUNT_UPDATED = 1;
+    ACCOUNT_DELETED = 2;
 }
 
 enum AccountType {
@@ -26,6 +23,12 @@ enum PositionEventType {
     POSITION_CLOSED = 2;
 }
 
+enum BalanceEventType {
+    OPERATION_ADDED = 0;
+    OPERATION_UPDATED = 1;
+    OPERATION_DELETED = 2;
+}
+
 message MetatraderAccountBodySbModel {
     string TraderAccountId = 1;
     int64 MetatraderLogin = 2;
@@ -34,6 +37,8 @@ message MetatraderAccountBodySbModel {
     int32 BrokerId = 5;
     int32 TradingPlatformId = 6;
     AccountEventType EventType = 7;
+    bool Disabled = 8;
+    bool TradeDisabled = 9;
 }
 
 message MetatraderAccountMessage
@@ -56,4 +61,22 @@ message MetatraderPositionBodySbModel {
 message MetatraderPositionMessage
 {
     MetatraderPositionBodySbModel Body = 1; 
+}
+
+
+message MetatraderBalanceBodySbModel {
+    string TraderAccountId = 1;
+    int64 MetatraderLogin = 2;
+    int64 DealId = 3;
+    TradingPlatformType TradingPlatformType = 4;
+    AccountType AccountType = 5;
+    int32 BrokerId = 6;
+    int32 TradingPlatformId = 7;
+    BalanceEventType EventType = 8;
+    int64 Time = 9;
+}
+
+message MetatraderBalanceMessage
+{
+    MetatraderBalanceBodySbModel Body = 1; 
 }
