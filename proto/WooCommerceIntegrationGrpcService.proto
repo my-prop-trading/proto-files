@@ -1,0 +1,51 @@
+syntax = "proto3";
+package woocoommerce_integration;
+import "google/protobuf/empty.proto";
+
+message CreateOrderRequest {
+    woocoommerce_integration.ContactDetails billing = 1;
+    repeated woocoommerce_integration.MetaData meta_data = 2;
+    string trader_package_id = 3;
+}
+
+message MetaData {
+    int32 id = 1;
+    string key = 2;
+    string value = 3;
+}
+
+message ContactDetails {
+  string first_name = 1;
+  string last_name = 2;
+  string company = 3;
+  string address_1 = 4;
+  string address_2 = 5;
+  string city = 6;
+  string state = 7;
+  string postcode = 8;
+  string country = 9;
+  string email = 10;
+  string phone = 11;
+}
+
+message CreateOrderResponse {
+  oneof response { 
+    string payment_url = 1;
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
+  }
+}
+
+enum WooCommerceIntegrationError {
+  OK = 0;
+  NO_ACCOUNT = 1;
+  NO_TRADING_PACKAGE = 2;
+  UNAUTHORIZED = 3;
+  NO_PERSONAL_DATA = 4;
+  TRADER_ACCOUNT_WRONG_STATUS = 5;
+}
+
+service WooCommerceIntegrationGrpcService {
+    rpc CreateOrder(woocoommerce_integration.CreateOrderRequest) returns (woocoommerce_integration.CreateOrderResponse);
+   
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
