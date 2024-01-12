@@ -1,0 +1,116 @@
+syntax = "proto3";
+package kyc_bridge;
+import "google/protobuf/empty.proto";
+
+enum Error {
+    Ok = 0;
+    InternalError = 1;
+}
+
+message CreateKycBridgeTokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateKycBridgeTokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateKycBridgeTokenResponse {
+    oneof response {
+        CreateKycBridgeTokenResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message CreateKycBridgeProofOfIdentityTokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateKycBridgeProofOfIdentityTokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateKycBridgeProofOfIdentityTokenResponse {
+    oneof response {
+        CreateKycBridgeProofOfIdentityTokenResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message CreateKycBridgeProofOfAddressTokenRequest {
+    string ClientId = 1;
+    string Country = 2;
+    string ProcessId = 3;
+}
+
+message CreateKycBridgeProofOfAddressTokenResponseBody {
+    string Token = 1;
+    int64 CreatedAt = 2;
+}
+
+message CreateKycBridgeProofOfAddressTokenResponse {
+    oneof response {
+        CreateKycBridgeProofOfAddressTokenResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+message GetKycBridgeApplicantDataRequest {
+    string ApplicantId = 1;
+    string ProcessId = 2;
+}
+
+message KycBridgePersonalDataModel {
+    optional string FirstName = 1;
+    optional string LastName = 2;
+    optional int64 DateOfBirth = 3;
+    optional string CountryOfResidence = 4;
+}
+
+enum KycBridgeDocumentStatus
+{
+    VERIFIED = 0;
+    DECLINED = 1;
+}
+
+message KycBridgeDocumentModel {
+    string Type = 1;
+    KycBridgeDocumentStatus Status = 2;
+    optional string Number = 3;
+    optional string Comment = 4;
+    optional string Country = 5;
+    optional string ValidUntil = 6;
+}
+
+message GetKycBridgeApplicantDataResponseBody {
+    KycBridgePersonalDataModel PersonalData = 1;
+    repeated KycBridgeDocumentModel Items = 2;
+}
+
+message GetKycBridgeApplicantDataResponse {
+    oneof response {
+        GetKycBridgeApplicantDataResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+service KycBridgeBridgeGrpcService {
+    rpc CreateKycBridgeToken(CreateKycBridgeTokenRequest) 
+    returns (CreateKycBridgeTokenResponse);
+
+    rpc CreateKycBridgeProofOfIdentityToken(CreateKycBridgeProofOfIdentityTokenRequest) 
+    returns (CreateKycBridgeProofOfIdentityTokenResponse);
+
+    rpc CreateKycBridgeProofOfAddressToken(CreateKycBridgeProofOfAddressTokenRequest) 
+    returns (CreateKycBridgeProofOfAddressTokenResponse);
+
+    rpc GetKycBridgeApplicantData(GetKycBridgeApplicantDataRequest) 
+    returns (GetKycBridgeApplicantDataResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
