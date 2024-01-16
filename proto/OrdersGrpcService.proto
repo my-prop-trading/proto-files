@@ -54,6 +54,7 @@ message CreateTraderAccountOrderResponse {
 message CreateTraderAccountOrderResponseBody {
   string OrderId = 1;
   int64 CreatedAt = 2;
+  string PaymentUrl = 3;
 }
 
 message GetOrdersPaginatedRequest {
