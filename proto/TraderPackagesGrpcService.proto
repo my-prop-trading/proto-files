@@ -42,9 +42,6 @@ message TraderPackage {
 
     double TargetProfit = 33;
     double RevenueShare = 34;
-
-    string payment_integration_id = 35;
-    trader_packages.PaymentIntegrationType payment_integration_type = 36;
 }
 
 enum PaymentIntegrationType {
