@@ -240,8 +240,7 @@ message GetUserProfileVisibleFieldsRequest {
 }
 
 message UserProfileVisibleFields {
-    bool registration_date_from = 1;
-    bool registration_date_to = 2;
+    bool registration_date = 1;
     bool crm_status = 3;
     bool first_name_reg = 4;
     bool last_name_reg = 5;
