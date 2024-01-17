@@ -308,8 +308,7 @@ message DeleteReportTemplateResponse {
 
 // A report template.
 message UserProfileFieldsTemplate {
-  optional int64 registration_date_from = 1;
-  optional int64 registration_date_to = 2;
+  optional int64 registration_date = 1;
   optional int64 crm_status = 3;
   optional string first_name_reg = 4;
   optional string last_name_reg = 5;
