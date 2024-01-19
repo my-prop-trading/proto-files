@@ -121,6 +121,8 @@ service ClientsCrmGrpcService {
     // Delete a report template.
     rpc DeleteReportTemplate(DeleteReportTemplateRequest) returns (DeleteReportTemplateResponse);
 
+    // Get all cache countries
+    rpc GetCountries(GetCountriesRequest) returns (GetCountriesResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
@@ -140,6 +142,21 @@ message SetUserProfileRequest {
 }
 
 message SetUserProfileResponse {
+}
+
+message GetCountriesRequest {
+}
+
+message GetCountriesResponse {
+    repeated CountryCache countries_by_poa = 1;
+    repeated CountryCache countries_by_reg = 2;
+    repeated CountryCache countries_by_reg_ip = 3;
+    repeated CountryCache ccountries_by_poi = 4;
+}
+
+message CountryCache {
+    string name = 1;
+    uint64 count = 2;
 }
 
 // Request and Response messages for SearchUserProfiles
