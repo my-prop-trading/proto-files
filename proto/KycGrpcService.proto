@@ -133,6 +133,7 @@ message GetClientVerificationProgressResponse {
     kyc.WaitKycStatus WaitProofOfIdentityStatus = 4;
     kyc.WaitKycStatus WaitProofOfAddressStatus = 5;
     repeated kyc.ContractModel ContractSignStatus = 6;
+    ProviderType Provider = 7;
 }
 
 enum ProofStatus {
