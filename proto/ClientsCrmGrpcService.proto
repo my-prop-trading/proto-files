@@ -151,7 +151,7 @@ message GetCountriesResponse {
     repeated CountryCache countries_by_poa = 1;
     repeated CountryCache countries_by_reg = 2;
     repeated CountryCache countries_by_reg_ip = 3;
-    repeated CountryCache ccountries_by_poi = 4;
+    repeated CountryCache countries_by_poi = 4;
 }
 
 message CountryCache {
