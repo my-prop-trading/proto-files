@@ -11,6 +11,11 @@ enum KycError {
     NOT_AUTHORIZED = 5; 
 }
 
+enum ProviderType {
+    SUMSUB = 0;
+    IDENTOMAT = 1;
+}
+
 message ProofOfIdentityRequest {
     string ClientId = 1;
     string Country = 2;
@@ -21,6 +26,7 @@ message ProofOfIdentityRequest {
 message ProofOfIdentityResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
+    ProviderType Provider = 3;  
 }
 
 message ProofOfIdentityResponse {
@@ -39,6 +45,7 @@ message RetryProofOfIdentityRequest {
 message RetryProofOfIdentityResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
+    ProviderType Provider = 3;
 }
 
 message RetryProofOfIdentityResponse {
@@ -58,6 +65,7 @@ message ProofOfAddressRequest {
 message ProofOfAddressResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
+    ProviderType Provider = 3;
 }
 
 message ProofOfAddressResponse {
@@ -76,6 +84,7 @@ message RetryProofOfAddressRequest {
 message RetryProofOfAddressResponseBody {
     string Token = 1;
     int64 CreatedAt = 2;
+    ProviderType Provider = 3;
 }
 
 message RetryProofOfAddressResponse {
@@ -181,6 +190,7 @@ message ProofModel {
     int64 CreatedAt = 12;
     int64 UpdatedAt = 13;
     string Brand = 14;
+    ProviderType Provider = 15;
 }
 
 message GetProofsOfIdentityRequest {
