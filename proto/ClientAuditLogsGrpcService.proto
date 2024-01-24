@@ -16,6 +16,8 @@ message ClientAuditLog {
   string NewContext = 5;
   string PrevContext = 6;
   client_audit_logs.ClientAuditLogType Type = 7;
+  string SiteVersion = 8;
+  string IpAddress = 9;
 }
 
 message CreateClientAuditLogRequest {
