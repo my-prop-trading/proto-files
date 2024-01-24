@@ -17,6 +17,8 @@ message SetPersonalDataRequest{
     string Id = 1;
     pd.PersonalDataModel PersonalDataModel = 2;
     string ProcessId = 3;
+    string SiteVersion = 4;
+    string IpAddress = 5;
 }
 
 // GET
