@@ -28,6 +28,8 @@ message CreateClientAuditLogRequest {
   string PrevContext = 6;
   client_audit_logs.ClientAuditLogType Type = 7;
   string ProcessId = 8;
+  string SiteVersion = 9;
+  string IpAddress = 10;
 }
 
 message CreateClientAuditLogResponse {
