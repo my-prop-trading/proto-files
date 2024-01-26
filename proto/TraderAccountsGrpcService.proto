@@ -95,6 +95,8 @@ message CreateTraderAccountRequest {
 
 message CreateTraderAccountResponse{
   string OrderId = 1;
+  string TraderAccId = 2; 
+  string AggregateId = 3;
 }
 
 message GetTraderAccountCredentialsRequest {
