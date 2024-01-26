@@ -127,6 +127,7 @@ message GetPayinsPaginatedRequest {
   optional string TraderPackageId = 6;
   optional int64 FromDate = 7;
   optional int64 ToDate = 8;
+  optional string TraderAggregatedId = 9;
 }
 
 message Payin {
