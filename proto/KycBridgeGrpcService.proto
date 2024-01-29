@@ -87,9 +87,12 @@ service KycBridgeBridgeGrpcService {
 
     rpc CreateKycBridgeProofOfAddressToken(CreateKycBridgeProofOfAddressTokenRequest) 
     returns (CreateKycBridgeProofOfAddressTokenResponse);
-
-    rpc GetKycBridgeApplicantData(GetKycBridgeApplicantDataRequest) 
+    
+    rpc GetKycBridgeProofOfIdentityApplicantData(GetKycBridgeApplicantDataRequest) 
     returns (GetKycBridgeApplicantDataResponse);
     
+    rpc GetKycBridgeProofOfAddressApplicantData(GetKycBridgeApplicantDataRequest) 
+    returns (GetKycBridgeApplicantDataResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
