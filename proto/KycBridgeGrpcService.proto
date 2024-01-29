@@ -58,6 +58,7 @@ enum KycBridgeDocumentStatus
 {
     VERIFIED = 0;
     DECLINED = 1;
+    IN_PROGRESS = 2;
 }
 
 message KycBridgeDocumentModel {
