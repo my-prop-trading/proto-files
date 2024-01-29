@@ -42,7 +42,12 @@ message CreateKycBridgeProofOfAddressTokenResponse {
         Error Error = 2;
     } 
 }
-message GetKycBridgeApplicantDataRequest {
+message GetKycBridgeProofOfIdentityApplicantDataRequest {
+    string ApplicantId = 1;
+    string ProcessId = 2;
+}
+
+message GetKycBridgeProofOfAddressApplicantDataRequest {
     string ApplicantId = 1;
     string ProcessId = 2;
 }
@@ -75,7 +80,14 @@ message GetKycBridgeApplicantDataResponseBody {
     repeated KycBridgeDocumentModel Items = 2;
 }
 
-message GetKycBridgeApplicantDataResponse {
+message GetKycBridgeProofOfIdentityApplicantDataResponse {
+    oneof response {
+        GetKycBridgeApplicantDataResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GetKycBridgeProofOfAddressApplicantDataResponse {
     oneof response {
         GetKycBridgeApplicantDataResponseBody Body = 1;
         Error Error = 2;
@@ -89,11 +101,11 @@ service KycBridgeBridgeGrpcService {
     rpc CreateKycBridgeProofOfAddressToken(CreateKycBridgeProofOfAddressTokenRequest) 
     returns (CreateKycBridgeProofOfAddressTokenResponse);
     
-    rpc GetKycBridgeProofOfIdentityApplicantData(GetKycBridgeApplicantDataRequest) 
-    returns (GetKycBridgeApplicantDataResponse);
+    rpc GetKycBridgeProofOfIdentityApplicantData(GetKycBridgeProofOfIdentityApplicantDataRequest) 
+    returns (GetKycBridgeProofOfIdentityApplicantDataResponse);
     
-    rpc GetKycBridgeProofOfAddressApplicantData(GetKycBridgeApplicantDataRequest) 
-    returns (GetKycBridgeApplicantDataResponse);
+    rpc GetKycBridgeProofOfAddressApplicantData(GetKycBridgeProofOfAddressApplicantDataRequest) 
+    returns (GetKycBridgeProofOfAddressApplicantDataResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
