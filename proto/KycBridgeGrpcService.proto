@@ -67,7 +67,7 @@ message KycBridgeDocumentModel {
     optional string Number = 3;
     optional string Comment = 4;
     optional string Country = 5;
-    optional string ValidUntil = 6;
+    optional int64 ValidUntil = 6;
 }
 
 message GetKycBridgeApplicantDataResponseBody {
