@@ -99,6 +99,8 @@ message UserProfile {
 service ClientsCrmGrpcService {
     rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse);
     rpc SetUserProfile(SetUserProfileRequest) returns (SetUserProfileResponse);
+    rpc SetUserProfileManager(SetUserProfileManagerRequest) returns (SetUserProfileResponse);
+    rpc SetUserProfileCrmStatus(SetUserProfileCrmStatusRequest) returns (SetUserProfileResponse);
     rpc SearchUserProfiles(SearchUserProfilesRequest) returns (SearchUserProfilesResponse);
 
     // Methods for CRM Status management
@@ -137,6 +139,16 @@ message GetUserProfileResponse {
 }
 
 message SetUserProfileRequest {
+    string client_id = 1;
+    int64 crm_status = 2;
+}
+
+message SetUserProfileManagerRequest {
+    string client_id = 1;
+    string manager = 2;
+}
+
+message SetUserProfileCrmStatusRequest {
     string client_id = 1;
     UserProfile user_profile = 2;
 }
