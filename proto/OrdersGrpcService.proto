@@ -25,6 +25,7 @@ message Order {
   metatrader_platfom.TradingPlatformModel TradingPlatform = 10; // Trading platform selected for package
   optional int64 PayBy = 11; 
   string BrandId = 12; 
+  string PaymentUrl = 13;
 }
 
 message CreateTraderAccountOrderRequest {
