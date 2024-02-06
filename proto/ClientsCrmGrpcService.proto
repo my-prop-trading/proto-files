@@ -201,6 +201,7 @@ message SearchUserProfilesRequest {
 
 message SearchUserProfilesResponse {
     repeated clients_crm.UserProfile user_profiles = 1; // List of user profiles matching the search criteria
+    uint64 total = 2; // Total number of user profiles matching the search criteria
 }
 
 // Request and Response messages for CRM Status management
