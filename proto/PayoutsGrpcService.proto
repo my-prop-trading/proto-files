@@ -256,6 +256,8 @@ enum PayoutsGrpcServiceError {
     CANT_MAKE_DECISION = 4;
     BLOCKED = 5;
     USER_HAS_OPEN_POSITIONS = 6;
+    LESS_THAN_MIN_VALUE = 7;
+    EXCEEDS_MAX_VALUE = 8;
 }
 
 message GetByIdRequest {
@@ -267,6 +269,34 @@ message GetByIdResponse {
         payouts.PayoutRequest Payout = 1;
         payouts.PayoutsGrpcServiceError Error = 2;
     }
+}
+
+
+enum MinMaxValueType {
+    Min = 0;
+    Max = 1;
+}
+
+message PayoutWithdrawalSetting {
+    string Currency = 1;
+    double Value = 2;
+    payouts.PaymentMethod PaymentMethod = 3;
+    payouts.MinMaxValueType Type = 4;
+}
+
+message GetPayoutsWithdrawalSettingsRequest {
+}
+
+message GetPayoutsWithdrawalSettingsResponse {
+    repeated payouts.PayoutWithdrawalSetting Settings = 1;
+}
+
+message SetPayoutsWithdrawalSettingsRequest {
+    payouts.PayoutWithdrawalSetting Setting = 1;
+}
+
+message SetPayoutsWithdrawalSettingsResponse {
+    payouts.PayoutWithdrawalSetting Setting = 1;
 }
 
 service PayoutsGrpcService {
@@ -289,6 +319,10 @@ service PayoutsGrpcService {
     rpc GetPayoutsStatistic(payouts.GetPayoutsStatisticRequest) returns (payouts.GetPayoutsStatisticResponse);
 
     rpc GetPayoutsStatisticForClient(payouts.GetPayoutsStatisticForClientRequest) returns (payouts.GetPayoutsStatisticForClientResponse);
+
+    rpc GetPayoutsWithdrawalSettings(payouts.GetPayoutsWithdrawalSettingsRequest) returns (payouts.GetPayoutsWithdrawalSettingsResponse);
+
+    rpc SetPayoutsWithdrawalSettings(payouts.SetPayoutsWithdrawalSettingsRequest) returns (payouts.SetPayoutsWithdrawalSettingsResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
