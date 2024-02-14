@@ -118,7 +118,7 @@ message CreatePayoutRequest {
 message CreatePayoutResponse {
     oneof response {
         payouts.PayoutRequest Payout = 1;
-        payouts.PayoutsGrpcServiceError Error = 2;
+        payouts.PayoutsGrpcServiceErrorWithMessage Error = 2;
     }
 }
 
@@ -258,6 +258,11 @@ enum PayoutsGrpcServiceError {
     USER_HAS_OPEN_POSITIONS = 6;
     LESS_THAN_MIN_VALUE = 7;
     EXCEEDS_MAX_VALUE = 8;
+}
+
+message PayoutsGrpcServiceErrorWithMessage {
+    payouts.PayoutsGrpcServiceError Error = 1;
+    string Message = 2;
 }
 
 message GetByIdRequest {
