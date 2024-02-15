@@ -102,17 +102,9 @@ message GetAccountBalanceRequest {
 
 message GetAccountBalanceResponse {
     oneof response {
-        metatrader.AccountBalance Body = 1;
+        metatrader.BalanceModel Body = 1;
         metatrader.MetatraderAccountError Error = 2;
     } 
-}
-
-message AccountBalance {
-    double Balance = 1;        // balance+credit
-    double Equity = 2;         // equity
-    double Margin = 3;         // margin requirements
-    double MarginFree = 4;     // free margin
-    double MarginLevel = 5;    // margin level
 }
 
 message CloseAccountRequest {
