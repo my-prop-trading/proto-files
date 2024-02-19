@@ -145,6 +145,7 @@ message Payin {
     orders.OrderStatus Status = 11; // Status (Unpaid, Success, Pending, Canceled)
     string TradingPackageId = 12; // Trading Package ID
     string TraderAccountAggregatedId = 13; // Trader account aggregate ID (should be filled for orders with status Success only)
+    double DiscountAmount = 14; // Price
 }
 
 message GetPayinsPaginatedResponse {
