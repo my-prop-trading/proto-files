@@ -118,6 +118,7 @@ enum OrdersError {
   OrderNotFound = 2;
   OrderNotPending = 3;
   OrderNotPaid = 4;
+  DiscountCodeInvalid = 5;
 }
 
 message GetPayinsPaginatedRequest {
