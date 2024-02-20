@@ -26,7 +26,8 @@ message Order {
   optional int64 PayBy = 11; 
   string BrandId = 12; 
   string PaymentUrl = 13;
-  double DiscountAmount = 14; // Price
+  double DiscountPrice = 14; // Price
+  string DiscountCode = 15;
 }
 
 message CreateTraderAccountOrderRequest {
