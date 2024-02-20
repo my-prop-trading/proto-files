@@ -28,9 +28,89 @@ message ContactDetails {
   string phone = 11;
 }
 
+message Coupon {
+    int32 id = 1;
+    string code = 2;
+    string amount = 3;
+    int64 date_created = 4;
+    int64 date_created_gmt = 5;
+    int64 date_modified = 6;
+    int64 date_modified_gmt = 7;
+    DiscountType discount_type = 8;
+    string description = 9;
+    int64 date_expires = 10; // Note: Use empty string to represent None
+    int64 date_expires_gmt = 11; // Note: Use empty string to represent None
+    int32 usage_count = 12;
+    bool individual_use = 13;
+    repeated int32 product_ids = 14;
+    repeated int32 excluded_product_ids = 15;
+    optional int32 usage_limit = 16; // Note: Use 0 or a specific negative value to represent None
+}
+
+
+enum DiscountType {
+    FIXED_CART = 0; // default
+    PERCENT = 1;
+    FIXED_PRODUCT = 2;
+}
+
 message CreateOrderResponse {
   oneof response { 
     string payment_url = 1;
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
+  }
+}
+
+
+message CreateCouponRequest {
+  string code = 1;
+  string amount = 2;
+  DiscountType discount_type = 3;
+  string description = 4;
+  optional int64 date_expires_gmt = 5; // Note: Use empty string to represent None
+  bool individual_use = 6;
+  repeated int32 product_ids = 7;
+  optional int32 usage_limit = 8; // Note: Use 0 or a specific negative value to represent None
+}
+
+
+message CreateCouponResponse {
+  oneof response { 
+    woocoommerce_integration.Coupon coupon = 1;
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
+  }
+}
+
+message GetCouponRequest {
+  uint32 id = 1;
+}
+
+message GetCouponResponse {
+  oneof response { 
+    woocoommerce_integration.Coupon coupon = 1;
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
+  }
+}
+
+message UpdateCouponRequest {
+  woocoommerce_integration.Coupon coupon = 1;
+}
+
+
+message UpdateCouponResponse {
+  oneof response { 
+    woocoommerce_integration.Coupon coupon = 1;
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
+  }
+}
+
+message DeleteCouponRequest {
+  uint32 id = 1;
+}
+
+message DeleteCouponResponse {
+  oneof response { 
+    woocoommerce_integration.Coupon coupon = 1;
     woocoommerce_integration.WooCommerceIntegrationError error = 2;
   }
 }
@@ -41,6 +121,14 @@ enum WooCommerceIntegrationError {
 
 service WooCommerceIntegrationGrpcService {
     rpc CreateOrder(woocoommerce_integration.CreateOrderRequest) returns (woocoommerce_integration.CreateOrderResponse);
+
+    rpc CreateCoupon(woocoommerce_integration.CreateCouponRequest) returns (woocoommerce_integration.CreateCouponResponse);
+
+    rpc UpdateCoupon(woocoommerce_integration.UpdateCouponRequest) returns (woocoommerce_integration.UpdateCouponResponse);
+
+    rpc GetCoupon(woocoommerce_integration.GetCouponRequest) returns (woocoommerce_integration.GetCouponResponse);
+
+    rpc DeleteCoupon(woocoommerce_integration.DeleteCouponRequest) returns (woocoommerce_integration.DeleteCouponResponse);
    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
