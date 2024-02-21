@@ -1,0 +1,109 @@
+syntax = "proto3";
+package discount_codes;
+import "google/protobuf/empty.proto";
+
+message DiscountCode {
+    string code = 2;
+    string amount = 3;
+    int64 date_created = 4;
+    int64 date_updated = 7;
+    discount_codes.DiscountType discount_type = 8;
+    string description = 9;
+    int64 date_ends = 10;
+    int64 date_starts = 11; 
+    repeated string trading_package_ids = 15;
+    optional int32 usage_limit = 16;
+    int32 usage_count = 17;
+    bool is_active = 18;
+}
+
+enum DiscountCodeType {
+    FIXED = 0; // default
+    PERCENT = 1;
+}
+
+message DiscountCodesList {
+    repeated discount_codes.DiscountCode discount_codes = 1;
+
+    uint64 total_count = 2;
+}
+
+message CreateDiscountCodeRequest{
+    string code = 2;
+    string amount = 3;
+    discount_codes.DiscountType discount_type = 8;
+    string description = 9;
+    int64 date_ends = 10;
+    int64 date_starts = 11; 
+    repeated string trading_package_ids = 15;
+    optional int32 usage_limit = 16;
+}
+
+message CreateDiscountCodeResponse {
+  oneof response { 
+    discount_codes.DiscountCode discount_code = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
+message UpdateDiscountCodeRequest{
+    string code = 2;
+    string amount = 3;
+    discount_codes.DiscountType discount_type = 8;
+    string description = 9;
+    int64 date_ends = 10;
+    int64 date_starts = 11; 
+    repeated string trading_package_ids = 15;
+    optional int32 usage_limit = 16;
+    int32 usage_count = 17;
+}
+
+message UpdateDiscountCodeResponse {
+  oneof response { 
+    discount_codes.DiscountCode discount_code = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
+message GetDiscountCodesPaginatedRequest {
+  optional string Code = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  optional int64 FromDate = 7;
+  optional int64 ToDate = 8;
+  optional bool IsActive = 9;
+}
+
+message GetDiscountCodesPaginatedResponse {
+  oneof response { 
+    discount_codes.DiscountCodesList discount_codes_list = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
+message DisableDiscountCodeRequest {
+  string Code = 1;
+}
+
+message DisableDiscountCodeResponse {
+  oneof response { 
+    discount_codes.DiscountCodesList discount_codes_list = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
+enum DiscountCodesError {
+  TECHNICAL_ERROR = 0;
+}
+
+service DiscountCodesGrpcService {
+    rpc CreateDiscountCode(discount_codes.CreateDiscountCodeRequest) returns (discount_codes.CreateDiscountCodeResponse);
+
+    rpc UpdateDiscountCode(discount_codes.UpdateDiscountCodeRequest) returns (discount_codes.UpdateDiscountCodeResponse);
+
+    rpc DisableDiscountCode(discount_codes.DisableDiscountCodeRequest) returns (discount_codes.UpdateDiscountCodeResponse);
+
+    rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (stream discount_codes.GetDiscountCodesPaginatedResponse);
+   
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
