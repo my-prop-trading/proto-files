@@ -7,7 +7,7 @@ message DiscountCode {
     string amount = 3;
     int64 date_created = 4;
     int64 date_updated = 7;
-    discount_codes.DiscountType discount_type = 8;
+    discount_codes.DiscountCodeType discount_type = 8;
     string description = 9;
     int64 date_ends = 10;
     int64 date_starts = 11; 
@@ -31,7 +31,7 @@ message DiscountCodesList {
 message CreateDiscountCodeRequest{
     string code = 2;
     string amount = 3;
-    discount_codes.DiscountType discount_type = 8;
+    discount_codes.DiscountCodeType discount_type = 8;
     string description = 9;
     int64 date_ends = 10;
     int64 date_starts = 11; 
@@ -49,7 +49,7 @@ message CreateDiscountCodeResponse {
 message UpdateDiscountCodeRequest{
     string code = 2;
     string amount = 3;
-    discount_codes.DiscountType discount_type = 8;
+    discount_codes.DiscountCodeType discount_type = 8;
     string description = 9;
     int64 date_ends = 10;
     int64 date_starts = 11; 
