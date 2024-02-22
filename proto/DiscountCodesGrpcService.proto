@@ -103,7 +103,7 @@ service DiscountCodesGrpcService {
 
     rpc DisableDiscountCode(discount_codes.DisableDiscountCodeRequest) returns (discount_codes.UpdateDiscountCodeResponse);
 
-    rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (stream discount_codes.GetDiscountCodesPaginatedResponse);
+    rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (discount_codes.GetDiscountCodesPaginatedResponse);
    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
