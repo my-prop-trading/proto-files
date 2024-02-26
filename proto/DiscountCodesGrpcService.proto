@@ -4,7 +4,7 @@ import "google/protobuf/empty.proto";
 
 message DiscountCode {
     string code = 2;
-    string amount = 3;
+    double amount = 3;
     int64 date_created = 4;
     int64 date_updated = 7;
     discount_codes.DiscountCodeType discount_type = 8;
