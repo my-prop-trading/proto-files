@@ -55,7 +55,6 @@ message UpdateDiscountCodeRequest{
     int64 date_starts = 11; 
     repeated string trading_package_ids = 15;
     optional int32 usage_limit = 16;
-    int32 usage_count = 17;
 }
 
 message UpdateDiscountCodeResponse {
@@ -94,6 +93,7 @@ message DisableDiscountCodeResponse {
 
 enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
+  CODE_DOES_NOT_EXIST = 1;
 }
 
 service DiscountCodesGrpcService {
