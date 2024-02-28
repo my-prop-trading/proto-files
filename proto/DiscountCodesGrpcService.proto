@@ -91,6 +91,17 @@ message DisableDiscountCodeResponse {
   }
 }
 
+message GetDiscountCodeRequest {
+  string Code = 1;
+}
+
+message GetDiscountCodeResponse {
+  oneof response { 
+    discount_codes.DiscountCode discount_code = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
 enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
   CODE_DOES_NOT_EXIST = 1;
@@ -104,6 +115,8 @@ service DiscountCodesGrpcService {
     rpc DisableDiscountCode(discount_codes.DisableDiscountCodeRequest) returns (discount_codes.UpdateDiscountCodeResponse);
 
     rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (discount_codes.GetDiscountCodesPaginatedResponse);
+
+    rpc GetDiscountCode(discount_codes.GetDiscountCodeRequest) returns (discount_codes.GetDiscountCodeResponse);
    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
