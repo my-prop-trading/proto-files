@@ -71,7 +71,7 @@ message CreateCouponRequest {
   string description = 4;
   optional int64 date_expires_gmt = 5; // Note: Use empty string to represent None
   bool individual_use = 6;
-  repeated int32 product_ids = 7;
+  repeated string trader_packages_ids = 7;
   optional int32 usage_limit = 8; // Note: Use 0 or a specific negative value to represent None
 }
 
