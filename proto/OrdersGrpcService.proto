@@ -59,7 +59,37 @@ message CreateTraderAccountOrderResponseBody {
   int64 CreatedAt = 2;
   string PaymentUrl = 3;
 }
+//--
+message PreviewTraderAccountOrderRequest {
+  string TradingPackageId = 1;
+  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  metatrader_broker.BrokerModel BrokerModel = 3;
+  optional string DiscountCode = 4;
+  string ProcessId = 5;
+  string ClientId = 6;
+  string Brand = 7;
+}
 
+message PreviewTraderAccountOrderResponse {
+  oneof response {
+    orders.PreviewTraderAccountOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message PreviewTraderAccountOrderResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+  double DiscountAmount = 4;
+  orders.DiscountCodeType DiscountType = 5;
+}
+
+enum DiscountCodeType {
+  FIXED = 0; // default
+  PERCENT = 1;
+}
+//--
 message GetOrdersPaginatedRequest {
   optional string ClientId = 1;
   uint64 Limit = 2;
@@ -175,6 +205,8 @@ service OrdersGrpcService {
     rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
+
+    rpc PreviewTraderAccountOrder(orders.PreviewTraderAccountOrderRequest) returns (orders.PreviewTraderAccountOrderResponse);
 
     rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
 
