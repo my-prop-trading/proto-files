@@ -59,8 +59,8 @@ message CreateTraderAccountOrderResponseBody {
   int64 CreatedAt = 2;
   string PaymentUrl = 3;
 }
-//--
-message PreviewTraderAccountOrderRequest {
+
+message PreviewOrderDiscountRequest {
   string TradingPackageId = 1;
   metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
   metatrader_broker.BrokerModel BrokerModel = 3;
@@ -70,14 +70,16 @@ message PreviewTraderAccountOrderRequest {
   string Brand = 7;
 }
 
-message PreviewTraderAccountOrderResponse {
+message PreviewOrderDiscountResponse {
   oneof response {
-    orders.PreviewTraderAccountOrderResponseBody Body = 1;
-    orders.OrdersError Error = 2;
+    orders.PreviewOrderDiscountResponseBody Body = 1;
+    orders.PreviewOrderDiscountEmptyResponseBody BodyWithoutDiscount = 2;
+    orders.PreviewOrderDiscountEmptyResponseBody BodyInvaliDiscount = 3;
+    orders.PreviewError Error = 4;
   } 
 }
 
-message PreviewTraderAccountOrderResponseBody {
+message PreviewOrderDiscountResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
@@ -85,11 +87,22 @@ message PreviewTraderAccountOrderResponseBody {
   orders.DiscountCodeType DiscountType = 5;
 }
 
+message PreviewOrderDiscountEmptyResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+}
+
 enum DiscountCodeType {
   FIXED = 0; // default
   PERCENT = 1;
 }
-//--
+
+enum PreviewError {
+  PE_OK = 0;
+  PE_PACKAGE_NOT_FOUND = 1;
+}
+
 message GetOrdersPaginatedRequest {
   optional string ClientId = 1;
   uint64 Limit = 2;
@@ -206,7 +219,7 @@ service OrdersGrpcService {
 
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 
-    rpc PreviewTraderAccountOrder(orders.PreviewTraderAccountOrderRequest) returns (orders.PreviewTraderAccountOrderResponse);
+    rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
     rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
 
