@@ -73,8 +73,8 @@ message PreviewOrderDiscountRequest {
 message PreviewOrderDiscountResponse {
   oneof response {
     orders.PreviewOrderDiscountResponseBody Body = 1;
-    orders.PreviewOrderDiscountEmptyResponseBody BodyWithoutDiscount = 2;
-    orders.PreviewOrderDiscountEmptyResponseBody BodyInvaliDiscount = 3;
+    orders.PreviewOrderDiscountWithoutResponseBody BodyWithoutDiscount = 2;
+    orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscount = 3;
     orders.PreviewError Error = 4;
   } 
 }
@@ -87,7 +87,13 @@ message PreviewOrderDiscountResponseBody {
   orders.DiscountCodeType DiscountType = 5;
 }
 
-message PreviewOrderDiscountEmptyResponseBody {
+message PreviewOrderDiscountWithoutResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+}
+
+message PreviewOrderDiscountInvalidResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
