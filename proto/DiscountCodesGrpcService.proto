@@ -103,6 +103,17 @@ message GetDiscountCodeResponse {
   }
 }
 
+message IncrementDiscountCodeUsageRequest {
+  string Code = 1;
+}
+
+message IncrementDiscountCodeUsageResponse {
+  oneof response { 
+    discount_codes.DiscountCode discount_code = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
 enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
   CODE_DOES_NOT_EXIST = 1;
@@ -119,6 +130,8 @@ service DiscountCodesGrpcService {
     rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (discount_codes.GetDiscountCodesPaginatedResponse);
 
     rpc GetDiscountCode(discount_codes.GetDiscountCodeRequest) returns (discount_codes.GetDiscountCodeResponse);
+
+    rpc IncrementDiscountCodeUsage(discount_codes.IncrementDiscountCodeUsageRequest) returns (discount_codes.IncrementDiscountCodeUsageResponse);
    
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
