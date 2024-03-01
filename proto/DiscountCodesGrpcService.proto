@@ -93,6 +93,7 @@ message DisableDiscountCodeResponse {
 
 message GetDiscountCodeRequest {
   string Code = 1;
+  optional string TradingPackageId = 2;
 }
 
 message GetDiscountCodeResponse {
