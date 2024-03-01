@@ -106,6 +106,7 @@ message GetDiscountCodeResponse {
 enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
   CODE_DOES_NOT_EXIST = 1;
+  INVALID_CODE = 2;
 }
 
 service DiscountCodesGrpcService {
