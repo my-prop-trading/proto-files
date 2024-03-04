@@ -58,9 +58,14 @@ enum DiscountType {
 
 message CreateOrderResponse {
   oneof response { 
-    string payment_url = 1;
+    CreateOrderResponseInternal order = 1;
     woocoommerce_integration.WooCommerceIntegrationError error = 2;
   }
+}
+
+message CreateOrderResponseInternal {
+  string payment_url = 1;
+  int32 order_id = 2;
 }
 
 
@@ -117,12 +122,24 @@ message DeleteCouponResponse {
   }
 }
 
+message CloseOrderRequest {
+  int32 order_id = 1;
+}
+
+message CloseOrderResponse {
+  oneof response { 
+    woocoommerce_integration.WooCommerceIntegrationError error = 1;
+  }
+}
+
 enum WooCommerceIntegrationError {
   TECHNICAL_ERROR = 0;
 }
 
 service WooCommerceIntegrationGrpcService {
     rpc CreateOrder(woocoommerce_integration.CreateOrderRequest) returns (woocoommerce_integration.CreateOrderResponse);
+
+    rpc CloseOrder(woocoommerce_integration.CloseOrderRequest) returns (woocoommerce_integration.CloseOrderResponse);
 
     rpc CreateCoupon(woocoommerce_integration.CreateCouponRequest) returns (woocoommerce_integration.CreateCouponResponse);
 
