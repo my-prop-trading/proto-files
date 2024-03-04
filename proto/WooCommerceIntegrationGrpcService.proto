@@ -138,6 +138,8 @@ message CloseOrderResponse {
 
 enum WooCommerceIntegrationError {
   TECHNICAL_ERROR = 0;
+  ORDER_DOES_NOT_EXIST = 1;
+  ORDER_ALREADY_CLOSED = 2;
 }
 
 service WooCommerceIntegrationGrpcService {
