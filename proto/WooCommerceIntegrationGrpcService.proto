@@ -126,9 +126,13 @@ message CloseOrderRequest {
   int32 order_id = 1;
 }
 
+message CloseOrderResponseInternal {
+}
+
 message CloseOrderResponse {
-  oneof response { 
-    woocoommerce_integration.WooCommerceIntegrationError error = 1;
+  oneof response {
+    woocoommerce_integration.CloseOrderResponseInternal order = 1; 
+    woocoommerce_integration.WooCommerceIntegrationError error = 2;
   }
 }
 
