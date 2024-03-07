@@ -140,6 +140,8 @@ enum WooCommerceIntegrationError {
   TECHNICAL_ERROR = 0;
   ORDER_DOES_NOT_EXIST = 1;
   ORDER_ALREADY_CLOSED = 2;
+  COUPON_DOES_NOT_EXIST = 3;
+  COUPON_ALREADY_EXISTS = 4;
 }
 
 service WooCommerceIntegrationGrpcService {
