@@ -76,6 +76,7 @@ message PreviewOrderDiscountResponse {
     orders.PreviewOrderDiscountWithoutResponseBody BodyWithoutDiscount = 2;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscount = 3;
     orders.PreviewError Error = 4;
+    orders.PreviewOrderDiscountInvalidUsageExceededResponseBody BodyInvalidUsageExceeded = 5;
   } 
 }
 
@@ -94,6 +95,12 @@ message PreviewOrderDiscountWithoutResponseBody {
 }
 
 message PreviewOrderDiscountInvalidResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+}
+
+message PreviewOrderDiscountInvalidUsageExceededResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
@@ -169,6 +176,7 @@ enum OrdersError {
   OrderNotPending = 3;
   OrderNotPaid = 4;
   InvalidDiscountCode = 5;
+  DiscountCodeUsageExceeded = 6;
 }
 
 message GetPayinsPaginatedRequest {
