@@ -91,6 +91,9 @@ message CreateTraderAccountRequest {
     string ProcessId = 13;
     string OrderId = 14;
     string Brand = 15;
+
+    trader_packages.TraderPackage TraderPackage = 16;
+    double RealPrice = 17;
 }
 
 message CreateTraderAccountResponse{
