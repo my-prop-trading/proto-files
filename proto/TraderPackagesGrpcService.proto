@@ -2,6 +2,11 @@ syntax = "proto3";
 package trader_packages;
 import "google/protobuf/empty.proto";
 
+message TraderPackageGroup {
+    string Id = 1;
+    string Name = 2;
+}
+
 message TraderPackage {
     string Id = 1;
 
@@ -42,6 +47,8 @@ message TraderPackage {
 
     double TargetProfit = 33;
     double RevenueShare = 34;
+
+    string TraderPackageGroupId = 35;
 }
 
 enum PaymentIntegrationType {
@@ -128,6 +135,43 @@ message PublishResponse {
   bool Success = 1;
 }
 
+////////////////////////
+// GROUPS
+////////////////////////
+message GetAllGroupsRequest{
+}
+
+message GetAllPublishedGroupsRequest {
+  
+}
+
+message GetAllGroupsResponse{
+  repeated trader_packages.TraderPackageGroup Items = 1;
+}
+
+message SetGroupRequest{
+  trader_packages.TraderPackageGroup Item = 1;
+}
+
+message SetGroupResponse {
+  bool Success = 1;
+}
+
+message DeleteGroupRequest{
+  string TraderPackageGroupId = 1;
+}
+
+message DeleteGroupResponse {
+  bool Success = 1;
+}
+
+message PublishGroupRequest{
+  string TraderPackageGroupId = 1;
+}
+
+message PublishGroupResponse {
+  bool Success = 1;
+}
 
 service TraderPackagesGrpcService {
     rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
@@ -137,6 +181,14 @@ service TraderPackagesGrpcService {
     rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
 
     rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
+
+    // produce the same requests but for groups
+    rpc GetAllGroups(trader_packages.GetAllGroupsRequest) returns (trader_packages.GetAllGroupsResponse);
+    rpc GetAllPublishedGroups(trader_packages.GetAllPublishedGroupsRequest) returns (trader_packages.GetAllGroupsResponse);
+    rpc SetGroup(trader_packages.SetGroupRequest) returns (trader_packages.SetGroupResponse);
+    rpc DeleteGroup(trader_packages.DeleteGroupRequest) returns (trader_packages.DeleteGroupResponse);
+    rpc PublishGroup(trader_packages.PublishGroupRequest) returns (trader_packages.PublishGroupResponse);
+
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
