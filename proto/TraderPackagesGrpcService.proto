@@ -5,6 +5,8 @@ import "google/protobuf/empty.proto";
 message TraderPackageGroup {
     string Id = 1;
     string Name = 2;
+    string IconUrl = 3;
+    int32 Order = 4;
 }
 
 message TraderPackage {
