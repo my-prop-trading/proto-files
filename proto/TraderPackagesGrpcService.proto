@@ -51,6 +51,7 @@ message TraderPackage {
     double RevenueShare = 34;
 
     string TraderPackageGroupId = 35;
+    string TraderPackageGroupName = 36;
 }
 
 enum PaymentIntegrationType {
