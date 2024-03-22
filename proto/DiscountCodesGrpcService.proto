@@ -118,6 +118,17 @@ enum DiscountCodesError {
   CODE_DOES_NOT_EXIST = 1;
 }
 
+message GetDiscountCodeForTradingPackageIdRequest {
+  string trading_package_id = 15;
+}
+
+message GetDiscountCodeForTradingPackageIdResponse {
+  oneof response { 
+    discount_codes.DiscountCodesList discount_codes_list = 1;
+    discount_codes.DiscountCodesError error = 2;
+  }
+}
+
 service DiscountCodesGrpcService {
     rpc CreateDiscountCode(discount_codes.CreateDiscountCodeRequest) returns (discount_codes.CreateDiscountCodeResponse);
 
@@ -131,5 +142,7 @@ service DiscountCodesGrpcService {
 
     rpc IncrementDiscountCodeUsage(discount_codes.IncrementDiscountCodeUsageRequest) returns (discount_codes.IncrementDiscountCodeUsageResponse);
    
+    rpc GetDiscountCodeForTradingPackageId(discount_codes.GetDiscountCodeForTradingPackageIdRequest) returns (discount_codes.GetDiscountCodeForTradingPackageIdResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
