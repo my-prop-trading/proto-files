@@ -2,6 +2,13 @@ syntax = "proto3";
 package trader_packages;
 import "google/protobuf/empty.proto";
 
+enum TraderPackagePhaseType {
+  PHASE_1 = 0;
+  PHASE_2 = 1;
+  PHASE_3 = 2;
+  INSTANT_FUNDING = 3;
+}
+
 message TraderPackageGroup {
     string Id = 1;
     string Name = 2;
@@ -52,10 +59,18 @@ message TraderPackage {
 
     string TraderPackageGroupId = 35;
     string TraderPackageGroupName = 36;
-}
 
-enum PaymentIntegrationType {
-  WOO_COMMERCE = 0;
+    trader_packages.TraderPackagePhaseType PhaseType = 37;
+
+    double Phase3DailyDrawdown = 39;
+    double Phase3OverallDrawdown = 40;
+    double Phase3TargetProfit = 41;
+    int32 Phase3Duration = 42;
+    optional int32 Phase3MinTradingDays = 43;
+    optional int32 Phase3MinOpenedPositions = 44;
+    optional double Phase3RevenueShare = 45;
+    double Phase3Refund = 46;
+    repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
 }
 
 message TraderPackageAttempt {
@@ -93,6 +108,16 @@ message TraderPackageFieldsOrder {
   optional int32 RevenueScaling = 32;
   optional int32 TargetProfit = 33;
   optional int32 RevenueShare = 34;
+
+  optional int32 Phase3DailyDrawdown = 39;
+  optional int32 Phase3OverallDrawdown = 40;
+  optional int32 Phase3TargetProfit = 41;
+  optional int32 Phase3Duration = 42;
+  optional int32 Phase3MinTradingDays = 43;
+  optional int32 Phase3MinOpenedPositions = 44;
+  optional int32 Phase3RevenueShare = 45;
+  optional int32 Phase3Refund = 46;
+  optional int32 Phase3Attempts = 47;
 }
 
 message GetAllRequest{

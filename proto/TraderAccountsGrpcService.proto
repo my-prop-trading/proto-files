@@ -30,6 +30,7 @@ message TraderAccount {
     string OrderId = 21;
     string TraderPackageGroupId = 22;
     string TraderPackageGroupName = 23;
+    trader_packages.TraderPackagePhaseType TraderPackagePhaseType = 24;
 }
 
 message TraderPlatformCredentials {
