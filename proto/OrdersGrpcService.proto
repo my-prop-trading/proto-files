@@ -28,6 +28,8 @@ message Order {
   string PaymentUrl = 13;
   double DiscountPrice = 14; // Price
   string DiscountCode = 15;
+  string TraderPackageGroup = 16;
+  string TraderPackageGroupName = 17;
 }
 
 message CreateTraderAccountOrderRequest {
