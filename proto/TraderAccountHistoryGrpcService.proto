@@ -70,6 +70,11 @@ message UpdateLogDetails {
         trader_account_history.EmptyPhaseDetails UserOpenedFirstPositionInPhase1 = 12;
         trader_account_history.EmptyPhaseDetails UserOpenedFirstPositionInPhase2 = 13;
         trader_account_history.EmptyPhaseDetails UserOpenedFirstPositionInLive = 14;
+        //For phase 3 demo accounts
+        trader_account_history.EmptyPhaseDetails UserOpenedFirstPositionInPhase3 = 15;
+        trader_account_history.PhaseDetails WinInPhase3 = 16;
+        trader_account_history.PhaseDetails LoseInPhase3 = 17;
+        trader_account_history.EmptyPhaseDetails Phase3AccountGranted = 18;
     }
 }
 
