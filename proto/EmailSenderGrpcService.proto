@@ -38,6 +38,24 @@ message SuccesfullScenarioPhase2Request {
     string TraderAccountId = 3;
 }
 
+message SuccesfullScenarioPhase3Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendSuccesfullScenarioPhase1KycRequiredRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendSuccesfullScenarioPhase1ContractRequiredRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 message SendSuccesfullScenarioPhase2KycRequiredRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -50,6 +68,18 @@ message SendSuccesfullScenarioPhase2ContractRequiredRequest {
     string TraderAccountId = 3;
 }
 
+message SendSuccesfullScenarioPhase3KycRequiredRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendSuccesfullScenarioPhase3ContractRequiredRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 message SendFailedScenarioPhase1Request {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -57,6 +87,12 @@ message SendFailedScenarioPhase1Request {
 }
 
 message SendFailedScenarioPhase2Request {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
+message SendFailedScenarioPhase3Request {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderAccountId = 3;
@@ -197,9 +233,19 @@ service EmailSenderGrpcService {
 
     rpc SendSuccesfullScenarioPhase2(email_sender.SuccesfullScenarioPhase2Request) returns (email_sender.EmailSentResponse);
 
+    rpc SendSuccesfullScenarioPhase3(email_sender.SuccesfullScenarioPhase3Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase1KycRequired(email_sender.SendSuccesfullScenarioPhase1KycRequiredRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase1ContractRequired(email_sender.SendSuccesfullScenarioPhase1ContractRequiredRequest) returns (email_sender.EmailSentResponse);
+
     rpc SendSuccesfullScenarioPhase2KycRequired(email_sender.SendSuccesfullScenarioPhase2KycRequiredRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccesfullScenarioPhase2ContractRequired(email_sender.SendSuccesfullScenarioPhase2ContractRequiredRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase3KycRequired(email_sender.SendSuccesfullScenarioPhase3KycRequiredRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendSuccesfullScenarioPhase3ContractRequired(email_sender.SendSuccesfullScenarioPhase3ContractRequiredRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccessfulProofOfIdentity(email_sender.SendSuccessfulProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
     
@@ -241,6 +287,8 @@ service EmailSenderGrpcService {
     rpc SendFailedScenarioPhase1(email_sender.SendFailedScenarioPhase1Request) returns (email_sender.EmailSentResponse);
 
     rpc SendFailedScenarioPhase2(email_sender.SendFailedScenarioPhase2Request) returns (email_sender.EmailSentResponse);
+
+    rpc SendFailedScenarioPhase3(email_sender.SendFailedScenarioPhase3Request) returns (email_sender.EmailSentResponse);
 
     rpc SendPayoutSuccess(email_sender.SendPayoutSuccessRequest) returns (email_sender.EmailSentResponse);
 
