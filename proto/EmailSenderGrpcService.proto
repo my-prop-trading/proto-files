@@ -180,6 +180,18 @@ message SendPaymentReceivedRequest{
     string TraderPackagesName = 3;
 }
 
+message SendInstantPaymentReceivedKycRequired {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+}
+
+message SendInstantPaymentReceivedContractRequired {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+}
+
 message SendPaymentFailedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -281,6 +293,10 @@ service EmailSenderGrpcService {
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
     
     rpc SendPaymentReceived(email_sender.SendPaymentReceivedRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendInstantPaymentReceivedKycRequired(email_sender.SendInstantPaymentReceivedKycRequired) returns (email_sender.EmailSentResponse);
+
+    rpc SendInstantPaymentReceivedContractRequired(email_sender.SendInstantPaymentReceivedContractRequired) returns (email_sender.EmailSentResponse);
 
     rpc SendPaymentFailed(email_sender.SendPaymentFailedRequest) returns (email_sender.EmailSentResponse);
 
