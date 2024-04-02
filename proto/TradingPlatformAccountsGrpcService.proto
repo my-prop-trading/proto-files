@@ -1,14 +1,17 @@
 syntax = "proto3";
-package metatrader;
+package trading_platform_accounts;
 import "google/protobuf/empty.proto";
-import "MetatraderBroker.proto";
-import "MetatraderPlatform.proto";
 
-enum MetatraderAccountError {
-    Ok = 0;
-    InternalError = 1;
-    NoSuchMetatraderLogin = 2;
-    UserHasOpenPositions = 3;
+enum AccountType {
+    DEMO = 0;
+    LIVE = 1;
+}
+
+enum TradingPlatformAccountError {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+    NO_SUCH_ACCOUNT_ID = 2;
+    ACCOUNT_ID_HAS_OPEN_POSITIONS = 3;
 }
 
 message CreateAccountRequest {
@@ -20,33 +23,33 @@ message CreateAccountRequest {
     optional string Email = 6;
     optional string Country = 7;
     string ProcessId = 8;
-    metatrader_broker.BrokerModel Broker = 9;
-    metatrader_platfom.TradingPlatformModel Platform = 10;
+    AccountType AccountType = 9;
+    int32 PlatformId = 10;
 }
 
 message CreateAccountResponseBody {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
 }
 
 message CreateAccountResponse {
     oneof response {
-        metatrader.CreateAccountResponseBody Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
+        CreateAccountResponseBody Body = 1;
+        TradingPlatformAccountError Error = 2;
     } 
 }
 
 message ChangeAccountTradePasswordRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string NewPassword = 2;    
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;  
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;  
 }
 
 message ChangeAccountViewPasswordRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string NewPassword = 2;      
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message ChangeAccountPasswordResponse {
@@ -54,77 +57,64 @@ message ChangeAccountPasswordResponse {
 }
 
 message DepositAccountRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
-    metatrader_broker.BrokerModel Broker = 5;
-    metatrader_platfom.TradingPlatformModel Platform = 6;
+    AccountType AccountType = 5;
+    int32 PlatformId = 6;
 }
 
 message DepositAccountResponseBody {
-    int64 MetatraderOrderId = 1;
+    string OrderId = 1;
 }
 
 message DepositAccountResponse {
     oneof response {
-        metatrader.DepositAccountResponseBody Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
+        DepositAccountResponseBody Body = 1;
+        TradingPlatformAccountError Error = 2;
     } 
 }
 
 message WithdrawalAccountRequest{
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
     bool ErrorOnOpenPositions = 5;
-    metatrader_broker.BrokerModel Broker = 6;
-    metatrader_platfom.TradingPlatformModel Platform = 7;
+    AccountType AccountType = 6;
+    int32 PlatformId = 7;
 }
 
 message WithdrawalAccountResponseBody {
-    int64 MetatraderOrderId = 1;
+    string OrderId = 1;
 }
 
 message WithdrawalAccountResponse {
     oneof response {
-        metatrader.WithdrawalAccountResponseBody Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
+        WithdrawalAccountResponseBody Body = 1;
+        TradingPlatformAccountError Error = 2;
     } 
 }
 
 message GetAccountBalanceRequest {
-    int64 MetatraderLogin = 1;
-    metatrader_broker.BrokerModel Broker = 2;
-    metatrader_platfom.TradingPlatformModel Platform = 3;
+    string AccountId = 1;
+    AccountType AccountType = 2;
+    int32 PlatformId = 3;
 }
 
 message GetAccountBalanceResponse {
     oneof response {
-        metatrader.BalanceModel Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
+        BalanceModel Body = 1;
+        TradingPlatformAccountError Error = 2;
     } 
 }
 
-message CloseAccountRequest {
-    option deprecated = true;
-    int64 MetatraderLogin = 1;
-    string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
-}
-
-message CloseAccountResponse {
-    option deprecated = true;
-    bool Success = 1;
-}
-
 message EnableAccountRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message EnableAccountResponse {
@@ -132,10 +122,10 @@ message EnableAccountResponse {
 }
 
 message DisableAccountRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message DisableAccountResponse {
@@ -143,10 +133,10 @@ message DisableAccountResponse {
 }
 
 message DisableAccountTradeRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message DisableAccountTraderResponse {
@@ -154,10 +144,10 @@ message DisableAccountTraderResponse {
 }
 
 message EnableAccountTradeRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message EnableAccountTraderResponse {
@@ -166,13 +156,13 @@ message EnableAccountTraderResponse {
 
 
 message GetAccountsBalanceRequest {
-    metatrader_broker.BrokerModel Broker = 1;
-    metatrader_platfom.TradingPlatformModel Platform = 2;
+    AccountType AccountType = 1;
+    int32 PlatformId = 2;
 
 }
 
 message BalanceModel {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     //int64 Leverage = 2;        // user leverage
     double Balance = 3;        // balance+credit
     double Equity = 4;         // equity
@@ -181,10 +171,10 @@ message BalanceModel {
     double MarginLevel = 7;    // margin level
 }
 
-message GetAccountHistory {
-    int64 MetatraderLogin = 1;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+message GetAccountHistoryRequest {
+    string AccountId = 1;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 enum TradeType { 
@@ -199,8 +189,8 @@ enum TradeType {
 };
 
 message AccountTradeModel {
-    int64 Id = 1;            // order ticket
-    int64 MetatraderLogin = 2;            // owner's login
+    string Id = 1;            // order ticket
+    string AccountId = 2;            // owner's login
     optional string Symbol = 3;       // security
     int64 Digits = 4;           // security precision
     TradeType Type = 5;              // trade command
@@ -220,8 +210,8 @@ message AccountTradeModel {
 }
 
 message GetTimeRequest {
-    metatrader_broker.BrokerModel Broker = 1;
-    metatrader_platfom.TradingPlatformModel Platform = 2;
+    AccountType AccountType = 1;
+    int32 PlatformId = 2;
 }
 
 message GetTimeResponse {
@@ -236,15 +226,15 @@ message EndOfDayModel {
 }
 
 message CloseAccountPositionsRequest {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string ProcessId = 2;
-    metatrader_broker.BrokerModel Broker = 3;
-    metatrader_platfom.TradingPlatformModel Platform = 4;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
 }
 
 message CloseTradeModel {
-    int64 Id = 1;            
-    int64 MetatraderLogin = 2;          
+    string Id = 1;            
+    string AccountId = 2;          
     optional string Symbol = 3;       
     TradeType Type = 4;             
     double Lots = 5;           
@@ -252,77 +242,71 @@ message CloseTradeModel {
 }
 
 message CloseAccountPositionsResponseBody {
-    repeated metatrader.CloseTradeModel Trades = 1;
+    repeated CloseTradeModel Trades = 1;
 }
 
 message CloseAccountPositionsResponse {
     oneof response {
-        metatrader.CloseAccountPositionsResponseBody Body = 1;
-        metatrader.MetatraderAccountError Error = 2;
+        CloseAccountPositionsResponseBody Body = 1;
+        TradingPlatformAccountError Error = 2;
     } 
 }
 
 message CloseAllPositionsRequest {
     string ProcessId = 1;
-    metatrader_broker.BrokerModel Broker = 2;
-    metatrader_platfom.TradingPlatformModel Platform = 3;
+    AccountType AccountType = 2;
+    int32 PlatformId = 3;
 }
 
 message CloseAllPositionsModel {
-    int64 MetatraderLogin = 1;
+    string AccountId = 1;
     string TraderAccountId = 2;
 }
 
-service MetatraderAccountGrpcService {
-    rpc CreateAccount(metatrader.CreateAccountRequest) 
-    returns (metatrader.CreateAccountResponse);
+service TradingPlatformAccountsGrpcService {
+    rpc CreateAccount(CreateAccountRequest) 
+    returns (CreateAccountResponse);
 
-    rpc ChangeAccountTradePassword(metatrader.ChangeAccountTradePasswordRequest) 
-    returns (metatrader.ChangeAccountPasswordResponse);
+    rpc ChangeAccountTradePassword(ChangeAccountTradePasswordRequest) 
+    returns (ChangeAccountPasswordResponse);
 
-    rpc ChangeAccountViewPassword(metatrader.ChangeAccountViewPasswordRequest) 
-    returns (metatrader.ChangeAccountPasswordResponse);
+    rpc ChangeAccountViewPassword(ChangeAccountViewPasswordRequest) 
+    returns (ChangeAccountPasswordResponse);
 
-    rpc DepositAccount(metatrader.DepositAccountRequest) 
-    returns (metatrader.DepositAccountResponse);
+    rpc DepositAccount(DepositAccountRequest) 
+    returns (DepositAccountResponse);
 
-    rpc WithdrawalAccount(metatrader.WithdrawalAccountRequest) 
-    returns (metatrader.WithdrawalAccountResponse);
+    rpc WithdrawalAccount(WithdrawalAccountRequest) 
+    returns (WithdrawalAccountResponse);
 
-    rpc GetAccountBalance(metatrader.GetAccountBalanceRequest) 
-    returns (metatrader.GetAccountBalanceResponse);
+    rpc GetAccountBalance(GetAccountBalanceRequest) 
+    returns (GetAccountBalanceResponse);
 
-    rpc CloseAccount(metatrader.CloseAccountRequest) 
-    returns (metatrader.CloseAccountResponse)
-    {
-        option deprecated = true;
-    };
+    rpc EnableAccount(EnableAccountRequest) 
+    returns (EnableAccountResponse);
 
-    rpc EnableAccount(metatrader.EnableAccountRequest) 
-    returns (metatrader.EnableAccountResponse);
+    rpc DisableAccount(DisableAccountRequest) 
+    returns (DisableAccountResponse);
 
-    rpc DisableAccount(metatrader.DisableAccountRequest) 
-    returns (metatrader.DisableAccountResponse);
+    rpc DisableAccountTrade(DisableAccountTradeRequest) 
+    returns (DisableAccountTraderResponse);
 
-    rpc DisableAccountTrade(metatrader.DisableAccountTradeRequest) 
-    returns (metatrader.DisableAccountTraderResponse);
+    rpc EnableAccountTrade(EnableAccountTradeRequest) 
+    returns (EnableAccountTraderResponse);
 
-    rpc EnableAccountTrade(metatrader.EnableAccountTradeRequest) 
-    returns (metatrader.EnableAccountTraderResponse);
+    rpc GetAccountsBalance(GetAccountsBalanceRequest) 
+    returns (stream BalanceModel);
 
-    rpc GetAccountsBalance(metatrader.GetAccountsBalanceRequest) 
-    returns (stream metatrader.BalanceModel);
-
-    rpc GetAccountHistory(metatrader.GetAccountHistory) 
-    returns (stream metatrader.AccountTradeModel);
+    rpc GetAccountHistory(GetAccountHistoryRequest) 
+    returns (stream AccountTradeModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
-    rpc GetTime(metatrader.GetTimeRequest) returns (metatrader.GetTimeResponse);
+    rpc GetTime(GetTimeRequest) returns (GetTimeResponse);
 
-    rpc CloseAccountPositions(metatrader.CloseAccountPositionsRequest) 
-    returns (metatrader.CloseAccountPositionsResponse);
+    rpc CloseAccountPositions(CloseAccountPositionsRequest) 
+    returns (CloseAccountPositionsResponse);
 
-    rpc CloseAllPositions(metatrader.CloseAllPositionsRequest) 
-    returns (stream metatrader.CloseAllPositionsModel);
+    rpc CloseAllPositions(CloseAllPositionsRequest) 
+    returns (stream CloseAllPositionsModel);
 }
