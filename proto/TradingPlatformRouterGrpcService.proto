@@ -270,22 +270,18 @@ message PlatformLinks {
     optional string Web = 5;
 }
 
-message ProviderShortInfoModel {
-    int32 ProviderId = 1;
-    string ProviderName = 2;
-    string ProviderIconUrl = 3;
-    bool Enabled = 4;
-    repeated PlatformModel Platforms = 5;
-}
-  
-message PlatformModel {
+message PlatformInfoModel {
     int32 PlatformId = 1;
     string PlatformName = 2;
-    optional PlatformLinks PlatformLinks = 3;
+    optional string PlatformIconUrl = 3;
+    optional PlatformLinks PlatformLinks = 4;
+    optional string BrokerName = 5;
+    optional string BrokerIconUrl = 6;
+    bool Enabled = 7;
 }
 
 message GetAllResponse {
-    repeated ProviderShortInfoModel Items = 1;
+    repeated PlatformInfoModel Items = 1;
 }
 
 message ResolveTradingPlatformByIdRequest {
