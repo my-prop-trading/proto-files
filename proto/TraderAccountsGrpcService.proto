@@ -177,6 +177,14 @@ message GetTraderAccountConditionsByIdResponse {
   }
 }
 
+message GetTraderAccountsByAggregatedIRequest {
+  string AggregatedId = 1;
+}
+
+message GetTraderAccountsByAggregatedIResponse {
+  repeated trader_accounts.TraderAccount Items = 1;
+}
+
 message GetTraderAccountConditionsByIdResponseBody {
   trader_packages.TraderPackage TraderPackage = 1;
 }
@@ -242,6 +250,8 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
     rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
+
+    rpc GetTraderAccountsByAggregatedId(trader_accounts.GetTraderAccountsByAggregatedIRequest) returns (trader_accounts.GetTraderAccountsByAggregatedIResponse);
 
     rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
     rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
