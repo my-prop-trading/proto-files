@@ -30,6 +30,7 @@ message Order {
   string DiscountCode = 15;
   string TraderPackageGroup = 16;
   string TraderPackageGroupName = 17;
+  string TraderAccountAggregatedId = 18;
 }
 
 message CreateTraderAccountOrderRequest {
