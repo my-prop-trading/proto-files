@@ -1,5 +1,5 @@
 syntax = "proto3";
-package trading_platform_accounts;
+package trading_platform_router;
 import "google/protobuf/empty.proto";
 
 enum AccountType {
@@ -7,7 +7,7 @@ enum AccountType {
     LIVE = 1;
 }
 
-enum TradingPlatformAccountError {
+enum TradingPlatformRouterError {
     OK = 0;
     INTERNAL_ERROR = 1;
     NO_SUCH_ACCOUNT_ID = 2;
@@ -34,7 +34,7 @@ message CreateAccountResponseBody {
 message CreateAccountResponse {
     oneof response {
         CreateAccountResponseBody Body = 1;
-        TradingPlatformAccountError Error = 2;
+        TradingPlatformRouterError Error = 2;
     } 
 }
 
@@ -72,7 +72,7 @@ message DepositAccountResponseBody {
 message DepositAccountResponse {
     oneof response {
         DepositAccountResponseBody Body = 1;
-        TradingPlatformAccountError Error = 2;
+        TradingPlatformRouterError Error = 2;
     } 
 }
 
@@ -93,7 +93,7 @@ message WithdrawalAccountResponseBody {
 message WithdrawalAccountResponse {
     oneof response {
         WithdrawalAccountResponseBody Body = 1;
-        TradingPlatformAccountError Error = 2;
+        TradingPlatformRouterError Error = 2;
     } 
 }
 
@@ -106,7 +106,7 @@ message GetAccountBalanceRequest {
 message GetAccountBalanceResponse {
     oneof response {
         BalanceModel Body = 1;
-        TradingPlatformAccountError Error = 2;
+        TradingPlatformRouterError Error = 2;
     } 
 }
 
@@ -153,7 +153,6 @@ message EnableAccountTradeRequest {
 message EnableAccountTraderResponse {
     bool Success = 1;
 }
-
 
 message GetAccountsBalanceRequest {
     AccountType AccountType = 1;
@@ -248,7 +247,7 @@ message CloseAccountPositionsResponseBody {
 message CloseAccountPositionsResponse {
     oneof response {
         CloseAccountPositionsResponseBody Body = 1;
-        TradingPlatformAccountError Error = 2;
+        TradingPlatformRouterError Error = 2;
     } 
 }
 
@@ -263,7 +262,7 @@ message CloseAllPositionsModel {
     string TraderAccountId = 2;
 }
 
-service TradingPlatformAccountsGrpcService {
+service TradingPlatformRouterGrpcService {
     rpc CreateAccount(CreateAccountRequest) 
     returns (CreateAccountResponse);
 
@@ -309,4 +308,6 @@ service TradingPlatformAccountsGrpcService {
 
     rpc CloseAllPositions(CloseAllPositionsRequest) 
     returns (stream CloseAllPositionsModel);
+
+    
 }

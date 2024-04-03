@@ -1,0 +1,311 @@
+syntax = "proto3";
+package trading_platform_bridge;
+import "google/protobuf/empty.proto";
+
+enum AccountType {
+    DEMO = 0;
+    LIVE = 1;
+}
+
+enum TradingPlatformBridgeError {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+    NO_SUCH_ACCOUNT_ID = 2;
+    ACCOUNT_ID_HAS_OPEN_POSITIONS = 3;
+}
+
+message CreateAccountRequest {
+    string FullName = 1;
+    string TradePassword = 2;      
+    string ViewPassword = 3; 
+    string TraderAccountId = 4;  
+    int64 Leverage = 5;  
+    optional string Email = 6;
+    optional string Country = 7;
+    string ProcessId = 8;
+    AccountType AccountType = 9;
+    int32 PlatformId = 10;
+}
+
+message CreateAccountResponseBody {
+    string AccountId = 1;
+}
+
+message CreateAccountResponse {
+    oneof response {
+        CreateAccountResponseBody Body = 1;
+        TradingPlatformBridgeError Error = 2;
+    } 
+}
+
+message ChangeAccountTradePasswordRequest {
+    string AccountId = 1;
+    string NewPassword = 2;    
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;  
+}
+
+message ChangeAccountViewPasswordRequest {
+    string AccountId = 1;
+    string NewPassword = 2;      
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message ChangeAccountPasswordResponse {
+    bool Success = 1;
+}
+
+message DepositAccountRequest {
+    string AccountId = 1;
+    double Amount = 2;
+    string Comment = 3;
+    string ProcessId = 4;
+    AccountType AccountType = 5;
+    int32 PlatformId = 6;
+}
+
+message DepositAccountResponseBody {
+    string OrderId = 1;
+}
+
+message DepositAccountResponse {
+    oneof response {
+        DepositAccountResponseBody Body = 1;
+        TradingPlatformBridgeError Error = 2;
+    } 
+}
+
+message WithdrawalAccountRequest{
+    string AccountId = 1;
+    double Amount = 2;
+    string Comment = 3;
+    string ProcessId = 4;
+    bool ErrorOnOpenPositions = 5;
+    AccountType AccountType = 6;
+    int32 PlatformId = 7;
+}
+
+message WithdrawalAccountResponseBody {
+    string OrderId = 1;
+}
+
+message WithdrawalAccountResponse {
+    oneof response {
+        WithdrawalAccountResponseBody Body = 1;
+        TradingPlatformBridgeError Error = 2;
+    } 
+}
+
+message GetAccountBalanceRequest {
+    string AccountId = 1;
+    AccountType AccountType = 2;
+    int32 PlatformId = 3;
+}
+
+message GetAccountBalanceResponse {
+    oneof response {
+        BalanceModel Body = 1;
+        TradingPlatformBridgeError Error = 2;
+    } 
+}
+
+message EnableAccountRequest {
+    string AccountId = 1;
+    string ProcessId = 2;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message EnableAccountResponse {
+    bool Success = 1;
+}
+
+message DisableAccountRequest {
+    string AccountId = 1;
+    string ProcessId = 2;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message DisableAccountResponse {
+    bool Success = 1;
+}
+
+message DisableAccountTradeRequest {
+    string AccountId = 1;
+    string ProcessId = 2;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message DisableAccountTraderResponse {
+    bool Success = 1;
+}
+
+message EnableAccountTradeRequest {
+    string AccountId = 1;
+    string ProcessId = 2;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message EnableAccountTraderResponse {
+    bool Success = 1;
+}
+
+message GetAccountsBalanceRequest {
+    AccountType AccountType = 1;
+    int32 PlatformId = 2;
+
+}
+
+message BalanceModel {
+    string AccountId = 1;
+    //int64 Leverage = 2;        // user leverage
+    double Balance = 3;        // balance+credit
+    double Equity = 4;         // equity
+    double Margin = 5;         // margin requirements
+    double MarginFree = 6;     // free margin
+    double MarginLevel = 7;    // margin level
+}
+
+message GetAccountHistoryRequest {
+    string AccountId = 1;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+enum TradeType { 
+    Buy = 0; 
+    Sell = 1; 
+    BuyLimit = 2; 
+    SellLimit = 3; 
+    BuyStop = 4; 
+    SellStop = 5; 
+    Balance = 6; 
+    Credit = 7; 
+};
+
+message AccountTradeModel {
+    string Id = 1;            // order ticket
+    string AccountId = 2;            // owner's login
+    optional string Symbol = 3;       // security
+    int64 Digits = 4;           // security precision
+    TradeType Type = 5;              // trade command
+    double Lots = 6;           // volume
+    int64 OpenTime = 7;        // open time
+    double OpenPrice = 8;       // open price
+    double Sl = 9;
+    double Tp = 10;            // stop loss & take profit
+    optional int64 CloseTime = 11;       // close time
+    double Fee = 12;             // commission
+    double Swap = 13;            // order swaps
+    double ClosePrice = 14;      // close price
+    double Profit = 15;           // profit
+    double Taxes = 16;            // taxes
+    string Comment = 17;          // comment
+    int64 Timestamp = 18;        // timestamp
+}
+
+message GetTimeRequest {
+    AccountType AccountType = 1;
+    int32 PlatformId = 2;
+}
+
+message GetTimeResponse {
+    int64 ServerTime = 1;
+    int64 GmtTimeZone = 2;
+    EndOfDayModel EndOfDay = 3;
+}
+
+message EndOfDayModel {
+    int64 Hour = 1;
+    int64 Minute = 2;
+}
+
+message CloseAccountPositionsRequest {
+    string AccountId = 1;
+    string ProcessId = 2;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
+message CloseTradeModel {
+    string Id = 1;            
+    string AccountId = 2;          
+    optional string Symbol = 3;       
+    TradeType Type = 4;             
+    double Lots = 5;           
+    string Comment = 6;          
+}
+
+message CloseAccountPositionsResponseBody {
+    repeated CloseTradeModel Trades = 1;
+}
+
+message CloseAccountPositionsResponse {
+    oneof response {
+        CloseAccountPositionsResponseBody Body = 1;
+        TradingPlatformBridgeError Error = 2;
+    } 
+}
+
+message CloseAllPositionsRequest {
+    string ProcessId = 1;
+    AccountType AccountType = 2;
+    int32 PlatformId = 3;
+}
+
+message CloseAllPositionsModel {
+    string AccountId = 1;
+    string TraderAccountId = 2;
+}
+
+service TradingPlatformBridgeGrpcService {
+    rpc CreateAccount(CreateAccountRequest) 
+    returns (CreateAccountResponse);
+
+    rpc ChangeAccountTradePassword(ChangeAccountTradePasswordRequest) 
+    returns (ChangeAccountPasswordResponse);
+
+    rpc ChangeAccountViewPassword(ChangeAccountViewPasswordRequest) 
+    returns (ChangeAccountPasswordResponse);
+
+    rpc DepositAccount(DepositAccountRequest) 
+    returns (DepositAccountResponse);
+
+    rpc WithdrawalAccount(WithdrawalAccountRequest) 
+    returns (WithdrawalAccountResponse);
+
+    rpc GetAccountBalance(GetAccountBalanceRequest) 
+    returns (GetAccountBalanceResponse);
+
+    rpc EnableAccount(EnableAccountRequest) 
+    returns (EnableAccountResponse);
+
+    rpc DisableAccount(DisableAccountRequest) 
+    returns (DisableAccountResponse);
+
+    rpc DisableAccountTrade(DisableAccountTradeRequest) 
+    returns (DisableAccountTraderResponse);
+
+    rpc EnableAccountTrade(EnableAccountTradeRequest) 
+    returns (EnableAccountTraderResponse);
+
+    rpc GetAccountsBalance(GetAccountsBalanceRequest) 
+    returns (stream BalanceModel);
+
+    rpc GetAccountHistory(GetAccountHistoryRequest) 
+    returns (stream AccountTradeModel);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    rpc GetTime(GetTimeRequest) returns (GetTimeResponse);
+
+    rpc CloseAccountPositions(CloseAccountPositionsRequest) 
+    returns (CloseAccountPositionsResponse);
+
+    rpc CloseAllPositions(CloseAllPositionsRequest) 
+    returns (stream CloseAllPositionsModel);
+}
