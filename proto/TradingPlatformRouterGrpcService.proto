@@ -289,9 +289,7 @@ message ResolveTradingPlatformByIdRequest {
 }
 
 message ResolveTradingPlatformByIdResponse {
-    int32 PlatformId = 1;
-    string PlatformName = 2;
-    string ProviderName = 3;
+    PlatformInfoModel Platform = 1;
 }
 
 service TradingPlatformRouterGrpcService {
