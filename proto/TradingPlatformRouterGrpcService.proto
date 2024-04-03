@@ -261,8 +261,45 @@ message CloseAllPositionsModel {
     string AccountId = 1;
     string TraderAccountId = 2;
 }
+//---
+message PlatformLinks {
+    optional string Windows = 1;
+    optional string Mac = 2;
+    optional string Ios = 3;
+    optional string Android = 4;
+    optional string Web = 5;
+}
+
+message ProviderShortInfoModel {
+    int32 ProviderId = 1;
+    string ProviderName = 2;
+    string ProviderIconUrl = 3;
+    bool Enabled = 4;
+    repeated PlatformModel Platforms = 5;
+}
+  
+message PlatformModel {
+    int32 PlatformId = 1;
+    string PlatformName = 2;
+    optional PlatformLinks PlatformLinks = 3;
+}
+
+message GetAllResponse {
+    repeated ProviderShortInfoModel Items = 1;
+}
+
+message ResolveTradingPlatformByIdRequest {
+    int32 TradingPlatformId = 1;
+}
+
+message ResolveTradingPlatformByIdResponse {
+    int32 PlatformId = 1;
+    string PlatformName = 2;
+    string ProviderName = 3;
+}
 
 service TradingPlatformRouterGrpcService {
+    //Bridge requests
     rpc CreateAccount(CreateAccountRequest) 
     returns (CreateAccountResponse);
 
@@ -299,8 +336,6 @@ service TradingPlatformRouterGrpcService {
     rpc GetAccountHistory(GetAccountHistoryRequest) 
     returns (stream AccountTradeModel);
 
-    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
-
     rpc GetTime(GetTimeRequest) returns (GetTimeResponse);
 
     rpc CloseAccountPositions(CloseAccountPositionsRequest) 
@@ -308,6 +343,15 @@ service TradingPlatformRouterGrpcService {
 
     rpc CloseAllPositions(CloseAllPositionsRequest) 
     returns (stream CloseAllPositionsModel);
-
     
+    // Platform configurations
+    rpc GetAll(google.protobuf.Empty) 
+    returns (GetAllResponse);
+
+    rpc ResolveTradingPlatformById(ResolveTradingPlatformByIdRequest) 
+    returns (ResolveTradingPlatformByIdResponse);
+
+    // Ping
+    rpc Ping(google.protobuf.Empty) 
+    returns (google.protobuf.Empty);
 }
