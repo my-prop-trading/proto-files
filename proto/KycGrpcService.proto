@@ -111,10 +111,10 @@ enum WaitKycStatus {
     WKS_RETRY = 4;
 } 
 
-message ContractModel
-{
+message ContractModel {
     string ContractId = 1;
     kyc.ContractSignStatus ContractSignStatus = 2;
+    string TraderAccountAggregatedId = 3;
 }
 
 enum ContractSignStatus
