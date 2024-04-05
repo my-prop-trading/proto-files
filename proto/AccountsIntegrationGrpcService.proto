@@ -1,0 +1,81 @@
+syntax = "proto3";
+package accounts_integration;
+import "google/protobuf/empty.proto";
+
+enum AccountsIntegrationOperationResult{
+    Ok = 0;
+    AccountNotFound = 1;
+    TraderNotFound = 2;
+    NotEnoughBalance = 3;
+    ProcessIdDuplicate = 4;
+    InvalidTradingGroup = 5;
+}
+
+enum AccountsIntegrationUpdateAccountBalanceReason{
+    BalanceCorrection = 0;
+    Deposit = 1;
+    Withdrawal = 2;
+}
+
+message AccountsIntegrationClientAccountGrpcModel{
+    string TraderId = 1;
+    string AccountId = 2;
+    string Currency = 3;
+    double Balance = 4;
+    string TradingGroupId = 5;
+    uint64 CreatedAt = 6;
+    uint64 UpdatedAt = 7;
+    bool TradingDisabled = 8;
+}
+
+message AccountsIntegrationUpdateAccountBalanceGrpcRequest{
+    string TraderId = 1;
+    string AccountId = 2;
+    double Delta = 3;
+    string Comment = 4;
+    string ProcessId = 5;
+    bool AllowNegativeBalance = 6;
+    AccountsIntegrationUpdateAccountBalanceReason Reason = 7;
+    optional string ReferenceTransactionId = 8;
+}
+
+message AccountsIntegrationAccountGrpcResponse{
+    AccountsIntegrationOperationResult Result = 1;
+    AccountsIntegrationClientAccountGrpcModel Account = 2;
+}
+
+message AccountsIntegrationAccountUpdateBalanceGrpcResponse{
+    accounts_integration.AccountsIntegrationOperationResult Result = 1;
+    accounts_integration.AccountsIntegrationAccountBalanceUpdateInfoGrpc UpdateBalanceInfo = 2;
+}
+
+message AccountsIntegrationAccountBalanceUpdateInfoGrpc{
+    string OperationId = 1;
+    accounts_integration.AccountsIntegrationClientAccountGrpcModel Account = 2;
+}
+
+message AccountsIntegrationCreateClientAccountGrpcRequest{
+    string TraderId = 1;
+    string Currency = 2;
+    string ProcessId = 3;
+    optional string TradingGroupId = 4;
+}
+
+message AccountsIntegrationGetClientAccountsGrpcRequest{
+    string TraderId = 1;
+}
+
+message AccountsIntegrationUpdateAccountTradingDisabledGrpcRequest{
+    string TraderId = 1;
+    string AccountId = 2;
+    bool TradingDisabled = 3;
+    string ProcessId = 4;
+}
+
+service AccountsIntegrationGrpcService {
+    rpc CreateClientAccount(AccountsIntegrationCreateClientAccountGrpcRequest) returns (AccountsIntegrationAccountGrpcResponse);
+    rpc UpdateClientAccountBalance(AccountsIntegrationUpdateAccountBalanceGrpcRequest) returns (AccountsIntegrationAccountUpdateBalanceGrpcResponse);
+    rpc GetClientAccounts(AccountsIntegrationGetClientAccountsGrpcRequest) returns (stream AccountsIntegrationClientAccountGrpcModel);
+    rpc UpdateAccountTradingDisabled(AccountsIntegrationUpdateAccountTradingDisabledGrpcRequest) returns (AccountsIntegrationAccountGrpcResponse);
+    rpc Ping(google.protobuf.Empty) returns(google.protobuf.Empty);
+}
