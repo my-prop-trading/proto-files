@@ -139,7 +139,7 @@ message DisableAccountTradeRequest {
     int32 PlatformId = 4;
 }
 
-message DisableAccountTraderResponse {
+message DisableAccountTradeResponse {
     bool Success = 1;
 }
 
@@ -150,7 +150,7 @@ message EnableAccountTradeRequest {
     int32 PlatformId = 4;
 }
 
-message EnableAccountTraderResponse {
+message EnableAccountTradeResponse {
     bool Success = 1;
 }
 
@@ -288,10 +288,10 @@ service TradingPlatformBridgeGrpcService {
     returns (DisableAccountResponse);
 
     rpc DisableAccountTrade(DisableAccountTradeRequest) 
-    returns (DisableAccountTraderResponse);
+    returns (DisableAccountTradeResponse);
 
     rpc EnableAccountTrade(EnableAccountTradeRequest) 
-    returns (EnableAccountTraderResponse);
+    returns (EnableAccountTradeResponse);
 
     rpc GetAccountsBalance(GetAccountsBalanceRequest) 
     returns (stream BalanceModel);
