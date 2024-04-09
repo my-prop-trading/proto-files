@@ -285,11 +285,11 @@ message GetAllResponse {
 }
 
 message ResolveTradingPlatformByIdRequest {
-    int32 TradingPlatformId = 1;
+    int32 PlatformId = 1;
 }
 
 message ResolveTradingPlatformByIdResponse {
-    PlatformInfoModel Platform = 1;
+    PlatformInfoModel PlatformInfo = 1;
 }
 
 service TradingPlatformRouterGrpcService {
@@ -346,6 +346,5 @@ service TradingPlatformRouterGrpcService {
     returns (ResolveTradingPlatformByIdResponse);
 
     // Ping
-    rpc Ping(google.protobuf.Empty) 
-    returns (google.protobuf.Empty);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
