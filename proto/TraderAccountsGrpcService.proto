@@ -1,16 +1,13 @@
 syntax = "proto3";
 package trader_accounts;
 import "google/protobuf/empty.proto";
-import "MetatraderBroker.proto";
-import "MetatraderPlatform.proto";
 import "TraderPackagesGrpcService.proto";
-
 
 message TraderAccount {
     string Id = 1;
     string Title = 2;
     int32 Phase = 3;
-    metatrader_platfom.TradingPlatformModel TradingPlatformModel = 4;
+    int32 TradingPlatformModel = 4;
     double Balance = 5;
     optional int64 StartDate = 6;
     optional int64 EndDate = 7;
@@ -34,9 +31,9 @@ message TraderAccount {
 }
 
 message TraderPlatformCredentials {
-  metatrader_broker.BrokerModel Broker = 1;
+  TraderAccountTypeModel AccountType = 1;
 
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
+  int32 TradingPlatform = 2;
 
   string Windows = 3;
 
@@ -79,8 +76,8 @@ message GetByClientIdResponse{
 
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
-    metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
-    metatrader_broker.BrokerModel BrokerModel = 3;
+    int32 TradingPlatform = 2;
+    TraderAccountTypeModel AccountType = 3;
     // NOT USED
     //string FirstName = 4;
     //string LastName = 5;
@@ -128,8 +125,8 @@ message GetTraderAccountCredentialsResponseBody {
 
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated int64 Logins = 1;
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
-  metatrader_broker.BrokerModel Broker = 3;
+  int32 TradingPlatform = 2;
+  TraderAccountTypeModel AccountType = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
@@ -143,8 +140,8 @@ message LoginTradAccId {
 
 message GetLoginByTraderAccIdRequest {
   repeated string TraderAccId = 1;
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
-  metatrader_broker.BrokerModel Broker = 3;
+  int32 TradingPlatform = 2;
+  TraderAccountTypeModel AccountType = 3;
 }
 
 message GetLoginByTraderAccIdResponse {
