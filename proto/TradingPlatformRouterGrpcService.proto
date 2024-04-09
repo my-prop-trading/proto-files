@@ -10,8 +10,8 @@ enum AccountType {
 enum TradingPlatformRouterError {
     OK = 0;
     INTERNAL_ERROR = 1;
-    NO_SUCH_ACCOUNT_ID = 2;
-    ACCOUNT_ID_HAS_OPEN_POSITIONS = 3;
+    NO_SUCH_ACCOUNT = 2;
+    ACCOUNT_HAS_OPEN_POSITIONS = 3;
 }
 
 message CreateAccountRequest {
@@ -28,7 +28,7 @@ message CreateAccountRequest {
 }
 
 message CreateAccountResponseBody {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
 }
 
 message CreateAccountResponse {
@@ -39,14 +39,14 @@ message CreateAccountResponse {
 }
 
 message ChangeAccountTradePasswordRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string NewPassword = 2;    
     AccountType AccountType = 3;
     int32 PlatformId = 4;  
 }
 
 message ChangeAccountViewPasswordRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string NewPassword = 2;      
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -57,7 +57,7 @@ message ChangeAccountPasswordResponse {
 }
 
 message DepositAccountRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
@@ -77,7 +77,7 @@ message DepositAccountResponse {
 }
 
 message WithdrawalAccountRequest{
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     double Amount = 2;
     string Comment = 3;
     string ProcessId = 4;
@@ -98,7 +98,7 @@ message WithdrawalAccountResponse {
 }
 
 message GetAccountBalanceRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     AccountType AccountType = 2;
     int32 PlatformId = 3;
 }
@@ -111,7 +111,7 @@ message GetAccountBalanceResponse {
 }
 
 message EnableAccountRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -122,7 +122,7 @@ message EnableAccountResponse {
 }
 
 message DisableAccountRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -133,7 +133,7 @@ message DisableAccountResponse {
 }
 
 message DisableAccountTradeRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -144,7 +144,7 @@ message DisableAccountTradeResponse {
 }
 
 message EnableAccountTradeRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -161,19 +161,18 @@ message GetAccountsBalanceRequest {
 }
 
 message BalanceModel {
-    string AccountId = 1;
-    //int64 Leverage = 2;        // user leverage
-    double Balance = 3;        // balance+credit
-    double Equity = 4;         // equity
-    double Margin = 5;         // margin requirements
-    double MarginFree = 6;     // free margin
-    double MarginLevel = 7;    // margin level
+    string PlatformAccountId = 1;
+    double Balance = 2;        // balance+credit
+    double Equity = 3;         // equity
+    double Margin = 4;         // margin requirements
+    double MarginFree = 5;     // free margin
+    double MarginLevel = 6;    // margin level
 }
 
 message GetAccountHistoryRequest {
-    string AccountId = 1;
-    AccountType AccountType = 3;
-    int32 PlatformId = 4;
+    string PlatformAccountId = 1;
+    AccountType AccountType = 2;
+    int32 PlatformId = 3;
 }
 
 enum TradeType { 
@@ -189,7 +188,7 @@ enum TradeType {
 
 message AccountTradeModel {
     string Id = 1;            // order ticket
-    string AccountId = 2;            // owner's login
+    string PlatformAccountId = 2;            // owner's login
     optional string Symbol = 3;       // security
     int64 Digits = 4;           // security precision
     TradeType Type = 5;              // trade command
@@ -225,7 +224,7 @@ message EndOfDayModel {
 }
 
 message CloseAccountPositionsRequest {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
@@ -233,7 +232,7 @@ message CloseAccountPositionsRequest {
 
 message CloseTradeModel {
     string Id = 1;            
-    string AccountId = 2;          
+    string PlatformAccountId = 2;          
     optional string Symbol = 3;       
     TradeType Type = 4;             
     double Lots = 5;           
@@ -258,7 +257,7 @@ message CloseAllPositionsRequest {
 }
 
 message CloseAllPositionsModel {
-    string AccountId = 1;
+    string PlatformAccountId = 1;
     string TraderAccountId = 2;
 }
 //---
