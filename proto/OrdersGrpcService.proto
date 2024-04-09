@@ -21,8 +21,8 @@ message Order {
   string ClientId = 6;
   string TradingPackageTitle = 7; // Trading Package title
   double AccountBalance = 8; // Account balance in package
-  metatrader_broker.BrokerModel Broker = 9; // Broker selected for package
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 10; // Trading platform selected for package
+  int32 Broker = 9; // Broker selected for package
+  int32 TradingPlatform = 10; // Trading platform selected for package
   optional int64 PayBy = 11; 
   string BrandId = 12; 
   string PaymentUrl = 13;
@@ -35,8 +35,8 @@ message Order {
 
 message CreateTraderAccountOrderRequest {
   string TradingPackageId = 1;
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
-  metatrader_broker.BrokerModel BrokerModel = 3;
+  int32 TradingPlatform = 2;
+  int32 BrokerModel = 3;
   string FirstName = 4;
   string LastName = 5;
   string City = 6;
@@ -66,8 +66,8 @@ message CreateTraderAccountOrderResponseBody {
 
 message PreviewOrderDiscountRequest {
   string TradingPackageId = 1;
-  metatrader_platfom.TradingPlatformModel TradingPlatform = 2;
-  metatrader_broker.BrokerModel BrokerModel = 3;
+  int32 TradingPlatform = 2;
+  int32 BrokerModel = 3;
   optional string DiscountCode = 4;
   string ProcessId = 5;
   string ClientId = 6;
@@ -197,8 +197,8 @@ message Payin {
     string ClientId = 3;         // Client ID, can be used as a link to client profile
     string TradingPackageTitle = 4; // Trading Package title
     double AccountBalance = 5; // Account balance in package
-    metatrader_broker.BrokerModel Broker = 6; // Broker selected for package
-    metatrader_platfom.TradingPlatformModel TradingPlatform = 7; // Trading platform selected for package
+    int32 Broker = 6; // Broker selected for package
+    int32 TradingPlatform = 7; // Trading platform selected for package
     int64 PaidAt= 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
     double Price = 9; // Price
     string Currency = 10; // Currency

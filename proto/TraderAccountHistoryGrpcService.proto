@@ -1,8 +1,6 @@
 syntax = "proto3";
 package trader_account_history;
 import "google/protobuf/empty.proto";
-import "MetatraderBroker.proto";
-import "MetatraderPlatform.proto";
 
 message TraderAccountHistoryLogsRequest {
     repeated TraderAccountUpdateLog TraderAccountUpdateLogs = 1;
@@ -26,8 +24,8 @@ message TraderAccountUpdateLog {
     int32 ActionNumber = 2;
     string ClientId = 3;
     int64 CreatedDate = 4; // Assuming microseconds as int64
-    metatrader_broker.BrokerModel Broker = 5;
-    metatrader_platfom.TradingPlatformModel TradingPlatform = 6;
+    int32 Broker = 5;
+    int32 TradingPlatform = 6;
     trader_account_history.UpdateLogDetails EventInfo = 7;
     int32 OrderInActionNumber = 8;
 }
