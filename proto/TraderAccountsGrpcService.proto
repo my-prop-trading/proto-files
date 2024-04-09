@@ -3,6 +3,7 @@ package trader_accounts;
 import "google/protobuf/empty.proto";
 import "TraderPackagesGrpcService.proto";
 
+
 message TraderAccount {
     string Id = 1;
     string Title = 2;
@@ -31,7 +32,7 @@ message TraderAccount {
 }
 
 message TraderPlatformCredentials {
-  TraderAccountTypeModel AccountType = 1;
+  int32 Broker = 1;
 
   int32 TradingPlatform = 2;
 
@@ -77,7 +78,7 @@ message GetByClientIdResponse{
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
     int32 TradingPlatform = 2;
-    TraderAccountTypeModel AccountType = 3;
+    int32 BrokerModel = 3;
     // NOT USED
     //string FirstName = 4;
     //string LastName = 5;
@@ -126,7 +127,7 @@ message GetTraderAccountCredentialsResponseBody {
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated int64 Logins = 1;
   int32 TradingPlatform = 2;
-  TraderAccountTypeModel AccountType = 3;
+  int32 Broker = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
@@ -141,7 +142,7 @@ message LoginTradAccId {
 message GetLoginByTraderAccIdRequest {
   repeated string TraderAccId = 1;
   int32 TradingPlatform = 2;
-  TraderAccountTypeModel AccountType = 3;
+  int32 Broker = 3;
 }
 
 message GetLoginByTraderAccIdResponse {
