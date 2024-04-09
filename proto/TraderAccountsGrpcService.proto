@@ -120,12 +120,12 @@ message GetTraderAccountCredentialsResponseBody {
   string AccountId = 2;
   string TradePassword = 3;      
   string ViewPassword = 4; 
-  int64 Login = 5;
+  string Login = 5;
   string Server = 6;
 }
 
 message GetTraderAccIdByCredentialsLoginRequest {
-  repeated int64 Logins = 1;
+  repeated string Logins = 1;
   int32 TradingPlatform = 2;
   int32 Broker = 3;
 }
@@ -135,7 +135,7 @@ message GetTraderAccIdByCredentialsLoginResponse {
 }
 
 message LoginTradAccId {
-  int64 Login = 1;
+  string Login = 1;
   string TraderAccId = 2;
 }
 
