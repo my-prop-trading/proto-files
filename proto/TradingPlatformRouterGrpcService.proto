@@ -277,6 +277,7 @@ message PlatformInfoModel {
     optional string BrokerName = 5;
     optional string BrokerIconUrl = 6;
     bool Enabled = 7;
+    string PlatformUrl = 8;
 }
 
 message GetAllResponse {
