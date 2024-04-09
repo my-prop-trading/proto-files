@@ -21,8 +21,8 @@ message EodModel {
 
 message CreateEodSchedulerResponse {
     oneof response {
-        metatrader_eod.CreateEodSchedulerResponseBody Body = 1;
-        metatrader_eod.EodError Error = 2;
+        CreateEodSchedulerResponseBody Body = 1;
+        EodError Error = 2;
     } 
 }
 
@@ -31,7 +31,8 @@ message CreateEodSchedulerResponseBody {
 }
 
 service MetatraderEodGrpcService {
-    rpc CreateEodScheduler(metatrader_eod.CreateEodSchedulerRequest) returns (metatrader_eod.CreateEodSchedulerResponse);
+    rpc CreateEodScheduler(metatrader_eod.CreateEodSchedulerRequest) 
+    returns (CreateEodSchedulerResponse);
  
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
