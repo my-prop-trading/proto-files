@@ -1,8 +1,11 @@
 syntax = "proto3";
 package metatrader_eod;
-import "MetatraderBroker.proto";
-import "MetatraderPlatform.proto";
 import "google/protobuf/empty.proto";
+
+enum AccountType {
+    DEMO = 0;
+    LIVE = 1;
+}
 
 enum EodError {
     OK = 0;
@@ -15,8 +18,8 @@ message CreateEodSchedulerRequest {
 }
 
 message EodModel {
-    metatrader_platfom.TradingPlatformModel TradingPlatform = 1;
-    metatrader_broker.BrokerModel Broker = 2;
+    int32 TradingPlatform = 1;
+    AccountType AccountType = 2;
     int64 StartEodTime = 3;
     int64 EndEodTime = 4;
 }

@@ -1,7 +1,0 @@
-syntax = "proto3";
-package metatrader_broker;
- 
-enum BrokerModel {
-    WELLTRADE_DEMO = 0;
-    WELLTRADE_LIVE = 1;
-}
