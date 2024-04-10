@@ -8,7 +8,7 @@ message TraderAccount {
     string Id = 1;
     string Title = 2;
     int32 Phase = 3;
-    int32 TradingPlatformModel = 4;
+    int32 PlatformId = 4;
     double Balance = 5;
     optional int64 StartDate = 6;
     optional int64 EndDate = 7;
@@ -29,22 +29,6 @@ message TraderAccount {
     string TraderPackageGroupId = 22;
     string TraderPackageGroupName = 23;
     trader_packages.TraderPackagePhaseType TraderPackagePhaseType = 24;
-}
-
-message TraderPlatformCredentials {
-  int32 Broker = 1;
-
-  int32 TradingPlatform = 2;
-
-  string Windows = 3;
-
-  string Mac = 4;
-
-  string Ios = 5;
-
-  string Android = 6;
-
-  string Web = 7;
 }
 
 enum TraderAccountTypeModel {
@@ -77,8 +61,8 @@ message GetByClientIdResponse{
 
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
-    int32 TradingPlatform = 2;
-    int32 BrokerModel = 3;
+    int32 PlatformId = 2;
+    int32 AccountType = 3;
     // NOT USED
     //string FirstName = 4;
     //string LastName = 5;
@@ -126,8 +110,8 @@ message GetTraderAccountCredentialsResponseBody {
 
 message GetTraderAccIdByCredentialsLoginRequest {
   repeated string Logins = 1;
-  int32 TradingPlatform = 2;
-  int32 Broker = 3;
+  int32 PlatformId = 2;
+  int32 AccountType = 3;
 }
 
 message GetTraderAccIdByCredentialsLoginResponse {
@@ -141,8 +125,8 @@ message LoginTradAccId {
 
 message GetLoginByTraderAccIdRequest {
   repeated string TraderAccId = 1;
-  int32 TradingPlatform = 2;
-  int32 Broker = 3;
+  int32 PlatformId = 2;
+  int32 AccountType = 3;
 }
 
 message GetLoginByTraderAccIdResponse {
