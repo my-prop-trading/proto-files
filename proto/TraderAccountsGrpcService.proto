@@ -187,20 +187,6 @@ message GetTraderAccountConditionsByIdResponseBody {
   trader_packages.TraderPackage TraderPackage = 1;
 }
 
-message GetTraderPlatformCredentialsRequest {
-}
-
-message GetTraderPlatformCredentialsResponse {
-  repeated trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
-}
-
-message UpsertTraderPlatformCredentialsRequest {
-  trader_accounts.TraderPlatformCredentials TraderPlatformCredentials = 1;
-}
-
-message UpsertTraderPlatformCredentialsResponse {
-}
-
 message BlockTraderAccountRequest {
   string TraderAccId = 1;
   trader_accounts.BlockerType BlockerType = 2;
@@ -250,9 +236,6 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
 
     rpc GetTraderAccountsByAggregatedId(trader_accounts.GetTraderAccountsByAggregatedIRequest) returns (trader_accounts.GetTraderAccountsByAggregatedIResponse);
-
-    rpc GetTraderPlatformCredentials(trader_accounts.GetTraderPlatformCredentialsRequest) returns (trader_accounts.GetTraderPlatformCredentialsResponse);
-    rpc UpsertTraderPlatformCredentials(trader_accounts.UpsertTraderPlatformCredentialsRequest) returns (trader_accounts.UpsertTraderPlatformCredentialsResponse);
 
     rpc GetBlockedTraderAccounts(trader_accounts.GetBlockedTraderAccountsRequest) returns (trader_accounts.GetBlockedTraderAccountsResponse);
     rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
