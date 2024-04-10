@@ -1,11 +1,6 @@
 syntax = "proto3";
 package metatrader_service_bus;
 
-enum TradingPlatformType {
-    METATRADER_4 = 0;
-    METATRADER_5 = 1;
-}
-
 enum AccountEventType {
     ACCOUNT_CREATED = 0;
     ACCOUNT_UPDATED = 1;
@@ -31,11 +26,9 @@ enum BalanceEventType {
 
 message MetatraderAccountBodySbModel {
     string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
-    TradingPlatformType TradingPlatformType = 3;
+    string PlatformAccountId = 2;
+    int32 PlatformId = 3;
     AccountType AccountType = 4;
-    int32 BrokerId = 5;
-    int32 TradingPlatformId = 6;
     AccountEventType EventType = 7;
     bool Disabled = 8;
     bool TradeDisabled = 9;
@@ -48,12 +41,10 @@ message MetatraderAccountMessage
 
 message MetatraderPositionBodySbModel {
     string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
-    int64 PositionId = 3;
-    TradingPlatformType TradingPlatformType = 4;
+    string PlatformAccountId = 2;
+    string PositionId = 3;
+    int32 PlatformId = 4;
     AccountType AccountType = 5;
-    int32 BrokerId = 6;
-    int32 TradingPlatformId = 7;
     PositionEventType EventType = 8;
     int64 Time = 9;
 }
@@ -66,12 +57,10 @@ message MetatraderPositionMessage
 
 message MetatraderBalanceBodySbModel {
     string TraderAccountId = 1;
-    int64 MetatraderLogin = 2;
-    int64 DealId = 3;
-    TradingPlatformType TradingPlatformType = 4;
-    AccountType AccountType = 5;
-    int32 BrokerId = 6;
-    int32 TradingPlatformId = 7;
+    string PlatformAccountId = 2;
+    string DealId = 3;
+    int32 PlatformId = 4;
+    AccountType AccountType = 5;    
     BalanceEventType EventType = 8;
     int64 Time = 9;
 }
