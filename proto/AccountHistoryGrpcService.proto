@@ -15,7 +15,7 @@ enum TradeTypeModel {
 
 
 message AccountTradeModel {
-  int64 Id = 1;            
+  string Id = 1;            
   string PlatfomAccountId = 4;
   string TraderAccountId = 5;
   string Symbol = 6;
