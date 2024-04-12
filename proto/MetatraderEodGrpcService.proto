@@ -13,8 +13,8 @@ message CreateEodSchedulerRequest {
 }
 
 message EodModel {
-    int32 TradingPlatform = 1;
-    int32 Broker = 2;
+    int32 PlatformId = 1;
+    int32 AccountType = 2;
     int64 StartEodTime = 3;
     int64 EndEodTime = 4;
 }
