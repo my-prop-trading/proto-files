@@ -163,6 +163,14 @@ message PublishResponse {
   bool Success = 1;
 }
 
+message UnPublishRequest{
+  string TraderPackageId = 1;
+}
+
+message UnPublishResponse {
+  bool Success = 1;
+}
+
 ////////////////////////
 // GROUPS
 ////////////////////////
@@ -207,6 +215,7 @@ service TraderPackagesGrpcService {
     rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
     rpc Delete(trader_packages.DeleteRequest) returns (trader_packages.DeleteResponse);
     rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
+    rpc UnPublish(trader_packages.UnPublishRequest) returns (trader_packages.UnPublishResponse);
 
     rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
 
