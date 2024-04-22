@@ -177,8 +177,9 @@ message BalanceModel {
 
 message GetAccountHistoryRequest {
     string PlatformAccountId = 1;
-    AccountType AccountType = 2;
-    int32 PlatformId = 3;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+    string TraderAccountId = 5;
 }
 
 enum TradeType { 
