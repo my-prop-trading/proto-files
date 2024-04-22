@@ -271,8 +271,10 @@ message CloseAllPositionsModel {
 message GetPlatformRedirectUrlRequest { 
     string PlatformAccountId = 1;
     string TraderAccountId = 2;
-  }
-  
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+}
+
 message GetPlatformRedirectUrlResponseBody {
     string RedirectUrl = 2;
 }
