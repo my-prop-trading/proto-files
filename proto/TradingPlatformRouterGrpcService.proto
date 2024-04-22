@@ -266,6 +266,23 @@ message CloseAllPositionsModel {
     string PlatformAccountId = 1;
     string TraderAccountId = 2;
 }
+
+message GetPlatformRedirectUrlRequest { 
+    string PlatformAccountId = 1;
+    string TraderAccountId = 2;
+  }
+  
+message GetPlatformRedirectUrlResponseBody {
+    string RedirectUrl = 2;
+}
+
+message GetPlatformRedirectUrlResponse {
+    oneof response {
+        GetPlatformRedirectUrlResponseBody Body = 1;
+        TradingPlatformRouterError Error = 2;
+    } 
+}
+
 //---
 message PlatformLinks {
     optional string Windows = 1;
@@ -345,6 +362,9 @@ service TradingPlatformRouterGrpcService {
 
     rpc CloseAllPositions(CloseAllPositionsRequest) 
     returns (stream CloseAllPositionsModel);
+
+    rpc GetPlatformRedirectUrl(GetPlatformRedirectUrlRequest) 
+    returns (GetPlatformRedirectUrlResponse);
     
     // Platform configurations
     rpc GetAll(google.protobuf.Empty) 
