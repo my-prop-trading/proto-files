@@ -144,6 +144,17 @@ message GetTraderAccountByIdResponse {
   }
 }
 
+message GetTraderAccountByIdPrefixRequest {
+  string TraderAccIdPrefix = 1;
+}
+
+message GetTraderAccountByIdPrefixResponse {
+  oneof response {
+    trader_accounts.GetTraderAccountByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
 message GetTraderAccountByIdResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
 }
@@ -220,6 +231,7 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
 
     rpc GetTraderAccountsByAggregatedId(trader_accounts.GetTraderAccountsByAggregatedIRequest) returns (trader_accounts.GetTraderAccountsByAggregatedIResponse);
+    rpc GetTraderAccountByIdPrefix(trader_accounts.GetTraderAccountByIdPrefixRequest) returns (trader_accounts.GetTraderAccountByIdPrefixResponse);
 
     rpc GetBlockedTraderAccounts(trader_accounts.GetBlockedTraderAccountsRequest) returns (trader_accounts.GetBlockedTraderAccountsResponse);
     rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
