@@ -63,6 +63,7 @@ message DepositAccountRequest {
     string ProcessId = 4;
     AccountType AccountType = 5;
     int32 PlatformId = 6;
+    string TraderAccountId = 7;
 }
 
 message DepositAccountResponseBody {
@@ -84,6 +85,7 @@ message WithdrawalAccountRequest{
     bool ErrorOnOpenPositions = 5;
     AccountType AccountType = 6;
     int32 PlatformId = 7;
+    string TraderAccountId = 8;
 }
 
 message WithdrawalAccountResponseBody {
