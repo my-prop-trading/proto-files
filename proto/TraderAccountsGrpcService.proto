@@ -149,10 +149,7 @@ message GetTraderAccountByIdPrefixRequest {
 }
 
 message GetTraderAccountByIdPrefixResponse {
-  oneof response {
-    trader_accounts.GetTraderAccountByIdResponseBody Body = 1;
-    trader_accounts.TraderAccountError Error = 2;
-  }
+  repeated trader_accounts.TraderAccount Items = 1;
 }
 
 message GetTraderAccountByIdResponseBody {
