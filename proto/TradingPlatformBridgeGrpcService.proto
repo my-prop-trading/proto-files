@@ -117,6 +117,7 @@ message EnableAccountRequest {
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5;
 }
 
 message EnableAccountResponse {
@@ -128,6 +129,7 @@ message DisableAccountRequest {
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5;
 }
 
 message DisableAccountResponse {
@@ -139,6 +141,7 @@ message DisableAccountTradeRequest {
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5;
 }
 
 message DisableAccountTradeResponse {
@@ -150,6 +153,7 @@ message EnableAccountTradeRequest {
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5;
 }
 
 message EnableAccountTradeResponse {
