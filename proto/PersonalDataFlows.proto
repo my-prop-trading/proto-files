@@ -65,6 +65,7 @@ message PersonalDataModel {
     optional pd.SexTitle Sex = 11;
     optional pd.AccountType AccountType = 12;
     optional int64 CreatedDate = 13;
+    optional string Region = 14;
 }
 
 message PersonalDataModelWithId {
