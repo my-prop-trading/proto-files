@@ -175,7 +175,6 @@ message BalanceModel {
     double Margin = 4;         // margin requirements
     double MarginFree = 5;     // free margin
     double MarginLevel = 6;    // margin level
-    string TraderAccountId = 7; 
 }
 
 message GetAccountHistoryRequest {
@@ -215,7 +214,6 @@ message AccountTradeModel {
     double Taxes = 16;            // taxes
     string Comment = 17;          // comment
     int64 Timestamp = 18;        // timestamp
-    string TraderAccountId = 19; 
 }
 
 message GetTimeRequest {
