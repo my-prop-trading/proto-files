@@ -15,6 +15,12 @@ message RegistrationConfirmationRequest{
     string Code = 3;
 }
 
+message  RegistrationSuccessfulRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TempPassword = 3;
+}
+
 message ForgotPasswordRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -236,6 +242,8 @@ message EmailSentResponse {
 
 service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
+
+    rpc SendRegistrationSuccessful(email_sender.RegistrationSuccessfulRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendForgotPassword(email_sender.ForgotPasswordRequest) returns (email_sender.EmailSentResponse);
 
