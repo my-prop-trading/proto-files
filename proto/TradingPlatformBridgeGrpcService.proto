@@ -43,6 +43,7 @@ message ChangeAccountTradePasswordRequest {
     string NewPassword = 2;    
     AccountType AccountType = 3;
     int32 PlatformId = 4;  
+    string TraderAccountId = 5; 
 }
 
 message ChangeAccountViewPasswordRequest {
@@ -50,6 +51,7 @@ message ChangeAccountViewPasswordRequest {
     string NewPassword = 2;      
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5; 
 }
 
 message ChangeAccountPasswordResponse {
@@ -103,6 +105,7 @@ message GetAccountBalanceRequest {
     string PlatformAccountId = 1;
     AccountType AccountType = 2;
     int32 PlatformId = 3;
+    string TraderAccountId = 4; 
 }
 
 message GetAccountBalanceResponse {
@@ -163,17 +166,16 @@ message EnableAccountTradeResponse {
 message GetAccountsBalanceRequest {
     AccountType AccountType = 1;
     int32 PlatformId = 2;
-
 }
 
 message BalanceModel {
     string PlatformAccountId = 1;
-    //int64 Leverage = 2;        // user leverage
-    double Balance = 3;        // balance+credit
-    double Equity = 4;         // equity
-    double Margin = 5;         // margin requirements
-    double MarginFree = 6;     // free margin
-    double MarginLevel = 7;    // margin level
+    double Balance = 2;        // balance+credit
+    double Equity = 3;         // equity
+    double Margin = 4;         // margin requirements
+    double MarginFree = 5;     // free margin
+    double MarginLevel = 6;    // margin level
+    string TraderAccountId = 7; 
 }
 
 message GetAccountHistoryRequest {
@@ -213,6 +215,7 @@ message AccountTradeModel {
     double Taxes = 16;            // taxes
     string Comment = 17;          // comment
     int64 Timestamp = 18;        // timestamp
+    string TraderAccountId = 19; 
 }
 
 message GetTimeRequest {
@@ -236,6 +239,7 @@ message CloseAccountPositionsRequest {
     string ProcessId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string TraderAccountId = 5; 
 }
 
 message CloseTradeModel {
