@@ -1,0 +1,70 @@
+syntax = "proto3";
+package trading_platform_service_bus;
+
+enum AccountEventType {
+    ACCOUNT_CREATED = 0;
+    ACCOUNT_UPDATED = 1;
+    ACCOUNT_DELETED = 2;
+}
+
+enum AccountType {
+    DEMO = 0;
+    LIVE = 1;
+}
+
+enum PositionEventType {
+    POSITION_OPENED = 0;
+    POSITION_UPDATED = 1;
+    POSITION_CLOSED = 2;
+}
+
+enum BalanceEventType {
+    OPERATION_ADDED = 0;
+    OPERATION_UPDATED = 1;
+    OPERATION_DELETED = 2;
+}
+
+message TraderPlatformAccountBodySbModel {
+    string TraderAccountId = 1;
+    string PlatformAccountId = 2;
+    int32 PlatformId = 3;
+    AccountType AccountType = 4;
+    AccountEventType EventType = 7;
+    bool Disabled = 8;
+    bool TradeDisabled = 9;
+}
+
+message TraderPlatformAccountMessage
+{
+    TraderPlatformAccountBodySbModel Body = 1; 
+}
+
+message TraderPlatformPositionBodySbModel {
+    string TraderAccountId = 1;
+    string PlatformAccountId = 2;
+    string PositionId = 3;
+    int32 PlatformId = 4;
+    AccountType AccountType = 5;
+    PositionEventType EventType = 8;
+    int64 Time = 9;
+}
+
+message TraderPlatformPositionMessage
+{
+    TraderPlatformPositionBodySbModel Body = 1; 
+}
+
+message TraderPlatformBalanceBodySbModel {
+    string TraderAccountId = 1;
+    string PlatformAccountId = 2;
+    string DealId = 3;
+    int32 PlatformId = 4;
+    AccountType AccountType = 5;    
+    BalanceEventType EventType = 8;
+    int64 Time = 9;
+}
+
+message TraderPlatformBalanceMessage
+{
+    TraderPlatformBalanceBodySbModel Body = 1; 
+}
