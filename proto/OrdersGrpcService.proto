@@ -19,7 +19,7 @@ message Order {
   string ClientId = 6;
   string TradingPackageTitle = 7; // Trading Package title
   double AccountBalance = 8; // Account balance in package
-  int32 AccountType = 9; // Demo or Live
+  //int32 AccountType = 9; // Demo or Live
   int32 PlatformId = 10; // Trading platform selected for package
   optional int64 PayBy = 11; 
   string BrandId = 12; 
@@ -34,7 +34,7 @@ message Order {
 message CreateTraderAccountOrderRequest {
   string TradingPackageId = 1;
   int32 PlatformId = 2;
-  int32 AccountType = 3;
+  //int32 AccountType = 3;
   string FirstName = 4;
   string LastName = 5;
   string City = 6;
@@ -195,7 +195,7 @@ message Payin {
     string ClientId = 3;         // Client ID, can be used as a link to client profile
     string TradingPackageTitle = 4; // Trading Package title
     double AccountBalance = 5; // Account balance in package
-    int32 AccountType = 6; // Demo or Live
+    //int32 AccountType = 6; // Demo or Live
     int32 PlatformId = 7; // Trading platform selected for package
     int64 PaidAt= 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
     double Price = 9; // Price
