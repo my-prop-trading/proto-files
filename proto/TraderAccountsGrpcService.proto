@@ -62,8 +62,8 @@ message GetByClientIdResponse{
 message CreateTraderAccountRequest {
     string TradingPackageId = 1;
     int32 PlatformId = 2;
-    int32 AccountType = 3;
     // NOT USED
+    //int32 AccountType = 3;
     //string FirstName = 4;
     //string LastName = 5;
     //string City = 6;
