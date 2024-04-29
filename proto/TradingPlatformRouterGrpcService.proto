@@ -20,7 +20,7 @@ message CreateAccountRequest {
     string ViewPassword = 3; 
     string TraderAccountId = 4;  
     int64 Leverage = 5;  
-    optional string Email = 6;
+    string Email = 6;
     optional string Country = 7;
     string ProcessId = 8;
     AccountType AccountType = 9;
@@ -44,6 +44,8 @@ message ChangeAccountTradePasswordRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;  
     string TraderAccountId = 5; 
+    string Email = 6;
+    string ProcessId = 7;
 }
 
 message ChangeAccountViewPasswordRequest {
@@ -52,6 +54,8 @@ message ChangeAccountViewPasswordRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5; 
+    string Email = 6;
+    string ProcessId = 7;
 }
 
 message ChangeAccountPasswordResponse {
