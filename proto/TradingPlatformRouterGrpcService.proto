@@ -25,6 +25,7 @@ message CreateAccountRequest {
     string ProcessId = 8;
     AccountType AccountType = 9;
     int32 PlatformId = 10;
+    string ClientId = 11; 
 }
 
 message CreateAccountResponseBody {
@@ -46,6 +47,7 @@ message ChangeAccountTradePasswordRequest {
     string TraderAccountId = 5; 
     string Email = 6;
     string ProcessId = 7;
+    string ClientId = 8; 
 }
 
 message ChangeAccountViewPasswordRequest {
@@ -56,6 +58,7 @@ message ChangeAccountViewPasswordRequest {
     string TraderAccountId = 5; 
     string Email = 6;
     string ProcessId = 7;
+    string ClientId = 8; 
 }
 
 message ChangeAccountPasswordResponse {
@@ -70,6 +73,7 @@ message DepositAccountRequest {
     AccountType AccountType = 5;
     int32 PlatformId = 6;
     string TraderAccountId = 7;
+    string ClientId = 8; 
 }
 
 message DepositAccountResponseBody {
@@ -92,6 +96,7 @@ message WithdrawalAccountRequest{
     AccountType AccountType = 6;
     int32 PlatformId = 7;
     string TraderAccountId = 8;
+    string ClientId = 9; 
 }
 
 message WithdrawalAccountResponseBody {
@@ -110,6 +115,7 @@ message GetAccountBalanceRequest {
     AccountType AccountType = 2;
     int32 PlatformId = 3;
     string TraderAccountId = 4; 
+    string ClientId = 5; 
 }
 
 message GetAccountBalanceResponse {
@@ -125,6 +131,7 @@ message EnableAccountRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
+    string ClientId = 6; 
 }
 
 message EnableAccountResponse {
@@ -137,6 +144,7 @@ message DisableAccountRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
+    string ClientId = 6; 
 }
 
 message DisableAccountResponse {
@@ -149,6 +157,7 @@ message DisableAccountTradeRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
+    string ClientId = 6; 
 }
 
 message DisableAccountTradeResponse {
@@ -161,6 +170,7 @@ message EnableAccountTradeRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
+    string ClientId = 6; 
 }
 
 message EnableAccountTradeResponse {
@@ -169,7 +179,7 @@ message EnableAccountTradeResponse {
 
 message GetAccountsBalanceRequest {
     AccountType AccountType = 1;
-    int32 PlatformId = 2;
+    int32 PlatformId = 2;   
 }
 
 message BalanceModel {
@@ -186,6 +196,7 @@ message GetAccountHistoryRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
+    string ClientId = 6; 
 }
 
 enum TradeType { 
@@ -242,6 +253,7 @@ message CloseAccountPositionsRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5; 
+    string ClientId = 6; 
 }
 
 message CloseTradeModel {
@@ -280,6 +292,7 @@ message GetPlatformRedirectUrlRequest {
     string TraderAccountId = 2;
     AccountType AccountType = 3;
     int32 PlatformId = 4;
+    string ClientId = 5; 
 }
 
 message GetPlatformRedirectUrlResponseBody {
