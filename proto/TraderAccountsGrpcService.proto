@@ -121,6 +121,7 @@ message GetTraderAccIdByCredentialsLoginResponse {
 message LoginTradAccId {
   string Login = 1;
   string TraderAccId = 2;
+  string ClientId = 3;
 }
 
 message GetLoginByTraderAccIdRequest {
