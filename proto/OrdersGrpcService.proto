@@ -10,6 +10,11 @@ enum OrderStatus {
   PENDING = 4;
 }
 
+enum PurchaseType {
+  EXTERNAL = 0;
+  INTERNAL = 1;
+}
+
 message Order {
   string Id = 1;
   optional int64 CreatedAt = 2;
@@ -29,6 +34,7 @@ message Order {
   string TraderPackageGroup = 16;
   string TraderPackageGroupName = 17;
   string TraderAccountAggregatedId = 18;
+  orders.PurchaseType PurchaseType = 19;
 }
 
 message CreateTraderAccountOrderRequest {
@@ -46,6 +52,7 @@ message CreateTraderAccountOrderRequest {
   string ProcessId = 12;
   string ClientId = 13;
   string Brand = 14;
+  orders.PurchaseType PurchaseType = 15;
 }
 
 message CreateTraderAccountOrderResponse {
