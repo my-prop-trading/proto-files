@@ -29,6 +29,33 @@ message TraderAccount {
     string TraderPackageGroupId = 22;
     string TraderPackageGroupName = 23;
     trader_packages.TraderPackagePhaseType TraderPackagePhaseType = 24;
+
+    double Phase1DailyDrawdown = 30;
+    double Phase1OverallDrawdown = 31;
+    double Phase1TargetProfit = 32;
+    int32 Phase1Duration = 33;
+    optional int32 Phase1MinTradingDays = 34;
+    optional int32 Phase1MinOpenedPositions = 35;
+    optional double Phase1RevenueShare = 36;
+    double Phase1Refund = 37;
+
+    double Phase2DailyDrawdown = 40;
+    double Phase2OverallDrawdown = 41;
+    double Phase2TargetProfit = 42;
+    int32 Phase2Duration = 43;
+    optional int32 Phase2MinTradingDays = 44;
+    optional int32 Phase2MinOpenedPositions = 45;
+    optional double Phase2RevenueShare = 46;
+    double Phase2Refund = 47;
+
+    double Phase3DailyDrawdown = 50;
+    double Phase3OverallDrawdown = 51;
+    double Phase3TargetProfit = 52;
+    int32 Phase3Duration = 53;
+    optional int32 Phase3MinTradingDays = 54;
+    optional int32 Phase3MinOpenedPositions = 55;
+    optional double Phase3RevenueShare = 56;
+    double Phase3Refund = 57;
 }
 
 enum TraderAccountTypeModel {
