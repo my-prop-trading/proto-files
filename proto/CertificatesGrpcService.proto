@@ -29,6 +29,7 @@ message GetPaginatedRequest {
   optional string tx_id = 3;
   optional int64 date = 4;
   optional certificates.CertificateType type = 5;
+  optional string client_id = 6;
 }
 
 message GetPaginatedResponse {
