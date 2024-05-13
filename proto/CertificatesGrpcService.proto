@@ -35,7 +35,7 @@ message GetPaginatedRequest {
 
 message GetPaginatedResponse {
   repeated certificates.Certificate certificates = 1;
-  int32 total = 2;
+  uint64 total = 2;
 }
 
 message GetResourceRequest { string id = 1; }
