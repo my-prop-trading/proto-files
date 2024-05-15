@@ -60,7 +60,7 @@ message GetTemplateRequest {
 }
 
 message GetTemplateResponse {
-    TemplateModel Template = 1;
+    optional TemplateModel Template = 1;
 }
 
 message TemplateModel {
