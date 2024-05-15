@@ -1,0 +1,122 @@
+syntax = "proto3";
+package email_template;
+import "google/protobuf/empty.proto";
+
+// Define the protobuf enum
+enum EmailType {
+    REGISTRATION_CONFIRMATION = 0;
+    FORGOT_PASSWORD = 1;
+    PASSWORD_RESET_NOTIFICATION = 2;
+    SUCCESSFUL_SCENARIO_PHASE1 = 3;
+    SUCCESSFUL_SCENARIO_PHASE2 = 4;
+    SUCCESSFUL_SCENARIO_PHASE2_KYC_REQUIRED = 5;
+    SUCCESSFUL_SCENARIO_PHASE2_CONTRACT_REQUIRED = 6;
+    SUCCESSFUL_PROOF_OF_IDENTITY = 7;
+    RETRY_PROOF_OF_IDENTITY = 8;
+    FAILED_PROOF_OF_IDENTITY = 9;
+    SUCCESSFUL_PROOF_OF_ADDRESS = 10;
+    RETRY_PROOF_OF_ADDRESS = 11;
+    FAILED_PROOF_OF_ADDRESS = 12;
+    CONTRACT_TO_CLIENT = 13;
+    SERVICE_DENIED_DUE_TO_VIOLATION_TERMS_AND_COND_ON_CONTRACT_SIGNING = 14;
+    SERVICE_DENIED_ON_ALL_ACCOUNTS_DUE_TO_VIOLATION_TERMS_AND_COND = 15;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND = 16;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND_FUTURE_PROFIT_BLOCKED = 17;
+    SERVICE_DENIED_DUE_TO_VIOLATION_OF_OUR_TERMS_AND_COND_FUTURE_AND_CURRENT_PROFIT_BLOCKED = 18;
+    LIVE_ACCOUNT_GRANTED = 19;
+    LIVE_ACCOUNT_LOST = 20;
+    PAYMENT_RECEIVED = 21;
+    PAYMENT_FAILED = 22;
+    FAILED_SCENARIO_PHASE1 = 23;
+    FAILED_SCENARIO_PHASE2 = 24;
+    PAYOUT_SUCCESS = 25;
+    PAYOUT_DECLINED = 26;
+    PROFIT_SPLIT_DAY = 27;
+    REVENUE_SHARE_TAKEN = 28;
+    SUCCESSFUL_SCENARIO_PHASE3 = 29;
+    SUCCESSFUL_SCENARIO_PHASE1_KYC_REQUIRED = 30;
+    SUCCESSFUL_SCENARIO_PHASE1_CONTRACT_REQUIRED = 31;
+    SUCCESSFUL_SCENARIO_PHASE3_KYC_REQUIRED = 32;
+    SUCCESSFUL_SCENARIO_PHASE3_CONTRACT_REQUIRED = 33;
+    FAILED_SCENARIO_PHASE3 = 34;
+    PAYMENT_RECEIVED_INSTANT_FUNDING_KYC_REQUIRED = 35;
+    PAYMENT_RECEIVED_INSTANT_FUNDING_CONTRACT_REQUIRED = 36;
+}
+
+enum Error {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+    EMAIL_PROVIDER_ERROR = 2;
+}
+
+message PlaceholderKeyValue {
+    string Key = 1;
+    string Value = 2;
+}
+
+message GetTemplateRequest {
+    EmailType EmailType = 1;
+    string LanguageIso2 = 2;
+}
+
+message GetTemplateResponse {
+    TemplateModel Template = 1;
+}
+
+message TemplateModel {
+    EmailType EmailType = 1;
+    string LanguageIso2 = 2;
+    string Name = 3;
+    string Subject = 4;
+    string HtmlContent = 5;
+    optional string TemplateProviderId = 6;
+    repeated PlaceholderKeyValue Placeholders = 7;
+}
+
+message GetAllTemplateRequest {
+    optional string LanguageIso2 = 1; 
+}
+
+message GenerateTemplateRequest {
+    EmailType EmailType = 1;
+    string LanguageIso2 = 2;
+}
+
+message GenerateTemplateResponse {
+    oneof response {
+        GenerateTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GenerateTemplateResponseBody {
+    string TemplateProviderId = 1; 
+}
+
+message SendEmailTemplateRequest {
+    string TemplateProviderId = 1;
+    string EmailFrom = 2;
+    string EmailTo = 3;
+    repeated PlaceholderKeyValue Placeholders = 4;
+    string Subject = 5;
+}
+
+message SendEmailTemplateResponse {
+    oneof response {
+        SendEmailTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message SendEmailTemplateResponseBody {
+
+}
+
+service EmailTemplateGrpcService {
+    rpc Get(GetTemplateRequest) returns (GetTemplateResponse);
+    rpc GetAll(GetAllTemplateRequest) returns (stream TemplateModel);
+    rpc Generate(GenerateTemplateRequest) returns (GenerateTemplateResponse);
+    rpc SendEmail(SendEmailTemplateRequest) returns (SendEmailTemplateResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
