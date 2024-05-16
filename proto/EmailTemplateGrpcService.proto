@@ -69,8 +69,9 @@ message TemplateModel {
     string Name = 3;
     string Subject = 4;
     string HtmlContent = 5;
-    optional string TemplateProviderId = 6;
-    repeated PlaceholderKeyValue Placeholders = 7;
+    string PlainContent = 6;
+    optional string TemplateProviderId = 7;
+    repeated string Placeholders = 8;
 }
 
 message GetAllTemplateRequest {
