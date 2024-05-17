@@ -106,7 +106,7 @@ message GenerateTemplateRequest {
 
 message GenerateTemplateResponse {
     oneof response {
-        SendTemplateByIdResponseBody Body = 1;
+        GenerateTemplateResponseBody Body = 1;
         Error Error = 2;
     } 
 }
