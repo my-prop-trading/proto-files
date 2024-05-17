@@ -4,13 +4,10 @@ import "google/protobuf/empty.proto";
 
 enum CertificateType {
   MaxAllocation = 0;
-
   EvaluationPhase1 = 1; 
   EvaluationPhase2 = 2; 
   EvaluationPhase3 = 3;
-
   EvaluationLiveAccount = 4;
-
   OverallPayout = 5;
   PayoutByMonth = 6; 
   PayoutByTxID = 7;
@@ -23,10 +20,14 @@ message Certificate {
   string client_id = 4;
 }
 
+message CertificateTemplate {
+  certificates.CertificateType type = 1;
+  string content = 2;
+}
+
 message GetPaginatedRequest {
   uint64 limit = 1;
   int64 offset = 2;
-
   optional string tx_id = 3;
   optional int64 date = 4;
   optional certificates.CertificateType type = 5;
@@ -44,12 +45,72 @@ message GetResourceResponse {
   bytes content = 1;
 }
 
+message GetTemplateRequest {
+  certificates.CertificateType type = 1;
+}
+
+message GetTemplateResponse {
+  certificates.CertificateTemplate template = 1;
+}
+
+message EditTemplateRequest {
+  certificates.CertificateTemplate template = 1;
+}
+
+message EditTemplateResponse {
+  certificates.CertificateTemplate template = 1;
+}
+
+message CreateTemplateRequest {
+  certificates.CertificateTemplate template = 1;
+}
+
+message CreateTemplateResponse {
+  certificates.CertificateTemplate template = 1;
+}
+
+message QRCode {
+  int32 width = 2;
+  int32 height = 3;
+  int32 x = 4;
+  int32 y = 5;
+}
+
+message GetQRCodeRequest {
+}
+
+message GetQRCodeResponse {
+  certificates.QRCode qr_code = 1;
+}
+
+message CreateQRCodeRequest {
+  certificates.QRCode qr_code = 1;
+}
+
+message CreateQRCodeResponse {
+  certificates.QRCode qr_code = 1;
+}
+
+message EditQRCodeRequest {
+  certificates.QRCode qr_code = 1;
+}
+
+message EditQRCodeResponse {
+  certificates.QRCode qr_code = 1;
+}
+
 service CertificatesGrpcService {
-  rpc GetPaginated(certificates.GetPaginatedRequest)
-      returns (certificates.GetPaginatedResponse);
-
-  rpc GetResource(certificates.GetResourceRequest)
-      returns (stream certificates.GetResourceResponse);
-
+  rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
+  rpc GetResource(certificates.GetResourceRequest) returns (stream certificates.GetResourceResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // Template management RPCs
+  rpc GetTemplate(certificates.GetTemplateRequest) returns (certificates.GetTemplateResponse);
+  rpc EditTemplate(certificates.EditTemplateRequest) returns (certificates.EditTemplateResponse);
+  rpc CreateTemplate(certificates.CreateTemplateRequest) returns (certificates.CreateTemplateResponse);
+
+  // QR code management RPCs
+  rpc GetQRCode(certificates.GetQRCodeRequest) returns (certificates.GetQRCodeResponse);
+  rpc CreateQRCode(certificates.CreateQRCodeRequest) returns (certificates.CreateQRCodeResponse);
+  rpc EditQRCode(certificates.EditQRCodeRequest) returns (certificates.EditQRCodeResponse);
 }
