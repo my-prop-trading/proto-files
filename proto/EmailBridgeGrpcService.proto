@@ -67,8 +67,8 @@ message SendTemplateRequest {
 
 message SendTemplateResponse {
     oneof response {
-        email_bridge.SendTemplateResponseBody Body = 1;
-        email_bridge.Error Error = 2;
+        SendTemplateResponseBody Body = 1;
+        Error Error = 2;
     } 
 }
 
@@ -89,12 +89,12 @@ message SendTemplateByIdRequest {
 
 message SendTemplateByIdResponse {
     oneof response {
-        email_bridge.SendTemplateByIdBody Body = 1;
-        email_bridge.Error Error = 2;
+        SendTemplateByIdResponseBody Body = 1;
+        Error Error = 2;
     } 
 }
 
-message SendTemplateByIdBody {
+message SendTemplateByIdResponseBody {
 }
 
 service EmailBridgeGrpcService {
