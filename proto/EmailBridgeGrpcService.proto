@@ -46,6 +46,7 @@ enum EmailType {
 enum Error {
     OK = 0;
     INTERNAL_ERROR = 1;
+    EMAIL_PROVIDER_ERROR = 2;
 }
 
 message PlaceholderKeyValue {
