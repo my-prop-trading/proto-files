@@ -113,11 +113,74 @@ message SendEmailTemplateResponseBody {
 
 }
 
+message BrandSettingsModel {
+    string LogoUrl = 1;
+    string PolicyUrl = 2;
+    string TermsUrl = 3;
+    string AboutUrl = 4;
+    string SupportUrl = 5;
+    string ColorUrl = 6;
+    string BrandName = 7;
+    string BrandCopyrights = 8;
+    string FaviconUrl = 9;
+    string RefundPolicyUrl = 10;
+    string TitleUrl = 11;
+    string TradingPackagesUrl = 12;
+    string HomePageUrl = 13;
+    string VerificationUrl = 14;
+    string PayoutsPageUrl = 15;
+    string CompanyName = 16;
+    string EmailFrom = 17;
+    string EmailCc = 18;
+    string EmailBcc = 19;
+    repeated string Languages = 20;
+}
+
+message EmailSenderSettingsModel {
+    string ApiKey = 1;
+}
+
+message GetSettingsTemplateRequest {
+
+}
+
+message GetSettingsTemplateResponse {
+    oneof response {
+        GetSettingsTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GetSettingsTemplateResponseBody {
+    EmailSenderSettingsModel EmailSenderSettings = 1;
+    BrandSettingsModel BrandSettings = 2;
+
+}
+
+message UpdateSettingsTemplateRequest {
+    optional EmailSenderSettingsModel EmailSenderSettings = 1;
+    optional BrandSettingsModel BrandSettings = 2;
+}
+
+message UpdateSettingsTemplateResponse {
+    oneof response {
+        UpdateSettingsTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message UpdateSettingsTemplateResponseBody {
+    EmailSenderSettingsModel EmailSenderSettings = 1;
+    BrandSettingsModel BrandSettings = 2;
+}
+
 service EmailTemplateGrpcService {
     rpc Get(GetTemplateRequest) returns (GetTemplateResponse);
     rpc GetAll(GetAllTemplateRequest) returns (stream TemplateModel);
     rpc Generate(GenerateTemplateRequest) returns (GenerateTemplateResponse);
     rpc SendEmail(SendEmailTemplateRequest) returns (SendEmailTemplateResponse);
-    
+    rpc GetSettings(GetSettingsTemplateRequest) returns (GetSettingsTemplateResponse);
+    rpc UpdateSettings(UpdateSettingsTemplateRequest) returns (UpdateSettingsTemplateResponse);
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
