@@ -97,12 +97,33 @@ message SendTemplateByIdResponse {
 message SendTemplateByIdResponseBody {
 }
 
+message GenerateTemplateRequest {
+    string Name = 1;
+    string Subject = 2;
+    string HtmlContent = 3;
+    string PlainContent = 4;
+}
+
+message GenerateTemplateResponse {
+    oneof response {
+        SendTemplateByIdResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GenerateTemplateResponseBody {
+    string TemplateProviderId = 1; 
+}
+
 service EmailBridgeGrpcService {
     rpc SendTemplate(SendTemplateRequest) 
     returns (SendTemplateResponse);
 
     rpc SendTemplateById(SendTemplateByIdRequest) 
     returns (SendTemplateByIdResponse);
+
+    rpc GenerateTemplate(GenerateTemplateRequest) 
+    returns (GenerateTemplateResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
