@@ -65,9 +65,6 @@ message SendTemplateRequest {
     string Language = 9;
 }
 
-message SendTemplateResponseBody {
-}
-
 message SendTemplateResponse {
     oneof response {
         email_bridge.SendTemplateResponseBody Body = 1;
@@ -75,9 +72,37 @@ message SendTemplateResponse {
     } 
 }
 
+message SendTemplateResponseBody {
+}
+
+message SendTemplateByIdRequest {
+    string EmailFrom = 1;
+    string Subject = 2;
+    string TemplateId = 3;
+    repeated string EmailTo = 4;
+    repeated string EmailCc = 5;
+    repeated string EmailBcc = 6;
+    repeated PlaceholderKeyValue Placeholders = 7;
+    string ProcessId = 8;
+    string Language = 9;
+}
+
+message SendTemplateByIdResponse {
+    oneof response {
+        email_bridge.SendTemplateByIdBody Body = 1;
+        email_bridge.Error Error = 2;
+    } 
+}
+
+message SendTemplateByIdBody {
+}
+
 service EmailBridgeGrpcService {
-    rpc SendTemplate(email_bridge.SendTemplateRequest) 
-    returns (email_bridge.SendTemplateResponse);
+    rpc SendTemplate(SendTemplateRequest) 
+    returns (SendTemplateResponse);
+
+    rpc SendTemplateById(SendTemplateByIdRequest) 
+    returns (SendTemplateByIdResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
