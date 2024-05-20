@@ -70,10 +70,10 @@ message CreateTemplateResponse {
 }
 
 message QRCode {
-  int32 width = 2;
-  int32 height = 3;
-  int32 x = 4;
-  int32 y = 5;
+  uint32 width = 2;
+  uint32 height = 3;
+  uint32 x = 4;
+  uint32 y = 5;
 }
 
 message GetQRCodeRequest {
