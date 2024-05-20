@@ -47,6 +47,7 @@ enum Error {
     OK = 0;
     INTERNAL_ERROR = 1;
     EMAIL_PROVIDER_ERROR = 2;
+    NO_TEMPLATE_FOR_EMAIL = 3;
 }
 
 message PlaceholderKeyValue {
@@ -154,7 +155,6 @@ message GetSettingsTemplateResponse {
 message GetSettingsTemplateResponseBody {
     EmailSenderSettingsModel EmailSenderSettings = 1;
     BrandSettingsModel BrandSettings = 2;
-
 }
 
 message UpdateSettingsTemplateRequest {
