@@ -69,37 +69,38 @@ message CreateTemplateResponse {
   certificates.CertificateTemplate template = 1;
 }
 
-message QRCode {
+message QrCode {
   uint32 width = 2;
   uint32 height = 3;
   uint32 x = 4;
   uint32 y = 5;
 }
 
-message GetQRCodeRequest {
+message GetQrCodeRequest {
 }
 
-message GetQRCodeResponse {
-  certificates.QRCode qr_code = 1;
+message GetQrCodeResponse {
+  certificates.QrCode qr_code = 1;
 }
 
-message CreateQRCodeRequest {
-  certificates.QRCode qr_code = 1;
+message CreateQrCodeRequest {
+  certificates.QrCode qr_code = 1;
 }
 
-message CreateQRCodeResponse {
-  certificates.QRCode qr_code = 1;
+message CreateQrCodeResponse {
+  certificates.QrCode qr_code = 1;
 }
 
-message EditQRCodeRequest {
-  certificates.QRCode qr_code = 1;
+message EditQrCodeRequest {
+  certificates.QrCode qr_code = 1;
 }
 
-message EditQRCodeResponse {
-  certificates.QRCode qr_code = 1;
+message EditQrCodeResponse {
+  certificates.QrCode qr_code = 1;
 }
 
 service CertificatesGrpcService {
+  //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
   rpc GetResource(certificates.GetResourceRequest) returns (stream certificates.GetResourceResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
@@ -110,7 +111,7 @@ service CertificatesGrpcService {
   rpc CreateTemplate(certificates.CreateTemplateRequest) returns (certificates.CreateTemplateResponse);
 
   // QR code management RPCs
-  rpc GetQRCode(certificates.GetQRCodeRequest) returns (certificates.GetQRCodeResponse);
-  rpc CreateQRCode(certificates.CreateQRCodeRequest) returns (certificates.CreateQRCodeResponse);
-  rpc EditQRCode(certificates.EditQRCodeRequest) returns (certificates.EditQRCodeResponse);
+  rpc GetQrCode(certificates.GetQrCodeRequest) returns (certificates.GetQrCodeResponse);
+  rpc CreateQrCode(certificates.CreateQrCodeRequest) returns (certificates.CreateQrCodeResponse);
+  rpc EditQrCode(certificates.EditQrCodeRequest) returns (certificates.EditQrCodeResponse);
 }
