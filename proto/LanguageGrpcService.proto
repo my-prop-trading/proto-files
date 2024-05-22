@@ -1,0 +1,74 @@
+syntax = "proto3";
+package language_content;
+import "google/protobuf/empty.proto";
+
+enum Error {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+    DEFAULT_LANGUAGE_CANNOT_BE_DELETED = 2;
+}
+
+message GetLanguageContentRequest {
+    optional string LanguageIso2 = 1;
+}
+
+message GetLanguageContentResponse {
+    optional LanguageContentModel Content = 1;
+}
+
+message LanguageContentModel {
+    string LanguageIso2 = 1;
+    string Content = 2;
+}
+
+message UpdateLanguageContentRequest {
+    LanguageContentModel Content = 1;
+}
+
+message UpdateLanguageContentResponse {
+    oneof response {
+        UpdateLanguageContentResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message UpdateLanguageContentResponseBody {
+}
+
+message AddLanguageContentRequest {
+    string LanguageIso2 = 1;
+}
+
+message AddLanguageContentResponse {
+    oneof response {
+        AddLanguageContentResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message AddLanguageContentResponseBody {
+    LanguageContentModel Content = 1;
+}
+
+message DeleteLanguageContentRequest {
+    string LanguageIso2 = 1;
+}
+
+message DeleteLanguageContentResponse {
+    oneof response {
+        DeleteLanguageContentResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message DeleteLanguageContentResponseBody {
+}
+
+service LanguageContentGrpcService {
+    rpc GetLanguageContent(GetLanguageContentRequest) returns (GetLanguageContentResponse);
+    rpc UpdateLanguageContent(UpdateLanguageContentRequest) returns (UpdateLanguageContentResponse);
+    rpc AddLanguageContent(AddLanguageContentRequest) returns (AddLanguageContentResponse);
+    rpc DeleteLanguageContent(DeleteLanguageContentRequest) returns (DeleteLanguageContentResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

@@ -48,6 +48,7 @@ enum Error {
     INTERNAL_ERROR = 1;
     EMAIL_PROVIDER_ERROR = 2;
     NO_TEMPLATE_FOR_EMAIL = 3;
+    DEFAULT_LANGUAGE_CANNOT_BE_DELETED = 4;
 }
 
 message PlaceholderKeyValue {
@@ -174,6 +175,35 @@ message UpdateSettingsTemplateResponseBody {
     BrandSettingsModel BrandSettings = 2;
 }
 
+message AddLanguageTemplateRequest {
+    string LanguageIso2 = 1;
+}
+
+message AddLanguageTemplateResponse {
+    oneof response {
+        AddLanguageTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message AddLanguageTemplateResponseBody {
+}
+
+
+message DeleteLanguageTemplateRequest {
+    string LanguageIso2 = 1;
+}
+
+message DeleteLanguageTemplateResponse {
+    oneof response {
+        DeleteLanguageTemplateResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message DeleteLanguageTemplateResponseBody {
+}
+
 service EmailTemplateGrpcService {
     rpc Get(GetTemplateRequest) returns (GetTemplateResponse);
     rpc GetAll(GetAllTemplateRequest) returns (stream TemplateModel);
@@ -181,6 +211,8 @@ service EmailTemplateGrpcService {
     rpc SendEmail(SendEmailTemplateRequest) returns (SendEmailTemplateResponse);
     rpc GetSettings(GetSettingsTemplateRequest) returns (GetSettingsTemplateResponse);
     rpc UpdateSettings(UpdateSettingsTemplateRequest) returns (UpdateSettingsTemplateResponse);
+    rpc AddLanguage(AddLanguageTemplateRequest) returns (AddLanguageTemplateResponse);
+    rpc DeleteLanguage(DeleteLanguageTemplateRequest) returns (DeleteLanguageTemplateResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
