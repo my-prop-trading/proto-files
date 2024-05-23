@@ -99,6 +99,27 @@ message EditQrCodeResponse {
   certificates.QrCode qr_code = 1;
 }
 
+message HtmlMetadata {
+  string title = 1;
+  string description = 2;
+  string link_to_app = 3;
+}
+
+message GetHtmlMetadataRequest {
+}
+
+message GetHtmlMetadataResponse {
+  HtmlMetadata metadata = 1;
+}
+
+message SetHtmlMetadataRequest {
+  HtmlMetadata metadata = 1;
+}
+
+message SetHtmlMetadataResponse {
+  HtmlMetadata metadata = 1;
+}
+
 service CertificatesGrpcService {
   //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
@@ -114,4 +135,8 @@ service CertificatesGrpcService {
   rpc GetQrCode(certificates.GetQrCodeRequest) returns (certificates.GetQrCodeResponse);
   rpc CreateQrCode(certificates.CreateQrCodeRequest) returns (certificates.CreateQrCodeResponse);
   rpc EditQrCode(certificates.EditQrCodeRequest) returns (certificates.EditQrCodeResponse);
+
+  // For Html Shared
+  rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (stream certificates.GetHtmlMetadataResponse);
+  rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (stream certificates.SetHtmlMetadataResponse);
 }
