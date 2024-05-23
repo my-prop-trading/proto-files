@@ -137,6 +137,6 @@ service CertificatesGrpcService {
   rpc EditQrCode(certificates.EditQrCodeRequest) returns (certificates.EditQrCodeResponse);
 
   // For Html Shared
-  rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (stream certificates.GetHtmlMetadataResponse);
-  rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (stream certificates.SetHtmlMetadataResponse);
+  rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (certificates.GetHtmlMetadataResponse);
+  rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (certificates.SetHtmlMetadataResponse);
 }
