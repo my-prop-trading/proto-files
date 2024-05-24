@@ -13,17 +13,17 @@ message TranslateModel {
     string Value = 2;
 }
 
+message LanguageContentModel {
+    string LanguageIso2 = 1;
+    repeated TranslateModel Content = 2;
+}
+
 message GetLanguageContentRequest {
     optional string LanguageIso2 = 1;
 }
 
 message GetLanguageContentResponse {
     repeated LanguageContentModel Content = 1;
-}
-
-message LanguageContentModel {
-    string LanguageIso2 = 1;
-    repeated TranslateModel Value = 2;
 }
 
 message UpdateLanguageContentRequest {
