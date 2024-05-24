@@ -103,6 +103,8 @@ message HtmlMetadata {
   string title = 1;
   string description = 2;
   string link_to_app = 3;
+  string site_name = 4;
+  string text_to_share_in_sn = 5;
 }
 
 message GetHtmlMetadataRequest {
