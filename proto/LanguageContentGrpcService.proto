@@ -17,7 +17,7 @@ message LanguageContentModel {
     string LanguageIso2 = 1;
     repeated TranslateModel Content = 2;
     string LanguageName = 3;
-    string LanguageNameLocal = 4;
+    string LocalLanguageName = 4;
 }
 
 message GetLanguageContentRequest {
