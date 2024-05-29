@@ -73,11 +73,27 @@ message DeleteLanguageContentResponse {
 message DeleteLanguageContentResponseBody {
 }
 
+message AddKeyLanguageContentRequest {
+    TranslateModel Content  = 1;
+}
+
+message AddKeyLanguageContentResponse {
+    oneof response {
+        AddKeyLanguageContentResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message AddKeyLanguageContentResponseBody {
+}
+
+
 service LanguageContentGrpcService {
     rpc GetLanguageContent(GetLanguageContentRequest) returns (GetLanguageContentResponse);
     rpc UpdateLanguageContent(UpdateLanguageContentRequest) returns (UpdateLanguageContentResponse);
     rpc AddLanguageContent(AddLanguageContentRequest) returns (AddLanguageContentResponse);
     rpc DeleteLanguageContent(DeleteLanguageContentRequest) returns (DeleteLanguageContentResponse);
+    rpc AddKeyLanguageContent(AddKeyLanguageContentRequest) returns (AddKeyLanguageContentResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
