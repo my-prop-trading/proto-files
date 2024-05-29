@@ -135,7 +135,7 @@ message BrandSettingsModel {
     string EmailFrom = 17;
     string EmailCc = 18;
     string EmailBcc = 19;
-    repeated string Languages = 20;
+    map<string, string> Languages = 20;
     string LoginUrl = 21;
 }
 
