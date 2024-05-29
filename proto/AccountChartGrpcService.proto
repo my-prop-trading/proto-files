@@ -9,6 +9,11 @@ message Candle {
     double Low = 4;
 }
 
+message HighLowOverall {
+    double High = 3;
+    double Low = 4;
+}
+
 message AccountChart {
   int64 Date = 1;
   double Equity = 2;
@@ -25,6 +30,8 @@ message GetByTraderAccIdRequest {
 
 message GetByTraderAccIdResponse {
     repeated account_chart.AccountChart AccountCharts = 1;
+    account_chart.HighLowOverall HighLowOverallBalance = 2;
+    account_chart.HighLowOverall HighLowOverallEquity = 3;
 }
 
 service AccountChartGrpcService {
