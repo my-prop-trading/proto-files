@@ -51,4 +51,6 @@ service FeaturesGrpcService {
   rpc SetFeatureStatus(SetFeatureStatusRequest) returns (SetFeatureStatusResponse);
   // Gets the status of all features
   rpc GetAllFeaturesStatus(GetAllFeaturesStatusRequest) returns (GetAllFeaturesStatusResponse);
+  
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
