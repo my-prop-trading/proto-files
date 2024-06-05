@@ -1,0 +1,54 @@
+syntax = "proto3";
+package features;
+import "google/protobuf/empty.proto";
+
+// Enum for defining app features
+enum AppFeature {
+    DirectRegistration = 0;
+    RegistrationThroughCheckout = 1;
+}
+
+// Message for feature status
+message FeatureStatus {
+    AppFeature feature = 1;
+    bool enabled = 2;
+}
+
+// Request message for getting the status of a specific feature
+message GetFeatureStatusRequest {
+    AppFeature feature = 1;
+}
+
+// Response message for returning the status of a specific feature
+message GetFeatureStatusResponse {
+    FeatureStatus status = 1;
+}
+
+// Request message for setting the status of a specific feature
+message SetFeatureStatusRequest {
+    FeatureStatus status = 1;
+}
+
+// Response message for setting the status of a specific feature
+message SetFeatureStatusResponse {
+    FeatureStatus status = 1;
+}
+
+// Empty request message for getting the status of all features
+message GetAllFeaturesStatusRequest {
+}
+
+// Response message for getting the status of all features
+message GetAllFeaturesStatusResponse {
+    repeated FeatureStatus statuses = 1;
+}
+
+// The FeaturesGrpcService defines the RPC methods for managing app features
+service FeaturesGrpcService {
+  // Gets the status of a specific feature
+  rpc GetFeatureStatus(GetFeatureStatusRequest) returns (GetFeatureStatusResponse);
+  // Sets the status of a specific feature
+  rpc SetFeatureStatus(SetFeatureStatusRequest) returns (SetFeatureStatusResponse);
+  // Gets the status of all features
+  rpc GetAllFeaturesStatus(GetAllFeaturesStatusRequest) returns (GetAllFeaturesStatusResponse);
+}
