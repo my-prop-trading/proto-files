@@ -11,8 +11,8 @@ enum OrderStatus {
 }
 
 enum PurchaseType {
-  EXTERNAL = 0;
-  INTERNAL = 1;
+  INTERNAL = 0;
+  EXTERNAL = 1;
 }
 
 message Order {
