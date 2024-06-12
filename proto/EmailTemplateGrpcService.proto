@@ -190,7 +190,6 @@ message AddLanguageTemplateResponse {
 }
 
 message AddLanguageTemplateResponseBody {
-    EmailSenderSettingsModel Content = 1;
 }
 
 
