@@ -139,6 +139,8 @@ message BrandSettingsModel {
     string LoginUrl = 21;
     bool ShowLiveChat = 22;
     optional string LiveChatLicense = 23;
+    string StylesCss = 24;
+
 }
 
 message EmailSenderSettingsModel {
