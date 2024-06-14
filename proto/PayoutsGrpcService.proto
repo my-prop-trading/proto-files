@@ -166,7 +166,7 @@ message ApprovePayoutRequest {
 
     string Currency = 3;
 
-    string Amount = 4;
+    double Amount = 4;
 }
     
 message ApprovePayoutResponse {
