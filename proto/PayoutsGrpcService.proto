@@ -163,6 +163,10 @@ message ApprovePayoutRequest {
     string PayoutId = 1;
 
     string ProcessId = 2;
+
+    string Currency = 3;
+
+    string Amount = 4;
 }
     
 message ApprovePayoutResponse {
