@@ -1,0 +1,138 @@
+syntax = "proto3";
+package news_trading;
+import "google/protobuf/empty.proto";
+
+enum ImpactType {
+  LOW = 0; // default
+  MEDIUM = 1;
+  HIGH = 2;
+}
+
+enum NewsStatus {
+    NEW = 0; // default
+    STARTED = 1;
+    FINISHED = 2;
+    DONE = 3;
+}
+
+enum NewsError {
+  TECHNICAL_ERROR = 0;
+}
+
+message PlatformCurrency {
+  int32 PlatformId = 1;
+  string PlatformName = 2;
+  repeated string PlatformCurrencies = 3;
+}
+
+message NewsModel {
+    string Id = 1;
+    string Event = 2;
+    ImpactType Impact = 3;
+    NewsStatus Status = 4;
+    repeated string Currencies = 5; 
+    repeated PlatformCurrency Platforms = 6; 
+    int64 EventDate = 7;
+    optional int64 DateStart = 8; 
+    optional int64 DateEnd = 9;
+    int64 Timestamp = 10;   
+    bool Deleted = 11;   
+}
+
+
+message NewsList {
+    repeated NewsModel Items = 1;
+    uint64 Total = 2;
+}
+
+message CreateNewsRequest{
+  string Event = 2;
+  ImpactType Impact = 3;
+  repeated string Currencies = 5; 
+  repeated PlatformCurrency Platforms = 6; 
+  int64 EventDate = 7;
+}
+
+message CreateNewsResponse {
+  oneof response { 
+    NewsModel Item = 1;
+    NewsError Error = 2;
+  }
+}
+
+message UpdateNewsRequest{
+  string Id = 1;
+  string Event = 2;
+  ImpactType Impact = 3;
+  NewsStatus Status = 4;
+  repeated string Currencies = 5; 
+  repeated PlatformCurrency Platforms = 6; 
+  int64 EventDate = 7;
+  optional int64 DateStart = 8; 
+  optional int64 DateEnd = 9;
+}
+
+message UpdateNewsResponse {
+  oneof response { 
+    NewsModel Item = 1;
+    NewsError Error = 2;
+  }
+}
+
+message GetNewsPaginatedRequest {
+  optional string Id = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  optional int64 FromDate = 7;
+  optional int64 ToDate = 8;
+  optional NewsStatus Status = 9;
+}
+
+message GetNewsPaginatedResponse {
+  oneof response { 
+    NewsList Data = 1;
+    NewsError Error = 2;
+  }
+}
+
+message DeleteNewsRequest {
+  string Code = 1;
+}
+
+message DeleteNewsResponse {
+  oneof response { 
+    NewsList Data = 1;
+    NewsError Error = 2;
+  }
+}
+
+message GetNewsRequest {
+  string Code = 1;
+}
+
+message GetNewsResponse {
+  oneof response { 
+    NewsModel Item = 1;
+    NewsError Error = 2;
+  }
+}
+
+message IncrementNewsUsageRequest {
+  string Code = 1;
+}
+
+message IncrementNewsUsageResponse {
+  oneof response { 
+    NewsModel Item = 1;
+    NewsError Error = 2;
+  }
+}
+
+service TradingNewsGrpcService {
+    rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
+    rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
+    rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
+    rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (GetNewsPaginatedResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

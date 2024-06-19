@@ -43,7 +43,7 @@ message GetByTraderAccountIdRequest {
 }
 
 message GetByTraderAccountIdResponse {
-  repeated account_history.AccountTradeModel Items = 1;
+  repeated AccountTradeModel Items = 1;
 }
 
 message GetByTraderAccountIdWithTotalCountRequest {
@@ -53,7 +53,7 @@ message GetByTraderAccountIdWithTotalCountRequest {
 }
 
 message GetByTraderAccountIdWithTotalCountResponse {
-  repeated account_history.AccountTradeModel Items = 1;
+  repeated AccountTradeModel Items = 1;
 
   uint64 TotalCount = 2;
 }
@@ -63,11 +63,22 @@ enum AccountHistoryError {
   NO_ACCOUNT = 1;
 }
 
+message GetAccountHistoryPaginatedRequest {
+  uint64 Limit = 1;
+  uint64 Offset = 2;
+  optional string Symbol = 3;
+  optional int64 FromDate = 4;
+  optional int64 ToDate = 5;
+}
+
+message GetAccountHistoryPaginatedResponse {
+  repeated AccountTradeModel Items = 1;
+}
 
 service AccountHistoryGrpcService {
-    rpc GetByTraderAccountId(account_history.GetByTraderAccountIdRequest) returns (account_history.GetByTraderAccountIdResponse);
-
-    rpc GetByTraderAccountIdWithTotalCount(account_history.GetByTraderAccountIdWithTotalCountRequest) returns (account_history.GetByTraderAccountIdWithTotalCountResponse);
+    rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
+    rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
+    rpc GetTradesPaginated(GetAccountHistoryPaginatedRequest) returns (GetAccountHistoryPaginatedResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
