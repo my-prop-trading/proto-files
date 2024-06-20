@@ -11,6 +11,7 @@ enum PayoutStatus {
 enum PayoutType {
     RevenueShare = 0;
     Withdrawal = 1;
+    ExcessiveProfit = 2;
 }
 
 enum PaymentMethod {
@@ -95,6 +96,8 @@ message GetByClientIdRequest {
     int64 Limit = 3;
 
     optional string TraderAccountId = 4;
+
+    optional repeated payouts.PayoutType PayoutType = 5;
 }
 
 message GetByClientIdResponse {
@@ -289,6 +292,15 @@ message PayoutWithdrawalSetting {
     double Value = 2;
     payouts.PaymentMethod PaymentMethod = 3;
     payouts.MinMaxValueType Type = 4;
+}
+
+
+message RevenueShareSettings {
+    bool PaymentLimitsEnabled = 1;
+
+    double PaymentLimitsPercentage = 2;
+
+    bool RevenueSharePerTransactionEnabled = 3;
 }
 
 message GetPayoutsWithdrawalSettingsRequest {
