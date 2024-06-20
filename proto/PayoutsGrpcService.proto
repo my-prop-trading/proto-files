@@ -97,7 +97,7 @@ message GetByClientIdRequest {
 
     optional string TraderAccountId = 4;
 
-    optional repeated payouts.PayoutType PayoutType = 5;
+    repeated payouts.PayoutType PayoutType = 5;
 }
 
 message GetByClientIdResponse {
