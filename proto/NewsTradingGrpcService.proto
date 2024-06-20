@@ -15,7 +15,7 @@ enum NewsStatus {
     DONE = 3;
 }
 
-enum NewsError {
+enum Error {
   TECHNICAL_ERROR = 0;
 }
 
@@ -39,25 +39,23 @@ message NewsModel {
     bool Deleted = 11;   
 }
 
-
-message NewsList {
-    repeated NewsModel Items = 1;
-    uint64 Total = 2;
-}
-
 message CreateNewsRequest{
-  string Event = 2;
-  ImpactType Impact = 3;
-  repeated string Currencies = 5; 
-  repeated PlatformCurrency Platforms = 6; 
-  int64 EventDate = 7;
+  string Event = 1;
+  ImpactType Impact = 2;
+  repeated string Currencies = 3; 
+  repeated PlatformCurrency Platforms = 4; 
+  int64 EventDate = 5;
 }
 
 message CreateNewsResponse {
   oneof response { 
-    NewsModel Item = 1;
-    NewsError Error = 2;
+    CreateNewsResponseBody Body = 1;
+    Error Error = 2;
   }
+}
+
+message CreateNewsResponseBody {
+    NewsModel Item = 1;
 }
 
 message UpdateNewsRequest{
@@ -74,25 +72,34 @@ message UpdateNewsRequest{
 
 message UpdateNewsResponse {
   oneof response { 
-    NewsModel Item = 1;
-    NewsError Error = 2;
+    UpdateNewsResponseBody Body = 1;
+    Error Error = 2;
   }
+}
+
+message UpdateNewsResponseBody {
+    NewsModel Item = 1;
 }
 
 message GetNewsPaginatedRequest {
   optional string Id = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
-  optional int64 FromDate = 7;
-  optional int64 ToDate = 8;
-  optional NewsStatus Status = 9;
+  optional int64 FromDate = 4;
+  optional int64 ToDate = 5;
+  optional NewsStatus Status = 6;
 }
 
 message GetNewsPaginatedResponse {
   oneof response { 
-    NewsList Data = 1;
-    NewsError Error = 2;
+    GetNewsPaginatedResponseBody Body = 1;
+    Error Error = 2;
   }
+}
+
+message GetNewsPaginatedResponseBody {
+  repeated NewsModel Items = 1;
+  uint64 Total = 2;
 }
 
 message DeleteNewsRequest {
@@ -101,9 +108,14 @@ message DeleteNewsRequest {
 
 message DeleteNewsResponse {
   oneof response { 
-    NewsList Data = 1;
-    NewsError Error = 2;
+    DeleteNewsResponseBody Body = 1;
+    Error Error = 2;
   }
+}
+
+message DeleteNewsResponseBody {
+  repeated NewsModel Items = 1;
+  uint64 Total = 2;
 }
 
 message GetNewsRequest {
@@ -112,27 +124,115 @@ message GetNewsRequest {
 
 message GetNewsResponse {
   oneof response { 
-    NewsModel Item = 1;
-    NewsError Error = 2;
+    GetNewsResponseBody Body = 1;
+    Error Error = 2;
   }
 }
 
-message IncrementNewsUsageRequest {
-  string Code = 1;
+message GetNewsResponseBody {
+    NewsModel Item = 1;
 }
 
-message IncrementNewsUsageResponse {
+enum TradeTypeModel {
+  BUY = 0;
+  SELL = 1;
+  BUY_LIMIT = 2;
+  SELL_LIMIT = 3;
+  BUY_STOP = 4;
+  SELL_STOP = 5;
+  BALANCE = 6;
+  CREDIT = 7;
+}
+
+message GetAffectedTradesPaginatedRequest {
+  optional string Id = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  optional int64 FromDate = 4;
+  optional int64 ToDate = 5;
+  optional int32 PlatformId = 6;
+}
+
+message GetAffectedTradesPaginatedResponse {
   oneof response { 
-    NewsModel Item = 1;
-    NewsError Error = 2;
+    GetAffectedTradesPaginatedResponseBody Body = 1;
+    Error Error = 2;
   }
 }
+
+message GetAffectedTradesPaginatedResponseBody {
+  repeated AffectedTradeModel Items = 1;
+  uint64 Total = 2;
+}
+
+message AffectedTradeModel {
+  string Id = 1;      
+  string NewsId = 2;  
+  int32 PlatformId = 3;     
+  string PlatfomAccountId = 4;
+  string TraderAccountId = 5;
+  string Symbol = 6;
+  int64 Digits = 7;
+  TradeTypeModel TradeType = 8;
+  double Lots = 9;
+  int64 OpenTime = 10;        
+  double OpenPrice = 11;
+  double Sl = 12;
+  double Tp = 13;
+  optional int64 CloseTime = 14;       
+  double Fee = 15;
+  double Swap = 16;
+  double ClosePrice = 17;
+  double Profit = 18;
+  double Taxes = 19;
+  string Comment = 20;
+  int64 Timestamp = 21;        
+}
+
+message NewsSettingsModel {
+  int64 BeforeNewsIntervalSec = 4;
+  int64 AfterNewsIntervalSec = 5;
+}
+
+message GetNewsSettingsRequest {
+
+}
+
+message GetNewsSettingsResponse {
+    oneof response {
+        GetNewsSettingsResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GetNewsSettingsResponseBody {
+    NewsSettingsModel NewsSettings = 1;
+}
+
+message UpdateNewsSettingsRequest {
+    optional NewsSettingsModel NewsSettings = 1;
+}
+
+message UpdateNewsSettingsResponse {
+    oneof response {
+        UpdateNewsSettingsResponseBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message UpdateNewsSettingsResponseBody {
+    NewsSettingsModel NewsSettings = 1;
+}
+
 
 service TradingNewsGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
     rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (GetNewsPaginatedResponse);
+    rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (GetAffectedTradesPaginatedResponse);
+    rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
+    rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
