@@ -310,6 +310,7 @@ message GetPayoutsWithdrawalSettingsRequest {
 
 message GetPayoutsWithdrawalSettingsResponse {
     repeated payouts.PayoutWithdrawalSetting Settings = 1;
+    payouts.RevenueShareSettings RevenueShareSettings = 2;
 }
 
 message SetPayoutsWithdrawalSettingsRequest {
