@@ -1,5 +1,5 @@
 syntax = "proto3";
-package news;
+package news_trading;
 import "google/protobuf/empty.proto";
 
 enum ImpactType {
@@ -225,7 +225,7 @@ message UpdateNewsSettingsResponseBody {
 }
 
 
-service NewsGrpcService {
+service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
