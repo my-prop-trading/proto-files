@@ -243,6 +243,28 @@ message GetRevenueShareByFiltersResponse {
     double TotalAmount = 2;
 }
 
+message GetExcessiveProfitByFiltersRequest {
+    optional string TraderAccountId = 1;
+    
+    optional int64 FromDate = 2;
+
+    optional int64 ToDate = 3;
+
+    optional string TransactionId = 4;
+
+    optional string ClientId = 5;
+
+    int64 Offset = 20;
+    
+    int64 Limit = 21;
+}
+    
+message GetExcessiveProfitByFiltersResponse {
+    repeated payouts.PayoutRequest Payouts = 1;
+
+    double TotalAmount = 2;
+}
+
 message RevenueShareItem {
     string Id = 1;
     int64 CreatedAt = 2;
@@ -329,6 +351,8 @@ service PayoutsGrpcService {
     rpc GetByFilters(payouts.GetByFiltersRequest) returns (payouts.GetByFiltersResponse);
 
     rpc GetRevenueShareByFilters(payouts.GetRevenueShareByFiltersRequest) returns (payouts.GetRevenueShareByFiltersResponse);
+
+    rpc GetExcessiveProfitByFilters(payouts.GetExcessiveProfitByFiltersRequest) returns (payouts.GetExcessiveProfitByFiltersResponse);
 
     rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
 
