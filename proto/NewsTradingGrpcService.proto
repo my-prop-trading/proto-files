@@ -170,7 +170,7 @@ message AffectedTradeModel {
   string Id = 1;      
   string NewsId = 2;  
   int32 PlatformId = 3;     
-  string PlatfomAccountId = 4;
+  string PlatformAccountId = 4;
   string TraderAccountId = 5;
   string Symbol = 6;
   int64 Digits = 7;
