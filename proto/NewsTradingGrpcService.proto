@@ -35,7 +35,7 @@ message NewsModel {
     int64 EventDate = 7;
     optional int64 DateStart = 8; 
     optional int64 DateEnd = 9;
-    int64 Timestamp = 10;   
+    int64 UpdatedAt = 10;   
     bool Deleted = 11;   
 }
 
@@ -187,7 +187,7 @@ message AffectedTradeModel {
   double Profit = 18;
   double Taxes = 19;
   string Comment = 20;
-  int64 Timestamp = 21;        
+  int64 NewsEventTime = 21;        
 }
 
 message NewsSettingsModel {
