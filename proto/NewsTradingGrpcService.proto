@@ -151,6 +151,7 @@ message GetAffectedTradesPaginatedRequest {
   optional int64 FromDate = 4;
   optional int64 ToDate = 5;
   optional int32 PlatformId = 6;
+  optional string NewsId = 7;
 }
 
 message GetAffectedTradesPaginatedResponse {
