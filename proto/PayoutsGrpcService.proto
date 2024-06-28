@@ -80,6 +80,7 @@ message PayoutRequest {
     int64 ETag = 14;
     double FeeAmount = 15;
     double TotalWithdrawalAmount = 16;
+    double RevenueShare = 17;
 }
 
 message ProfitWidget {
@@ -91,7 +92,9 @@ message ProfitWidget {
 
     double current_profit = 4;
 
-    double left_to_withdraw_in__profit_period = 5;
+    double left_to_withdraw_in_profit_period = 5;
+
+    double trader_account_revenue_share_percentage = 6;
 }
 
 
