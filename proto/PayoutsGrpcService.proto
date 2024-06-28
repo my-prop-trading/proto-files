@@ -2,6 +2,11 @@ syntax = "proto3";
 package payouts;
 import "google/protobuf/empty.proto";
 
+enum RevenueShareType {
+    Timetable = 0;
+    PerTransaction = 1;
+}
+
 enum PayoutStatus {
     Pending = 0;
     Success = 1;
@@ -275,6 +280,7 @@ message RevenueShareItem {
     double Amount = 7;
     string Currency = 8;
     double RevenueSharePercent = 9;
+    payouts.RevenueShareType RevenueShareType = 10;
 }
 
 enum PayoutsGrpcServiceError {
