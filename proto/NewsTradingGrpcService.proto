@@ -31,20 +31,18 @@ message NewsModel {
     ImpactType Impact = 3;
     NewsStatus Status = 4;
     repeated string Currencies = 5; 
-    repeated PlatformCurrency Platforms = 6; 
-    int64 EventDate = 7;
-    optional int64 DateStart = 8; 
-    optional int64 DateEnd = 9;
-    int64 UpdatedAt = 10;   
-    bool Deleted = 11;   
+    int64 EventDate = 6;
+    optional int64 DateStart = 7; 
+    optional int64 DateEnd = 8;
+    int64 UpdatedAt = 9;   
+    bool Deleted = 10;   
 }
 
 message CreateNewsRequest{
   string Event = 1;
   ImpactType Impact = 2;
   repeated string Currencies = 3; 
-  repeated PlatformCurrency Platforms = 4; 
-  int64 EventDate = 5;
+  int64 EventDate = 4;
 }
 
 message CreateNewsResponse {
