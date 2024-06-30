@@ -83,22 +83,19 @@ message GetNewsPaginatedRequest {
   optional string Id = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
-  optional int64 FromDate = 4;
-  optional int64 ToDate = 5;
-  optional NewsStatus Status = 6;
 }
 
-message GetNewsPaginatedResponse {
-  oneof response { 
-    GetNewsPaginatedResponseBody Body = 1;
-    Error Error = 2;
-  }
-}
+// message GetNewsPaginatedResponse {
+//   oneof response { 
+//     GetNewsPaginatedResponseBody Body = 1;
+//     Error Error = 2;
+//   }
+// }
 
-message GetNewsPaginatedResponseBody {
-  repeated NewsModel Items = 1;
-  uint64 Total = 2;
-}
+// message GetNewsPaginatedResponseBody {
+//   repeated NewsModel Items = 1;
+//   uint64 Total = 2;
+// }
 
 message DeleteNewsRequest {
   string Code = 1;
@@ -228,7 +225,8 @@ service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
-    rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (GetNewsPaginatedResponse);
+    rpc GetUpcomingNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
+    rpc GetPastNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (GetAffectedTradesPaginatedResponse);
     rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
     rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
