@@ -17,6 +17,8 @@ enum NewsStatus {
 
 enum Error {
   TECHNICAL_ERROR = 0;
+  NEWS_IS_OUTDATED = 1;
+  NEWS_ALREADY_EXIST = 2;
 }
 
 message PlatformCurrency {
@@ -188,9 +190,15 @@ message AffectedTradeModel {
   int64 NewsEventTime = 21;        
 }
 
+enum NewsRestrictions {
+  OPEN_POSITIONS = 0;
+  CLOSE_POSITIONS = 1;
+  ALL_POSITIONS = 2;
+}
 message NewsSettingsModel {
-  int64 BeforeNewsIntervalSec = 4;
-  int64 AfterNewsIntervalSec = 5;
+  int64 BeforeNewsIntervalSec = 1;
+  int64 AfterNewsIntervalSec = 2;
+  NewsRestrictions Restrictions = 3;
 }
 
 message GetNewsSettingsRequest {
