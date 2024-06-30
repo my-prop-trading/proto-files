@@ -38,7 +38,6 @@ message NewsModel {
     optional int64 DateStart = 7; 
     optional int64 DateEnd = 8;
     int64 UpdatedAt = 9;   
-    bool Deleted = 10;   
 }
 
 message CreateNewsRequest{
