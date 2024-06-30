@@ -114,8 +114,7 @@ message DeleteNewsResponse {
 }
 
 message DeleteNewsResponseBody {
-  repeated NewsModel Items = 1;
-  uint64 Total = 2;
+  NewsModel Item = 1;
 }
 
 message GetNewsRequest {
