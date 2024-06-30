@@ -80,9 +80,27 @@ message UpdateNewsResponseBody {
 }
 
 message GetNewsPaginatedRequest {
+  repeated NewsStatus Status = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
 }
+
+message GetNewsTotalByStatusRequest {
+  repeated NewsStatus Status = 1;
+}
+
+message GetNewsTotalByStatusResponse {
+  oneof response { 
+    GetNewsResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message GetNewsTotalByStatusResponseBody {
+  uint64 Item = 1;
+}
+
+
 
 message DeleteNewsRequest {
   string Code = 1;
@@ -207,13 +225,12 @@ message UpdateNewsSettingsResponseBody {
     NewsSettingsModel NewsSettings = 1;
 }
 
-
 service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
-    rpc GetUpcomingNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetPastNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
+    rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
+    rpc GetNewsTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (GetAffectedTradesPaginatedResponse);
     rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
     rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
