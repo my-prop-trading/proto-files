@@ -218,7 +218,7 @@ message GetNewsSettingsResponseBody {
 }
 
 message UpdateNewsSettingsRequest {
-    optional NewsSettingsModel NewsSettings = 1;
+    NewsSettingsModel NewsSettings = 1;
 }
 
 message UpdateNewsSettingsResponse {
