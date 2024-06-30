@@ -19,6 +19,7 @@ enum Error {
   TECHNICAL_ERROR = 0;
   NEWS_IS_OUTDATED = 1;
   NEWS_ALREADY_EXIST = 2;
+  NO_SUCH_NEWS = 3;
 }
 
 message PlatformCurrency {
