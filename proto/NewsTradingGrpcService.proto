@@ -80,22 +80,9 @@ message UpdateNewsResponseBody {
 }
 
 message GetNewsPaginatedRequest {
-  optional string Id = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
 }
-
-// message GetNewsPaginatedResponse {
-//   oneof response { 
-//     GetNewsPaginatedResponseBody Body = 1;
-//     Error Error = 2;
-//   }
-// }
-
-// message GetNewsPaginatedResponseBody {
-//   repeated NewsModel Items = 1;
-//   uint64 Total = 2;
-// }
 
 message DeleteNewsRequest {
   string Code = 1;
