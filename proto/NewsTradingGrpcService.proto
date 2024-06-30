@@ -97,10 +97,8 @@ message GetNewsTotalByStatusResponse {
 }
 
 message GetNewsTotalByStatusResponseBody {
-  uint64 Item = 1;
+  uint64 Total = 1;
 }
-
-
 
 message DeleteNewsRequest {
   string Code = 1;
