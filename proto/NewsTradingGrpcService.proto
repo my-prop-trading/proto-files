@@ -91,7 +91,7 @@ message GetNewsTotalByStatusRequest {
 
 message GetNewsTotalByStatusResponse {
   oneof response { 
-    GetNewsResponseBody Body = 1;
+    GetNewsTotalByStatusResponseBody Body = 1;
     Error Error = 2;
   }
 }
