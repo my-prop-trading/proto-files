@@ -104,7 +104,7 @@ message GetNewsTotalByStatusResponseBody {
 }
 
 message DeleteNewsRequest {
-  string Code = 1;
+  string Id = 1;
 }
 
 message DeleteNewsResponse {
