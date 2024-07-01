@@ -172,6 +172,7 @@ message AffectedTradeModel {
   double Profit = 18;
   double Taxes = 19;
   string Comment = 20;
+  int64 NewsEventTime = 21;  
   NewsShortModel NewsDescription = 22; 
   string ClientId = 23;      
 }
