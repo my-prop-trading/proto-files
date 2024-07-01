@@ -264,10 +264,10 @@ message UpdateNewsPlatformResponseBody {
 }
 
 message GetNewsPlatformPaginatedRequest {
-  uint64 Limit = 1;
-  uint64 Offset = 2;
+  optional uint32 Limit = 1;
+  optional uint32 Offset = 2;
   optional int32 PlatformId = 3;
-  optional int32 Currency = 4;
+  optional string Currency = 4;
 }
 
 service NewsTradingGrpcService {
