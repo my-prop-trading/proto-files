@@ -111,10 +111,6 @@ message DeleteNewsResponseBody {
   NewsModel Item = 1;
 }
 
-message GetNewsRequest {
-  string Code = 1;
-}
-
 message GetNewsResponse {
   oneof response { 
     GetNewsResponseBody Body = 1;
@@ -169,6 +165,19 @@ message AffectedTradeModel {
   double Taxes = 19;
   string Comment = 20;
   int64 NewsEventTime = 21;        
+}
+
+message GetAffectedTradesTotalRequest {}
+
+message GetAffectedTradesTotalResponse {
+  oneof response { 
+    GetAffectedTradesTotalResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message GetAffectedTradesTotalResponseBody {
+  uint64 Total = 1;
 }
 
 enum NewsRestrictions {
@@ -270,6 +279,23 @@ message GetNewsPlatformPaginatedRequest {
   optional string Currency = 4;
 }
 
+
+message DeleteNewsPlatformRequest {
+  int32 PlatformId = 1;
+  string Symbol = 2;
+}
+
+message DeleteNewsPlatformResponse {
+  oneof response { 
+    DeleteNewsPlatformResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message DeleteNewsPlatformResponseBody {
+  NewsPlatformModel Item = 1;
+}
+
 service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
@@ -278,13 +304,14 @@ service NewsTradingGrpcService {
     rpc GetNewsTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
+    rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalRequest);
 
     rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
     rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
 
     rpc CreateNewsPlatform(CreateNewsPlatformRequest) returns (CreateNewsPlatformResponse);
     rpc UpdateNewsPlatform(UpdateNewsPlatformRequest) returns (UpdateNewsPlatformResponse);
-    //rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
+    rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
     rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
