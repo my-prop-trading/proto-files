@@ -221,22 +221,20 @@ message UpdateNewsSettingsResponseBody {
     NewsSettingsModel NewsSettings = 1;
 }
 
-message NewsPlatformCurrencyModel {
-  string Symbol = 1;
-  string Base = 2;
-  string Quote = 3; 
-}
-
 message NewsPlatformModel {
   int32 PlatformId = 1;
   string PlatformName = 2;
-  repeated NewsPlatformCurrencyModel Currencies = 3; 
+  string Symbol = 3;
+  string Base = 4;
+  string Quote = 5; 
 }
 
 message CreateNewsPlatformRequest{
   int32 PlatformId = 1;
   string PlatformName = 2;
-  repeated NewsPlatformCurrencyModel Currencies = 3; 
+  string Symbol = 3;
+  string Base = 4;
+  string Quote = 5; 
 }
 
 message CreateNewsPlatformResponse {
@@ -251,27 +249,25 @@ message CreateNewsPlatformResponseBody {
 }
 
 message UpdateNewsPlatformRequest{
-  int32 PlatformId = 1;
-  string PlatformName = 2;
-  repeated NewsPlatformCurrencyModel Currencies = 3; 
+  NewsPlatformModel Item = 1; 
 }
 
 message UpdateNewsPlatformResponse {
-oneof response { 
-  UpdateNewsPlatformResponseBody Body = 1;
-  Error Error = 2;
-}
+  oneof response { 
+    UpdateNewsPlatformResponseBody Body = 1;
+    Error Error = 2;
+  }
 }
 
 message UpdateNewsPlatformResponseBody {
   NewsPlatformModel Item = 1;
 }
 
-
 message GetNewsPlatformPaginatedRequest {
-  optional int32 PlatformId = 1;
-  uint64 Limit = 2;
-  uint64 Offset = 3;
+  uint64 Limit = 1;
+  uint64 Offset = 2;
+  optional int32 PlatformId = 3;
+  optional int32 Currency = 4;
 }
 
 service NewsTradingGrpcService {
