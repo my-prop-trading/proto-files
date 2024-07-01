@@ -22,12 +22,6 @@ enum Error {
   NO_SUCH_NEWS = 3;
 }
 
-message PlatformCurrency {
-  int32 PlatformId = 1;
-  string PlatformName = 2;
-  repeated string PlatformCurrencies = 3;
-}
-
 message NewsModel {
     string Id = 1;
     string Event = 2;
@@ -64,7 +58,7 @@ message UpdateNewsRequest{
   ImpactType Impact = 3;
   NewsStatus Status = 4;
   repeated string Currencies = 5; 
-  repeated PlatformCurrency Platforms = 6; 
+
   int64 EventDate = 7;
   optional int64 DateStart = 8; 
   optional int64 DateEnd = 9;
@@ -153,18 +147,6 @@ message GetAffectedTradesPaginatedRequest {
   optional string NewsId = 7;
 }
 
-message GetAffectedTradesPaginatedResponse {
-  oneof response { 
-    GetAffectedTradesPaginatedResponseBody Body = 1;
-    Error Error = 2;
-  }
-}
-
-message GetAffectedTradesPaginatedResponseBody {
-  repeated AffectedTradeModel Items = 1;
-  uint64 Total = 2;
-}
-
 message AffectedTradeModel {
   string Id = 1;      
   string NewsId = 2;  
@@ -239,15 +221,75 @@ message UpdateNewsSettingsResponseBody {
     NewsSettingsModel NewsSettings = 1;
 }
 
+message NewsPlatformCurrencyModel {
+  string Symbol = 1;
+  string Base = 2;
+  string Quote = 3; 
+}
+
+message NewsPlatformModel {
+  int32 PlatformId = 1;
+  string PlatformName = 2;
+  repeated NewsPlatformCurrencyModel Currencies = 3; 
+}
+
+message CreateNewsPlatformRequest{
+  int32 PlatformId = 1;
+  string PlatformName = 2;
+  repeated NewsPlatformCurrencyModel Currencies = 3; 
+}
+
+message CreateNewsPlatformResponse {
+  oneof response { 
+    CreateNewsPlatformResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message CreateNewsPlatformResponseBody {
+  NewsPlatformModel Item = 1;
+}
+
+message UpdateNewsPlatformRequest{
+  int32 PlatformId = 1;
+  string PlatformName = 2;
+  repeated NewsPlatformCurrencyModel Currencies = 3; 
+}
+
+message UpdateNewsPlatformResponse {
+oneof response { 
+  UpdateNewsPlatformResponseBody Body = 1;
+  Error Error = 2;
+}
+}
+
+message UpdateNewsPlatformResponseBody {
+  NewsPlatformModel Item = 1;
+}
+
+
+message GetNewsPlatformPaginatedRequest {
+  optional int32 PlatformId = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+}
+
 service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
     rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
     rpc GetNewsTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
-    rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (GetAffectedTradesPaginatedResponse);
+
+    rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
+
     rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
     rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
+
+    rpc CreateNewsPlatform(CreateNewsPlatformRequest) returns (CreateNewsPlatformResponse);
+    rpc UpdateNewsPlatform(UpdateNewsPlatformRequest) returns (UpdateNewsPlatformResponse);
+    //rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
+    rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
