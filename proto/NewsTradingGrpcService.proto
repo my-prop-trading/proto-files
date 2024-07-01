@@ -143,6 +143,14 @@ message GetAffectedTradesPaginatedRequest {
   optional string NewsId = 7;
 }
 
+message NewsShortModel {
+  string Id = 1;
+  string Event = 2;
+  ImpactType Impact = 3;
+  repeated string Currencies = 5; 
+  int64 EventDate = 6;
+}
+
 message AffectedTradeModel {
   string Id = 1;      
   string NewsId = 2;  
@@ -164,7 +172,8 @@ message AffectedTradeModel {
   double Profit = 18;
   double Taxes = 19;
   string Comment = 20;
-  int64 NewsEventTime = 21;        
+  NewsShortModel NewsDescription = 22; 
+  string ClientId = 23;      
 }
 
 message GetAffectedTradesTotalRequest {}
