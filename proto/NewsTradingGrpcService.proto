@@ -194,10 +194,19 @@ enum NewsRestrictions {
   CLOSE_POSITIONS = 1;
   ALL_POSITIONS = 2;
 }
+
+enum AccountTypeRestrictions {
+  DEMO = 0;
+  LIVE = 1;
+  ALL = 2;
+}
+
+
 message NewsSettingsModel {
   int64 BeforeNewsIntervalSec = 1;
   int64 AfterNewsIntervalSec = 2;
   NewsRestrictions Restrictions = 3;
+  AccountTypeRestrictions AccountType = 4;
 }
 
 message GetNewsSettingsRequest {
