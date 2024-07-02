@@ -306,6 +306,17 @@ message GetPlatformRedirectUrlResponse {
     } 
 }
 
+message InstrumentModel {
+    string Instrument = 1;
+    string Base = 2;
+    string Quote = 3;
+}
+
+message GetPlatformInstrumentsRequest {
+    int32 PlatformId = 1;
+    optional AccountType AccountType = 2;
+}
+
 //---
 message PlatformLinks {
     optional string Windows = 1;
@@ -388,6 +399,9 @@ service TradingPlatformRouterGrpcService {
 
     rpc GetPlatformRedirectUrl(GetPlatformRedirectUrlRequest) 
     returns (GetPlatformRedirectUrlResponse);
+
+    rpc GetPlatformInstruments(GetPlatformInstrumentsRequest) 
+    returns (stream InstrumentModel);
     
     // Platform configurations
     rpc GetAll(google.protobuf.Empty) 

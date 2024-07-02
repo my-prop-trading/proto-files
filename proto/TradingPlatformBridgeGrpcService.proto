@@ -306,6 +306,17 @@ message GetPlatformRedirectUrlResponse {
     } 
 }
 
+message InstrumentModel {
+    string Instrument = 1;
+    string Base = 2;
+    string Quote = 3;
+}
+
+message GetPlatformInstrumentsRequest {
+    int32 PlatformId = 1;
+    optional AccountType AccountType = 2;
+}
+
 service TradingPlatformBridgeGrpcService {
     rpc CreateAccount(CreateAccountRequest) 
     returns (CreateAccountResponse);
@@ -355,4 +366,7 @@ service TradingPlatformBridgeGrpcService {
 
     rpc GetPlatformRedirectUrl(GetPlatformRedirectUrlRequest) 
     returns (GetPlatformRedirectUrlResponse);
+
+    rpc GetPlatformInstruments(GetPlatformInstrumentsRequest) 
+    returns (stream InstrumentModel);
 }
