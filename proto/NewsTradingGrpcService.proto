@@ -299,16 +299,16 @@ message DeleteNewsPlatformResponseBody {
   NewsPlatformModel Item = 1;
 }
 
-message GetNewsPlatformRequest {}
+message GetNewsPlatformTotalRequest {}
 
-message GetNewsPlatformResponse {
+message GetNewsPlatformTotalResponse {
   oneof response { 
-    GetNewsPlatformResponseBody Body = 1;
+    GetNewsPlatformTotalBody Body = 1;
     Error Error = 2;
   }
 }
 
-message GetNewsPlatformResponseBody {
+message GetNewsPlatformTotalBody {
   uint64 Total = 1;
 }
 
@@ -329,7 +329,7 @@ service NewsTradingGrpcService {
     rpc UpdateNewsPlatform(UpdateNewsPlatformRequest) returns (UpdateNewsPlatformResponse);
     rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
     rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
-    rpc GetNewsPlatformTotal(GetNewsPlatformRequest) returns (GetNewsPlatformResponse);
+    rpc GetNewsPlatformTotal(GetNewsPlatformTotalRequest) returns (GetNewsPlatformTotalResponse);
 
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
