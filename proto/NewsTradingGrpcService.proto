@@ -303,12 +303,12 @@ message GetNewsPlatformTotalRequest {}
 
 message GetNewsPlatformTotalResponse {
   oneof response { 
-    GetNewsPlatformTotalBody Body = 1;
+    GetNewsPlatformTotalResponseBody Body = 1;
     Error Error = 2;
   }
 }
 
-message GetNewsPlatformTotalBody {
+message GetNewsPlatformTotalResponseBody {
   uint64 Total = 1;
 }
 
