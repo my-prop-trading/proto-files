@@ -299,7 +299,9 @@ message DeleteNewsPlatformResponseBody {
   NewsPlatformModel Item = 1;
 }
 
-message GetNewsPlatformTotalRequest {}
+message GetNewsPlatformTotalRequest {
+  optional int32 PlatformId = 1;
+}
 
 message GetNewsPlatformTotalResponse {
   oneof response { 
