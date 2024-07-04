@@ -54,15 +54,7 @@ message CreateNewsResponseBody {
 }
 
 message UpdateNewsRequest{
-  string Id = 1;
-  string Event = 2;
-  ImpactType Impact = 3;
-  NewsStatus Status = 4;
-  repeated string Currencies = 5; 
-
-  int64 EventDate = 7;
-  optional int64 DateStart = 8; 
-  optional int64 DateEnd = 9;
+  NewsModel Item = 1;
 }
 
 message UpdateNewsResponse {
