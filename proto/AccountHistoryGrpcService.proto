@@ -63,20 +63,16 @@ enum AccountHistoryError {
   NO_ACCOUNT = 1;
 }
 
-message GetAccountHistoryPaginatedRequest {
+message GetTradesBySymbolsRequest {
   repeated string Symbols = 1;
   optional int64 FromDate = 2;
   optional int64 ToDate = 3;
 }
 
-message GetAccountHistoryPaginatedResponse {
-  repeated AccountTradeModel Items = 1;
-}
-
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
     rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
-    rpc GetTradesBySymbols(GetAccountHistoryPaginatedRequest) returns (stream AccountTradeModel);
+    rpc GetTradesBySymbols(GetTradesBySymbolsRequest) returns (stream AccountTradeModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
