@@ -13,6 +13,10 @@ enum TradeTypeModel {
   CREDIT = 7;
 }
 
+enum AccountType {
+  DEMO = 0;
+  LIVE = 1;
+}
 
 message AccountTradeModel {
   string Id = 1;            
@@ -33,7 +37,10 @@ message AccountTradeModel {
   double Profit = 18;
   double Taxes = 19;
   string Comment = 20;
-  int64 Timestamp = 21;        
+  int64 Timestamp = 21;    
+  int32 PlatformId = 22;
+  AccountType AccountType = 23;
+  string ClientId = 24;
 }
 
 message GetByTraderAccountIdRequest {
