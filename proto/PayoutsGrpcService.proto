@@ -51,6 +51,7 @@ message CryptoWithdrawalDetails {
     string CryptoWalletAddress = 6;
     string RefundFeeCurrency = 7;
     double TotalProfitAmountToBeWithdrawn = 8;
+    double CryptoAmount = 9;
 }
 
 message NotSelectedPaymentDetails {}
