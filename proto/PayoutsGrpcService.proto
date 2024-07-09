@@ -353,6 +353,13 @@ message SetPayoutsWithdrawalSettingsResponse {
     payouts.PayoutWithdrawalSetting Setting = 1;
 }
 
+message SetSetPayoutLimitsPercentageRequest {
+    double Value = 1;
+}
+
+message SetPayoutLimitsPercentageResponse {
+}
+
 service PayoutsGrpcService {
     rpc GetById(payouts.GetByIdRequest) returns (payouts.GetByIdResponse);
 
@@ -379,6 +386,8 @@ service PayoutsGrpcService {
     rpc GetPayoutsWithdrawalSettings(payouts.GetPayoutsWithdrawalSettingsRequest) returns (payouts.GetPayoutsWithdrawalSettingsResponse);
 
     rpc SetPayoutsWithdrawalSettings(payouts.SetPayoutsWithdrawalSettingsRequest) returns (payouts.SetPayoutsWithdrawalSettingsResponse);
+
+    rpc SetPayoutLimitsPercentage(payouts.SetSetPayoutLimitsPercentageRequest) returns (payouts.SetPayoutLimitsPercentageResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
