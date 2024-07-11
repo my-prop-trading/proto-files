@@ -183,6 +183,10 @@ message GetAffectedTradesTotalResponseBody {
   uint64 Total = 1;
 }
 
+message GetAffectedTradesRequest {
+  string TraderAccountId = 5;
+}
+
 enum NewsRestrictions {
   OPEN_POSITIONS = 0;
   CLOSE_POSITIONS = 1;
@@ -323,6 +327,7 @@ service NewsTradingGrpcService {
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
     rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalResponse);
+    rpc GetNewsAffectedTrades(GetAffectedTradesRequest) returns (stream AffectedTradeModel);
 
     rpc GetNewsSettings(GetNewsSettingsRequest) returns (GetNewsSettingsResponse);
     rpc UpdateNewsSettings(UpdateNewsSettingsRequest) returns (UpdateNewsSettingsResponse);
