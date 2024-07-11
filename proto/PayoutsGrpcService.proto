@@ -355,6 +355,7 @@ message SetPayoutsWithdrawalSettingsResponse {
 
 message SetPayoutLimitsPercentageRequest {
     double Value = 1;
+    bool Enabled = 2;
 }
 
 message SetPayoutLimitsPercentageResponse {
