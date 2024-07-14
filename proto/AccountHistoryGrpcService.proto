@@ -74,6 +74,7 @@ message GetTradesBySymbolsRequest {
   repeated string Symbols = 1;
   optional int64 FromDate = 2;
   optional int64 ToDate = 3;
+  int32 PlatformId = 4;
 }
 
 service AccountHistoryGrpcService {
