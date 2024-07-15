@@ -74,7 +74,6 @@ message GetNewsPaginatedRequest {
 }
 
 message GetNewsTotalByStatusRequest {
-  repeated NewsStatus Status = 1;
 }
 
 message GetNewsTotalByStatusResponse {
