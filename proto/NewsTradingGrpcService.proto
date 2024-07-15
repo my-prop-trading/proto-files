@@ -322,9 +322,9 @@ service NewsTradingGrpcService {
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
     rpc GetNewsUpcomingPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsUpcomingTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsUpcomingTotal(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
     rpc GetNewsPastPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsPastTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsPastTotal(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
     rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalResponse);
