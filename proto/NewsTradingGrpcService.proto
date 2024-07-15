@@ -69,7 +69,6 @@ message UpdateNewsResponseBody {
 }
 
 message GetNewsPaginatedRequest {
-  repeated NewsStatus Status = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
 }
@@ -322,8 +321,10 @@ service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
-    rpc GetNewsPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsUpcomingPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
+    rpc GetNewsUpcomingTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsPastPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
+    rpc GetNewsPastTotalByStatus(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
     rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalResponse);
@@ -337,7 +338,6 @@ service NewsTradingGrpcService {
     rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
     rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
     rpc GetNewsPlatformTotal(GetNewsPlatformTotalRequest) returns (GetNewsPlatformTotalResponse);
-
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
