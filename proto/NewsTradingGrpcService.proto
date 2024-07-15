@@ -73,7 +73,7 @@ message GetNewsPaginatedRequest {
   uint64 Offset = 3;
 }
 
-message GetNewsTotalByStatusRequest {
+message GetNewsTotalRequest {
 }
 
 message GetNewsTotalByStatusResponse {
@@ -321,9 +321,9 @@ service NewsTradingGrpcService {
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
     rpc GetNewsUpcomingPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsUpcomingTotal(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsUpcomingTotal(GetNewsTotalRequest) returns (GetNewsTotalByStatusResponse);
     rpc GetNewsPastPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsPastTotal(GetNewsTotalByStatusRequest) returns (GetNewsTotalByStatusResponse);
+    rpc GetNewsPastTotal(GetNewsTotalRequest) returns (GetNewsTotalByStatusResponse);
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
     rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalResponse);
