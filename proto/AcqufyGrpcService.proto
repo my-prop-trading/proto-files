@@ -2,6 +2,15 @@ syntax = "proto3";
 package acqufy;
 import "google/protobuf/empty.proto";
 
+message RegisterTraderRequest{
+    string ClientId = 1;
+    string ClickId = 2;
+}
+
+message RegisterTraderResponse{
+}
+
 service AcqufyGrpcService {
+    rpc RegisterTrader(acqufy.RegisterTraderRequest) returns (acqufy.RegisterTraderResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
