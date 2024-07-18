@@ -337,6 +337,8 @@ message PlatformInfoModel {
     string PlatformUrl = 8;
     int32 BrokerId = 9;
     int32 PlatformType = 10;
+    string PlatformShortName = 11;
+    string PlatformIcon = 12;
 }
 
 message GetAllResponse {
