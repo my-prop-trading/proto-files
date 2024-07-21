@@ -73,17 +73,25 @@ message GetNewsPaginatedRequest {
   uint64 Offset = 3;
 }
 
-message GetNewsTotalRequest {
-}
-
-message GetNewsTotalResponse {
+message GetNewsUpcomingTotalResponse {
   oneof response { 
-    GetNewsTotalResponseBody Body = 1;
+    GetNewsUpcomingTotalResponseBody Body = 1;
     Error Error = 2;
   }
 }
 
-message GetNewsTotalResponseBody {
+message GetNewsUpcomingTotalResponseBody {
+  uint64 Total = 1;
+}
+
+message GetNewsPastTotalResponse {
+  oneof response { 
+    GetNewsPastTotalResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message GetNewsPastTotalResponseBody {
   uint64 Total = 1;
 }
 
@@ -321,9 +329,9 @@ service NewsTradingGrpcService {
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
     rpc DeleteNews(DeleteNewsRequest) returns (DeleteNewsResponse);
     rpc GetNewsUpcomingPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsUpcomingTotal(GetNewsTotalRequest) returns (GetNewsTotalResponse);
+    rpc GetNewsUpcomingTotal(google.protobuf.Empty) returns (GetNewsUpcomingTotalResponse);
     rpc GetNewsPastPaginated(GetNewsPaginatedRequest) returns (stream NewsModel);
-    rpc GetNewsPastTotal(GetNewsTotalRequest) returns (GetNewsTotalResponse);
+    rpc GetNewsPastTotal(google.protobuf.Empty) returns (GetNewsPastTotalResponse);
 
     rpc GetNewsAffectedTradesPaginated(GetAffectedTradesPaginatedRequest) returns (stream AffectedTradeModel);
     rpc GetNewsAffectedTradesTotal(GetAffectedTradesTotalRequest) returns (GetAffectedTradesTotalResponse);
