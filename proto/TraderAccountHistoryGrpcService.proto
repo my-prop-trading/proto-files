@@ -45,6 +45,14 @@ message AccountBlockedDetails {
     BlockerType BlockerType = 2;
 }
 
+message NewsDetails {
+    string Id = 1;
+    string Event = 2;
+    int64 EventDate = 3;
+    repeated string TradeId = 4; 
+    string Message = 5;
+}
+
 enum BlockerType {
     NoBlocker = 0;
     BlockTrades = 1;
@@ -73,6 +81,7 @@ message UpdateLogDetails {
         trader_account_history.PhaseDetails WinInPhase3 = 16;
         trader_account_history.PhaseDetails LoseInPhase3 = 17;
         trader_account_history.EmptyPhaseDetails Phase3AccountGranted = 18;
+        trader_account_history.NewsDetails NewsTradingRestrictionViolation = 19;
     }
 }
 
