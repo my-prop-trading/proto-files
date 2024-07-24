@@ -71,6 +71,8 @@ message TraderPackage {
     optional double Phase3RevenueShare = 45;
     double Phase3Refund = 46;
     repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
+
+    double Refund = 49;
 }
 
 message TraderPackageAttempt {
