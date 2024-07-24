@@ -118,6 +118,8 @@ message TraderPackageFieldsOrder {
   optional int32 Phase3RevenueShare = 45;
   optional int32 Phase3Refund = 46;
   optional int32 Phase3Attempts = 47;
+
+  optional int32 Refund = 49;
 }
 
 message GetAllRequest{
