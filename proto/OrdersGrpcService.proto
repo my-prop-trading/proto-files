@@ -35,6 +35,8 @@ message Order {
   string TraderPackageGroupName = 17;
   string TraderAccountAggregatedId = 18;
   orders.PurchaseType PurchaseType = 19;
+  optional int32 PaymentProviderOrderId = 20;
+
 }
 
 message CreateTraderAccountOrderRequest {
