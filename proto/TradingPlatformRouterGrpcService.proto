@@ -326,6 +326,12 @@ message PlatformLinks {
     optional string Web = 5;
 }
 
+enum CredentialType {
+    MT_CREDS = 0;
+    AUTOLOGIN_LINK = 1;
+    CT_CREDS = 2;
+}
+
 message PlatformInfoModel {
     int32 PlatformId = 1;
     string PlatformName = 2;
@@ -338,6 +344,7 @@ message PlatformInfoModel {
     int32 BrokerId = 9;
     int32 PlatformType = 10;
     string PlatformShortName = 11;
+    CredentialType PlatformCredentialType = 12;
 }
 
 message GetAllResponse {
