@@ -328,7 +328,7 @@ message PlatformLinks {
 
 enum CredentialType {
     MT_CREDS = 0;
-    AUTOLOGIN_LINK = 1;
+    AUTO_LOGIN_LINK = 1;
     CT_CREDS = 2;
 }
 
