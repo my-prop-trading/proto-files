@@ -217,6 +217,7 @@ message Payin {
     optional double DiscountAmount = 16;
     optional orders.DiscountCodeType DiscountType = 17;
     orders.PurchaseType PurchaseType = 18;
+    optional int32 PaymentProviderOrderId = 20;
 }
 
 message GetPayinsPaginatedResponse {
