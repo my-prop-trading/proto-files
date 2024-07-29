@@ -196,6 +196,7 @@ message GetPayinsPaginatedRequest {
   optional int64 FromDate = 7;
   optional int64 ToDate = 8;
   optional string TraderAggregatedId = 9;
+  optional bool IsFirstPayin = 10;
 }
 
 message Payin {
@@ -218,6 +219,7 @@ message Payin {
     optional orders.DiscountCodeType DiscountType = 17;
     orders.PurchaseType PurchaseType = 18;
     optional int32 PaymentProviderOrderId = 20;
+    bool IsFirstPayin = 21;
 }
 
 message GetPayinsPaginatedResponse {
