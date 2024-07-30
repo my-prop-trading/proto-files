@@ -345,6 +345,7 @@ message PlatformInfoModel {
     int32 PlatformType = 10;
     string PlatformShortName = 11;
     CredentialType PlatformCredentialType = 12;
+    bool HidePlatformUrlForDashboard = 13;
 }
 
 message GetAllResponse {
