@@ -243,10 +243,29 @@ message GetOrderResponseBody {
   orders.Order Order = 1;
 }
 
+message CreatePaidTraderAccountOrderRequest {
+  string TradingPackageId = 1;
+  int32 PlatformId = 2;
+  string ProcessId = 3;
+  string ClientId = 4;
+  string Brand = 5;
+  uint32 PaidPhases = 6;
+}
+
+message CreatePaidTraderAccountOrderResponse {
+  oneof response {
+    orders.CreateTraderAccountOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
 service OrdersGrpcService {
     rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
     rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
+
+    //this is through admin panel
+    rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
 
     rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
