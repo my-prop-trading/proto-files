@@ -250,6 +250,7 @@ message CreatePaidTraderAccountOrderRequest {
   string ClientId = 4;
   string Brand = 5;
   uint32 PaidPhases = 6;
+  string Manager = 7;
 }
 
 message CreatePaidTraderAccountOrderResponse {

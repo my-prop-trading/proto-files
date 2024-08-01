@@ -69,6 +69,15 @@ enum BlockerType {
     BlockTradesAndFutureAndCurrent = 4;
 }
 
+message ManualTraderAccountGranted{
+    string Manager = 1;
+    string TradingPackageTitle = 2;
+    string TradingPackageId = 3;
+    int32 NumberOfPhases = 4;
+    int32 PassedPhasesMarked = 5;
+
+}
+
 message UpdateLogDetails {
     oneof Event {
         trader_account_history.PhaseDetails WinInPhase1 = 1;

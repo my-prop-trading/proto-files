@@ -263,6 +263,7 @@ message CreatePaidTraderAccountRequest {
   trader_packages.TraderPackage TraderPackage = 16;
   double RealPrice = 17;
   uint32 CompletedPhases = 18;
+  string Manager = 19;
 }
 
 message CreatePaidTraderAccountResponse{
