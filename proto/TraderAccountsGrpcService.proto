@@ -137,6 +137,7 @@ message GetTraderAccountCredentialsResponseBody {
   string Server = 6;
   string PlatformAccountId = 7; 
   int32 CredentialType = 8;
+  string Email = 9;
 }
 
 message GetTraderAccIdByCredentialsLoginRequest {
