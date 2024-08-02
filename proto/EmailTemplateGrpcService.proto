@@ -140,6 +140,11 @@ message BrandSettingsModel {
     bool ShowLiveChat = 22;
     optional string LiveChatLicense = 23;
     string StylesCssUrl = 24;
+    bool HideLiveChat = 25;
+    bool HideAffiliateMenu = 26;
+    string MailLogoUrl = 27;
+    string MailSuccessPictureUrl = 28;
+    string MailFailPictureUrl = 29;
 
 }
 
