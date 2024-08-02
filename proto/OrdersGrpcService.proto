@@ -220,6 +220,7 @@ message Payin {
     orders.PurchaseType PurchaseType = 18;
     optional int32 PaymentProviderOrderId = 20;
     bool IsFirstPayin = 21;
+    optional string GrantedByManager = 22;
 }
 
 message GetPayinsPaginatedResponse {
