@@ -115,6 +115,38 @@ message GenerateTemplateResponseBody {
     string TemplateProviderId = 1; 
 }
 
+message ReloadFromDefaultTemplateRequest {
+    EmailType EmailType = 1;
+    string LanguageIso2 = 2;
+    string TemplateProviderId = 3;
+}
+
+message ReloadFromDefaultTemplateResponse {
+    oneof response {
+        ReloadFromDefaultTemplateBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message ReloadFromDefaultTemplateBody {
+    string TemplateVersionId = 1; 
+}
+
+message GetTemplateEditLinkRequest {
+    string TemplateProviderId = 3;
+}
+
+message GetTemplateEditLinkResponse {
+    oneof response {
+        ReloadFromDefaultTemplateBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GetTemplateEditLinkBody {
+    string EditLink = 1; 
+}
+
 service EmailBridgeGrpcService {
     rpc SendTemplate(SendTemplateRequest) 
     returns (SendTemplateResponse);
@@ -124,6 +156,12 @@ service EmailBridgeGrpcService {
 
     rpc GenerateTemplate(GenerateTemplateRequest) 
     returns (GenerateTemplateResponse);
+
+    rpc ReloadFromDefaultTemplate(ReloadFromDefaultTemplateRequest) 
+    returns (ReloadFromDefaultTemplateResponse);
+
+    rpc GetTemplateEditLink(GetTemplateEditLinkRequest) 
+    returns (GetTemplateEditLinkResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

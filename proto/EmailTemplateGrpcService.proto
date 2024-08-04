@@ -96,6 +96,38 @@ message GenerateTemplateResponseBody {
     string TemplateProviderId = 1; 
 }
 
+message ReloadFromDefaultTemplateRequest {
+    EmailType EmailType = 1;
+    string LanguageIso2 = 2;
+    string TemplateProviderId = 3;
+}
+
+message ReloadFromDefaultTemplateResponse {
+    oneof response {
+        ReloadFromDefaultTemplateBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message ReloadFromDefaultTemplateBody {
+    string TemplateVersionId = 1; 
+}
+
+message GetTemplateEditLinkRequest {
+    string TemplateProviderId = 3;
+}
+
+message GetTemplateEditLinkResponse {
+    oneof response {
+        ReloadFromDefaultTemplateBody Body = 1;
+        Error Error = 2;
+    } 
+}
+
+message GetTemplateEditLinkBody {
+    string EditLink = 1; 
+}
+
 message SendEmailTemplateRequest {
     string TemplateProviderId = 1;
     string EmailFrom = 2;
@@ -218,6 +250,8 @@ service EmailTemplateGrpcService {
     rpc Get(GetTemplateRequest) returns (GetTemplateResponse);
     rpc GetAll(GetAllTemplateRequest) returns (stream TemplateModel);
     rpc Generate(GenerateTemplateRequest) returns (GenerateTemplateResponse);
+    rpc ReloadFromDefaultTemplate(ReloadFromDefaultTemplateRequest) returns (ReloadFromDefaultTemplateResponse);
+    rpc GetTemplateEditLink(GetTemplateEditLinkRequest) returns (GetTemplateEditLinkResponse);
     rpc SendEmail(SendEmailTemplateRequest) returns (SendEmailTemplateResponse);
     rpc GetSettings(GetSettingsTemplateRequest) returns (GetSettingsTemplateResponse);
     rpc UpdateSettings(UpdateSettingsTemplateRequest) returns (UpdateSettingsTemplateResponse);
