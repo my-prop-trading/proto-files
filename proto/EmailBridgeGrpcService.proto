@@ -116,9 +116,11 @@ message GenerateTemplateResponseBody {
 }
 
 message ReloadFromDefaultTemplateRequest {
-    EmailType EmailType = 1;
-    string LanguageIso2 = 2;
-    string TemplateProviderId = 3;
+    string Name = 1;
+    string Subject = 2;
+    string HtmlContent = 3;
+    string PlainContent = 4;
+    string TemplateProviderId = 5;
 }
 
 message ReloadFromDefaultTemplateResponse {
@@ -138,7 +140,7 @@ message GetTemplateEditLinkRequest {
 
 message GetTemplateEditLinkResponse {
     oneof response {
-        ReloadFromDefaultTemplateBody Body = 1;
+        GetTemplateEditLinkBody Body = 1;
         Error Error = 2;
     } 
 }
