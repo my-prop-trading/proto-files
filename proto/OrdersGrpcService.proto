@@ -295,7 +295,7 @@ service OrdersGrpcService {
     //this is through admin panel
     rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
 
-    rpc MarkPayinAsSuccessfullOrder(orders.MarkPayinAsSuccessfullOrderRequest) returns (orders.MarkPayinAsSuccessfullOrderResponse);
+    rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfullOrderRequest) returns (orders.MarkPayinAsSuccessfullOrderResponse);
 
     rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
