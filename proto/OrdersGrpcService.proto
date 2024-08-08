@@ -263,7 +263,7 @@ message CreatePaidTraderAccountOrderResponse {
 
 
 
-message MarkPayinAsSuccessfullOrderRequest {
+message MarkPayinAsSuccessfulOrderRequest {
   string TradingPackageId = 1;
   int32 PlatformId = 2;
   string ProcessId = 3;
@@ -273,7 +273,7 @@ message MarkPayinAsSuccessfullOrderRequest {
   string Manager = 7;
 }
 
-message MarkPayinAsSuccessfullOrderResponse {
+message MarkPayinAsSuccessfulOrderResponse {
   oneof response {
     orders.OrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
@@ -295,7 +295,7 @@ service OrdersGrpcService {
     //this is through admin panel
     rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
 
-    rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfullOrderRequest) returns (orders.MarkPayinAsSuccessfullOrderResponse);
+    rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfulOrderRequest) returns (orders.MarkPayinAsSuccessfulOrderResponse);
 
     rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
