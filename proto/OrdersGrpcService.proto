@@ -276,9 +276,7 @@ message MarkPayinAsSuccessfulOrderResponse {
 
 message OrderResponseBody {
   string OrderId = 1;
-  int64 CreatedAt = 2;
-  string PaymentUrl = 3;
-  orders.OrderStatus Status = 4;
+  orders.OrderStatus Status = 2;
 }
 
 service OrdersGrpcService {
