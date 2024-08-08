@@ -265,7 +265,7 @@ message MarkPayinAsSuccessfulOrderRequest {
   string OrderId = 1;
   string ProcessId = 2;
   optional string Manager = 3;
-  optional int32 PlatformOrderId = 4; // Trading platform selected for package
+  optional int32 PaymentProviderOrderId = 4; // Trading platform selected for package
   optional string PaymentUrl = 5;
   optional bool IsFirstPayin = 6;
 }
