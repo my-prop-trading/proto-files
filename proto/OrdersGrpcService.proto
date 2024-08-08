@@ -261,16 +261,10 @@ message CreatePaidTraderAccountOrderResponse {
   } 
 }
 
-
-
 message MarkPayinAsSuccessfulOrderRequest {
-  string TradingPackageId = 1;
-  int32 PlatformId = 2;
-  string ProcessId = 3;
-  string ClientId = 4;
-  string Brand = 5;
-  uint32 PaidPhases = 6;
-  string Manager = 7;
+  string OrderId = 1;
+  string ProcessId = 2;
+  string Manager = 3;
 }
 
 message MarkPayinAsSuccessfulOrderResponse {
