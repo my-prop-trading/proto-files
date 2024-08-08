@@ -177,7 +177,11 @@ message BrandSettingsModel {
     optional string MailLogoUrl = 27;
     optional string MailSuccessPictureUrl = 28;
     optional string MailFailPictureUrl = 29;
-
+    optional string AffiliateUrl = 30;
+    optional string DiscordUrl = 31;
+    optional bool HideDiscordMenu = 32;
+    optional string GoogleTagManagerKey = 33;
+    optional bool HideGoogleTag = 34;
 }
 
 message EmailSenderSettingsModel {
