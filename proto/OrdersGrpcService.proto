@@ -277,6 +277,9 @@ message MarkPayinAsSuccessfulOrderResponse {
 message OrderResponseBody {
   string OrderId = 1;
   orders.OrderStatus Status = 2;
+  int32 PlatformOrderId = 3; // Trading platform selected for package
+  optional string PaymentUrl = 4;
+  optional bool IsFirstPayin = 5;
 }
 
 service OrdersGrpcService {
