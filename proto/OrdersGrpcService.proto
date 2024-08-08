@@ -261,6 +261,32 @@ message CreatePaidTraderAccountOrderResponse {
   } 
 }
 
+
+
+message MarkPayinAsSuccessfullOrderRequest {
+  string TradingPackageId = 1;
+  int32 PlatformId = 2;
+  string ProcessId = 3;
+  string ClientId = 4;
+  string Brand = 5;
+  uint32 PaidPhases = 6;
+  string Manager = 7;
+}
+
+message MarkPayinAsSuccessfullOrderResponse {
+  oneof response {
+    orders.OrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  } 
+}
+
+message OrderResponseBody {
+  string OrderId = 1;
+  int64 CreatedAt = 2;
+  string PaymentUrl = 3;
+  orders.OrderStatus Status = 4;
+}
+
 service OrdersGrpcService {
     rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
@@ -268,6 +294,8 @@ service OrdersGrpcService {
 
     //this is through admin panel
     rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
+
+    rpc MarkPayinAsSuccessfullOrder(orders.MarkPayinAsSuccessfullOrderRequest) returns (orders.MarkPayinAsSuccessfullOrderResponse);
 
     rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
