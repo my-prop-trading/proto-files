@@ -221,6 +221,7 @@ message Payin {
     optional int32 PaymentProviderOrderId = 20;
     bool IsFirstPayin = 21;
     optional string GrantedByManager = 22;
+    optional string AffiliateId = 23;
 }
 
 message GetPayinsPaginatedResponse {
