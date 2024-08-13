@@ -93,6 +93,8 @@ message UserProfile {
     clients_crm.POIStatus poi_status = 14;
     clients_crm.POAStatus poa_status = 15;
     clients_crm.KYCStatus kyc_status = 16;
+    string phone = 17;
+    string affiliate_id = 19;
 }
 
 // Service for user profile operations
@@ -197,6 +199,8 @@ message SearchUserProfilesRequest {
     optional string client_id = 19; // Client ID to search for
 
     repeated UserProfileFieldSortOrder order_by = 20; // List of fields to order by
+
+    optional string affiliate_id = 21;
 }
 
 message SearchUserProfilesResponse {

@@ -10,7 +10,25 @@ message RegisterTraderRequest{
 message RegisterTraderResponse{
 }
 
+message Click{
+    string ClientId = 2;
+    string ClickId = 3;
+    string AffiliateId = 4;
+    int64 CreatedAt = 5;
+}
+
+message GetClicksPaginatedRequest{
+    int32 limit = 2;
+    int32 offset = 3;
+}
+
+message GetClicksPaginatedResponse{
+    repeated Click clicks = 1;
+}
+
 service AcqufyGrpcService {
     rpc RegisterTrader(acqufy.RegisterTraderRequest) returns (acqufy.RegisterTraderResponse);
+    //rpc to get all clicks with pagination
+    rpc GetClicksPaginated(acqufy.GetClicksPaginatedRequest) returns (acqufy.GetClicksPaginatedResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
