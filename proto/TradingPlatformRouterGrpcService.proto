@@ -189,6 +189,7 @@ message BalanceModel {
     double Margin = 4;         // margin requirements
     double MarginFree = 5;     // free margin
     double MarginLevel = 6;    // margin level
+    double Profit = 7;
 }
 
 message GetAccountHistoryRequest {
@@ -310,6 +311,13 @@ message InstrumentModel {
     string Instrument = 1;
     string Base = 2;
     string Quote = 3;
+    optional InstrumentPriceModel price = 4;
+}
+
+message InstrumentPriceModel {
+    double Bid = 1;
+    double Ask = 2;
+    int64 Timestamp = 3;
 }
 
 message GetPlatformInstrumentsRequest {
