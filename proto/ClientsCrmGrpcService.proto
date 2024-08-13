@@ -290,7 +290,9 @@ message UserProfileVisibleFields {
     bool poa_status = 15;
     bool kyc_status = 16;
 
-    bool client_id = 19; // Client ID to search for
+    bool client_id = 19;
+    bool phone = 20;
+    bool affiliate_id = 21;
 }
 
 message GetUserProfileVisibleFieldsResponse {
