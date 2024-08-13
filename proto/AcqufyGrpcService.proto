@@ -18,8 +18,8 @@ message Click{
 }
 
 message GetClicksPaginatedRequest{
-    int32 limit = 2;
-    int32 offset = 3;
+    uint64 limit = 2;
+    uint64 offset = 3;
 }
 
 message GetClicksPaginatedResponse{
