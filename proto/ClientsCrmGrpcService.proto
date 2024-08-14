@@ -96,8 +96,9 @@ message UserProfile {
     clients_crm.POIStatus poi_status = 14;
     clients_crm.POAStatus poa_status = 15;
     clients_crm.KYCStatus kyc_status = 16;
-    string phone = 17;
-    string affiliate_id = 19;
+
+    string affiliate_id = 17;
+    string phone = 18;
 }
 
 // Service for user profile operations
@@ -362,6 +363,9 @@ message UserProfileFieldsTemplate {
   optional clients_crm.POIStatus poi_status = 14;
   optional clients_crm.POAStatus poa_status = 15;
   optional clients_crm.KYCStatus kyc_status = 16;
+
+  optional string affiliate_id = 17;
+  optional string phone = 18;
 
   optional string client_id = 19; // Client ID to search for
 
