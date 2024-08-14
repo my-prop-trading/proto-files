@@ -68,6 +68,9 @@ enum UserProfileField {
     POI_STATUS = 14;
     POA_STATUS = 15;
     KYC_STATUS = 16;
+
+    AFFILIATE_ID = 17;
+    PHONE = 18;
 }
 
 message UserProfileFieldSortOrder {
