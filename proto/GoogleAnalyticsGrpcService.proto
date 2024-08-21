@@ -1,0 +1,21 @@
+syntax = "proto3";
+package google_analytics;
+import "google/protobuf/empty.proto";
+
+message RegisterTraderRequest{
+    string ClientId = 1;
+    //string client_id_ga = 2; session_id_ga и gclid.
+    string ClientIdGa = 2;
+    string SessionIdGa = 3;
+    string Gclid = 4;
+
+}
+
+message RegisterTraderResponse{
+}
+
+service GoogleAnalyticsGrpcService {
+    rpc RegisterTrader(google_analytics.RegisterTraderRequest) returns (google_analytics.RegisterTraderResponse);
+    
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
