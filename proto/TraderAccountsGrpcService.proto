@@ -272,6 +272,17 @@ string TraderAccId = 2;
 string AggregateId = 3;
 }
 
+message GetTraderAccountByOrderIdRequest {
+  string OrderId = 1;
+}
+
+message GetTraderAccountByOrderIdResponse {
+  oneof response {
+    trader_accounts.GetTraderAccountByIdResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -280,6 +291,8 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
     rpc GetTraderAccountConditionsById(trader_accounts.GetTraderAccountConditionsByIdRequest) returns (trader_accounts.GetTraderAccountConditionsByIdResponse);
+    //Get trader account by order id
+    rpc GetTraderAccountByOrderId(trader_accounts.GetTraderAccountByOrderIdRequest) returns (trader_accounts.GetTraderAccountByOrderIdResponse);
     //this is only through admin panel
     rpc CreatePaidTraderAccount(trader_accounts.CreatePaidTraderAccountRequest) returns (trader_accounts.CreatePaidTraderAccountResponse);
 
