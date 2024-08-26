@@ -116,6 +116,7 @@ message IncrementDiscountCodeUsageResponse {
 enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
   CODE_DOES_NOT_EXIST = 1;
+  CODE_ALREADY_EXISTS = 2;
 }
 
 message GetDiscountCodeForTradingPackageIdRequest {
