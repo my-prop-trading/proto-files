@@ -2,17 +2,44 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 package trading_control;
 
-message TradingProgressGrpcModel {}
+message TradingMetricsGrpcModel {
+  double average_win = 1;
+  double average_loss = 2;
+  double win_ratio = 3;
+  double risk_reward = 4;
+  int32 days_traded_count = 5;
+  double traded_days_percent = 6;
+  double current_profit = 7;
+  double profit_percent = 8;
+  double max_daily_loss = 9;
+  double max_daily_loss_recorded = 10;
+  double max_daily_loss_percent = 11;
+  double max_overall_loss_recorded = 12;
+  double max_overall_loss_percent = 13;
+  int32 min_trading_days_count = 14;
+  double target_profit = 15;
+  double max_overall_loss = 16;
+  double overall_profit_percent = 17;
+  double initial_account_balance = 18;
+  double overall_loss_level = 19;
+  double initial_balance_loss = 20;
+  double current_equity = 21;
+  double current_balance = 22;
+  double initial_balance_loss_percent = 23;
+  double daily_loss_level = 24;
+  double daily_loss_percent = 25;
+  double current_daily_loss = 26;
+}
 
-message GetTradingProgressGrpcRequest {
+message GetTradingMetricsGrpcRequest {
   string AccountId = 1;
 }
 
-message GetTradingProgressGrpcResponse {
-  TradingProgressGrpcModel item = 1;
+message GetTradingMetricsGrpcResponse {
+  TradingMetricsGrpcModel item = 1;
 }
 
 service TradingControlGrpcService {
-  rpc GetTradingProgress(GetTradingProgressGrpcRequest) returns (GetTradingProgressGrpcResponse);
+  rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
