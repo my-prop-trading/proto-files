@@ -1,0 +1,7 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package trading_control;
+
+service TradingControlGrpcService {
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
