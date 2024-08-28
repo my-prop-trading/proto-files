@@ -6,7 +6,7 @@ message TradingMetricsGrpcModel {
   double average_win = 1;
   double average_loss = 2;
   double win_ratio = 3;
-  double risk_reward = 4;
+  double risk_ratio = 4;
   int32 traded_days_count = 5;
   double traded_days_percent = 6;
   double current_profit = 7;
