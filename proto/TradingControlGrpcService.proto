@@ -9,7 +9,7 @@ message TradingMetricsGrpcModel {
   double risk_ratio = 4;
   int32 traded_days_count = 5;
   double traded_days_percent = 6;
-  double current_profit = 7;
+  double current_total_profit = 7;
   double profit_percent = 8;
   double max_daily_loss = 9;
   double max_daily_loss_recorded = 10;
