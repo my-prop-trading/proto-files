@@ -283,6 +283,29 @@ message GetTraderAccountByOrderIdResponse {
   }
 }
 
+message ReactivateTraderAccountBalanceCorrection {
+  double BalanceDiff = 1;
+}
+
+message ReactivateTraderAccountRequest {
+  string TraderAccId = 1;
+  string ProcessId = 2;
+  string OfficerId = 3;
+  
+  trader_accounts.ReactivateTraderAccountBalanceCorrection BalanceCorrection = 4;
+}
+
+message ReactivateTraderAccountResponse {
+  oneof response {
+    trader_accounts.ReactivateTraderAccountResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message ReactivateTraderAccountResponseBody {
+  trader_accounts.TraderAccount TraderAccount = 1;
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -302,6 +325,9 @@ service TraderAccountsGrpcService {
     rpc GetBlockedTraderAccounts(trader_accounts.GetBlockedTraderAccountsRequest) returns (trader_accounts.GetBlockedTraderAccountsResponse);
     rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
     rpc UnBlockTraderAccount(trader_accounts.UnBlockTraderAccountRequest) returns (trader_accounts.UnBlockTraderAccountResponse);
+
+    //Reactivate trader account
+    rpc ReactivateTraderAccount(trader_accounts.ReactivateTraderAccountRequest) returns (trader_accounts.ReactivateTraderAccountResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
