@@ -39,7 +39,35 @@ message GetTradingMetricsGrpcResponse {
   TradingMetricsGrpcModel item = 1;
 }
 
+enum TradingObjectiveFailReasonGrpc {
+  daily_loss_level = 0;
+  overall_loss_level = 1;
+  target_date = 2;
+}
+
+message FailTradingObjectiveGrpcRequest {
+  string TraderAccountId = 1;
+  TradingObjectiveFailReasonGrpc fail_reason = 2;
+}
+
+message FailTradingObjectiveGrpcResponse {
+  bool is_success = 1;
+  string message = 2;
+}
+
+message PassTradingObjectiveGrpcRequest {
+  string TraderAccountId = 1;
+}
+
+message PassTradingObjectiveGrpcResponse {
+  bool is_success = 1;
+  string message = 2;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
+  rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
+  rpc PassTradingObjective(PassTradingObjectiveGrpcRequest) returns (PassTradingObjectiveGrpcResponse);
+
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
