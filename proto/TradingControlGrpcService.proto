@@ -33,6 +33,7 @@ message TradingMetricsGrpcModel {
 
 message GetTradingMetricsGrpcRequest {
   string TraderAccountId = 1;
+  string ClientId = 2;
 }
 
 message GetTradingMetricsGrpcResponse {
