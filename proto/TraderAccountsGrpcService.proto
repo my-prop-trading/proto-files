@@ -307,6 +307,48 @@ message ReactivateTraderAccountResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
 }
 
+message BalanceCorrection {
+  string id = 1;
+  string client_id = 2;
+  string trader_account_id = 3;
+  string platform_account_id = 4;
+  int32 platform_id = 5;
+  trader_accounts.TraderAccountTypeModel account_type = 6;
+  int64 created_at = 7;
+  string officer_id = 8;
+  string comment = 9;
+  double amount = 10;
+}
+
+message GetBalanceCorrectionsRequest {
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+}
+
+message GetBalanceCorrectionsResponse {
+  repeated trader_accounts.BalanceCorrection Items = 1;
+}
+
+message CreateBalanceCorrectionRequest {
+  string TraderAccId = 1;
+  string ProcessId = 2;
+  string OfficerId = 3;
+
+  trader_accounts.ReactivateTraderAccountBalanceCorrection BalanceCorrection = 4;
+  string Comment = 5;
+}
+
+message CreateBalanceCorrectionResponse {
+  oneof response {
+    trader_accounts.CreateBalanceCorrectionResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message CreateBalanceCorrectionResponseBody {
+  trader_accounts.BalanceCorrection BalanceCorrection = 1;
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -329,6 +371,11 @@ service TraderAccountsGrpcService {
 
     //Reactivate trader account
     rpc ReactivateTraderAccount(trader_accounts.ReactivateTraderAccountRequest) returns (trader_accounts.ReactivateTraderAccountResponse);
+    //Get balance corrections
+    rpc GetBalanceCorrections(trader_accounts.GetBalanceCorrectionsRequest) returns (trader_accounts.GetBalanceCorrectionsResponse);
+    // Create balance correction
+    rpc CreateBalanceCorrection(trader_accounts.CreateBalanceCorrectionRequest) returns (trader_accounts.CreateBalanceCorrectionResponse);
+
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
