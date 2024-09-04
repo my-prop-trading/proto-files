@@ -197,7 +197,9 @@ message GetAccountHistoryRequest {
     AccountType AccountType = 3;
     int32 PlatformId = 4;
     string TraderAccountId = 5;
-    string ClientId = 6; 
+    string ClientId = 6;
+    optional int64 FromDate = 7;
+    repeated TradeType TradeTypes = 8;
 }
 
 enum TradeType { 
