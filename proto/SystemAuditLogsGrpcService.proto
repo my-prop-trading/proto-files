@@ -1,6 +1,6 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-package system_audit_log;
+package system_audit_logs;
 
 message SystemLogGrpcModel {
   string id = 1;
@@ -24,7 +24,7 @@ message GetPageGrpcResponse {
   repeated SystemLogGrpcModel items = 1;
 }
 
-service TradeLogGrpcService {
+service SystemAuditLogsGrpcService {
   rpc GetPage(GetPageGrpcRequest) returns (GetPageGrpcResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
