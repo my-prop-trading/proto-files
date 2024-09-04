@@ -2,7 +2,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 package system_audit_logs;
 
-message SystemLogGrpcModel {
+message SystemAuditLogGrpcModel {
   string id = 1;
   int64 date = 2;
   string label = 3;
@@ -21,7 +21,7 @@ message GetPageGrpcRequest {
 }
 
 message GetPageGrpcResponse {
-  repeated SystemLogGrpcModel items = 1;
+  repeated SystemAuditLogGrpcModel items = 1;
 }
 
 service SystemAuditLogsGrpcService {
