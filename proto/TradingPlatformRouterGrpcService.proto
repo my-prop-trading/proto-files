@@ -198,8 +198,13 @@ message GetAccountHistoryRequest {
     int32 PlatformId = 4;
     string TraderAccountId = 5;
     string ClientId = 6;
-    optional int64 FromDate = 7;
-    repeated TradeType TradeTypes = 8;
+    AccountHistoryFilter ClosedTradesFilter = 7;
+    AccountHistoryFilter OpenedTradesFilter = 8;
+}
+
+message AccountHistoryFilter {
+    optional int64 FromDate = 1;
+    repeated TradeType TradeTypes = 2;
 }
 
 enum TradeType { 
