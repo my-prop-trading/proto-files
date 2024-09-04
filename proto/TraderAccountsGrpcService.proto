@@ -291,8 +291,9 @@ message ReactivateTraderAccountRequest {
   string TraderAccId = 1;
   string ProcessId = 2;
   string OfficerId = 3;
-  
+
   trader_accounts.ReactivateTraderAccountBalanceCorrection BalanceCorrection = 4;
+  string Comment = 5;
 }
 
 message ReactivateTraderAccountResponse {
