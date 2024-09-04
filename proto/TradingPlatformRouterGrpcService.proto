@@ -198,11 +198,11 @@ message GetAccountHistoryRequest {
     int32 PlatformId = 4;
     string TraderAccountId = 5;
     string ClientId = 6;
-    AccountHistoryFilter ClosedTradesFilter = 7;
-    AccountHistoryFilter OpenedTradesFilter = 8;
+    AccountTradeFilter ClosedTradeFilter = 7;
+    AccountTradeFilter OpenedTradeFilter = 8;
 }
 
-message AccountHistoryFilter {
+message AccountTradeFilter {
     optional int64 FromDate = 1;
     repeated TradeType TradeTypes = 2;
 }
