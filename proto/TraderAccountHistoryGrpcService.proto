@@ -81,7 +81,7 @@ message ManualTraderAccountGranted{
 
 message AccountReactivatedDetails {
     string Manager = 1;
-    double Balance = 2;
+    double Amount = 2;
     string Comment = 3;
 }
 
