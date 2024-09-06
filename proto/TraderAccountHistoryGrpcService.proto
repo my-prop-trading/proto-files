@@ -13,6 +13,8 @@ message QueryTraderAccountHistoryLogsRequest {
     string ClientId = 1;
     uint64 Offset = 2;
     uint64 Limit = 3;
+
+    optional string TraderAccountAggregatedId = 4;
 }
 
 message QueryTraderAccountHistoryLogsResponse {
@@ -28,6 +30,7 @@ message TraderAccountUpdateLog {
     int32 PlatformId = 6;
     trader_account_history.UpdateLogDetails EventInfo = 7;
     int32 OrderInActionNumber = 8;
+    string TraderAccountAggregatedId = 9;
 }
 
 message PhaseDetails {
