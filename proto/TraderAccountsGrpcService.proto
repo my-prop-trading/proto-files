@@ -321,6 +321,7 @@ message BalanceCorrection {
 }
 
 message GetBalanceCorrectionsRequest {
+  repeated string TraderAccountIds = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
 }
