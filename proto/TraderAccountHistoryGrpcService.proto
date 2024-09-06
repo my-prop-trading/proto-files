@@ -14,7 +14,7 @@ message QueryTraderAccountHistoryLogsRequest {
     uint64 Offset = 2;
     uint64 Limit = 3;
 
-    optional string TraderAccountAggregatedId = 4;
+    string TraderAccountAggregatedId = 4;
 }
 
 message QueryTraderAccountHistoryLogsResponse {
