@@ -318,6 +318,7 @@ message BalanceCorrection {
   string officer_id = 8;
   string comment = 9;
   double amount = 10;
+  string platform_operation_id = 11;
 }
 
 message GetBalanceCorrectionsRequest {
