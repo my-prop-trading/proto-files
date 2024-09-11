@@ -26,6 +26,7 @@ message CreateAccountRequest {
     AccountType AccountType = 9;
     int32 PlatformId = 10;
     string ClientId = 11; 
+    string PlatformGroup = 12; 
 }
 
 message CreateAccountResponseBody {
