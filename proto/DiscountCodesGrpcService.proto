@@ -15,6 +15,8 @@ message DiscountCode {
     optional int32 usage_limit = 16;
     int32 usage_count = 17;
     bool is_active = 18;
+    bool is_lifetime = 19;
+    map<int32, string> platform_groups = 20;
 }
 
 enum DiscountCodeType {
@@ -37,6 +39,8 @@ message CreateDiscountCodeRequest{
     int64 date_starts = 11; 
     repeated string trading_package_ids = 15;
     optional int32 usage_limit = 16;
+    bool is_lifetime = 17;
+    map<int32, string> platform_groups = 18;
 }
 
 message CreateDiscountCodeResponse {
@@ -55,6 +59,8 @@ message UpdateDiscountCodeRequest{
     int64 date_starts = 11; 
     repeated string trading_package_ids = 15;
     optional int32 usage_limit = 16;
+    bool is_lifetime = 17;
+    map<int32, string> platform_groups = 18;
 }
 
 message UpdateDiscountCodeResponse {
