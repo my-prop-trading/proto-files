@@ -12,6 +12,7 @@ message Candle {
 message HighLowOverall {
     double High = 3;
     double Low = 4;
+    double LowAfterPeak = 6;
 }
 
 message AccountChart {
