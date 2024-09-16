@@ -184,6 +184,7 @@ enum OrdersError {
   InvalidDiscountCode = 5;
   DiscountCodeUsageExceeded = 6;
   DiscountCodeExpired = 7;
+  FailedToUpdateLifetimeDiscountCode = 8;
 }
 
 message GetPayinsPaginatedRequest {
