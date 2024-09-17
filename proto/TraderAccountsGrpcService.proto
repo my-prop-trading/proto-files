@@ -58,7 +58,8 @@ message TraderAccount {
     double Phase3Refund = 57;
 
     double Refund = 58;
-    string PlatformGroup = 59;
+    optional string PlatformGroupDemo = 59;
+    optional string PlatformGroupLive = 60;
 }
 
 enum TraderAccountTypeModel {
@@ -109,7 +110,8 @@ message CreateTraderAccountRequest {
 
     trader_packages.TraderPackage TraderPackage = 16;
     double RealPrice = 17;
-    string PlatformGroup = 19;
+    optional string PlatformGroupDemo = 18;
+    optional string PlatformGroupLive = 19;
 }
 
 message CreateTraderAccountResponse{
@@ -266,7 +268,8 @@ message CreatePaidTraderAccountRequest {
   double RealPrice = 17;
   uint32 CompletedPhases = 18;
   string Manager = 19;
-  string PlatformGroup = 20;
+  optional string PlatformGroupDemo = 20;
+  optional string PlatformGroupLive = 21;
 }
 
 message CreatePaidTraderAccountResponse{
