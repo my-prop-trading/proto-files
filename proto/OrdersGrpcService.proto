@@ -254,6 +254,7 @@ message CreatePaidTraderAccountOrderRequest {
   string Brand = 5;
   uint32 PaidPhases = 6;
   string Manager = 7;
+  optional double RefundGrantedByManager = 8;
 }
 
 message CreatePaidTraderAccountOrderResponse {
