@@ -270,6 +270,8 @@ message CreatePaidTraderAccountRequest {
   string Manager = 19;
   optional string PlatformGroupDemo = 20;
   optional string PlatformGroupLive = 21;
+
+  optional double RefundGrantedByManager = 22;
 }
 
 message CreatePaidTraderAccountResponse{
