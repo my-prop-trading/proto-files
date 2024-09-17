@@ -26,7 +26,7 @@ message CreateAccountRequest {
     AccountType AccountType = 9;
     int32 PlatformId = 10;
     string ClientId = 11; 
-    string PlatformGroup = 12; 
+    optional string PlatformGroup = 12; 
 }
 
 message CreateAccountResponseBody {
@@ -133,6 +133,7 @@ message EnableAccountRequest {
     int32 PlatformId = 4;
     string TraderAccountId = 5;
     string ClientId = 6; 
+    optional string PlatformGroup = 7; 
 }
 
 message EnableAccountResponse {
