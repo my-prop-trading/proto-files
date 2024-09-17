@@ -60,6 +60,8 @@ message TraderAccount {
     double Refund = 58;
     optional string PlatformGroupDemo = 59;
     optional string PlatformGroupLive = 60;
+
+    optional double RefundGrantedByManager = 61;
 }
 
 enum TraderAccountTypeModel {
