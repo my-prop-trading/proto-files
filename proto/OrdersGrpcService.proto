@@ -200,6 +200,13 @@ message GetPayinsPaginatedRequest {
   optional bool IsFirstPayin = 10;
 }
 
+
+message LifetimeMetaData {
+  optional string lifetime_discount_code = 1;
+  optional string platform_group_live = 2;
+  optional string platform_group_demo = 3;
+}
+
 message Payin {
     int64 CreatedAt = 1; // Date and time of the order creation, typically represented as int64
     string OrderNumber = 2;      // Order number
@@ -223,6 +230,7 @@ message Payin {
     bool IsFirstPayin = 21;
     optional string GrantedByManager = 22;
     optional string AffiliateId = 23;
+    LifetimeMetaData lifetime_metadata = 24;
 }
 
 message GetPayinsPaginatedResponse {
