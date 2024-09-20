@@ -29,6 +29,7 @@ message TradingMetricsGrpcModel {
   double daily_loss_level = 24;
   double daily_loss_percent = 25;
   double current_daily_loss = 26;
+  double day_entry_equity = 27;
 }
 
 message GetTradingMetricsGrpcRequest {
