@@ -377,6 +377,10 @@ message ResolveTradingPlatformByIdResponse {
     PlatformInfoModel PlatformInfo = 1;
 }
 
+message PingPlatformRequest {
+    int32 PlatformId = 1;
+}
+
 service TradingPlatformRouterGrpcService {
     //Bridge requests
     rpc CreateAccount(CreateAccountRequest) 
@@ -436,6 +440,9 @@ service TradingPlatformRouterGrpcService {
     rpc ResolveTradingPlatformById(ResolveTradingPlatformByIdRequest) 
     returns (ResolveTradingPlatformByIdResponse);
 
+    rpc PingPlatform(PingPlatformRequest) returns (google.protobuf.Empty);
+
     // Ping
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
 }
