@@ -80,7 +80,6 @@ enum TraderAccountStatusModel {
   DISABLED = 2;
   STAGE_COMPLETED = 3;
   BLOCKED = 4;
-  TRADING_SUSPENDED = 5;
 }
 
 enum BlockerType {
