@@ -88,6 +88,8 @@ enum BlockerType {
   BLOCK_TRADES = 1;
   BLOCK_TRADES_AND_FUTURE = 2;
   BLOCK_TRADES_AND_FUTURE_AND_CURRENT = 4;
+  //BlockTradesForPayouts
+  BLOCK_TRADES_FOR_PAYOUTS = 5;
 }
 
 enum DailyLossFormulaSelector {
