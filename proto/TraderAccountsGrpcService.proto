@@ -80,6 +80,7 @@ enum TraderAccountStatusModel {
   DISABLED = 2;
   STAGE_COMPLETED = 3;
   BLOCKED = 4;
+  TRADING_SUSPENDED = 5;
 }
 
 enum BlockerType {
@@ -378,6 +379,36 @@ message CreateBalanceCorrectionResponseBody {
   trader_accounts.BalanceCorrection BalanceCorrection = 1;
 }
 
+message SuspendTradingRequest {
+  string TraderAccId = 1;
+}
+
+message SuspendTradingResponse {
+  oneof response {
+    trader_accounts.SuspendTradingResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message SuspendTradingResponseBody {
+  trader_accounts.TraderAccount TraderAccount = 1;
+}
+
+message EnableTradingRequest {
+  string TraderAccId = 1;
+}
+
+message EnableTradingResponse {
+  oneof response {
+    trader_accounts.EnableTradingResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message EnableTradingResponseBody {
+  trader_accounts.TraderAccount TraderAccount = 1;
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -395,8 +426,13 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountByIdPrefix(trader_accounts.GetTraderAccountByIdPrefixRequest) returns (trader_accounts.GetTraderAccountByIdPrefixResponse);
 
     rpc GetBlockedTraderAccounts(trader_accounts.GetBlockedTraderAccountsRequest) returns (trader_accounts.GetBlockedTraderAccountsResponse);
+    //this is disables/enables account
     rpc BlockTraderAccount(trader_accounts.BlockTraderAccountRequest) returns (trader_accounts.BlockTraderAccountResponse);
     rpc UnBlockTraderAccount(trader_accounts.UnBlockTraderAccountRequest) returns (trader_accounts.UnBlockTraderAccountResponse);
+
+    // Suspend trading operations
+    rpc SuspendTrading(trader_accounts.SuspendTradingRequest) returns (trader_accounts.SuspendTradingResponse);
+    rpc EnableTrading(trader_accounts.EnableTradingRequest) returns (trader_accounts.EnableTradingResponse);
 
     //Reactivate trader account
     rpc ReactivateTraderAccount(trader_accounts.ReactivateTraderAccountRequest) returns (trader_accounts.ReactivateTraderAccountResponse);
