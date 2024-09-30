@@ -44,6 +44,7 @@ message CreateDiscountCodeRequest{
     bool is_lifetime = 17;
     map<int32, string> platform_groups_demo = 18;
     map<int32, string> platform_groups_live = 19;
+    bool is_all_trading_package_ids = 20;
 }
 
 message CreateDiscountCodeResponse {
@@ -65,6 +66,7 @@ message UpdateDiscountCodeRequest{
     bool is_lifetime = 17;
     map<int32, string> platform_groups_demo = 18;
     map<int32, string> platform_groups_live = 19;
+    bool is_all_trading_package_ids = 20;
 }
 
 message UpdateDiscountCodeResponse {
