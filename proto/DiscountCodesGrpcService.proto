@@ -18,6 +18,7 @@ message DiscountCode {
     bool is_lifetime = 19;
     map<int32, string> platform_groups_demo = 20;
     map<int32, string> platform_groups_live = 21;
+    bool is_all_trading_package_ids = 22;
 }
 
 enum DiscountCodeType {
