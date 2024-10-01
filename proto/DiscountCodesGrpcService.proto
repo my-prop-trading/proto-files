@@ -145,8 +145,7 @@ message GetDiscountCodeForTradingPackageIdResponse {
 
 message CreateDiscountGroupRequest{
   DiscountCode TemplateCode = 1;
-  string GroupName = 2;
-  int64 Count = 3;
+  int64 Count = 2;
 }
 
 message UpdateDiscountGroupRequest{
