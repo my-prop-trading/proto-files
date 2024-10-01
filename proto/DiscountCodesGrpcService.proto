@@ -19,6 +19,7 @@ message DiscountCode {
     map<int32, string> platform_groups_demo = 20;
     map<int32, string> platform_groups_live = 21;
     bool is_all_trading_package_ids = 22;
+    optional string discount_group_name = 23;
 }
 
 enum DiscountCodeType {
@@ -142,6 +143,28 @@ message GetDiscountCodeForTradingPackageIdResponse {
   }
 }
 
+message CreateDiscountGroupRequest{
+  DiscountCode TemplateCode = 1;
+  string GroupName = 2;
+  int64 Count = 3;
+}
+
+message UpdateDiscountGroupRequest{
+  DiscountCode TemplateCode = 1;
+}
+
+message DeleteDiscountGroupRequest {
+  string GroupName = 1;
+}
+
+message GetDiscountGroupPaginatedRequest {
+  optional string Code = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+  optional int64 FromDate = 4;
+  optional int64 ToDate = 5;
+}
+
 service DiscountCodesGrpcService {
     rpc CreateDiscountCode(discount_codes.CreateDiscountCodeRequest) returns (discount_codes.CreateDiscountCodeResponse);
 
@@ -158,4 +181,13 @@ service DiscountCodesGrpcService {
     rpc GetDiscountCodeForTradingPackageId(discount_codes.GetDiscountCodeForTradingPackageIdRequest) returns (discount_codes.GetDiscountCodeForTradingPackageIdResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    rpc CreateDiscountGroup(discount_codes.CreateDiscountGroupRequest) returns (stream DiscountCode);
+
+    rpc UpdateDiscountGroup(discount_codes.UpdateDiscountGroupRequest) returns (google.protobuf.Empty);
+
+    rpc DeleteDiscountGroup(discount_codes.DeleteDiscountGroupRequest) returns (google.protobuf.Empty);
+    
+    rpc GetDiscountGroupPaginated(discount_codes.GetDiscountGroupPaginatedRequest) returns (stream DiscountCode);;
+
 }
