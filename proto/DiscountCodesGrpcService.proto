@@ -165,6 +165,11 @@ message GetDiscountCodeAggregatedByGroupRequest {
   optional int64 ToDate = 4;
 }
 
+message GetDiscountCodeAggregatedByGroupCountRequest {
+  optional int64 FromDate = 1;
+  optional int64 ToDate = 2;
+}
+
 message GetDiscountCodeAggregatedByGroupCountResponse {
   uint64 total_count = 1;
 }
@@ -186,11 +191,11 @@ service DiscountCodesGrpcService {
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
-    rpc CreateDiscountGroup(discount_codes.CreateDiscountGroupRequest) returns (stream DiscountCode);
-    rpc UpdateDiscountGroup(discount_codes.UpdateDiscountGroupRequest) returns (google.protobuf.Empty);
-    rpc DeleteDiscountGroup(discount_codes.DeleteDiscountGroupRequest) returns (google.protobuf.Empty);
-    rpc GetDiscountCodeAggregatedByGroup(discount_codes.GetDiscountCodeAggregatedByGroupRequest) returns (stream DiscountCode);
-    rpc GetDiscountCodeAggregatedByGroupCount(discount_codes.GetDiscountCodeAggregatedByGroupRequest) 
+    rpc CreateDiscountGroup(CreateDiscountGroupRequest) returns (stream DiscountCode);
+    rpc UpdateDiscountGroup(UpdateDiscountGroupRequest) returns (google.protobuf.Empty);
+    rpc DeleteDiscountGroup(DeleteDiscountGroupRequest) returns (google.protobuf.Empty);
+    rpc GetDiscountCodeAggregatedByGroup(GetDiscountCodeAggregatedByGroupRequest) returns (stream DiscountCode);
+    rpc GetDiscountCodeAggregatedByGroupCount(GetDiscountCodeAggregatedByGroupCountRequest) 
       returns (GetDiscountCodeAggregatedByGroupCountResponse);
 
 
