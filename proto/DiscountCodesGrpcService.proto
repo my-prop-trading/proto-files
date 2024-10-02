@@ -20,6 +20,7 @@ message DiscountCode {
     map<int32, string> platform_groups_live = 21;
     bool is_all_trading_package_ids = 22;
     optional string discount_group_name = 23;
+    int64 count_in_group = 24;
 }
 
 enum DiscountCodeType {
@@ -84,6 +85,7 @@ message GetDiscountCodesPaginatedRequest {
   optional int64 FromDate = 7;
   optional int64 ToDate = 8;
   optional bool IsActive = 9;
+  optional string DiscountGroupName = 10;
 }
 
 message GetDiscountCodesPaginatedResponse {
