@@ -19,7 +19,7 @@ message DiscountCode {
     map<int32, string> platform_groups_demo = 20;
     map<int32, string> platform_groups_live = 21;
     bool is_all_trading_package_ids = 22;
-    optional string discount_group_name = 23;
+    string discount_group_name = 23;
     int64 count_in_group = 24;
 }
 
