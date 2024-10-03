@@ -163,11 +163,13 @@ message GetDiscountCodeAggregatedByGroupRequest {
   uint64 Offset = 2;
   optional int64 FromDate = 3;
   optional int64 ToDate = 4;
+  optional string Code = 5;
 }
 
 message GetDiscountCodeAggregatedByGroupCountRequest {
   optional int64 FromDate = 1;
   optional int64 ToDate = 2;
+  optional string Code = 3;
 }
 
 message GetDiscountCodeAggregatedByGroupCountResponse {
