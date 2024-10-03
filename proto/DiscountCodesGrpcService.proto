@@ -180,6 +180,10 @@ message GetDiscountCodeByGroupRequest {
   string GroupName = 1;
 }
 
+message GetDiscountCodeTotalCountResponse {
+  uint64 total_count = 1;
+}
+
 service DiscountCodesGrpcService {
     rpc CreateDiscountCode(discount_codes.CreateDiscountCodeRequest) returns (discount_codes.CreateDiscountCodeResponse);
 
@@ -204,4 +208,5 @@ service DiscountCodesGrpcService {
     rpc GetDiscountCodeAggregatedByGroupCount(GetDiscountCodeAggregatedByGroupCountRequest) 
       returns (GetDiscountCodeAggregatedByGroupCountResponse);
     rpc GetDiscountCodeByGroup(GetDiscountCodeByGroupRequest) returns (stream DiscountCode);
+    rpc GetDiscountCodeTotalCount(google.protobuf.Empty) returns (GetDiscountCodeTotalCountResponse);
 }
