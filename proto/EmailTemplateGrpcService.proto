@@ -182,6 +182,9 @@ message BrandSettingsModel {
     optional bool HideDiscordMenu = 32;
     optional string GoogleTagManagerKey = 33;
     optional bool HideGoogleTag = 34;
+    optional bool HideEconomicCalendarMenu = 35;
+    string DisclaimerUrl = 36;
+    string CookiePolicyUrl = 37;
 }
 
 message EmailSenderSettingsModel {
