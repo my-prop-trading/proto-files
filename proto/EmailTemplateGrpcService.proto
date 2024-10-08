@@ -185,6 +185,8 @@ message BrandSettingsModel {
     optional bool HideEconomicCalendarMenu = 35;
     optional string DisclaimerUrl = 36;
     optional string CookiePolicyUrl = 37;
+    optional string EmailFromName = 38;
+    optional string ContractManagerEmail = 39;
 }
 
 message EmailSenderSettingsModel {
