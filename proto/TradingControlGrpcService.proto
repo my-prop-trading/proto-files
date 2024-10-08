@@ -68,10 +68,59 @@ message PassTradingObjectiveGrpcResponse {
   string message = 2;
 }
 
+message AccountCandleGrpcModel {
+  CandleInterval interval = 1;
+  int64 date = 2;
+  string trader_account_id = 3;
+  AccountCandleDataGrpcModel balance_data = 4;
+  AccountCandleDataGrpcModel equity_data = 5;
+  AccountCandleDataGrpcModel pnl_data = 6;
+}
+
+message AccountCandleDataGrpcModel {
+  double open = 1;
+  double close = 2;
+  double high = 3;
+  double low = 4;
+  double low_after_height = 5;
+
+}
+
+message GetAccountCandlesGrpcRequest {
+  string TraderAccId = 1;
+  int64 StartDate = 2;
+  int64 EndDate = 3;
+  optional CandleInterval Interval = 4;
+}
+
+message GetAccountCandlesGrpcResponse {
+  repeated AccountCandleGrpcModel items = 1;
+}
+
+enum CandleInterval {
+  Minute = 0;
+  Hour = 1;
+  Day = 2;
+  Month = 3;
+  ThreeMinutes = 4;
+  FiveMinutes = 5;
+  FifteenMinutes = 6;
+  ThirtyMinutes = 7;
+  TwoHours = 8;
+  FourHours = 9;
+  SixHours = 10;
+  EightHours = 11;
+  TwelveHours = 12;
+  ThreeDays = 13;
+  SevenDays = 14;
+  Endless = 15;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
   rpc PassTradingObjective(PassTradingObjectiveGrpcRequest) returns (PassTradingObjectiveGrpcResponse);
+  rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
