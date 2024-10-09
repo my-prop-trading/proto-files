@@ -240,6 +240,21 @@ message EmailSentResponse {
     
 }
 
+message SendDemoAccountBlockRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendDemoAccountUnblockRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
+message SendReactivateAccountRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
@@ -323,4 +338,8 @@ service EmailSenderGrpcService {
     rpc SendRevenueShareTaken(email_sender.SendRevenueShareTakenRequest) returns (email_sender.EmailSentResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    rpc SendDemoAccountBlock(SendDemoAccountBlockRequest) returns (email_sender.EmailSentResponse);
+    rpc SendDemoAccountUnblock(SendDemoAccountUnblockRequest) returns (email_sender.EmailSentResponse);
+    rpc SendReactivateAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
 }
