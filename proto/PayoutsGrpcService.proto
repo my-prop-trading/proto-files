@@ -84,7 +84,7 @@ message PayoutRequest {
     double TotalWithdrawalAmount = 16;
     double RevenueShare = 17;
     int64 UpdatedAt = 18;
-    int64 ProcessedAt = 19;
+    optional int64 ProcessedAt = 19;
     optional string OfficerId = 20;
 }
 
