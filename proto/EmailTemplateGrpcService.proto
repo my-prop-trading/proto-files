@@ -137,6 +137,8 @@ message SendEmailTemplateRequest {
     string EmailTo = 3;
     repeated PlaceholderKeyValue Placeholders = 4;
     string Subject = 5;
+    optional string EmailFromName = 6;
+    optional string ClientId = 7;
 }
 
 message SendEmailTemplateResponse {

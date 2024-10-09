@@ -68,7 +68,7 @@ message SendTemplateRequest {
     string ProcessId = 8;
     string Language = 9;
     optional string EmailFromName = 10;
-    string ClientId = 11;
+    optional string ClientId = 11;
 }
 
 message SendTemplateResponse {
@@ -91,7 +91,7 @@ message SendTemplateByIdRequest {
     repeated PlaceholderKeyValue Placeholders = 7;
     string ProcessId = 8;
     optional string EmailFromName = 9;
-    string ClientId = 10;
+    optional string ClientId = 10;
 }
 
 message SendTemplateByIdResponse {
