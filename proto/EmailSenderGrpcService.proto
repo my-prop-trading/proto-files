@@ -243,16 +243,19 @@ message EmailSentResponse {
 message SendDemoAccountBlockRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
 message SendDemoAccountUnblockRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
 message SendReactivateAccountRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
 service EmailSenderGrpcService {
