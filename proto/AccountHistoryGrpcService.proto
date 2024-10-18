@@ -77,10 +77,18 @@ message GetTradesBySymbolsRequest {
   int32 PlatformId = 4;
 }
 
+message InsertOrUpdateGrpcRequest {
+  repeated AccountTradeModel items = 1;
+}
+
+message InsertOrUpdateGrpcResponse {
+}
+
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
     rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
     rpc GetTradesBySymbols(GetTradesBySymbolsRequest) returns (stream AccountTradeModel);
+    rpc InsertOrUpdate(InsertOrUpdateGrpcRequest) returns (InsertOrUpdateGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
