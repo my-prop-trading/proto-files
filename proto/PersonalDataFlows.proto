@@ -93,50 +93,6 @@ message GetListResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
 
-// GetClientTypeRequest
-message GetClientTypeRequest {
-    string ClientId = 1;
-}
-
-// GetInternalClientResponse
-message GetInternalClientResponse {
-    pd.ClientType ClientType = 1;
-}
-
-// GetAllInternalClientsRequest
-message GetAllInternalClientsRequest {
-    uint64 offset = 1;
-    uint64 limit = 2;
-}
-
-// GetAllInternalClientsResponse
-message GetAllInternalClientsResponse {
-    repeated pd.InternalClient InternalClients = 1;
-}
-
-// SetClientTypeRequest
-message SetClientTypeRequest {
-    string ClientId = 1;
-    pd.ClientType ClientType = 2;
-}
-
-// SetClientTypeResponse
-message SetClientTypeResponse {
-}
-
-// Enum for ClientType if not already defined
-enum ClientType {
-    EXTERNAL = 0;
-    INTERNAL = 1;
-}
-
-// InternalClient message
-message InternalClient {
-    string ClientId = 1;
-    pd.ClientType ClientType = 3;
-}
-
-
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
@@ -145,13 +101,6 @@ service PersonalDataService {
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
-
-
-    // Create Types for those requests
-    rpc GetClientType(pd.GetClientTypeRequest) returns (pd.GetInternalClientResponse);
-    rpc GetAllInternalClients(pd.GetAllInternalClientsRequest) returns (pd.GetAllInternalClientsResponse);
-    rpc SetClientType(pd.SetClientTypeRequest) returns (pd.SetClientTypeResponse);
-    //
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
