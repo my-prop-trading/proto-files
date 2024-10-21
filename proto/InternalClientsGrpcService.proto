@@ -1,0 +1,58 @@
+
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package internal_clients;
+
+// GetClientTypeRequest
+message GetClientTypeRequest {
+    string ClientId = 1;
+}
+
+// GetInternalClientResponse
+message GetInternalClientResponse {
+    internal_clients.ClientType ClientType = 1;
+}
+
+// GetAllInternalClientsRequest
+message GetAllInternalClientsRequest {
+    uint64 offset = 1;
+    uint64 limit = 2;
+}
+
+// GetAllInternalClientsResponse
+message GetAllInternalClientsResponse {
+    repeated internal_clients.InternalClient InternalClients = 1;
+}
+
+// SetClientTypeRequest
+message SetClientTypeRequest {
+    string ClientId = 1;
+    internal_clients.ClientType ClientType = 2;
+}
+
+// SetClientTypeResponse
+message SetClientTypeResponse {
+}
+
+// Enum for ClientType if not already defined
+enum ClientType {
+    EXTERNAL = 0;
+    INTERNAL = 1;
+}
+
+// InternalClient message
+message InternalClient {
+    string ClientId = 1;
+    internal_clients.ClientType ClientType = 3;
+}
+
+
+service InternalClientsGrpcService {
+    // Create Types for those requests
+    rpc GetClientType(internal_clients.GetClientTypeRequest) returns (internal_clients.GetInternalClientResponse);
+    rpc GetAllInternalClients(internal_clients.GetAllInternalClientsRequest) returns (internal_clients.GetAllInternalClientsResponse);
+    rpc SetClientType(internal_clients.SetClientTypeRequest) returns (internal_clients.SetClientTypeResponse);
+    //
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
