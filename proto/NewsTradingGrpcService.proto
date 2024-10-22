@@ -329,12 +329,6 @@ message GetNewsPlatformTotalResponseBody {
   uint64 Total = 1;
 }
 
-message ReactivateAccountRequest {
-  string ClientId = 1;
-  string TraderAccountId = 2;
-  int32 PlatformId = 3;
-}
-
 service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
@@ -356,8 +350,6 @@ service NewsTradingGrpcService {
     rpc DeleteNewsPlatform(DeleteNewsPlatformRequest) returns (DeleteNewsPlatformResponse);
     rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
     rpc GetNewsPlatformTotal(GetNewsPlatformTotalRequest) returns (GetNewsPlatformTotalResponse);
-
-    rpc ReactivateAccount(ReactivateAccountRequest) returns (stream AffectedTradeModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
