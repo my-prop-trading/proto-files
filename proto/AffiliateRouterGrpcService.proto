@@ -1,0 +1,52 @@
+syntax = "proto3";
+package affiliate_router;
+import "google/protobuf/empty.proto";
+
+enum AffiliateIntegration {
+    Acqufy = 0;
+    Keitaro = 1;
+}
+
+message RegisterTraderRequest{
+    string ClientId = 1;
+    string ClickId = 2;
+    affiliate_router.AffiliateIntegration AffiliateIntegration = 3;
+}
+
+message RegisterTraderResponse{
+}
+
+message Click{
+    string ClientId = 2;
+    string ClickId = 3;
+    optional string AffiliateId = 4;
+    int64 CreatedAt = 5;
+    affiliate_router.AffiliateIntegration AffiliateIntegration = 6;
+}
+
+message GetClicksPaginatedRequest{
+    affiliate_router.AffiliateIntegration AffiliateIntegration = 1;
+    uint64 limit = 2;
+    uint64 offset = 3;
+}
+
+message GetClicksPaginatedResponse{
+    repeated affiliate_router.Click clicks = 1;
+}
+
+message GetTraderAffiliateInfoRequest{
+    string ClientId = 1;
+    affiliate_router.AffiliateIntegration AffiliateIntegration = 2;
+}
+
+message GetTraderAffiliateInfoResponse{
+    affiliate_router.Click Click = 1;
+}
+
+service AffiliateRouterGrpcService {
+    rpc RegisterTrader(affiliate_router.RegisterTraderRequest) returns (affiliate_router.RegisterTraderResponse);
+    rpc GetTraderAffiliateInfo(affiliate_router.GetTraderAffiliateInfoRequest) returns (affiliate_router.GetTraderAffiliateInfoResponse);
+    //rpc to get all clicks with pagination
+    rpc GetClicksPaginated(affiliate_router.GetClicksPaginatedRequest) returns (affiliate_router.GetClicksPaginatedResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
