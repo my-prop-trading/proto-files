@@ -3,6 +3,6 @@ package affiliate_bridge;
 import "google/protobuf/empty.proto";
 
 // we need it just for ping purpose i guess
-service AffiliateRouterGrpcService {
+service AffiliateBridgeGrpcService {
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
