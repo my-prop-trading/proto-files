@@ -44,9 +44,19 @@ message GetTraderAffiliateInfoResponse{
     affiliate_router.Click Click = 1;
 }
 
+message AddAffiliateIdRequest {
+    string ClientId = 1;
+    string AffiliateId = 2;
+    affiliate_router.AffiliateIntegration AffiliateIntegration = 3;
+}
+
+message AddAffiliateIdResponse {
+}
+
 service AffiliateRouterGrpcService {
     rpc RegisterTrader(affiliate_router.RegisterTraderRequest) returns (affiliate_router.RegisterTraderResponse);
     rpc GetTraderAffiliateInfo(affiliate_router.GetTraderAffiliateInfoRequest) returns (affiliate_router.GetTraderAffiliateInfoResponse);
+    rpc AddAffiliateId(affiliate_router.AddAffiliateIdRequest) returns (affiliate_router.AddAffiliateIdResponse);
     //rpc to get all clicks with pagination
     rpc GetClicksPaginated(affiliate_router.GetClicksPaginatedRequest) returns (affiliate_router.GetClicksPaginatedResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
