@@ -435,8 +435,8 @@ message GetAddressInfoFromKycProviderResponse {
 enum ManualProofStatus{
     MPS_NOT_REQUESTED = 0;
     MPS_REQUESTED = 1;
-    MPS_REJECTTED = 2;
-    MPS_APPRROVED = 3;
+    MPS_REJECTED = 2;
+    MPS_APPROVED = 3;
 }
 
 message ManualProofRequest {
