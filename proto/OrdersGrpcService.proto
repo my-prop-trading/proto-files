@@ -2,6 +2,13 @@ syntax = "proto3";
 package orders;
 import "google/protobuf/empty.proto";
 
+enum TraderPackageChallengeType {
+  PHASE_1 = 0;
+  PHASE_2 = 1;
+  PHASE_3 = 2;
+  INSTANT_FUNDING = 3;
+}
+
 enum OrderStatus {
   SUCCESSFUL = 0;
   UNPAID = 1;
@@ -232,6 +239,7 @@ message Payin {
     optional string AffiliateId = 23;
     LifetimeMetaData lifetime_metadata = 24; //YURA!!!!
     optional string PaymentMethodTitle = 25;
+    orders.TraderPackageChallengeType ChallengeType = 26;
 }
 
 message GetPayinsPaginatedResponse {
