@@ -192,6 +192,7 @@ message BrandSettingsModel {
     optional string CookiePolicyUrl = 37;
     optional string EmailFromName = 38;
     optional string ContractManagerEmail = 39;
+    optional int64 RegistrationType = 40;
 }
 
 message EmailSenderSettingsModel {
