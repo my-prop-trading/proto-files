@@ -11,6 +11,7 @@ message CreateKycBridgeProofOfIdentityTokenRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
+    optional string ApplicantId = 4;
 }
 
 message CreateKycBridgeProofOfIdentityTokenResponseBody {
@@ -29,6 +30,7 @@ message CreateKycBridgeProofOfAddressTokenRequest {
     string ClientId = 1;
     string Country = 2;
     string ProcessId = 3;
+    optional string ApplicantId = 4;
 }
 
 message CreateKycBridgeProofOfAddressTokenResponseBody {
