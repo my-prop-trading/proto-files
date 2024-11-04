@@ -66,6 +66,8 @@ message PersonalDataModel {
     optional pd.AccountType AccountType = 12;
     optional int64 CreatedDate = 13;
     optional string Region = 14;
+    optional string CountryOfRegistration = 15;
+    optional string CountryOfRegistrationByIp = 16;
 }
 
 message PersonalDataModelWithId {
