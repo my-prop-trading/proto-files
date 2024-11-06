@@ -15,11 +15,10 @@ message SystemAuditLogGrpcModel {
 }
 
 message GetPageGrpcRequest {
-  optional string label = 1;
-  optional string ref_id = 2;
-  uint32 limit = 3;
-  uint32 page_number = 4;
-  bool include_related = 5;
+  uint32 limit = 1;
+  uint32 page_number = 2;
+  string ref_id = 3;
+  bool include_related = 4;
 }
 
 message GetPageGrpcResponse {
