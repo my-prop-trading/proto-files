@@ -11,6 +11,7 @@ message SystemAuditLogGrpcModel {
   string ref_id = 6;
   optional string snapshot_before = 7;
   optional string snapshot_after = 8;
+  repeated string related_ids = 9;
 }
 
 message GetPageGrpcRequest {
