@@ -258,6 +258,12 @@ message SendReactivateAccountRequest {
     string TraderAccountId = 3;
 }
 
+message SendRegistrationSuccesfulRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+}
+
 service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
@@ -345,4 +351,5 @@ service EmailSenderGrpcService {
     rpc SendDemoAccountBlock(SendDemoAccountBlockRequest) returns (email_sender.EmailSentResponse);
     rpc SendDemoAccountUnblock(SendDemoAccountUnblockRequest) returns (email_sender.EmailSentResponse);
     rpc SendReactivateAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
+    rpc SendRegistrationSuccesful(SendRegistrationSuccesfulRequest) returns (email_sender.EmailSentResponse);
 }
