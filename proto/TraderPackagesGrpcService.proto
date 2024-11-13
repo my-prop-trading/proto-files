@@ -128,6 +128,7 @@ message TraderPackageFieldsOrder {
   optional int32 Phase3Attempts = 47;
 
   optional int32 Refund = 49;
+  optional int32 Type = 50;
 }
 
 message GetAllRequest{
