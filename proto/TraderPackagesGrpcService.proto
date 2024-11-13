@@ -2,6 +2,11 @@ syntax = "proto3";
 package trader_packages;
 import "google/protobuf/empty.proto";
 
+enum TraderPackageType {
+  SWING = 0;
+  INTRADAY = 1;
+}
+
 enum TraderPackagePhaseType {
   PHASE_1 = 0;
   PHASE_2 = 1;
@@ -73,6 +78,7 @@ message TraderPackage {
     repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
 
     double Refund = 49;
+    trader_packages.TraderPackageType Type = 50;
 }
 
 message TraderPackageAttempt {

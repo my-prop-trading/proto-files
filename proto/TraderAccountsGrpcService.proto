@@ -67,6 +67,8 @@ message TraderAccount {
     trader_accounts.OverallLossFormulaSelector OverallLossFormulaSelector = 63;
 
     double RevenueShare = 64;
+
+    trader_packages.TraderPackageType Type = 65;
 }
 
 enum TraderAccountTypeModel {
