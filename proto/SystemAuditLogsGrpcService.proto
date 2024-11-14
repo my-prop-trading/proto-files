@@ -19,6 +19,7 @@ message GetPageGrpcRequest {
   uint32 page_number = 2;
   string ref_id = 3;
   bool include_related = 4;
+  optional string label = 5;
 }
 
 message GetPageGrpcResponse {
