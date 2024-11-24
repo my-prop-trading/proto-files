@@ -79,6 +79,14 @@ message TraderPackage {
 
     double Refund = 49;
     trader_packages.TraderPackageType Type = 50;
+    repeated PlatformGroup platform_group_demo = 51;
+    repeated PlatformGroup platform_group_live = 52;
+}
+
+message PlatformGroup {
+  int32 platform_id = 1;               
+  string platform_name = 2;          
+  string group_name = 3;      
 }
 
 message TraderPackageAttempt {
