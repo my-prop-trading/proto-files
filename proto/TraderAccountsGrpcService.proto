@@ -69,6 +69,7 @@ message TraderAccount {
     double RevenueShare = 64;
 
     trader_packages.TraderPackageType TraderPackageType = 65;
+    trader_packages.TradingConditionType TradingCondition = 66;
 }
 
 enum TraderAccountTypeModel {

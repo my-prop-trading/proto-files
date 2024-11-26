@@ -7,6 +7,12 @@ enum TraderPackageType {
   INTRADAY = 1;
 }
 
+enum TradingConditionType {
+  NONE = 0;
+  FIXED_SPREADS = 1;
+  NO_COMISSION = 2;
+}
+
 enum TraderPackagePhaseType {
   PHASE_1 = 0;
   PHASE_2 = 1;
@@ -15,86 +21,88 @@ enum TraderPackagePhaseType {
 }
 
 message TraderPackageGroup {
-    string Id = 1;
-    string Name = 2;
-    optional string IconUrl = 3;
-    int32 Order = 4;
+  string Id = 1;
+  string Name = 2;
+  optional string IconUrl = 3;
+  int32 Order = 4;
 }
 
 message TraderPackage {
-    string Id = 1;
+  string Id = 1;
 
-    string Title = 2;
-    double AccountBalance = 3;
-    string AccountBalanceCurrency = 4;
-    double Price = 5;
-    string PriceCurrency = 6;
-    int32 Leverage = 7;
-    string Label = 8;
+  string Title = 2;
+  double AccountBalance = 3;
+  string AccountBalanceCurrency = 4;
+  double Price = 5;
+  string PriceCurrency = 6;
+  int32 Leverage = 7;
+  string Label = 8;
 
-    double Phase1DailyDrawdown = 9;
-    double Phase1OverallDrawdown = 10;
-    double Phase1TargetProfit = 11;
-    int32 Phase1Duration = 12;
-    optional int32 Phase1MinTradingDays = 13;
-    optional int32 Phase1MinOpenedPositions = 14;
-    optional double Phase1RevenueShare = 15;
-    double Phase1Refund = 16;
-    repeated trader_packages.TraderPackageAttempt Phase1Attempts = 17;
+  double Phase1DailyDrawdown = 9;
+  double Phase1OverallDrawdown = 10;
+  double Phase1TargetProfit = 11;
+  int32 Phase1Duration = 12;
+  optional int32 Phase1MinTradingDays = 13;
+  optional int32 Phase1MinOpenedPositions = 14;
+  optional double Phase1RevenueShare = 15;
+  double Phase1Refund = 16;
+  repeated trader_packages.TraderPackageAttempt Phase1Attempts = 17;
 
-    double Phase2DailyDrawdown = 19;
-    double Phase2OverallDrawdown = 20;
-    double Phase2TargetProfit = 21;
-    int32 Phase2Duration = 22;
-    optional int32 Phase2MinTradingDays = 23;
-    optional int32 Phase2MinOpenedPositions = 24;
-    optional double Phase2RevenueShare = 25;
-    double Phase2Refund = 26;
-    repeated trader_packages.TraderPackageAttempt Phase2Attempts = 27;
+  double Phase2DailyDrawdown = 19;
+  double Phase2OverallDrawdown = 20;
+  double Phase2TargetProfit = 21;
+  int32 Phase2Duration = 22;
+  optional int32 Phase2MinTradingDays = 23;
+  optional int32 Phase2MinOpenedPositions = 24;
+  optional double Phase2RevenueShare = 25;
+  double Phase2Refund = 26;
+  repeated trader_packages.TraderPackageAttempt Phase2Attempts = 27;
 
-    double DailyDrawdown = 30;
-    double OverallDrawdown = 31;
-    
-    // RevenueScalingNOT USED
-    //double RevenueScaling = 32;
-    // RevenueScalingNOT USED
+  double DailyDrawdown = 30;
+  double OverallDrawdown = 31;
 
-    double TargetProfit = 33;
-    double RevenueShare = 34;
+  // RevenueScalingNOT USED
+  // double RevenueScaling = 32;
+  // RevenueScalingNOT USED
 
-    string TraderPackageGroupId = 35;
-    string TraderPackageGroupName = 36;
+  double TargetProfit = 33;
+  double RevenueShare = 34;
 
-    trader_packages.TraderPackagePhaseType PhaseType = 37;
+  string TraderPackageGroupId = 35;
+  string TraderPackageGroupName = 36;
 
-    double Phase3DailyDrawdown = 39;
-    double Phase3OverallDrawdown = 40;
-    double Phase3TargetProfit = 41;
-    int32 Phase3Duration = 42;
-    optional int32 Phase3MinTradingDays = 43;
-    optional int32 Phase3MinOpenedPositions = 44;
-    optional double Phase3RevenueShare = 45;
-    double Phase3Refund = 46;
-    repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
+  trader_packages.TraderPackagePhaseType PhaseType = 37;
 
-    double Refund = 49;
-    trader_packages.TraderPackageType Type = 50;
-    repeated PlatformGroup platform_group_demo = 51;
-    repeated PlatformGroup platform_group_live = 52;
+  double Phase3DailyDrawdown = 39;
+  double Phase3OverallDrawdown = 40;
+  double Phase3TargetProfit = 41;
+  int32 Phase3Duration = 42;
+  optional int32 Phase3MinTradingDays = 43;
+  optional int32 Phase3MinOpenedPositions = 44;
+  optional double Phase3RevenueShare = 45;
+  double Phase3Refund = 46;
+  repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
+
+  double Refund = 49;
+  trader_packages.TraderPackageType Type = 50;
+  repeated PlatformGroup platform_group_demo = 51;
+  repeated PlatformGroup platform_group_live = 52;
+
+  trader_packages.TradingConditionType TradingCondition = 53;
 }
 
 message PlatformGroup {
-  int32 platform_id = 1;               
-  string platform_name = 2;          
-  string group_name = 3;      
+  int32 platform_id = 1;
+  string platform_name = 2;
+  string group_name = 3;
 }
 
 message TraderPackageAttempt {
-    string Id = 1;
-    string TradingPackageId = 2;
-    double Price = 3;
-    string PriceCurrency = 4;
-    int32 Number = 5;
+  string Id = 1;
+  string TradingPackageId = 2;
+  double Price = 3;
+  string PriceCurrency = 4;
+  int32 Number = 5;
 }
 
 message TraderPackageFieldsOrder {
@@ -139,112 +147,85 @@ message TraderPackageFieldsOrder {
   optional int32 Type = 50;
 }
 
-message GetAllRequest{
-}
+message GetAllRequest {}
 
-message GetAllPublishedRequest {
-  
-}
+message GetAllPublishedRequest {}
 
-message GetAllResponse{
-  repeated trader_packages.TraderPackage Items = 1;
-}
+message GetAllResponse { repeated trader_packages.TraderPackage Items = 1; }
 
-message SetRequest{
-  trader_packages.TraderPackage Item = 1;
-}
+message SetRequest { trader_packages.TraderPackage Item = 1; }
 
-message SetResponse {
-  bool Success = 1;
-}
+message SetResponse { bool Success = 1; }
 
 message SetTraderPackageFieldsOrderRequest {
   trader_packages.TraderPackageFieldsOrder Item = 1;
 }
 
-message SetTraderPackageFieldsOrderResponse {
-  bool Success = 1;
-}
+message SetTraderPackageFieldsOrderResponse { bool Success = 1; }
 
-message DeleteRequest{
-  string TraderPackageId = 1;
-}
+message DeleteRequest { string TraderPackageId = 1; }
 
-message DeleteResponse {
-  bool Success = 1;
-}
+message DeleteResponse { bool Success = 1; }
 
-message PublishRequest{
-  string TraderPackageId = 1;
-}
+message PublishRequest { string TraderPackageId = 1; }
 
-message PublishResponse {
-  bool Success = 1;
-}
+message PublishResponse { bool Success = 1; }
 
-message UnPublishRequest{
-  string TraderPackageId = 1;
-}
+message UnPublishRequest { string TraderPackageId = 1; }
 
-message UnPublishResponse {
-  bool Success = 1;
-}
+message UnPublishResponse { bool Success = 1; }
 
 ////////////////////////
 // GROUPS
 ////////////////////////
-message GetAllGroupsRequest{
-}
+message GetAllGroupsRequest {}
 
-message GetAllPublishedGroupsRequest {
-  
-}
+message GetAllPublishedGroupsRequest {}
 
-message GetAllGroupsResponse{
+message GetAllGroupsResponse {
   repeated trader_packages.TraderPackageGroup Items = 1;
 }
 
-message SetGroupRequest{
-  trader_packages.TraderPackageGroup Item = 1;
-}
+message SetGroupRequest { trader_packages.TraderPackageGroup Item = 1; }
 
-message SetGroupResponse {
-  bool Success = 1;
-}
+message SetGroupResponse { bool Success = 1; }
 
-message DeleteGroupRequest{
-  string TraderPackageGroupId = 1;
-}
+message DeleteGroupRequest { string TraderPackageGroupId = 1; }
 
-message DeleteGroupResponse {
-  bool Success = 1;
-}
+message DeleteGroupResponse { bool Success = 1; }
 
-message PublishGroupRequest{
-  string TraderPackageGroupId = 1;
-}
+message PublishGroupRequest { string TraderPackageGroupId = 1; }
 
-message PublishGroupResponse {
-  bool Success = 1;
-}
+message PublishGroupResponse { bool Success = 1; }
 
 service TraderPackagesGrpcService {
-    rpc GetAll(trader_packages.GetAllRequest) returns (trader_packages.GetAllResponse);
-    rpc GetAllPublished(trader_packages.GetAllPublishedRequest) returns (trader_packages.GetAllResponse);
-    rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
-    rpc Delete(trader_packages.DeleteRequest) returns (trader_packages.DeleteResponse);
-    rpc Publish(trader_packages.PublishRequest) returns (trader_packages.PublishResponse);
-    rpc UnPublish(trader_packages.UnPublishRequest) returns (trader_packages.UnPublishResponse);
+  rpc GetAll(trader_packages.GetAllRequest)
+      returns (trader_packages.GetAllResponse);
+  rpc GetAllPublished(trader_packages.GetAllPublishedRequest)
+      returns (trader_packages.GetAllResponse);
+  rpc Set(trader_packages.SetRequest) returns (trader_packages.SetResponse);
+  rpc Delete(trader_packages.DeleteRequest)
+      returns (trader_packages.DeleteResponse);
+  rpc Publish(trader_packages.PublishRequest)
+      returns (trader_packages.PublishResponse);
+  rpc UnPublish(trader_packages.UnPublishRequest)
+      returns (trader_packages.UnPublishResponse);
 
-    rpc SetTraderPackageFieldsOrder(trader_packages.SetTraderPackageFieldsOrderRequest) returns (trader_packages.SetTraderPackageFieldsOrderResponse);
+  rpc SetTraderPackageFieldsOrder(
+      trader_packages.SetTraderPackageFieldsOrderRequest)
+      returns (trader_packages.SetTraderPackageFieldsOrderResponse);
 
-    // produce the same requests but for groups
-    rpc GetAllGroups(trader_packages.GetAllGroupsRequest) returns (trader_packages.GetAllGroupsResponse);
-    rpc GetAllPublishedGroups(trader_packages.GetAllPublishedGroupsRequest) returns (trader_packages.GetAllGroupsResponse);
-    rpc SetGroup(trader_packages.SetGroupRequest) returns (trader_packages.SetGroupResponse);
-    rpc DeleteGroup(trader_packages.DeleteGroupRequest) returns (trader_packages.DeleteGroupResponse);
-    rpc PublishGroup(trader_packages.PublishGroupRequest) returns (trader_packages.PublishGroupResponse);
+  // produce the same requests but for groups
+  rpc GetAllGroups(trader_packages.GetAllGroupsRequest)
+      returns (trader_packages.GetAllGroupsResponse);
+  rpc GetAllPublishedGroups(trader_packages.GetAllPublishedGroupsRequest)
+      returns (trader_packages.GetAllGroupsResponse);
+  rpc SetGroup(trader_packages.SetGroupRequest)
+      returns (trader_packages.SetGroupResponse);
+  rpc DeleteGroup(trader_packages.DeleteGroupRequest)
+      returns (trader_packages.DeleteGroupResponse);
+  rpc PublishGroup(trader_packages.PublishGroupRequest)
+      returns (trader_packages.PublishGroupResponse);
 
-
-    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
