@@ -393,6 +393,8 @@ message CreateBalanceCorrectionResponseBody {
 message SuspendTradingRequest {
   string TraderAccId = 1;
 
+  trader_accounts.TradeDisabledReasonModel TradeDisabledReason = 2;
+
 }
 
 message SuspendTradingResponse {
@@ -404,13 +406,11 @@ message SuspendTradingResponse {
 
 message SuspendTradingResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
-
-  trader_accounts.TradeDisabledReasonModel TradeDisabledReason = 2;
 }
 
 message EnableTradingRequest {
   string TraderAccId = 1;
-  
+
   trader_accounts.TradeDisabledReasonModel TradeDisabledReason = 2;
 }
 
