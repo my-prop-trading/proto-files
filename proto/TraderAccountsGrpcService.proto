@@ -70,11 +70,18 @@ message TraderAccount {
 
     trader_packages.TraderPackageType TraderPackageType = 65;
     trader_packages.TradingConditionType TradingCondition = 66;
+
+    repeated trader_accounts.TradeDisabledReasonModel TradeDisabledReasons = 67;
 }
 
 enum TraderAccountTypeModel {
   DEMO = 0;
   LIVE = 1;
+}
+
+enum TradeDisabledReasonModel {
+  PAYOUT = 0;
+  INTRADAY = 1;
 }
 
 enum TraderAccountStatusModel {
@@ -385,6 +392,7 @@ message CreateBalanceCorrectionResponseBody {
 
 message SuspendTradingRequest {
   string TraderAccId = 1;
+
 }
 
 message SuspendTradingResponse {
@@ -413,6 +421,17 @@ message EnableTradingResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
 }
 
+message ClosePositionsRequest {
+  string TraderAccountId = 1;
+}
+
+message ClosePositionsResponse {
+  //IF OK NO ERROR
+  trader_accounts.TraderAccountError Result = 2;
+}
+
+
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -437,6 +456,9 @@ service TraderAccountsGrpcService {
     // Suspend trading operations
     rpc SuspendTrading(trader_accounts.SuspendTradingRequest) returns (trader_accounts.SuspendTradingResponse);
     rpc EnableTrading(trader_accounts.EnableTradingRequest) returns (trader_accounts.EnableTradingResponse);
+
+    // Close all positions on trading platform for trader account
+    rpc ClosePositions(trader_accounts.ClosePositionsRequest) returns (trader_accounts.ClosePositionsResponse);
 
     //Reactivate trader account
     rpc ReactivateTraderAccount(trader_accounts.ReactivateTraderAccountRequest) returns (trader_accounts.ReactivateTraderAccountResponse);
