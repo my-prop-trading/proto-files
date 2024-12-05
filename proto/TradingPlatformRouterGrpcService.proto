@@ -364,6 +364,7 @@ message PlatformInfoModel {
     string PlatformShortName = 11;
     CredentialType PlatformCredentialType = 12;
     bool HidePlatformUrlForDashboard = 13;
+    repeated string RestrictedCountries = 14;
 }
 
 message GetAllResponse {
