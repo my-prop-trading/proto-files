@@ -9,7 +9,7 @@ enum TraderPackageType {
 
 enum TradingConditionType {
   NONE = 0;
-  FIXED_SPREADS = 1;
+  RAW_SPREADS = 1;
   NO_COMMISSION = 2;
 }
 
