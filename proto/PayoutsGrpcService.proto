@@ -220,6 +220,8 @@ message GetPayoutsStatisticResponse {
     double TotallyWithdrawn = 3;
     double PendingPayouts = 4;
     double FeeToBeRefunded = 5;
+    double WithdrawnFeeRefund = 6;
+    double PotentialFeeRefund = 7;
 }
 
 message GetPayoutsStatisticForClientRequest {
@@ -236,6 +238,7 @@ message TraderAccountStatistic {
     double ProfitToBeWithdrawn = 2;
     double TotalCurrentUsersProfit = 3;
     double TotallyWithdrawn = 4;
+    double WithdrawnFeeRefund = 5;
 }
 
 message GetRevenueShareByFiltersRequest {
