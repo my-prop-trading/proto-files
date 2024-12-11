@@ -21,22 +21,6 @@ message SetPersonalDataRequest{
     string IpAddress = 5;
 }
 
-message CreatePersonalDataRequest{
-    string Id = 1;
-    pd.PersonalDataModel PersonalDataModel = 2;
-    string ProcessId = 3;
-    string SiteVersion = 4;
-    string IpAddress = 5;
-}
-
-message UpdatePersonalDataRequest{
-    string Id = 1;
-    pd.PersonalDataModel PersonalDataModel = 2;
-    string ProcessId = 3;
-    string SiteVersion = 4;
-    string IpAddress = 5;
-}
-
 // GET
 message GetOrderPersonalDataRequest {
     string OrderId = 1;
@@ -84,6 +68,7 @@ message PersonalDataModel {
     optional string Region = 14;
     optional string CountryOfRegistration = 15;
     optional string CountryOfRegistrationByIp = 16;
+    string Id = 17;
 }
 
 message PersonalDataModelWithId {
@@ -111,18 +96,43 @@ message GetListResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
 
+message CreatePersonalDataRequest{
+    pd.PersonalDataModel PersonalDataModel = 1;
+    string ProcessId = 2;
+    string SiteVersion = 3;
+    string IpAddress = 4;
+}
+
+message UpdatePersonalDataRequest{
+    pd.PersonalDataModel PersonalDataModel = 1;
+    string ProcessId = 2;
+    string SiteVersion = 3;
+    string IpAddress = 4;
+}
+
+message GetPaginatedRequest {
+    uint64 Offset = 1;
+    uint64 Limit = 2;
+}
+
 service PersonalDataService {
-    rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
+    rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse) {
+        option deprecated = true;
+    }
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty) {
         option deprecated = true;
     }
-    rpc Create(pd.CreatePersonalDataRequest) returns (google.protobuf.Empty);
-    rpc Update(pd.UpdatePersonalDataRequest) returns (google.protobuf.Empty);
-
-    rpc GetList(pd.GetListRequest) returns (pd.GetListResponse);
+    rpc GetList(pd.GetListRequest) returns (pd.GetListResponse) {
+        option deprecated = true;
+    }
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    rpc GetById(pd.GetPersonalDataRequest) returns (PersonalDataModel);
+    rpc Create(pd.CreatePersonalDataRequest) returns (google.protobuf.Empty);
+    rpc Update(pd.UpdatePersonalDataRequest) returns (google.protobuf.Empty);
+    rpc GetPaginated(pd.GetPaginatedRequest) returns (stream PersonalDataModel);
 }
