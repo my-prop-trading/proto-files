@@ -116,23 +116,12 @@ message GetPaginatedRequest {
 }
 
 service PersonalDataService {
-    rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse) {
-        option deprecated = true;
-    }
-    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty) {
-        option deprecated = true;
-    }
-    rpc GetList(pd.GetListRequest) returns (pd.GetListResponse) {
-        option deprecated = true;
-    }
+    rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
+    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
+    rpc GetList(pd.GetListRequest) returns (pd.GetListResponse);
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
-
-    rpc GetById(GetPersonalDataRequest) returns (GetPersonalDataResponse);
-    rpc Create(CreatePersonalDataRequest) returns (google.protobuf.Empty);
-    rpc Update(UpdatePersonalDataRequest) returns (google.protobuf.Empty);
-    rpc GetPaginated(GetPaginatedRequest) returns (stream PersonalDataModel);
 }
