@@ -131,8 +131,8 @@ service PersonalDataService {
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
-    rpc GetById(pd.GetPersonalDataRequest) returns (PersonalDataModel);
-    rpc Create(pd.CreatePersonalDataRequest) returns (google.protobuf.Empty);
-    rpc Update(pd.UpdatePersonalDataRequest) returns (google.protobuf.Empty);
-    rpc GetPaginated(pd.GetPaginatedRequest) returns (stream PersonalDataModel);
+    rpc GetById(GetPersonalDataRequest) returns (GetPersonalDataResponse);
+    rpc Create(CreatePersonalDataRequest) returns (google.protobuf.Empty);
+    rpc Update(UpdatePersonalDataRequest) returns (google.protobuf.Empty);
+    rpc GetPaginated(GetPaginatedRequest) returns (stream PersonalDataModel);
 }
