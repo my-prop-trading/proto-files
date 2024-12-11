@@ -21,6 +21,22 @@ message SetPersonalDataRequest{
     string IpAddress = 5;
 }
 
+message CreatePersonalDataRequest{
+    string Id = 1;
+    pd.PersonalDataModel PersonalDataModel = 2;
+    string ProcessId = 3;
+    string SiteVersion = 4;
+    string IpAddress = 5;
+}
+
+message UpdatePersonalDataRequest{
+    string Id = 1;
+    pd.PersonalDataModel PersonalDataModel = 2;
+    string ProcessId = 3;
+    string SiteVersion = 4;
+    string IpAddress = 5;
+}
+
 // GET
 message GetOrderPersonalDataRequest {
     string OrderId = 1;
@@ -97,7 +113,11 @@ message GetListResponse {
 
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
-    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
+    rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty) {
+        option deprecated = true;
+    }
+    rpc Create(pd.CreatePersonalDataRequest) returns (google.protobuf.Empty);
+    rpc Update(pd.UpdatePersonalDataRequest) returns (google.protobuf.Empty);
 
     rpc GetList(pd.GetListRequest) returns (pd.GetListResponse);
 
