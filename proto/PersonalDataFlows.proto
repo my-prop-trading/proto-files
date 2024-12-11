@@ -96,25 +96,6 @@ message GetListResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
 
-message CreatePersonalDataRequest{
-    pd.PersonalDataModel PersonalDataModel = 1;
-    string ProcessId = 2;
-    string SiteVersion = 3;
-    string IpAddress = 4;
-}
-
-message UpdatePersonalDataRequest{
-    pd.PersonalDataModel PersonalDataModel = 1;
-    string ProcessId = 2;
-    string SiteVersion = 3;
-    string IpAddress = 4;
-}
-
-message GetPaginatedRequest {
-    uint64 Offset = 1;
-    uint64 Limit = 2;
-}
-
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
