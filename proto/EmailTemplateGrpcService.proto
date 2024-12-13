@@ -194,6 +194,7 @@ message BrandSettingsModel {
     optional string EmailFromName = 38;
     optional string ContractManagerEmail = 39;
     optional string RegistrationType = 40;
+    optional string EconomicCalendarUrl = 41;
 }
 
 message EmailSenderSettingsModel {
