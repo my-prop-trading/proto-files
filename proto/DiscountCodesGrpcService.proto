@@ -21,6 +21,7 @@ message DiscountCode {
     bool is_all_trading_package_ids = 22;
     string discount_group_name = 23;
     int64 count_in_group = 24;
+    optional int32 client_usage_limit = 25;
 }
 
 enum DiscountCodeType {
@@ -47,6 +48,7 @@ message CreateDiscountCodeRequest{
     map<int32, string> platform_groups_demo = 18;
     map<int32, string> platform_groups_live = 19;
     bool is_all_trading_package_ids = 20;
+    optional int32 client_usage_limit = 21;
 }
 
 message CreateDiscountCodeResponse {
@@ -69,6 +71,7 @@ message UpdateDiscountCodeRequest{
     map<int32, string> platform_groups_demo = 18;
     map<int32, string> platform_groups_live = 19;
     bool is_all_trading_package_ids = 20;
+    optional int32 client_usage_limit = 21;
 }
 
 message UpdateDiscountCodeResponse {
@@ -119,6 +122,7 @@ message GetDiscountCodeResponse {
 
 message IncrementDiscountCodeUsageRequest {
   string Code = 1;
+  optional string ClientId = 2;
 }
 
 message IncrementDiscountCodeUsageResponse {
@@ -184,6 +188,15 @@ message GetDiscountCodeTotalCountResponse {
   uint64 total_count = 1;
 }
 
+message GetClientUsageRequest {
+  string ClientId = 1;
+  string Code = 2;
+}
+
+message GetClientUsageResponse {
+  int32 client_usage_count = 1;
+}
+
 service DiscountCodesGrpcService {
     rpc CreateDiscountCode(discount_codes.CreateDiscountCodeRequest) returns (discount_codes.CreateDiscountCodeResponse);
 
@@ -194,6 +207,7 @@ service DiscountCodesGrpcService {
     rpc GetDiscountCodesPaginated(discount_codes.GetDiscountCodesPaginatedRequest) returns (discount_codes.GetDiscountCodesPaginatedResponse);
 
     rpc GetDiscountCode(discount_codes.GetDiscountCodeRequest) returns (discount_codes.GetDiscountCodeResponse);
+    rpc GetClientUsage(discount_codes.GetClientUsageRequest) returns (discount_codes.GetClientUsageResponse);
 
     rpc IncrementDiscountCodeUsage(discount_codes.IncrementDiscountCodeUsageRequest) returns (discount_codes.IncrementDiscountCodeUsageResponse);
    
