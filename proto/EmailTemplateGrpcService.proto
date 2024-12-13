@@ -261,6 +261,7 @@ message DeleteLanguageTemplateResponse {
 }
 
 message DeleteLanguageTemplateResponseBody {
+    
 }
 
 service EmailTemplateGrpcService {
