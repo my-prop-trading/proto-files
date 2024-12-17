@@ -438,6 +438,8 @@ message GetPageRequest {
   repeated trader_accounts.TraderAccountStatusModel Statuses = 1;
   uint64 Limit = 2;
   uint64 Offset = 3;
+  repeated trader_accounts.TraderAccountTypeModel Types = 4;
+
 }
 
 message GetPageResponse {
