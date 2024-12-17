@@ -434,7 +434,15 @@ message ClosePositionsResponse {
   trader_accounts.TraderAccountError Result = 2;
 }
 
+message GetPageRequest {
+  repeated trader_accounts.TraderAccountStatusModel Statuses = 1;
+  uint64 Limit = 2;
+  uint64 Offset = 3;
+}
 
+message GetPageResponse {
+  repeated trader_accounts.TraderAccount Items = 1;
+}
 
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
@@ -470,7 +478,7 @@ service TraderAccountsGrpcService {
     rpc GetBalanceCorrections(trader_accounts.GetBalanceCorrectionsRequest) returns (trader_accounts.GetBalanceCorrectionsResponse);
     // Create balance correction
     rpc CreateBalanceCorrection(trader_accounts.CreateBalanceCorrectionRequest) returns (trader_accounts.CreateBalanceCorrectionResponse);
-
+    rpc GetPage(trader_accounts.GetPageRequest) returns (trader_accounts.GetPageResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
