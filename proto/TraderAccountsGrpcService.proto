@@ -72,6 +72,7 @@ message TraderAccount {
     trader_packages.TradingConditionType TradingCondition = 66;
 
     repeated trader_accounts.TradeDisabledReasonModel TradeDisabledReasons = 67;
+    double Price = 68;
 }
 
 enum TraderAccountTypeModel {
