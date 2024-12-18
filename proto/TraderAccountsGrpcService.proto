@@ -73,6 +73,7 @@ message TraderAccount {
 
     repeated trader_accounts.TradeDisabledReasonModel TradeDisabledReasons = 67;
     double Price = 68;
+    int32 PhaseType = 69;
 }
 
 enum TraderAccountTypeModel {
