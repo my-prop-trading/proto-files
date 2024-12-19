@@ -84,7 +84,7 @@ message PreviewOrderDiscountRequest {
   //int32 AccountType = 3;
   optional string DiscountCode = 4;
   //string ProcessId = 5;
-  //string ClientId = 6;
+  optional string ClientId = 6;
   //string Brand = 7;
 }
 
