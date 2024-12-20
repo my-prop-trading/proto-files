@@ -464,10 +464,10 @@ message GetMaxAllocationByVolumeResponse {
   trader_accounts.MaxAllocationByVolume max_allocation_volume = 1;
 }
 
-message GetMaxAllocationByNmberRequest {
+message GetMaxAllocationByNumberRequest {
 }
 
-message GetMaxAllocationByNmberResponse {
+message GetMaxAllocationByNumberResponse {
   trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
 }
 
@@ -479,11 +479,11 @@ message EditMaxAllocationByVolumeResponse {
   trader_accounts.MaxAllocationByVolume max_allocation_volume = 1;
 }
 
-message EditMaxAllocationByNmberRequest {
+message EditMaxAllocationByNumberRequest {
   trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
 }
 
-message EditMaxAllocationByNmberResponse {
+message EditMaxAllocationByNumberResponse {
   trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
 }
 
@@ -525,10 +525,10 @@ service TraderAccountsGrpcService {
 
     //MAX ALLOCATION
     rpc GetMaxAllocationByVolume(trader_accounts.GetMaxAllocationByVolumeRequest) returns (trader_accounts.GetMaxAllocationByVolumeResponse);
-    rpc GetMaxAllocationByNmber(trader_accounts.GetMaxAllocationByNmberRequest) returns (trader_accounts.GetMaxAllocationByNmberResponse);
+    rpc GetMaxAllocationByNmber(trader_accounts.GetMaxAllocationByNumberRequest) returns (trader_accounts.GetMaxAllocationByNumberResponse);
 
     rpc UpsertMaxAllocationByVolume(trader_accounts.EditMaxAllocationByVolumeRequest) returns (trader_accounts.EditMaxAllocationByVolumeResponse);
-    rpc UpsertMaxAllocationByNumber(trader_accounts.EditMaxAllocationByNmberRequest) returns (trader_accounts.EditMaxAllocationByNmberResponse);
+    rpc UpsertMaxAllocationByNumber(trader_accounts.EditMaxAllocationByNumberRequest) returns (trader_accounts.EditMaxAllocationByNumberResponse);
     //MAX ALLOCATION
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
