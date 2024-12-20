@@ -447,6 +447,45 @@ message GetPageRequest {
 message GetPageResponse {
   repeated trader_accounts.TraderAccount Items = 1;
 }
+message MaxAllocationByVolume {
+  double max_allocation_volume = 4;
+  bool is_enabled = 5;
+}
+
+message MaxAllocationByNumber {
+  int32 max_allocation_number = 4;
+  bool is_enabled = 5;
+}
+
+message GetMaxAllocationByVolumeRequest {
+}
+
+message GetMaxAllocationByVolumeResponse {
+  trader_accounts.MaxAllocationByVolume max_allocation_volume = 1;
+}
+
+message GetMaxAllocationByNmberRequest {
+}
+
+message GetMaxAllocationByNmberResponse {
+  trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
+}
+
+message EditMaxAllocationByVolumeRequest {
+  trader_accounts.MaxAllocationByVolume max_allocation_volume = 1;
+}
+
+message EditMaxAllocationByVolumeResponse {
+  trader_accounts.MaxAllocationByVolume max_allocation_volume = 1;
+}
+
+message EditMaxAllocationByNmberRequest {
+  trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
+}
+
+message EditMaxAllocationByNmberResponse {
+  trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
+}
 
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
@@ -483,6 +522,14 @@ service TraderAccountsGrpcService {
     // Create balance correction
     rpc CreateBalanceCorrection(trader_accounts.CreateBalanceCorrectionRequest) returns (trader_accounts.CreateBalanceCorrectionResponse);
     rpc GetPage(trader_accounts.GetPageRequest) returns (trader_accounts.GetPageResponse);
+
+    //MAX ALLOCATION
+    rpc GetMaxAllocationByVolume(trader_accounts.GetMaxAllocationByVolumeRequest) returns (trader_accounts.GetMaxAllocationByVolumeResponse);
+    rpc GetMaxAllocationByNmber(trader_accounts.GetMaxAllocationByNmberRequest) returns (trader_accounts.GetMaxAllocationByNmberResponse);
+
+    rpc UpsertMaxAllocationByVolume(trader_accounts.EditMaxAllocationByVolumeRequest) returns (trader_accounts.EditMaxAllocationByVolumeResponse);
+    rpc UpsertMaxAllocationByNumber(trader_accounts.EditMaxAllocationByNmberRequest) returns (trader_accounts.EditMaxAllocationByNmberResponse);
+    //MAX ALLOCATION
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
