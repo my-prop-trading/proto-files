@@ -525,7 +525,7 @@ service TraderAccountsGrpcService {
 
     //MAX ALLOCATION
     rpc GetMaxAllocationByVolume(trader_accounts.GetMaxAllocationByVolumeRequest) returns (trader_accounts.GetMaxAllocationByVolumeResponse);
-    rpc GetMaxAllocationByNmber(trader_accounts.GetMaxAllocationByNumberRequest) returns (trader_accounts.GetMaxAllocationByNumberResponse);
+    rpc GetMaxAllocationByNumber(trader_accounts.GetMaxAllocationByNumberRequest) returns (trader_accounts.GetMaxAllocationByNumberResponse);
 
     rpc UpsertMaxAllocationByVolume(trader_accounts.EditMaxAllocationByVolumeRequest) returns (trader_accounts.EditMaxAllocationByVolumeResponse);
     rpc UpsertMaxAllocationByNumber(trader_accounts.EditMaxAllocationByNumberRequest) returns (trader_accounts.EditMaxAllocationByNumberResponse);
