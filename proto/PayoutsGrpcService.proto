@@ -175,6 +175,7 @@ message GetByFiltersRequest {
     
 message GetByFiltersResponse {
     repeated payouts.PayoutRequest Payouts = 1;
+    uint64 TotalCount = 2;
 }
 
 message ApprovePayoutRequest {
