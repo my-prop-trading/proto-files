@@ -244,6 +244,7 @@ message Payin {
 
 message GetPayinsPaginatedResponse {
   repeated orders.Payin Payins = 1;
+  uint64 TotalCount = 2;
 }
 
 
