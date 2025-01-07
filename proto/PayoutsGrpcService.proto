@@ -262,6 +262,8 @@ message GetRevenueShareByFiltersResponse {
     repeated payouts.RevenueShareItem Payouts = 1;
 
     double TotalAmount = 2;
+
+    uint64 TotalCount = 3;
 }
 
 message GetExcessiveProfitByFiltersRequest {
@@ -284,6 +286,8 @@ message GetExcessiveProfitByFiltersResponse {
     repeated payouts.PayoutRequest Payouts = 1;
 
     double TotalAmount = 2;
+
+    uint64 TotalCount = 3;
 }
 
 message RevenueShareItem {
