@@ -19,6 +19,7 @@ message QueryTraderAccountHistoryLogsRequest {
 
 message QueryTraderAccountHistoryLogsResponse {
     repeated TraderAccountUpdateLog TraderAccountUpdateLogs = 1;
+    uint64 TotalCount = 2;
 }
 
 message TraderAccountUpdateLog {

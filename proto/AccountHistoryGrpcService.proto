@@ -51,6 +51,7 @@ message GetByTraderAccountIdRequest {
 
 message GetByTraderAccountIdResponse {
   repeated AccountTradeModel Items = 1;
+  uint64 TotalCount = 2;
 }
 
 message GetByTraderAccountIdWithTotalCountRequest {
