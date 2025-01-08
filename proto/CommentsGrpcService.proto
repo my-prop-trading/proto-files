@@ -27,6 +27,7 @@ message GetByClientIdRequest {
 
 message GetByClientIdResponse {
     repeated Comment Comments = 1;
+    uint64 TotalCount = 2;
 }
 
 message GetByEntityIdRequest {
