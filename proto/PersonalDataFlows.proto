@@ -96,6 +96,14 @@ message GetListResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
 
+message GetForClientsRequest {
+    repeated string ClientIds = 1;
+}
+
+message GetForClientsResponse {
+    repeated pd.PersonalDataModelWithId Items = 1;
+}
+
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
@@ -103,6 +111,9 @@ service PersonalDataService {
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
+
+    //get for clients
+    rpc GetForClients(pd.GetForClientsRequest) returns (pd.GetForClientsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
