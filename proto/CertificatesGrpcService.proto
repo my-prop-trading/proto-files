@@ -35,6 +35,7 @@ message GetPaginatedRequest {
   optional certificates.CertificateType type = 5;
   optional string client_id = 6;
   optional int64 date_from = 7;
+  optional string trader_account_id = 8;
 }
 
 message GetPaginatedResponse {
