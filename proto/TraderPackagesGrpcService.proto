@@ -89,6 +89,7 @@ message TraderPackage {
   repeated PlatformGroup platform_group_live = 52;
 
   trader_packages.TradingConditionType TradingCondition = 53;
+  int32 RefundPayoutNumber = 54;
 }
 
 message PlatformGroup {
