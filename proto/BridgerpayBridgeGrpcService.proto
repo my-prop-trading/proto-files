@@ -2,6 +2,6 @@ syntax = "proto3";
 package bridgerpay_bridge;
 import "google/protobuf/empty.proto";
 
-service BridgepayBridgeGrpcService {
+service BridgerpayBridgeGrpcService {
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
