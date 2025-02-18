@@ -488,6 +488,49 @@ message EditMaxAllocationByNumberResponse {
   trader_accounts.MaxAllocationByNumber max_allocation_number = 1;
 }
 
+message GetTraderAccountCacheRequest {
+  string ClientId = 1;
+}
+
+enum CredentialType {
+  MT_CREDS = 0;
+  AUTO_LOGIN_LINK = 1;
+  CT_CREDS = 2;
+  TL_CREDS = 3;
+}
+
+message TraderAccountCacheModel {
+  string Id = 1;
+  string AggregateId = 2;
+  string Title = 3;
+  int32 Phase = 4;
+  int32 PlatformId = 5;
+  string PlatformName = 6;
+  int32 PlatformType = 7;
+  string PlatformShortName = 8;
+  optional string PlatformIconUrl = 9;
+  CredentialType PlatformCredentialType = 10;
+  double Balance = 11;
+  string StartDate = 12;
+  string EndDate = 13;
+  string CreatedAt = 14;
+  string UpdatedAt = 15;
+  TraderAccountStatusModel Status = 16;
+  int32 StatusText = 17;
+  TraderAccountTypeModel AccountType = 18;
+  string OrderId = 19;
+  optional BlockerType BlockerType = 20;
+  string TraderPackageGroupId = 21;
+  string TraderPackageGroupName = 22;
+  string InitialAccountCurrency = 23;
+  string Server = 24;
+  trader_packages.TraderPackagePhaseType TraderPackagePhaseTypeModel = 25;
+  repeated string NewsTradingRestrictionTrades = 26;
+  bool HidePlatformUrlForDashboard = 27;
+  trader_packages.TraderPackageType TraderPackageType = 28;
+  trader_packages.TradingConditionType TradingCondition = 29;
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -531,6 +574,8 @@ service TraderAccountsGrpcService {
     rpc UpsertMaxAllocationByVolume(trader_accounts.EditMaxAllocationByVolumeRequest) returns (trader_accounts.EditMaxAllocationByVolumeResponse);
     rpc UpsertMaxAllocationByNumber(trader_accounts.EditMaxAllocationByNumberRequest) returns (trader_accounts.EditMaxAllocationByNumberResponse);
     //MAX ALLOCATION
+
+    rpc GetTraderAccountCache(GetTraderAccountCacheRequest) returns (stream TraderAccountCacheModel);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
