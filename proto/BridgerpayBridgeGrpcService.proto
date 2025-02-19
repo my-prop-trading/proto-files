@@ -6,18 +6,17 @@ message CreateCheckoutGrpcRequest {
     string order_id = 1;
     string currency = 2;
     string country = 3;
-    optional f64 amount = 4;
+    optional double amount = 4;
     optional string first_name = 5;
     optional string last_name = 6;
     optional string city = 7;
-    string state = 8;
-    string zipcode = 9;
-    optional string email = 10;
-    optional string phone = 11;
-    optional string platform_id = 12;
-    optional string trading_id = 13;
-    optional string affiliate_id = 14;
-    optional string payload = 15;
+    optional string zip_code = 8;
+    optional string email = 9;
+    optional string phone = 10;
+    optional string platform_id = 11;
+    optional string trading_id = 12;
+    optional string affiliate_id = 13;
+    optional string payload = 14;
 }
 
 message CreateCheckoutGrpcResponse {
