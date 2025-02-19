@@ -2,6 +2,34 @@ syntax = "proto3";
 package bridgerpay_bridge;
 import "google/protobuf/empty.proto";
 
+message CreateCheckoutGrpcRequest {
+    string order_id = 1;
+    string currency = 2;
+    string country = 3;
+    optional string amount = 4;
+    optional string first_name = 5;
+    optional string last_name = 6;
+    optional string city = 7;
+    string state = 8;
+    string zipcode = 9;
+    optional string email = 10;
+    optional string phone = 11;
+    optional string platform_id = 12;
+    optional string trading_id = 13;
+    optional string affiliate_id = 14;
+    optional string payload = 15;
+}
+
+message CreateCheckoutGrpcResponse {
+    string checkout = 1;
+    CheckoutTypeGrpc checkout_type = 2;
+}
+
+enum CheckoutTypeGrpc {
+    HTML = 0;
+}
+
 service BridgerpayBridgeGrpcService {
+    rpc CreateCheckout(CreateCheckoutGrpcRequest) returns (CreateCheckoutGrpcResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
