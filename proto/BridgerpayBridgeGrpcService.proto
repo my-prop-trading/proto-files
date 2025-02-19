@@ -6,7 +6,7 @@ message CreateCheckoutGrpcRequest {
     string order_id = 1;
     string currency = 2;
     string country = 3;
-    optional string amount = 4;
+    optional f64 amount = 4;
     optional string first_name = 5;
     optional string last_name = 6;
     optional string city = 7;
