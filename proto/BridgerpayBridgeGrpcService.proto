@@ -17,6 +17,8 @@ message GeneratePaymentPageGrpcRequest {
     optional string platform_id = 12;
     optional string tracking_id = 13;
     optional string affiliate_id = 14;
+    optional string address = 15;
+    optional string state = 16;
 }
 
 message GeneratePaymentPageGrpcResponse {
