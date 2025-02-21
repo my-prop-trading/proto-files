@@ -80,7 +80,7 @@ message CreateTraderAccountOrderResponseBody {
 }
 
 message PaymentPage {
-  string Content = 1;
+  string Value = 1;
   PaymentPageType PageType = 2;
 }
 
