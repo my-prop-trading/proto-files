@@ -33,8 +33,8 @@ message Order {
   double AccountBalance = 8; // Account balance in package
   //int32 AccountType = 9; // Demo or Live
   int32 PlatformId = 10; // Trading platform selected for package
-  optional int64 PayBy = 11; 
-  string BrandId = 12; 
+  optional int64 PayBy = 11;
+  string BrandId = 12;
   string PaymentUrl = 13;
   double DiscountPrice = 14; // Price
   string DiscountCode = 15;
@@ -68,7 +68,7 @@ message CreateTraderAccountOrderResponse {
   oneof response {
     orders.CreateTraderAccountOrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message CreateTraderAccountOrderResponseBody {
@@ -76,6 +76,17 @@ message CreateTraderAccountOrderResponseBody {
   int64 CreatedAt = 2;
   string PaymentUrl = 3;
   orders.OrderStatus Status = 4;
+  PaymentPage PaymentPage = 5;
+}
+
+message PaymentPage {
+  string Content = 1;
+  PaymentPageType PageType = 2;
+}
+
+enum PaymentPageType {
+  URL = 0;
+  HTML = 1;
 }
 
 message PreviewOrderDiscountRequest {
@@ -96,7 +107,7 @@ message PreviewOrderDiscountResponse {
     orders.PreviewError Error = 4;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidUsageExceeded = 5;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscountExpired = 6;
-  } 
+  }
 }
 
 message PreviewOrderDiscountResponseBody {
@@ -160,7 +171,7 @@ message PayForOrderResponse {
   oneof response {
     orders.PayForOrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message PayForOrderResponseBody {
@@ -176,7 +187,7 @@ message CancelOrderResponse {
   oneof response {
     orders.CancelOrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message CancelOrderResponseBody {
@@ -215,31 +226,31 @@ message LifetimeMetaData {
 }
 
 message Payin {
-    int64 CreatedAt = 1; // Date and time of the order creation, typically represented as int64
-    string OrderNumber = 2;      // Order number
-    string ClientId = 3;         // Client ID, can be used as a link to client profile
-    string TradingPackageTitle = 4; // Trading Package title
-    double AccountBalance = 5; // Account balance in package
-    //int32 AccountType = 6; // Demo or Live
-    int32 PlatformId = 7; // Trading platform selected for package
-    int64 PaidAt= 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
-    double Price = 9; // Price
-    string Currency = 10; // Currency
-    orders.OrderStatus Status = 11; // Status (Unpaid, Success, Pending, Canceled)
-    string TradingPackageId = 12; // Trading Package ID
-    string TraderAccountAggregatedId = 13; // Trader account aggregate ID (should be filled for orders with status Success only)
-    optional string DiscountCode = 14;
-    double DiscountPrice = 15;
-    optional double DiscountAmount = 16;
-    optional orders.DiscountCodeType DiscountType = 17;
-    orders.PurchaseType PurchaseType = 18;
-    optional int32 PaymentProviderOrderId = 20;
-    bool IsFirstPayin = 21;
-    optional string GrantedByManager = 22;
-    optional string AffiliateId = 23;
-    LifetimeMetaData lifetime_metadata = 24; //YURA!!!!
-    optional string PaymentMethodTitle = 25;
-    orders.TraderPackageChallengeType ChallengeType = 26;
+  int64 CreatedAt = 1; // Date and time of the order creation, typically represented as int64
+  string OrderNumber = 2;      // Order number
+  string ClientId = 3;         // Client ID, can be used as a link to client profile
+  string TradingPackageTitle = 4; // Trading Package title
+  double AccountBalance = 5; // Account balance in package
+  //int32 AccountType = 6; // Demo or Live
+  int32 PlatformId = 7; // Trading platform selected for package
+  int64 PaidAt = 8; // Pay by (Date and time of the order creation + 30 days), typically represented as int64
+  double Price = 9; // Price
+  string Currency = 10; // Currency
+  orders.OrderStatus Status = 11; // Status (Unpaid, Success, Pending, Canceled)
+  string TradingPackageId = 12; // Trading Package ID
+  string TraderAccountAggregatedId = 13; // Trader account aggregate ID (should be filled for orders with status Success only)
+  optional string DiscountCode = 14;
+  double DiscountPrice = 15;
+  optional double DiscountAmount = 16;
+  optional orders.DiscountCodeType DiscountType = 17;
+  orders.PurchaseType PurchaseType = 18;
+  optional int32 PaymentProviderOrderId = 20;
+  bool IsFirstPayin = 21;
+  optional string GrantedByManager = 22;
+  optional string AffiliateId = 23;
+  LifetimeMetaData lifetime_metadata = 24; //YURA!!!!
+  optional string PaymentMethodTitle = 25;
+  orders.TraderPackageChallengeType ChallengeType = 26;
 }
 
 message GetPayinsPaginatedResponse {
@@ -257,7 +268,7 @@ message GetOrderResponse {
   oneof response {
     orders.GetOrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message GetOrderResponseBody {
@@ -280,7 +291,7 @@ message CreatePaidTraderAccountOrderResponse {
   oneof response {
     orders.CreateTraderAccountOrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message MarkPayinAsSuccessfulOrderRequest {
@@ -296,7 +307,7 @@ message MarkPayinAsSuccessfulOrderResponse {
   oneof response {
     orders.OrderResponseBody Body = 1;
     orders.OrdersError Error = 2;
-  } 
+  }
 }
 
 message OrderResponseBody {
@@ -305,24 +316,24 @@ message OrderResponseBody {
 }
 
 service OrdersGrpcService {
-    rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
+  rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
-    rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
+  rpc CreateTraderAccountOrder(orders.CreateTraderAccountOrderRequest) returns (orders.CreateTraderAccountOrderResponse);
 
-    //this is through admin panel
-    rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
+  //this is through admin panel
+  rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
 
-    rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfulOrderRequest) returns (orders.MarkPayinAsSuccessfulOrderResponse);
+  rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfulOrderRequest) returns (orders.MarkPayinAsSuccessfulOrderResponse);
 
-    rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
+  rpc PreviewOrderDiscount(orders.PreviewOrderDiscountRequest) returns (orders.PreviewOrderDiscountResponse);
 
-    rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
+  rpc GetOrdersPaginated(orders.GetOrdersPaginatedRequest) returns (orders.GetOrdersPaginatedResponse);
 
-    rpc GetOrder(orders.GetOrderRequest) returns (orders.GetOrderResponse);
+  rpc GetOrder(orders.GetOrderRequest) returns (orders.GetOrderResponse);
 
-    rpc PayForOrder(orders.PayForOrderRequest) returns (orders.PayForOrderResponse);
+  rpc PayForOrder(orders.PayForOrderRequest) returns (orders.PayForOrderResponse);
 
-    rpc CancelOrder(orders.CancelOrderRequest) returns (orders.CancelOrderResponse);
+  rpc CancelOrder(orders.CancelOrderRequest) returns (orders.CancelOrderResponse);
 
-    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
