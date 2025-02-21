@@ -28,7 +28,8 @@ message GeneratePaymentPageGrpcResponse {
 }
 
 enum PaymentPageTypeGrpc {
-    HTML = 0;
+    URL = 0;
+    HTML = 1;
 }
 
 service BridgerpayBridgeGrpcService {
