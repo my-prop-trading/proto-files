@@ -85,11 +85,20 @@ message InsertOrUpdateGrpcRequest {
 message InsertOrUpdateGrpcResponse {
 }
 
+message CloseAllTradesRequest {
+  string TraderAccountId = 1;
+}
+
+message CloseAllTradesResponse {
+  int32 Count = 1;
+}
+
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
     rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
     rpc GetTradesBySymbols(GetTradesBySymbolsRequest) returns (stream AccountTradeModel);
     rpc InsertOrUpdate(InsertOrUpdateGrpcRequest) returns (InsertOrUpdateGrpcResponse);
+    rpc CloseAll(CloseAllTradesRequest) returns (CloseAllTradesResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
