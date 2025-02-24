@@ -61,7 +61,7 @@ message NewsDetails {
     string Id = 1;
     string Event = 2;
     int64 EventDate = 3;
-    repeated string Trades = 4;
+    repeated string Trades = 4; 
     string Message = 5;
     PhaseDetails PhaseDetails = 6;
 }
@@ -119,28 +119,18 @@ message UpdateLogDetails {
         trader_account_history.PhaseDetails LoseInPhase3 = 17;
         trader_account_history.EmptyPhaseDetails Phase3AccountGranted = 18;
         trader_account_history.NewsDetails NewsTradingRestrictionViolation = 19;
-        trader_account_history.ManualTraderAccountGranted ManualTraderAccountGranted = 20;
+        trader_account_history.ManualTraderAccountGranted ManualTraderAccountGranted = 20; 
         trader_account_history.AccountReactivatedDetails AccountReactivated = 21;
         trader_account_history.BalanceCorrectionDetails BalanceCorrection = 22;
 
     }
 }
 
-message CloseAllTradesRequest {
-    string TraderAccountId = 1;
-}
-
-message CloseAllTradesResponse {
-    int32 Count = 1;
-}
-
 service TraderAccountHistoryGrpcService {
-    rpc CloseAll(trader_account_history.CloseAllTradesRequest) returns (trader_account_history.CloseAllTradesResponse);
-
-    rpc InsertTraderAccountHistoryLogs(trader_account_history.TraderAccountHistoryLogsRequest)
+    rpc InsertTraderAccountHistoryLogs(trader_account_history.TraderAccountHistoryLogsRequest) 
     returns (trader_account_history.TraderAccountHistoryLogsResponse);
 
-    rpc QueryTraderAccountHistoryLogs(trader_account_history.QueryTraderAccountHistoryLogsRequest)
+    rpc QueryTraderAccountHistoryLogs(trader_account_history.QueryTraderAccountHistoryLogsRequest) 
     returns (trader_account_history.QueryTraderAccountHistoryLogsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
