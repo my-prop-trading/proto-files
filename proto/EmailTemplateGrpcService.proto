@@ -195,6 +195,7 @@ message BrandSettingsModel {
     optional string ContractManagerEmail = 39;
     optional string RegistrationType = 40;
     optional string EconomicCalendarUrl = 41;
+    optional string GoogleAdsFloodlightKey = 42;
 }
 
 message EmailSenderSettingsModel {
