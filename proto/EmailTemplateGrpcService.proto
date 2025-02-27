@@ -273,6 +273,10 @@ message DeleteLanguageTemplateResponseBody {
     
 }
 
+message UpdateTemplateRequest {
+    TemplateModel Template = 1;
+}
+
 service EmailTemplateGrpcService {
     rpc Get(GetTemplateRequest) returns (GetTemplateResponse);
     rpc GetAll(GetAllTemplateRequest) returns (stream TemplateModel);
@@ -284,6 +288,7 @@ service EmailTemplateGrpcService {
     rpc UpdateSettings(UpdateSettingsTemplateRequest) returns (UpdateSettingsTemplateResponse);
     rpc AddLanguage(AddLanguageTemplateRequest) returns (AddLanguageTemplateResponse);
     rpc DeleteLanguage(DeleteLanguageTemplateRequest) returns (DeleteLanguageTemplateResponse);
+    rpc UpdateTemplate(UpdateTemplateRequest) returns (google.protobuf.Empty);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
