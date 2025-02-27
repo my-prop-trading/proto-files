@@ -275,6 +275,7 @@ message DeleteLanguageTemplateResponseBody {
 
 message UpdateTemplateRequest {
     TemplateModel Template = 1;
+    string OfficerId = 2;   
 }
 
 service EmailTemplateGrpcService {
