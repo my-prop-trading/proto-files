@@ -55,6 +55,13 @@ enum Error {
     DEFAULT_LANGUAGE_CANNOT_BE_DELETED = 4;
 }
 
+enum ReceiverType
+{
+    NOBODY = 0;
+    ALL = 1;
+    ONLY_MANAGERS = 2;
+}
+
 message PlaceholderKeyValue {
     string Key = 1;
     string Value = 2;
@@ -78,6 +85,7 @@ message TemplateModel {
     string PlainContent = 6;
     optional string TemplateProviderId = 7;
     repeated string Placeholders = 8;
+    ReceiverType ReceiverType = 9;
 }
 
 message GetAllTemplateRequest {
