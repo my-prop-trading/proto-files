@@ -56,10 +56,10 @@ message Order {
   string ManualApprovedByManager = 31;
   double TotalPaid = 32;
   double TotalDiscount = 33;
-  string AffiliateId = 34;
-  orders.LifetimeMetaData LifetimeMetadata = 35;
+  optional string AffiliateId = 34;
+  optional orders.LifetimeMetaData LifetimeMetadata = 35;
   orders.TraderPackageChallengeType TraderPackageChallengeType = 36;
-  string PspOrderId = 37;
+  optional string PspOrderId = 37;
   optional int32 PaymentProviderId = 38;
 }
 
