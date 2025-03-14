@@ -48,8 +48,8 @@ message Order {
   optional int64 UpdatedAt = 23;
   int32 OrderType = 24;
   string TradingPackageId = 25;
-  double DiscountAmount = 26;
-  orders.DiscountCodeType DiscountType = 27;
+  optional double DiscountAmount = 26;
+  optional orders.DiscountCodeType DiscountType = 27;
   bool IsFirstPurchase = 28;
   bool IsManual = 29;
   int32 ManualCompletedPhases = 30;
