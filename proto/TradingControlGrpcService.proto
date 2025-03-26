@@ -116,11 +116,18 @@ enum CandleInterval {
   Endless = 15;
 }
 
+message GetTotalNetProfitGrpcRequest {}
+
+message GetTotalNetProfitGrpcResponse {
+  double value = 1;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
   rpc PassTradingObjective(PassTradingObjectiveGrpcRequest) returns (PassTradingObjectiveGrpcResponse);
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
+  rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
