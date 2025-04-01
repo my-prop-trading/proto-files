@@ -212,14 +212,14 @@ message EmailSenderSettingsModel {
 
 message ChatWidget {
     optional LiveChat LiveChat = 1;
-    optional ZendDesk ZendDesk =2;
+    optional ZenDesk ZenDesk =2;
 }
 
 message LiveChat {
     string LicenseKey = 1;
 }
 
-message ZendDesk {
+message ZenDesk {
     string Key = 1;
 }
 
