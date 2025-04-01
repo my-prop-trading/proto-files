@@ -184,7 +184,7 @@ message BrandSettingsModel {
     map<string, string> Languages = 20;
     string LoginUrl = 21;
     bool ShowLiveChat = 22;
-    optional string LiveChatLicense = 23;
+    ChatWidget ChatWidget = 23;
     string StylesCssUrl = 24;
     optional bool HideLiveChat = 25;
     optional bool HideAffiliateMenu = 26;
@@ -208,6 +208,19 @@ message BrandSettingsModel {
 
 message EmailSenderSettingsModel {
     string ApiKey = 1;
+}
+
+message ChatWidget {
+    optional LiveChat LiveChat = 1;
+    optional ZendDesk ZendDesk =2;
+}
+
+message LiveChat {
+    string LicenseKey = 1;
+}
+
+message ZendDesk {
+    string Key = 1;
 }
 
 message GetSettingsTemplateRequest {
