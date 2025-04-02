@@ -75,6 +75,7 @@ message TraderAccount {
     double Price = 68;
     int32 PhaseType = 69;
     int32 RefundPayoutNumber = 70;
+    string TradingPackageId = 71;
 }
 
 enum TraderAccountTypeModel {
