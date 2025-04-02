@@ -204,6 +204,7 @@ message BrandSettingsModel {
     optional string RegistrationType = 40;
     optional string EconomicCalendarUrl = 41;
     optional string GoogleAdsFloodlightKey = 42;
+    optional string LiveChatLicense = 43;
 }
 
 message EmailSenderSettingsModel {
