@@ -214,7 +214,7 @@ message EmailSenderSettingsModel {
 message ChatWidget {
     optional ChatSetting LiveChat = 1;
     optional ChatSetting ZenDesk = 2;
-    optional bool hide_widget = 3;
+    optional bool HideWidget = 3;
 }
 
 message ChatSetting {
