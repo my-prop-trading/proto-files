@@ -57,8 +57,10 @@ message PersonalDataModel {
     optional string LastName = 3;
     optional string City = 4;
     optional int64 DateOfBirth = 5;
-    optional string CountryOfResidence = 6;
-    optional string CountryOfCitizenship = 7;
+    // "CountryOfResidence" is deprecated. Use "CountryOfRegistration" instead.
+    optional string CountryOfResidence = 6 [deprecated = true];
+    // "CountryOfCitizenship" is deprecated. Use "CountryOfRegistrationByIp" instead.
+    optional string CountryOfCitizenship = 7 [deprecated = true];
     optional string ZipCode = 8;
     optional string Phone = 9;
     optional string Address = 10;
