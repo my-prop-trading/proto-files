@@ -183,10 +183,8 @@ message BrandSettingsModel {
     string EmailBcc = 19;
     map<string, string> Languages = 20;
     string LoginUrl = 21;
-    bool ShowLiveChat = 22;
     optional string LiveChatLicense = 23;
     string StylesCssUrl = 24;
-    optional bool HideLiveChat = 25;
     optional bool HideAffiliateMenu = 26;
     optional string MailLogoUrl = 27;
     optional string MailSuccessPictureUrl = 28;
