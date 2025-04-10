@@ -213,6 +213,7 @@ message ChatWidget {
     optional ChatSetting LiveChat = 1;
     optional ChatSetting ZenDesk = 2;
     optional bool HideWidget = 3;
+    optional int32 ChatType = 4;
 }
 
 message ChatSetting {
