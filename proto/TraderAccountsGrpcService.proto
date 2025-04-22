@@ -147,6 +147,7 @@ message CreateTraderAccountRequest {
     double RealPrice = 17;
     optional string PlatformGroupDemo = 18;
     optional string PlatformGroupLive = 19;
+    optional string AggregatedId = 20;
 }
 
 message CreateTraderAccountResponse{
@@ -307,6 +308,7 @@ message CreatePaidTraderAccountRequest {
   optional string PlatformGroupLive = 21;
 
   optional double RefundGrantedByManager = 22;
+  optional string AggregatedId = 23;
 }
 
 message CreatePaidTraderAccountResponse{
