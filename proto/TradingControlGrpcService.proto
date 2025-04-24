@@ -46,6 +46,8 @@ message GetTradingMetricsGrpcResponse {
 message GetTradingMetricsPageGrpcRequest {
   optional uint64 FromDate = 1;
   optional uint64 ToDate = 2;
+  uint64 Limit = 3;
+  uint64 Offset = 4;
 }
 
 message GetTradingMetricsPageGrpcResponse {
