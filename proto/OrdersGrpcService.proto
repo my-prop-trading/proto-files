@@ -162,6 +162,8 @@ message GetOrdersPaginatedRequest {
   uint64 Limit = 2;
   uint64 Offset = 3;
   repeated orders.OrderStatus Statuses = 4;
+  optional uint64 FromDate = 5;
+  optional uint64 ToDate = 6;
 }
 
 message GetOrdersPaginatedResponse {
