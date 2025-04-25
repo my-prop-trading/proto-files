@@ -589,7 +589,6 @@ service TraderAccountsGrpcService {
     //MAX ALLOCATION
 
     rpc GetTraderAccountCache(GetTraderAccountCacheRequest) returns (stream TraderAccountCacheModel);
-    rpc GetTraderAccountsPage(GetTraderAccountsPageRequest) returns (GetTraderAccountsPageResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
