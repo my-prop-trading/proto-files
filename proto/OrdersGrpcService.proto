@@ -103,8 +103,8 @@ message PaymentPage {
 }
 
 enum PaymentPageDisplayMode {
-  Tab = 0;
-  Iframe = 1;
+  TAB = 0;
+  IFRAME = 1;
 }
 
 enum PaymentPageType {
