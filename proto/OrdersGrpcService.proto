@@ -99,10 +99,10 @@ message CreateTraderAccountOrderResponseBody {
 message PaymentPage {
   string Value = 1;
   PaymentPageType PageType = 2;
-  PaymentPageDisplayType DisplayType = 3;
+  PaymentPageDisplayMode DisplayMode = 3;
 }
 
-enum PaymentPageDisplayType {
+enum PaymentPageDisplayMode {
   Tab = 0;
   Iframe = 1;
 }
