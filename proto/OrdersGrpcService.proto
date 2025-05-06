@@ -99,7 +99,7 @@ message CreateTraderAccountOrderResponseBody {
 message PaymentPage {
   string Value = 1;
   PaymentPageType PageType = 2;
-  PaymentPageDisplayType openType = 3;
+  PaymentPageDisplayType DisplayType = 3;
 }
 
 enum PaymentPageDisplayType {
