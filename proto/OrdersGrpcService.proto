@@ -130,6 +130,7 @@ message PreviewOrderDiscountResponse {
     orders.PreviewError Error = 4;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidUsageExceeded = 5;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscountExpired = 6;
+    orders.PreviewOrderDiscountInvalidResponseBody BodyDiscountForAnotherPackage = 7;
   }
 }
 
