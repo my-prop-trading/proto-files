@@ -130,7 +130,7 @@ message PreviewOrderDiscountResponse {
     orders.PreviewError Error = 4;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidUsageExceeded = 5;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscountExpired = 6;
-    orders.PreviewOrderDiscountInvalidResponseBody BodyDiscountForAnotherPackage = 7;
+    orders.PreviewBodyDiscountForAnotherPackageResponseBody BodyDiscountForAnotherPackage = 7;
   }
 }
 
@@ -152,6 +152,10 @@ message PreviewOrderDiscountInvalidResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
+}
+
+message PreviewBodyDiscountForAnotherPackageResponseBody {
+  repeated string TradingPackageId = 1;
 }
 
 enum DiscountCodeType {
