@@ -155,7 +155,7 @@ message PreviewOrderDiscountInvalidResponseBody {
 }
 
 message PreviewBodyDiscountForAnotherPackageResponseBody {
-  repeated string TradingPackageId = 1;
+  repeated string TradingPackageIds = 1;
 }
 
 enum DiscountCodeType {
