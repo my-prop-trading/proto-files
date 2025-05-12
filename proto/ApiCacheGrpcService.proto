@@ -1,6 +1,6 @@
 syntax = "proto3";
 import "google/protobuf/empty.proto";
-package system_audit_logs;
+package api_cache;
 
 message TraderAccountApiGrpcModel {
   string id = 1;
