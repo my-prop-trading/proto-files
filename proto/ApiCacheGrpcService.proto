@@ -42,7 +42,7 @@ message GetTraderAccountsGrpcResponse {
   repeated TraderAccountApiGrpcModel items = 1;
 }
 
-service SystemAuditLogsGrpcService {
+service ApiCacheGrpcService {
   rpc GetTraderAccounts(GetTraderAccountsGrpcRequest) returns (GetTraderAccountsGrpcResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
