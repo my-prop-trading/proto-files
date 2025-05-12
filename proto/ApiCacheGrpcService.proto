@@ -1,0 +1,48 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package system_audit_logs;
+
+message TraderAccountApiGrpcModel {
+  string id = 1;
+  string aggregate_id = 2;
+  string title = 3;
+  int32 phase = 4;
+  int32 platform_id = 5;
+  string platform_name = 6;
+  int32 platform_type = 7;
+  string platform_short_name = 8;
+  optional string platform_icon_url = 9;
+  int32 platform_credential_type = 10;
+  double balance = 11;
+  string start_date = 12;
+  string end_date = 13;
+  string created_at = 14;
+  string updated_at = 15;
+  int32 status = 16;
+  int32 status_text = 17;
+  int32 account_type = 18;
+  string order_id = 19;
+  optional int32 blocker_type = 20;
+  string trader_package_group_id = 21;
+  string trader_package_group_name = 22;
+  string initial_account_currency = 23;
+  string server = 24;
+  int32 trader_package_phase_type_model = 25;
+  repeated string news_trading_restriction_trades = 26;
+  bool hide_platform_url_for_dashboard = 27;
+  int32 trader_package_type = 28;
+  int32 trading_condition = 29;
+}
+
+message GetTraderAccountsGrpcRequest {
+  string ClientId = 1;
+}
+
+message GetTraderAccountsGrpcResponse {
+  repeated TraderAccountApiGrpcModel items = 1;
+}
+
+service SystemAuditLogsGrpcService {
+  rpc GetTraderAccounts(GetTraderAccountsGrpcRequest) returns (GetTraderAccountsGrpcResponse);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
