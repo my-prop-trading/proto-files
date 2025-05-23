@@ -315,6 +315,7 @@ message CreatePaidTraderAccountOrderRequest {
   string Manager = 7;
   optional double RefundGrantedByManager = 8;
   LifetimeMetaData lifetime_metadata = 9;
+  optional double TotalPaid = 10;
 }
 
 message CreatePaidTraderAccountOrderResponse {
