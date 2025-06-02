@@ -42,7 +42,31 @@ message GetTraderAccountsGrpcResponse {
   repeated TraderAccountApiGrpcModel items = 1;
 }
 
+message SubscribeClientGrpcRequest {
+  string email = 1;
+  string password = 2;
+  string fist_name = 3;
+  string last_name = 4;
+  string country_of_registration_by_ip = 5;
+  string country_of_registration = 6;
+  string process = 7;
+}
+
+message SubscribeClientGrpcResponse {
+  string client_id = 1;
+  string order_id = 2;
+  string trader_account_id = 3;
+  PaymentPageGrpcModel payment_page = 4;
+}
+
+message PaymentPageGrpcModel {
+  string content = 1;
+  int32 content_type = 2;
+  int32 display_mode = 3;
+}
+
 service ApiCacheGrpcService {
   rpc GetTraderAccounts(GetTraderAccountsGrpcRequest) returns (GetTraderAccountsGrpcResponse);
+  rpc SubscribeClient(SubscribeClientGrpcRequest) returns (SubscribeClientGrpcResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
