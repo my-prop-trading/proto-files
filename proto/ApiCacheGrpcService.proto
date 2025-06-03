@@ -49,8 +49,9 @@ message SubscribeClientGrpcRequest {
   string last_name = 4;
   string country_of_registration_by_ip = 5;
   string country_of_registration = 6;
-  string process = 7;
+  string process_id = 7;
   map<string, string> metadata = 8;
+  string brand = 9;
 }
 
 message SubscribeClientGrpcResponse {
