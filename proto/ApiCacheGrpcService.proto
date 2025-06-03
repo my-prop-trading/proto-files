@@ -62,8 +62,7 @@ message SubscribeClientGrpcRequest {
 message SubscribeClientGrpcResponse {
   string client_id = 1;
   string order_id = 2;
-  string trader_account_id = 3;
-  PaymentPageGrpcModel payment_page = 4;
+  PaymentPageGrpcModel payment_page = 3;
 }
 
 message PaymentPageGrpcModel {
