@@ -316,6 +316,9 @@ message CreatePaidTraderAccountOrderRequest {
   optional double RefundGrantedByManager = 8;
   LifetimeMetaData lifetime_metadata = 9;
   optional double TotalPaid = 10;
+  optional string payment_method_title = 11;
+  bool is_first_purchase = 12;
+  optional string psp_order_id = 13;
 }
 
 message CreatePaidTraderAccountOrderResponse {
