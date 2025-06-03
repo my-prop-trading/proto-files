@@ -54,6 +54,8 @@ message SubscribeClientGrpcRequest {
   string brand = 9;
   string site_version = 10;
   string ip_address = 11;
+  string trading_package_id = 12;
+  string trading_platform_id = 13;
 }
 
 message SubscribeClientGrpcResponse {
