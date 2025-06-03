@@ -56,6 +56,7 @@ message SubscribeClientGrpcRequest {
   string ip_address = 11;
   string trading_package_id = 12;
   string trading_platform_id = 13;
+  optional string discount_code = 14;
 }
 
 message SubscribeClientGrpcResponse {
