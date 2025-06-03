@@ -47,8 +47,8 @@ message SubscribeClientGrpcRequest {
   string password = 2;
   string fist_name = 3;
   string last_name = 4;
-  string country_of_registration_by_ip = 5;
-  string country_of_registration = 6;
+  string country_by_ip = 5;
+  string country = 6;
   string process_id = 7;
   map<string, string> metadata = 8;
   string brand = 9;
