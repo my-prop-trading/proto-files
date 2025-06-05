@@ -63,6 +63,7 @@ message SubscribeClientGrpcResponse {
   string client_id = 1;
   string order_id = 2;
   PaymentPageGrpcModel payment_page = 3;
+  int32 order_status = 4;
 }
 
 message PaymentPageGrpcModel {
