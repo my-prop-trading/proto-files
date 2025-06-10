@@ -100,6 +100,7 @@ message PaymentPage {
   string Value = 1;
   PaymentPageType PageType = 2;
   PaymentPageDisplayMode DisplayMode = 3;
+  optional string WalletScript = 4;
 }
 
 enum PaymentPageDisplayMode {
