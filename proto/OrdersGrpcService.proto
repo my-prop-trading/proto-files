@@ -79,6 +79,7 @@ message CreateTraderAccountOrderRequest {
   string ClientId = 13;
   string Brand = 14;
   orders.PurchaseType PurchaseType = 15;
+  optional string email = 16;
 }
 
 message CreateTraderAccountOrderResponse {
