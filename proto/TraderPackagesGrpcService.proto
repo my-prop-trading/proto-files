@@ -187,6 +187,7 @@ message PublishGroupResponse { bool Success = 1; }
 
 message GetTraderPackageRequest {
   string id = 1;
+  bool is_published = 2;
 }
 
 message GetTraderPackageResponse {
