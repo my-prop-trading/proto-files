@@ -22,6 +22,12 @@ enum PurchaseType {
   EXTERNAL = 1;
 }
 
+enum PaymentProvider {
+  WOOCOMMERCE = 0;
+  BRIDGERPAY = 1;
+  FUNNELFOX = 2;
+}
+
 message Order {
   string Id = 1;
   optional int64 CreatedAt = 2;
@@ -321,6 +327,7 @@ message CreatePaidTraderAccountOrderRequest {
   optional string payment_method_title = 11;
   bool is_first_purchase = 12;
   optional string psp_order_id = 13;
+  optional PaymentProvider payment_provider = 14;
 }
 
 message CreatePaidTraderAccountOrderResponse {
