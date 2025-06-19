@@ -60,7 +60,8 @@ message PlaceholderKeyValue {
 
 message SendTemplateRequest {
     string EmailFrom = 1;
-    string Subject = 2;
+    // "Subject" is deprecated. No need to send.
+    // string Subject = 2[deprecated = true];
     EmailType EmailType = 3;
     repeated string EmailTo = 4;
     repeated string EmailCc = 5;
