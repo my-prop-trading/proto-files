@@ -79,6 +79,7 @@ message UpdateDiscountCodeRequest{
     map<int32, string> platform_groups_live = 19;
     bool is_all_trading_package_ids = 20;
     optional int32 client_usage_limit = 21;
+    DiscountCodeSource source = 22;
 }
 
 message UpdateDiscountCodeResponse {
