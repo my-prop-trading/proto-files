@@ -87,11 +87,22 @@ message ClaimRewardGrpcResponse {
   optional string ErrorMessage = 1;
 }
 
+message ApproveTaskGrpcRequest {
+  string ManagerId = 1;
+  string TaskId = 2;
+  string ClientId = 3;
+}
+
+message ApproveTaskGrpcResponse {
+  optional string ErrorMessage = 1;
+}
+
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
     rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
     rpc CompleteTask(CompleteTaskGrpcRequest) returns (CompleteTaskGrpcResponse);
+    rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
     rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
