@@ -38,6 +38,7 @@ message TaskGrpcModel {
   string Description = 5;
   int64 CreatedAt = 6;
   int64 UpdatedAt = 7;
+  optional string ClientId = 8;
 }
 
 message GetTasksPageGrpcRequest {
