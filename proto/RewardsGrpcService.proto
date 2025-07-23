@@ -12,7 +12,7 @@ enum TaskStatus {
 message RewardGrpcModel {
   string Id = 1;
   string IconUrl = 2;
-  string RequiredPoints = 3;
+  float RequiredPoints = 3;
   string Name = 4;
   string Description = 5;
   optional string ClientId = 6;
