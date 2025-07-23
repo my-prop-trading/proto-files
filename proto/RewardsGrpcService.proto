@@ -16,6 +16,8 @@ message RewardGrpcModel {
   string Name = 4;
   string Description = 5;
   optional string ClientId = 6;
+  int64 CreatedAt = 7;
+  int64 UpdatedAt = 8;
 }
 
 message GetRewardsPageGrpcRequest {
@@ -34,6 +36,8 @@ message TaskGrpcModel {
   string RewardPoints = 3;
   string Name = 4;
   string Description = 5;
+  int64 CreatedAt = 6;
+  int64 UpdatedAt = 7;
 }
 
 message GetTasksPageGrpcRequest {
@@ -49,6 +53,8 @@ message GetTasksPageGrpcResponse {
 message BalanceGrpcModel {
   string ClientId = 1;
   float AvailablePoints = 2;
+  int64 CreatedAt = 3;
+  int64 UpdatedAt = 4;
 }
 
 message GetBalanceGrpcRequest {
