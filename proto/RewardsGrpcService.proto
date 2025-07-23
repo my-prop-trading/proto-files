@@ -51,7 +51,7 @@ message GetTasksPageGrpcRequest {
 }
 
 message GetTasksPageGrpcResponse {
-  repeated RewardGrpcModel items = 1;
+  repeated TaskGrpcModel items = 1;
 }
 
 message BalanceGrpcModel {
