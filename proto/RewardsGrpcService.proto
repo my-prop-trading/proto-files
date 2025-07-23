@@ -75,6 +75,7 @@ message CompleteTaskGrpcRequest {
 }
 
 message CompleteTaskGrpcResponse {
+  optional string ErrorMessage = 1;
 }
 
 message ClaimRewardGrpcRequest {
@@ -83,6 +84,7 @@ message ClaimRewardGrpcRequest {
 }
 
 message ClaimRewardGrpcResponse {
+  optional string ErrorMessage = 1;
 }
 
 service RewardsGrpcService {
