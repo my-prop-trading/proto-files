@@ -2,19 +2,85 @@ syntax = "proto3";
 package rewards;
 import "google/protobuf/empty.proto";
 
+enum TaskStatus {
+  Available = 0;
+  InProgress = 1;
+  Completed = 2;
+  UnderReview = 3;
+}
+
 message RewardGrpcModel {
   string Id = 1;
+  string IconUrl = 2;
+  string RequiredPoints = 3;
+  string Name = 4;
+  string Description = 5;
+  optional string ClientId = 6;
 }
 
-message GetListGrpcRequest {
+message GetRewardsPageGrpcRequest {
+  int32 Limit = 1;
+  int32 Offset = 2;
+  optional string ClientId = 3;
 }
 
-message GetListGrpcResponse {
+message GetRewardsPageGrpcResponse {
   repeated RewardGrpcModel items = 1;
 }
 
+message TaskGrpcModel {
+  string Id = 1;
+  string IconUrl = 2;
+  string RewardPoints = 3;
+  string Name = 4;
+  string Description = 5;
+}
+
+message GetTasksPageGrpcRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  optional string ClientId = 3;
+}
+
+message GetTasksPageGrpcResponse {
+  repeated RewardGrpcModel items = 1;
+}
+
+message BalanceGrpcModel {
+  string ClientId = 1;
+  float AvailablePoints = 2;
+}
+
+message GetBalanceGrpcRequest {
+  string ClientId = 1;
+}
+
+message GetBalanceGrpcResponse {
+  BalanceGrpcModel item = 1;
+}
+
+message CompleteTaskGrpcRequest {
+  string ClientId = 1;
+  string TaskId = 2;
+}
+
+message CompleteTaskGrpcResponse {
+}
+
+message ClaimRewardGrpcRequest {
+  string ClientId = 1;
+  string RewardId = 2;
+}
+
+message ClaimRewardGrpcResponse {
+}
+
 service RewardsGrpcService {
-    rpc GetList(GetListGrpcRequest) returns (GetListGrpcResponse);
+    rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
+    rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
+    rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
+    rpc CompleteTask(CompleteTaskGrpcRequest) returns (CompleteTaskGrpcResponse);
+    rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
