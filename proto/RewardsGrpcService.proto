@@ -42,6 +42,7 @@ message TaskGrpcModel {
   optional string ClientId = 8;
   int64 ExpireDate = 9;
   TaskStatus Status = 10;
+  string ManagerId = 11;
 }
 
 message GetTasksPageGrpcRequest {
