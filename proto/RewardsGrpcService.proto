@@ -1,0 +1,21 @@
+syntax = "proto3";
+package rewards;
+import "google/protobuf/empty.proto";
+
+message RewardGrpcModel {
+  string Id = 1;
+}
+
+message GetListGrpcRequest {
+}
+
+message GetListGrpcResponse {
+  repeated RewardGrpcModel items = 1;
+}
+
+
+service RewardsGrpcService {
+    rpc GetList(GetListGrpcRequest) returns (GetListGrpcResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
