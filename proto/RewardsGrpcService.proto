@@ -34,7 +34,7 @@ message GetRewardsPageGrpcResponse {
 message TaskGrpcModel {
   string Id = 1;
   string IconUrl = 2;
-  string RewardPoints = 3;
+  double RewardPoints = 3;
   string Name = 4;
   string Description = 5;
   int64 CreatedAt = 6;
