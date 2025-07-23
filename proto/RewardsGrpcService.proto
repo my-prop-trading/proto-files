@@ -13,7 +13,6 @@ message GetListGrpcResponse {
   repeated RewardGrpcModel items = 1;
 }
 
-
 service RewardsGrpcService {
     rpc GetList(GetListGrpcRequest) returns (GetListGrpcResponse);
 
