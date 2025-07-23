@@ -12,7 +12,7 @@ enum TaskStatus {
 message RewardGrpcModel {
   string Id = 1;
   string IconUrl = 2;
-  float RequiredPoints = 3;
+  double RequiredPoints = 3;
   string Name = 4;
   string Description = 5;
   optional string ClientId = 6;
@@ -55,7 +55,7 @@ message GetTasksPageGrpcResponse {
 
 message BalanceGrpcModel {
   string ClientId = 1;
-  float AvailablePoints = 2;
+  double AvailablePoints = 2;
   int64 CreatedAt = 3;
   int64 UpdatedAt = 4;
 }
