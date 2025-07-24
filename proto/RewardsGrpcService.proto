@@ -5,8 +5,8 @@ import "google/protobuf/empty.proto";
 enum TaskStatus {
   Available = 0;
   InProgress = 1;
-  Completed = 2;
   UnderReview = 3;
+  Approved = 2;
 }
 
 message RewardGrpcModel {
@@ -70,18 +70,20 @@ message GetBalanceGrpcResponse {
   BalanceGrpcModel item = 1;
 }
 
-message CompleteTaskGrpcRequest {
+message SubmitTaskGrpcRequest {
   string ClientId = 1;
   string TaskId = 2;
 }
 
-message CompleteTaskGrpcResponse {
+message SubmitTaskGrpcResponse {
   optional string ErrorMessage = 1;
 }
 
 message ClaimRewardGrpcRequest {
   string ClientId = 1;
   string RewardId = 2;
+  bytes ScreenshotBytes = 3;
+  string ScreenshotName = 4;
 }
 
 message ClaimRewardGrpcResponse {
@@ -102,7 +104,7 @@ service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
     rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
-    rpc CompleteTask(CompleteTaskGrpcRequest) returns (CompleteTaskGrpcResponse);
+    rpc SubmitTask(SubmitTaskGrpcRequest) returns (SubmitTaskGrpcResponse);
     rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
     rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
 
