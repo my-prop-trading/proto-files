@@ -19,6 +19,7 @@ message RewardGrpcModel {
   int64 CreatedAt = 7;
   int64 UpdatedAt = 8;
   int64 ExpireDate = 9;
+  optional string ParentId = 10;
 }
 
 message GetRewardsPageGrpcRequest {
@@ -43,6 +44,8 @@ message TaskGrpcModel {
   int64 ExpireDate = 9;
   TaskStatus Status = 10;
   string ManagerId = 11;
+  optional string ParentId = 12;
+  optional string ScreenshotFileId = 13;
 }
 
 message GetTasksPageGrpcRequest {
