@@ -9,6 +9,11 @@ enum TaskStatusGrpc {
   Approved = 2;
 }
 
+enum RewardStatusGrpc {
+  REWARD_AVAILABLE = 0;
+  REWARD_CLAIMED = 1;
+}
+
 enum RewardTypeGrpc {
   DISCOUNT = 0;
   FREE_CHALLENGE = 1;
@@ -32,6 +37,7 @@ message RewardGrpcModel {
   optional string ParentId = 10;
   RewardTypeGrpc Type = 11;
   map<int32, string> Attributes = 12;
+  RewardStatusGrpc status = 13;
 }
 
 message DiscountAttributes {
@@ -47,6 +53,7 @@ message GetRewardsPageGrpcRequest {
   int32 Offset = 2;
   optional string ClientId = 3;
   repeated RewardTypeGrpc Types = 4;
+  repeated RewardStatusGrpc Statuses = 5;
 }
 
 message GetRewardsPageGrpcResponse {
