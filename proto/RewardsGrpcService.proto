@@ -9,6 +9,11 @@ enum TaskStatus {
   Approved = 2;
 }
 
+enum RewardType {
+  DISCOUNT_CODE = 0;
+  FREE_CHALLENGE = 1;
+}
+
 message RewardGrpcModel {
   string Id = 1;
   string IconUrl = 2;
@@ -20,6 +25,19 @@ message RewardGrpcModel {
   int64 UpdatedAt = 8;
   int64 ExpireDate = 9;
   optional string ParentId = 10;
+  RewardType Type = 11;
+  oneof Attributes {
+    DiscountAttributes discount = 12;
+    FreeChallengeAttributes free_challenge = 13;
+  }
+}
+
+message DiscountAttributes {
+  string Code = 1;
+}
+
+message FreeChallengeAttributes {
+  string ChallengeId = 1;
 }
 
 message GetRewardsPageGrpcRequest {
