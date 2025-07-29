@@ -52,6 +52,7 @@ message GetTasksPageGrpcRequest {
   int32 limit = 1;
   int32 offset = 2;
   optional string ClientId = 3;
+  repeated TaskStatus statuses = 4;
 }
 
 message GetTasksPageGrpcResponse {
