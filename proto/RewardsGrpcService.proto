@@ -2,16 +2,21 @@ syntax = "proto3";
 package rewards;
 import "google/protobuf/empty.proto";
 
-enum TaskStatus {
+enum TaskStatusGrpc {
   Available = 0;
   InProgress = 1;
   UnderReview = 3;
   Approved = 2;
 }
 
-enum RewardType {
-  DISCOUNT_CODE = 0;
+enum RewardTypeGrpc {
+  DISCOUNT = 0;
   FREE_CHALLENGE = 1;
+}
+
+enum RewardAttributeGrpc {
+  DISCOUNT_CODE = 0;
+  CHALLENGE_ID = 1;
 }
 
 message RewardGrpcModel {
@@ -25,11 +30,8 @@ message RewardGrpcModel {
   int64 UpdatedAt = 8;
   optional int64 ExpireDate = 9;
   optional string ParentId = 10;
-  RewardType Type = 11;
-  oneof Attributes {
-    DiscountAttributes discount = 12;
-    FreeChallengeAttributes free_challenge = 13;
-  }
+  RewardTypeGrpc Type = 11;
+  map<int32, string> Attributes = 12;
 }
 
 message DiscountAttributes {
@@ -44,7 +46,7 @@ message GetRewardsPageGrpcRequest {
   int32 Limit = 1;
   int32 Offset = 2;
   optional string ClientId = 3;
-  repeated RewardType Types = 4;
+  repeated RewardTypeGrpc Types = 4;
 }
 
 message GetRewardsPageGrpcResponse {
@@ -61,7 +63,7 @@ message TaskGrpcModel {
   int64 UpdatedAt = 7;
   optional string ClientId = 8;
   optional int64 ExpireDate = 9;
-  TaskStatus Status = 10;
+  TaskStatusGrpc Status = 10;
   string ManagerId = 11;
   optional string ParentId = 12;
   optional string ScreenshotFileId = 13;
@@ -71,7 +73,7 @@ message GetTasksPageGrpcRequest {
   int32 limit = 1;
   int32 offset = 2;
   optional string ClientId = 3;
-  repeated TaskStatus statuses = 4;
+  repeated TaskStatusGrpc statuses = 4;
 }
 
 message GetTasksPageGrpcResponse {
