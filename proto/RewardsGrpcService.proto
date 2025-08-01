@@ -132,9 +132,26 @@ message ApproveTaskGrpcResponse {
   optional string ErrorMessage = 1;
 }
 
+message CreateOrUpdateRewardsGrpcRequest {
+  repeated RewardGrpcModel Items = 1;
+}
+
+message CreateOrUpdateRewardsGrpcResponse {
+}
+
+message CreateOrUpdateTasksGrpcRequest {
+  repeated TaskGrpcModel Items = 1;
+}
+
+message CreateOrUpdateTasksGrpcResponse {
+}
+
+
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
+    rpc CreateOrUpdateRewards(CreateOrUpdateRewardsGrpcRequest) returns (CreateOrUpdateRewardsGrpcResponse);
+    rpc CreateOrUpdateTasks(CreateOrUpdateTasksGrpcRequest) returns (CreateOrUpdateTasksGrpcResponse);
     rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
     rpc SubmitTask(SubmitTaskGrpcRequest) returns (SubmitTaskGrpcResponse);
     rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
