@@ -108,8 +108,9 @@ message GetBalanceGrpcResponse {
 message SubmitTaskGrpcRequest {
   string ClientId = 1;
   string TaskId = 2;
-  bytes ScreenshotBytes = 3;
+  bytes ScreenshotContentBytes = 3;
   string ScreenshotName = 4;
+  string ScreenshotContentType = 5;
 }
 
 message SubmitTaskGrpcResponse {
