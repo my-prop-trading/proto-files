@@ -12,6 +12,8 @@ enum TaskStatusGrpc {
 enum RewardStatusGrpc {
   REWARD_AVAILABLE = 0;
   REWARD_CLAIMED = 1;
+  REWARD_PENDING = 2;
+  REWARD_FULFILLED = 3;
 }
 
 enum RewardTypeGrpc {
@@ -145,7 +147,6 @@ message CreateOrUpdateTasksGrpcRequest {
 
 message CreateOrUpdateTasksGrpcResponse {
 }
-
 
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
