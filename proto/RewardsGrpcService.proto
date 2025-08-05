@@ -185,6 +185,15 @@ message FileGrpcModel {
   string ContentType = 3;
 }
 
+message FulfillRewardGrpcRequest {
+  string Id = 1;
+  string ManagerId = 2;
+}
+
+message FulfillRewardGrpcResponse {
+  string ErrMessage = 1;
+}
+
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
@@ -198,6 +207,7 @@ service RewardsGrpcService {
     rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
     rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
     rpc GetTaskScreenshot(GetTaskScreenshotGrpcRequest) returns (GetTaskScreenshotGrpcResponse);
+    rpc FulfillReward(FulfillRewardGrpcRequest) returns (FulfillRewardGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
