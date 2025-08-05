@@ -3,10 +3,11 @@ package rewards;
 import "google/protobuf/empty.proto";
 
 enum TaskStatusGrpc {
-  Available = 0;
-  InProgress = 1;
-  UnderReview = 3;
-  Approved = 2;
+  AVAILABLE = 0;
+  IN_PROGRESS = 1;
+  UNDER_REVIEW = 3;
+  APPROVED = 2;
+  REJECTED = 4;
 }
 
 enum RewardStatusGrpc {
@@ -150,6 +151,28 @@ message CreateOrUpdateTasksGrpcRequest {
 message CreateOrUpdateTasksGrpcResponse {
 }
 
+message DeleteTaskGrpcRequest {
+  string Id = 1;
+}
+
+message DeleteTaskGrpcResponse {
+}
+
+message DeleteRewardGrpcRequest {
+  string Id = 1;
+}
+
+message DeleteRewardGrpcResponse {
+}
+
+message RejectTaskGrpcRequest {
+  string Id = 1;
+  string ManagerId = 2;
+}
+
+message RejectTaskGrpcResponse {
+}
+
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
@@ -158,7 +181,10 @@ service RewardsGrpcService {
     rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
     rpc SubmitTask(SubmitTaskGrpcRequest) returns (SubmitTaskGrpcResponse);
     rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
+    rpc RejectTask(RejectTaskGrpcRequest) returns (RejectTaskGrpcResponse);
     rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
+    rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
+    rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
