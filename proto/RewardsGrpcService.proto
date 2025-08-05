@@ -191,7 +191,7 @@ message FulfillRewardGrpcRequest {
 }
 
 message FulfillRewardGrpcResponse {
-  string ErrMessage = 1;
+  optional string ErrMessage = 1;
 }
 
 service RewardsGrpcService {
