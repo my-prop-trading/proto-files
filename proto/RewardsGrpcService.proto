@@ -109,9 +109,7 @@ message GetBalanceGrpcResponse {
 message SubmitTaskGrpcRequest {
   string ClientId = 1;
   string TaskId = 2;
-  bytes ScreenshotContentBytes = 3;
-  string ScreenshotName = 4;
-  string ScreenshotContentType = 5;
+  FileGrpcModel Screenshot = 3;
 }
 
 message SubmitTaskGrpcResponse {
@@ -173,6 +171,20 @@ message RejectTaskGrpcRequest {
 message RejectTaskGrpcResponse {
 }
 
+message GetTaskScreenshotGrpcRequest {
+  string Id = 1;
+}
+
+message GetTaskScreenshotGrpcResponse {
+  FileGrpcModel Screenshot = 1;
+}
+
+message FileGrpcModel {
+  bytes ContentBytes = 1;
+  string Name = 2;
+  string ContentType = 3;
+}
+
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
     rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
@@ -185,6 +197,7 @@ service RewardsGrpcService {
     rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
     rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
     rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
+    rpc GetTaskScreenshot(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
