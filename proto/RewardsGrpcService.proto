@@ -197,7 +197,7 @@ service RewardsGrpcService {
     rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
     rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
     rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
-    rpc GetTaskScreenshot(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
+    rpc GetTaskScreenshot(GetTaskScreenshotGrpcRequest) returns (GetTaskScreenshotGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
