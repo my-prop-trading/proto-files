@@ -114,6 +114,7 @@ message SubmitTaskGrpcRequest {
 
 message SubmitTaskGrpcResponse {
   optional string ErrorMessage = 1;
+  optional TaskGrpcModel Item = 2;
 }
 
 message ClaimRewardGrpcRequest {
@@ -123,6 +124,7 @@ message ClaimRewardGrpcRequest {
 
 message ClaimRewardGrpcResponse {
   optional string ErrorMessage = 1;
+  optional RewardGrpcModel Item = 2;
 }
 
 message ApproveTaskGrpcRequest {
@@ -133,6 +135,7 @@ message ApproveTaskGrpcRequest {
 
 message ApproveTaskGrpcResponse {
   optional string ErrorMessage = 1;
+  optional TaskGrpcModel Item = 2;
 }
 
 message CreateOrUpdateRewardsGrpcRequest {
@@ -169,6 +172,7 @@ message RejectTaskGrpcRequest {
 }
 
 message RejectTaskGrpcResponse {
+  optional TaskGrpcModel Item = 1;
 }
 
 message GetTaskScreenshotGrpcRequest {
@@ -192,6 +196,7 @@ message FulfillRewardGrpcRequest {
 
 message FulfillRewardGrpcResponse {
   optional string ErrMessage = 1;
+  optional RewardGrpcModel Item = 2;
 }
 
 service RewardsGrpcService {
