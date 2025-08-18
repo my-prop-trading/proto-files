@@ -133,6 +133,14 @@ message GetTotalNetProfitGrpcResponse {
   double value = 1;
 }
 
+message TopTradingMetricsGrpcRequest {
+  int32 limit = 1;
+}
+
+message TopTradingMetricsGrpcResponse {
+  repeated TradingMetricsGrpcModel items = 1;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
@@ -140,6 +148,7 @@ service TradingControlGrpcService {
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
   rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
   rpc GetTradingMetricsPage(GetTradingMetricsPageGrpcRequest) returns (GetTradingMetricsPageGrpcResponse);
+  rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
