@@ -32,6 +32,8 @@ message TradingMetricsGrpcModel {
   double day_entry_equity = 27;
   //removed
   //double changing_max_balance = 28;
+  string trader_account_id = 28;
+  string client_id = 29;
 }
 
 message GetTradingMetricsGrpcRequest {
