@@ -1,5 +1,5 @@
 syntax = "proto3";
-package leader_boards;
+package leaderboard;
 import "google/protobuf/empty.proto";
 
 message LeaderBoardGrpcModel {
