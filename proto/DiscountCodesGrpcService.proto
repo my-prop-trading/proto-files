@@ -22,6 +22,12 @@ message DiscountCode {
     string discount_group_name = 23;
     int64 count_in_group = 24;
     optional int32 client_usage_limit = 25;
+    DiscountCodeSource source = 26;
+}
+
+enum DiscountCodeSource {
+  BACKOFFICE = 0; // default
+  KEITARO_INHOUSE = 1;
 }
 
 enum DiscountCodeType {
@@ -49,6 +55,7 @@ message CreateDiscountCodeRequest{
     map<int32, string> platform_groups_live = 19;
     bool is_all_trading_package_ids = 20;
     optional int32 client_usage_limit = 21;
+    DiscountCodeSource source = 22;
 }
 
 message CreateDiscountCodeResponse {
@@ -72,6 +79,7 @@ message UpdateDiscountCodeRequest{
     map<int32, string> platform_groups_live = 19;
     bool is_all_trading_package_ids = 20;
     optional int32 client_usage_limit = 21;
+    DiscountCodeSource source = 22;
 }
 
 message UpdateDiscountCodeResponse {

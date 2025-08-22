@@ -19,6 +19,8 @@ message  RegistrationSuccessfulRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TempPassword = 3;
+    optional string Login = 4;
+    optional string ClientName = 5;
 }
 
 message ForgotPasswordRequest {

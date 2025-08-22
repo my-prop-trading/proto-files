@@ -3,6 +3,16 @@ package trader_accounts;
 import "google/protobuf/empty.proto";
 import "TraderPackagesGrpcService.proto";
 
+message GetTraderAccountsPageRequest {
+  uint64 Limit = 1;
+  uint64 Offset = 2;
+  optional uint64 FromDate = 3;
+  optional uint64 ToDate = 4;
+}
+
+message GetTraderAccountsPageResponse {
+  repeated TraderAccount Items = 1;
+}
 
 message TraderAccount {
     string Id = 1;
@@ -147,6 +157,7 @@ message CreateTraderAccountRequest {
     double RealPrice = 17;
     optional string PlatformGroupDemo = 18;
     optional string PlatformGroupLive = 19;
+    optional string AggregatedId = 20;
 }
 
 message CreateTraderAccountResponse{
@@ -307,6 +318,7 @@ message CreatePaidTraderAccountRequest {
   optional string PlatformGroupLive = 21;
 
   optional double RefundGrantedByManager = 22;
+  optional string AggregatedId = 23;
 }
 
 message CreatePaidTraderAccountResponse{

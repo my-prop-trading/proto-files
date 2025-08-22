@@ -29,7 +29,6 @@ message TraderPackageGroup {
 
 message TraderPackage {
   string Id = 1;
-
   string Title = 2;
   double AccountBalance = 3;
   string AccountBalanceCurrency = 4;
@@ -37,7 +36,6 @@ message TraderPackage {
   string PriceCurrency = 6;
   int32 Leverage = 7;
   string Label = 8;
-
   double Phase1DailyDrawdown = 9;
   double Phase1OverallDrawdown = 10;
   double Phase1TargetProfit = 11;
@@ -47,7 +45,6 @@ message TraderPackage {
   optional double Phase1RevenueShare = 15;
   double Phase1Refund = 16;
   repeated trader_packages.TraderPackageAttempt Phase1Attempts = 17;
-
   double Phase2DailyDrawdown = 19;
   double Phase2OverallDrawdown = 20;
   double Phase2TargetProfit = 21;
@@ -57,22 +54,13 @@ message TraderPackage {
   optional double Phase2RevenueShare = 25;
   double Phase2Refund = 26;
   repeated trader_packages.TraderPackageAttempt Phase2Attempts = 27;
-
   double DailyDrawdown = 30;
   double OverallDrawdown = 31;
-
-  // RevenueScalingNOT USED
-  // double RevenueScaling = 32;
-  // RevenueScalingNOT USED
-
   double TargetProfit = 33;
   double RevenueShare = 34;
-
   string TraderPackageGroupId = 35;
   string TraderPackageGroupName = 36;
-
   trader_packages.TraderPackagePhaseType PhaseType = 37;
-
   double Phase3DailyDrawdown = 39;
   double Phase3OverallDrawdown = 40;
   double Phase3TargetProfit = 41;
@@ -82,12 +70,10 @@ message TraderPackage {
   optional double Phase3RevenueShare = 45;
   double Phase3Refund = 46;
   repeated trader_packages.TraderPackageAttempt Phase3Attempts = 47;
-
   double Refund = 49;
   trader_packages.TraderPackageType Type = 50;
   repeated PlatformGroup platform_group_demo = 51;
   repeated PlatformGroup platform_group_live = 52;
-
   trader_packages.TradingConditionType TradingCondition = 53;
   int32 RefundPayoutNumber = 54;
 }
@@ -199,6 +185,15 @@ message PublishGroupRequest { string TraderPackageGroupId = 1; }
 
 message PublishGroupResponse { bool Success = 1; }
 
+message GetTraderPackageRequest {
+  string id = 1;
+  bool is_published = 2;
+}
+
+message GetTraderPackageResponse {
+  trader_packages.TraderPackage item = 1;
+}
+
 service TraderPackagesGrpcService {
   rpc GetAll(trader_packages.GetAllRequest)
       returns (trader_packages.GetAllResponse);
@@ -211,12 +206,12 @@ service TraderPackagesGrpcService {
       returns (trader_packages.PublishResponse);
   rpc UnPublish(trader_packages.UnPublishRequest)
       returns (trader_packages.UnPublishResponse);
+  rpc Get(GetTraderPackageRequest) returns (GetTraderPackageResponse);
 
   rpc SetTraderPackageFieldsOrder(
-      trader_packages.SetTraderPackageFieldsOrderRequest)
+  trader_packages.SetTraderPackageFieldsOrderRequest)
       returns (trader_packages.SetTraderPackageFieldsOrderResponse);
 
-  // produce the same requests but for groups
   rpc GetAllGroups(trader_packages.GetAllGroupsRequest)
       returns (trader_packages.GetAllGroupsResponse);
   rpc GetAllPublishedGroups(trader_packages.GetAllPublishedGroupsRequest)
@@ -227,6 +222,7 @@ service TraderPackagesGrpcService {
       returns (trader_packages.DeleteGroupResponse);
   rpc PublishGroup(trader_packages.PublishGroupRequest)
       returns (trader_packages.PublishGroupResponse);
+
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

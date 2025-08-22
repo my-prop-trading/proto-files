@@ -18,6 +18,17 @@ enum AccountType {
   LIVE = 1;
 }
 
+message GetTradesPageRequest {
+  uint64 Limit = 1;
+  uint64 Offset = 2;
+  optional uint64 FromDate = 3;
+  optional uint64 ToDate = 4;
+}
+
+message GetTradesPageResponse {
+  repeated AccountTradeModel Items = 1;
+}
+
 message AccountTradeModel {
   string Id = 1;            
   string PlatfomAccountId = 4;
@@ -99,6 +110,7 @@ service AccountHistoryGrpcService {
     rpc GetTradesBySymbols(GetTradesBySymbolsRequest) returns (stream AccountTradeModel);
     rpc InsertOrUpdate(InsertOrUpdateGrpcRequest) returns (InsertOrUpdateGrpcResponse);
     rpc CloseAll(CloseAllTradesRequest) returns (CloseAllTradesResponse);
+    rpc GetTradesPage(GetTradesPageRequest) returns (GetTradesPageResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

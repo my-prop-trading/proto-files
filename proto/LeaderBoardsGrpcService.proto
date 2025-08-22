@@ -1,0 +1,33 @@
+syntax = "proto3";
+package leader_boards;
+import "google/protobuf/empty.proto";
+
+message LeaderBoardGrpcModel {
+  string Id = 1;
+  int32 Rank = 2;
+  string Trader = 3;
+  double AccountSize = 4;
+  double ProfitUsd = 5;
+  double ProfitPercent = 6;
+  double WinRatio = 7;
+  double AverageWin = 8;
+  double AverageLoss = 9;
+  string PrimaryPair = 10;
+  int64 AverageTradeDuration = 11;
+  int64 TotalTrades = 12;
+  int32 LongestStreak = 13;
+  int32 LongestWinningStreak = 14;
+  int32 LongestLosingStreak = 15;
+}
+
+message GetLeaderBoardsPageGrpcRequest {}
+
+message GetLeaderBoardsPageGrpcResponse {
+  repeated LeaderBoardGrpcModel items = 1;
+}
+
+service LeaderBoardsGrpcService {
+    rpc GetLeaderBoardsPage(GetLeaderBoardsPageGrpcRequest) returns (GetLeaderBoardsPageGrpcResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

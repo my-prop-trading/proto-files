@@ -1,0 +1,218 @@
+syntax = "proto3";
+package rewards;
+import "google/protobuf/empty.proto";
+
+enum TaskStatusGrpc {
+  AVAILABLE = 0;
+  IN_PROGRESS = 1;
+  UNDER_REVIEW = 3;
+  APPROVED = 2;
+  REJECTED = 4;
+}
+
+enum RewardStatusGrpc {
+  REWARD_AVAILABLE = 0;
+  REWARD_CLAIMED = 1;
+  REWARD_PENDING = 2;
+  REWARD_FULFILLED = 3;
+}
+
+enum RewardTypeGrpc {
+  DISCOUNT = 0;
+  FREE_CHALLENGE = 1;
+}
+
+enum RewardAttributeGrpc {
+  DISCOUNT_CODE = 0;
+  CHALLENGE_ID = 1;
+}
+
+message RewardGrpcModel {
+  string Id = 1;
+  string IconUrl = 2;
+  double RequiredPoints = 3;
+  string Name = 4;
+  string Description = 5;
+  optional string ClientId = 6;
+  int64 CreatedAt = 7;
+  int64 UpdatedAt = 8;
+  optional int64 ExpireDate = 9;
+  optional string ParentId = 10;
+  RewardTypeGrpc Type = 11;
+  map<int32, string> Attributes = 12;
+  RewardStatusGrpc status = 13;
+  string ManagerId = 14;
+}
+
+message DiscountAttributes {
+  string Code = 1;
+}
+
+message FreeChallengeAttributes {
+  string ChallengeId = 1;
+}
+
+message GetRewardsPageGrpcRequest {
+  int32 Limit = 1;
+  int32 Offset = 2;
+  optional string ClientId = 3;
+  repeated RewardTypeGrpc Types = 4;
+  repeated RewardStatusGrpc Statuses = 5;
+}
+
+message GetRewardsPageGrpcResponse {
+  repeated RewardGrpcModel items = 1;
+}
+
+message TaskGrpcModel {
+  string Id = 1;
+  string IconUrl = 2;
+  double RewardPoints = 3;
+  string Name = 4;
+  string Description = 5;
+  int64 CreatedAt = 6;
+  int64 UpdatedAt = 7;
+  optional string ClientId = 8;
+  optional int64 ExpireDate = 9;
+  TaskStatusGrpc Status = 10;
+  string ManagerId = 11;
+  optional string ParentId = 12;
+  optional string ScreenshotFileId = 13;
+}
+
+message GetTasksPageGrpcRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+  optional string ClientId = 3;
+  repeated TaskStatusGrpc statuses = 4;
+}
+
+message GetTasksPageGrpcResponse {
+  repeated TaskGrpcModel items = 1;
+}
+
+message BalanceGrpcModel {
+  string ClientId = 1;
+  double AvailablePoints = 2;
+  int64 CreatedAt = 3;
+  int64 UpdatedAt = 4;
+}
+
+message GetBalanceGrpcRequest {
+  string ClientId = 1;
+}
+
+message GetBalanceGrpcResponse {
+  BalanceGrpcModel item = 1;
+}
+
+message SubmitTaskGrpcRequest {
+  string ClientId = 1;
+  string TaskId = 2;
+  FileGrpcModel Screenshot = 3;
+}
+
+message SubmitTaskGrpcResponse {
+  optional string ErrorMessage = 1;
+  optional TaskGrpcModel Item = 2;
+}
+
+message ClaimRewardGrpcRequest {
+  string ClientId = 1;
+  string RewardId = 2;
+}
+
+message ClaimRewardGrpcResponse {
+  optional string ErrorMessage = 1;
+  optional RewardGrpcModel Item = 2;
+}
+
+message ApproveTaskGrpcRequest {
+  string ManagerId = 1;
+  string TaskId = 2;
+  string ClientId = 3;
+}
+
+message ApproveTaskGrpcResponse {
+  optional string ErrorMessage = 1;
+  optional TaskGrpcModel Item = 2;
+}
+
+message CreateOrUpdateRewardsGrpcRequest {
+  repeated RewardGrpcModel Items = 1;
+}
+
+message CreateOrUpdateRewardsGrpcResponse {
+}
+
+message CreateOrUpdateTasksGrpcRequest {
+  repeated TaskGrpcModel Items = 1;
+}
+
+message CreateOrUpdateTasksGrpcResponse {
+}
+
+message DeleteTaskGrpcRequest {
+  string Id = 1;
+}
+
+message DeleteTaskGrpcResponse {
+}
+
+message DeleteRewardGrpcRequest {
+  string Id = 1;
+}
+
+message DeleteRewardGrpcResponse {
+}
+
+message RejectTaskGrpcRequest {
+  string Id = 1;
+  string ManagerId = 2;
+}
+
+message RejectTaskGrpcResponse {
+  optional TaskGrpcModel Item = 1;
+}
+
+message GetTaskScreenshotGrpcRequest {
+  string Id = 1;
+}
+
+message GetTaskScreenshotGrpcResponse {
+  FileGrpcModel Screenshot = 1;
+}
+
+message FileGrpcModel {
+  bytes ContentBytes = 1;
+  string Name = 2;
+  string ContentType = 3;
+}
+
+message FulfillRewardGrpcRequest {
+  string Id = 1;
+  string ManagerId = 2;
+}
+
+message FulfillRewardGrpcResponse {
+  optional string ErrMessage = 1;
+  optional RewardGrpcModel Item = 2;
+}
+
+service RewardsGrpcService {
+    rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
+    rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
+    rpc CreateOrUpdateRewards(CreateOrUpdateRewardsGrpcRequest) returns (CreateOrUpdateRewardsGrpcResponse);
+    rpc CreateOrUpdateTasks(CreateOrUpdateTasksGrpcRequest) returns (CreateOrUpdateTasksGrpcResponse);
+    rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
+    rpc SubmitTask(SubmitTaskGrpcRequest) returns (SubmitTaskGrpcResponse);
+    rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
+    rpc RejectTask(RejectTaskGrpcRequest) returns (RejectTaskGrpcResponse);
+    rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
+    rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
+    rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
+    rpc GetTaskScreenshot(GetTaskScreenshotGrpcRequest) returns (GetTaskScreenshotGrpcResponse);
+    rpc FulfillReward(FulfillRewardGrpcRequest) returns (FulfillRewardGrpcResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

@@ -22,6 +22,12 @@ enum PurchaseType {
   EXTERNAL = 1;
 }
 
+enum PaymentProvider {
+  WOOCOMMERCE = 0;
+  BRIDGERPAY = 1;
+  FUNNELFOX = 2;
+}
+
 message Order {
   string Id = 1;
   optional int64 CreatedAt = 2;
@@ -79,6 +85,7 @@ message CreateTraderAccountOrderRequest {
   string ClientId = 13;
   string Brand = 14;
   orders.PurchaseType PurchaseType = 15;
+  optional string email = 16;
 }
 
 message CreateTraderAccountOrderResponse {
@@ -99,6 +106,13 @@ message CreateTraderAccountOrderResponseBody {
 message PaymentPage {
   string Value = 1;
   PaymentPageType PageType = 2;
+  PaymentPageDisplayMode DisplayMode = 3;
+  optional string WalletScript = 4;
+}
+
+enum PaymentPageDisplayMode {
+  TAB = 0;
+  IFRAME = 1;
 }
 
 enum PaymentPageType {
@@ -124,6 +138,7 @@ message PreviewOrderDiscountResponse {
     orders.PreviewError Error = 4;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidUsageExceeded = 5;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscountExpired = 6;
+    orders.PreviewBodyDiscountForAnotherPackageResponseBody BodyDiscountForAnotherPackage = 7;
   }
 }
 
@@ -147,6 +162,10 @@ message PreviewOrderDiscountInvalidResponseBody {
   string PriceCurrency = 3;
 }
 
+message PreviewBodyDiscountForAnotherPackageResponseBody {
+  repeated string TradingPackageIds = 1;
+}
+
 enum DiscountCodeType {
   FIXED = 0; // default
   PERCENT = 1;
@@ -162,6 +181,8 @@ message GetOrdersPaginatedRequest {
   uint64 Limit = 2;
   uint64 Offset = 3;
   repeated orders.OrderStatus Statuses = 4;
+  optional uint64 FromDate = 5;
+  optional uint64 ToDate = 6;
 }
 
 message GetOrdersPaginatedResponse {
@@ -302,6 +323,11 @@ message CreatePaidTraderAccountOrderRequest {
   string Manager = 7;
   optional double RefundGrantedByManager = 8;
   LifetimeMetaData lifetime_metadata = 9;
+  optional double TotalPaid = 10;
+  optional string payment_method_title = 11;
+  bool is_first_purchase = 12;
+  optional string psp_order_id = 13;
+  optional PaymentProvider payment_provider = 14;
 }
 
 message CreatePaidTraderAccountOrderResponse {
