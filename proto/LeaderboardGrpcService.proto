@@ -2,7 +2,7 @@ syntax = "proto3";
 package leaderboard;
 import "google/protobuf/empty.proto";
 
-message LeaderBoardGrpcModel {
+message LeaderboardGrpcModel {
   string Id = 1;
   int32 Rank = 2;
   string Trader = 3;
@@ -20,14 +20,14 @@ message LeaderBoardGrpcModel {
   int32 LongestLosingStreak = 15;
 }
 
-message GetLeaderBoardPageGrpcRequest {}
+message GetLeaderboardPageGrpcRequest {}
 
-message GetLeaderBoardPageGrpcResponse {
-  repeated LeaderBoardGrpcModel items = 1;
+message GetLeaderboardPageGrpcResponse {
+  repeated LeaderboardGrpcModel items = 1;
 }
 
-service LeaderBoardGrpcService {
-    rpc GetLeaderBoardPage(GetLeaderBoardPageGrpcRequest) returns (GetLeaderBoardPageGrpcResponse);
+service LeaderboardGrpcService {
+    rpc GetLeaderboardPage(GetLeaderboardPageGrpcRequest) returns (GetLeaderboardPageGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
