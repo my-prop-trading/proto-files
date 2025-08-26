@@ -45,17 +45,6 @@ message GetTradingMetricsGrpcResponse {
   TradingMetricsGrpcModel item = 1;
 }
 
-message GetTradingMetricsPageGrpcRequest {
-  optional uint64 FromDate = 1;
-  optional uint64 ToDate = 2;
-  uint64 Limit = 3;
-  uint64 Offset = 4;
-}
-
-message GetTradingMetricsPageGrpcResponse {
-  repeated TradingMetricsGrpcModel items = 1;
-}
-
 enum TradingObjectiveFailReasonGrpc {
   daily_loss_level = 0;
   overall_loss_level = 1;
@@ -149,7 +138,6 @@ service TradingControlGrpcService {
   rpc PassTradingObjective(PassTradingObjectiveGrpcRequest) returns (PassTradingObjectiveGrpcResponse);
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
   rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
-  rpc GetTradingMetricsPage(GetTradingMetricsPageGrpcRequest) returns (GetTradingMetricsPageGrpcResponse);
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
