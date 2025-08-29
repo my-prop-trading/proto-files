@@ -544,10 +544,10 @@ message TraderAccountCacheModel {
   trader_packages.TradingConditionType TradingCondition = 29;
 }
 
-message GetDurationInDaysOfLongestActivatedAccountRequest { }
+message GetLongestActivatedAccountRequest { }
 
-message GetDurationInDaysOfLongestActivatedAccountResponse {
-  int32 Duration = 1;
+message GetLongestActivatedAccountResponse {
+  TraderAccount Item = 1;
 }
 
 service TraderAccountsGrpcService {
@@ -596,7 +596,7 @@ service TraderAccountsGrpcService {
 
     rpc GetTraderAccountCache(GetTraderAccountCacheRequest) returns (stream TraderAccountCacheModel);
 
-    rpc GetLongestActivatedAccountDurationInDays(GetDurationInDaysOfLongestActivatedAccountRequest) returns (GetDurationInDaysOfLongestActivatedAccountResponse);
+    rpc GetLongestActivatedAccount(GetLongestActivatedAccountRequest) returns (GetLongestActivatedAccountResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

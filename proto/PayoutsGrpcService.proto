@@ -401,16 +401,18 @@ message GetExcessiveProfitByClientIdsResponse {
     double TotalAmount = 2;
 }
 
-message GetHighestProfitRequest { }
+message GetHighestWithdrawalRequest { }
     
-message GetHighestProfitResponse {
-    double Profit = 1;
+message GetHighestWithdrawalResponse {
+    double Withdrawal = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
-message GetHighestTotalProfitRequest { }
+message GetHighestTotalWithdrawalRequest { }
     
-message GetHighestTotalProfitResponse {
-    double TotalProfit = 1;
+message GetHighestTotalWithdrawalResponse {
+    double TotalWithdrawal = 1;
 }
 
 service PayoutsGrpcService {
@@ -447,9 +449,9 @@ service PayoutsGrpcService {
 
     rpc GetExcessiveProfitByClientIds(payouts.GetExcessiveProfitByClientIdsRequest) returns (payouts.GetExcessiveProfitByClientIdsResponse);
 
-    rpc GetHighestProfit(payouts.GetHighestProfitRequest) returns (payouts.GetHighestProfitResponse);
+    rpc GetHighestWithdrawal(payouts.GetHighestWithdrawalRequest) returns (payouts.GetHighestWithdrawalResponse);
 
-    rpc GetHighestTotalProfit(payouts.GetHighestTotalProfitRequest) returns (payouts.GetHighestTotalProfitResponse);
+    rpc GetHighestTotalWithdrawal(payouts.GetHighestTotalWithdrawalRequest) returns (payouts.GetHighestTotalWithdrawalResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
