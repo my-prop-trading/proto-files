@@ -20,7 +20,7 @@ message LeaderboardGrpcModel {
   int32 LongestLosingStreak = 15;
 }
 
-message HighlightGrpcModel {
+message HighlightCardGrpcModel {
   double HighestTotalReward = 1;
   int32 LongestFundedAccountDuration = 2;
   double HighestSingleReward = 3;
@@ -35,7 +35,7 @@ message GetLeaderboardPageGrpcResponse {
 message GetHighlightCardGrpcRequest {}
 
 message GetHighlightCardGrpcResponse {
-  HighlightGrpcModel item = 1;
+  HighlightCardGrpcModel item = 1;
 }
 
 service LeaderboardGrpcService {

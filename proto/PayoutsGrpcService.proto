@@ -401,6 +401,18 @@ message GetExcessiveProfitByClientIdsResponse {
     double TotalAmount = 2;
 }
 
+message GetHighestProfitRequest { }
+    
+message GetHighestProfitResponse {
+    double Profit = 1;
+}
+
+message GetHighestTotalProfitRequest { }
+    
+message GetHighestTotalProfitResponse {
+    double TotalProfit = 1;
+}
+
 service PayoutsGrpcService {
     rpc GetById(payouts.GetByIdRequest) returns (payouts.GetByIdResponse);
 
@@ -434,6 +446,10 @@ service PayoutsGrpcService {
     rpc GetRevenueShareAmountByClientIds(payouts.GetRevenueShareAmountByClientIdsRequest) returns (payouts.GetRevenueShareAmountByClientIdsResponse);
 
     rpc GetExcessiveProfitByClientIds(payouts.GetExcessiveProfitByClientIdsRequest) returns (payouts.GetExcessiveProfitByClientIdsResponse);
+
+    rpc GetHighestProfit(payouts.GetHighestProfitRequest) returns (payouts.GetHighestProfitResponse);
+
+    rpc GetHighestTotalProfit(payouts.GetHighestTotalProfitRequest) returns (payouts.GetHighestTotalProfitResponse);
     
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
