@@ -544,6 +544,12 @@ message TraderAccountCacheModel {
   trader_packages.TradingConditionType TradingCondition = 29;
 }
 
+message GetLongestActivatedAccountRequest { }
+
+message GetLongestActivatedAccountResponse {
+  TraderAccount Item = 1;
+}
+
 service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
@@ -589,6 +595,8 @@ service TraderAccountsGrpcService {
     //MAX ALLOCATION
 
     rpc GetTraderAccountCache(GetTraderAccountCacheRequest) returns (stream TraderAccountCacheModel);
+
+    rpc GetLongestActivatedAccount(GetLongestActivatedAccountRequest) returns (GetLongestActivatedAccountResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

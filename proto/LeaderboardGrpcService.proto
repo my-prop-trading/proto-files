@@ -20,14 +20,27 @@ message LeaderboardGrpcModel {
   int32 LongestLosingStreak = 15;
 }
 
+message HighlightCardGrpcModel {
+  double HighestTotalReward = 1;
+  int32 LongestFundedAccountDuration = 2;
+  double HighestSingleReward = 3;
+}
+
 message GetLeaderboardPageGrpcRequest {}
 
 message GetLeaderboardPageGrpcResponse {
   repeated LeaderboardGrpcModel items = 1;
 }
 
+message GetHighlightCardGrpcRequest {}
+
+message GetHighlightCardGrpcResponse {
+  HighlightCardGrpcModel item = 1;
+}
+
 service LeaderboardGrpcService {
     rpc GetLeaderboardPage(GetLeaderboardPageGrpcRequest) returns (GetLeaderboardPageGrpcResponse);
+    rpc GetHighlightCard(GetHighlightCardGrpcRequest) returns (GetHighlightCardGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
