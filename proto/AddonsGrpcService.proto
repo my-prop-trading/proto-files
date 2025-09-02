@@ -111,7 +111,9 @@ message PurchaseAddonGrpcRequest {
   string OrderId = 4;
 }
 
-message PurchaseAddonGrpcResponse {}
+message PurchaseAddonGrpcResponse {
+  PurchasedAddonGrpcModel Item = 1;
+}
 
 message GetPurchasedAddonBundlesGrpcRequest {
   uint32 Limit = 1;
@@ -132,7 +134,10 @@ message PurchaseAddonBundleGrpcRequest {
   string OrderId = 4;
 }
 
-message PurchaseAddonBundleGrpcResponse {}
+message PurchaseAddonBundleGrpcResponse {
+  PurchasedAddonBundleGrpcModel Bundle = 1;
+  repeated PurchasedAddonGrpcModel Addons = 2;
+}
 
 service AddonsGrpcService {
   rpc GetAvailableAddons(GetAvailableAddonsGrpcRequest) returns (GetAvailableAddonsGrpcResponse);
