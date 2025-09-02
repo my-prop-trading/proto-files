@@ -1,0 +1,93 @@
+syntax = "proto3";
+package rewards;
+import "google/protobuf/empty.proto";
+
+enum AddonStatusGrpc {
+  ACTIVE = 0;
+  REFUNDED = 1;
+  LOST = 2;
+}
+
+enum AddonTypeGrpc {
+  PAYOUT_SCHEDULE = 0;
+  PROFIT_SPLIT = 1;
+}
+
+message PurchasedAddonGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double PricePercent = 4;
+  AddonStatusGrpc Status = 5;
+  AddonTypeGrpc Type = 6;
+  double Modifier = 7;
+  string ClientID = 8;
+  string TraderAccountId = 9;
+  string OrderId = 10;
+  string ParentId = 11;
+}
+
+
+message AvailableAddonGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double PricePercent = 4;
+  AddonTypeGrpc Type = 6;
+  double Modifier = 7;
+}
+
+message GetAvailableAddonsGrpcRequest {
+
+}
+
+message GetAvailableAddonsGrpcResponse {
+  AvailableAddonGrpcModel Items = 1;
+}
+
+message CreateOrUpdateAddonsGrpcRequest {
+  repeated AvailableAddonGrpcModel Items = 1;
+}
+
+message CreateOrUpdateAddonsGrpcResponse {
+
+}
+
+message GetPurchasedAddonsGrpcRequest {
+  uint32 Limit = 1;
+  uint32 Offset = 2;
+  repeated string ClientIds = 3;
+  repeated string TraderAccountIds = 4;
+  repeated string OrderIds = 5;
+}
+
+message GetPurchasedAddonsGrpcResponse {
+  PurchasedAddonGrpcModel Items = 1;
+}
+
+message DeleteAddonGrpcRequest {
+  string Id = 1;
+}
+
+message DeleteAddonGrpcResponse {
+}
+
+message PurchaseAddonGrpcRequest {
+  string Id = 1;
+  string ClientId = 2;
+  string TraderAccountId = 3;
+  string OrderId = 4;
+}
+
+message PurchaseAddonGrpcResponse {
+}
+
+service AddonsGrpcService {
+  rpc GetAvailableAddons(GetAvailableAddonsGrpcRequest) returns (GetAvailableAddonsGrpcResponse);
+  rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
+  rpc CreateOrUpdateAddons(CreateOrUpdateAddonsGrpcRequest) returns (CreateOrUpdateAddonsGrpcResponse);
+  rpc GetPurchasedAddons(GetPurchasedAddonsGrpcRequest) returns (GetPurchasedAddonsGrpcResponse);
+  rpc PurchaseAddon(PurchaseAddonGrpcRequest) returns (PurchaseAddonGrpcResponse);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
