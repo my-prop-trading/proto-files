@@ -13,21 +13,6 @@ enum AddonTypeGrpc {
   PROFIT_SPLIT = 1;
 }
 
-message PurchasedAddonGrpcModel {
-  string Id = 1;
-  string Name = 2;
-  string Description = 3;
-  double PricePercent = 4;
-  AddonStatusGrpc Status = 5;
-  AddonTypeGrpc Type = 6;
-  double Modifier = 7;
-  string ClientID = 8;
-  string TraderAccountId = 9;
-  string OrderId = 10;
-  string ParentId = 11;
-}
-
-
 message AvailableAddonGrpcModel {
   string Id = 1;
   string Name = 2;
@@ -37,21 +22,63 @@ message AvailableAddonGrpcModel {
   double Modifier = 7;
 }
 
-message GetAvailableAddonsGrpcRequest {
-
+message PurchasedAddonGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double PricePercent = 4;
+  AddonStatusGrpc Status = 5;
+  AddonTypeGrpc Type = 6;
+  double Modifier = 7;
+  string ClientId = 8;
+  string TraderAccountId = 9;
+  string OrderId = 10;
+  string ParentId = 11;
 }
+
+message AvailableAddonBundleGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double DiscountPercent = 4;
+  repeated string AddonIds = 5;
+}
+
+message PurchasedAddonBundleGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double DiscountPercent = 4;
+  repeated string AddonIds = 5;
+  string ClientId = 6;
+  string TraderAccountId = 7;
+  string OrderId = 8;
+  string ParentId = 9;
+}
+
+message GetAvailableAddonsGrpcRequest {}
 
 message GetAvailableAddonsGrpcResponse {
   AvailableAddonGrpcModel Items = 1;
+}
+
+message GetAvailableAddonBundlesGrpcRequest {}
+
+message GetAvailableAddonBundlesGrpcResponse {
+  AvailableAddonBundleGrpcModel Items = 1;
 }
 
 message CreateOrUpdateAddonsGrpcRequest {
   repeated AvailableAddonGrpcModel Items = 1;
 }
 
-message CreateOrUpdateAddonsGrpcResponse {
+message CreateOrUpdateAddonsGrpcResponse {}
 
+message CreateOrUpdateAddonBundlesGrpcRequest {
+  repeated AvailableAddonGrpcModel Items = 1;
 }
+
+message CreateOrUpdateAddonBundlesGrpcResponse {}
 
 message GetPurchasedAddonsGrpcRequest {
   uint32 Limit = 1;
@@ -69,8 +96,13 @@ message DeleteAddonGrpcRequest {
   string Id = 1;
 }
 
-message DeleteAddonGrpcResponse {
+message DeleteAddonGrpcResponse {}
+
+message DeleteAddonBundleGrpcRequest {
+  string Id = 1;
 }
+
+message DeleteAddonBundleGrpcResponse {}
 
 message PurchaseAddonGrpcRequest {
   string Id = 1;
@@ -79,15 +111,43 @@ message PurchaseAddonGrpcRequest {
   string OrderId = 4;
 }
 
-message PurchaseAddonGrpcResponse {
+message PurchaseAddonGrpcResponse {}
+
+message GetPurchasedAddonBundlesGrpcRequest {
+  uint32 Limit = 1;
+  uint32 Offset = 2;
+  repeated string ClientIds = 3;
+  repeated string TraderAccountIds = 4;
+  repeated string OrderIds = 5;
 }
+
+message GetPurchasedAddonBundlesGrpcResponse {
+  PurchasedAddonGrpcModel Items = 1;
+}
+
+message PurchaseAddonBundleGrpcRequest {
+  string Id = 1;
+  string ClientId = 2;
+  string TraderAccountId = 3;
+  string OrderId = 4;
+}
+
+message PurchaseAddonBundleGrpcResponse {}
 
 service AddonsGrpcService {
   rpc GetAvailableAddons(GetAvailableAddonsGrpcRequest) returns (GetAvailableAddonsGrpcResponse);
   rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
   rpc CreateOrUpdateAddons(CreateOrUpdateAddonsGrpcRequest) returns (CreateOrUpdateAddonsGrpcResponse);
+
   rpc GetPurchasedAddons(GetPurchasedAddonsGrpcRequest) returns (GetPurchasedAddonsGrpcResponse);
   rpc PurchaseAddon(PurchaseAddonGrpcRequest) returns (PurchaseAddonGrpcResponse);
+
+  rpc GetAvailableBundles(GetAvailableAddonBundlesGrpcRequest) returns (GetAvailableAddonBundlesGrpcResponse);
+  rpc DeleteBundle(DeleteAddonBundleGrpcRequest) returns (DeleteAddonBundleGrpcResponse);
+  rpc CreateOrUpdateBundles(CreateOrUpdateAddonBundlesGrpcRequest) returns (CreateOrUpdateAddonBundlesGrpcResponse);
+
+  rpc GetPurchasedBundles(GetPurchasedAddonBundlesGrpcRequest) returns (GetPurchasedAddonBundlesGrpcResponse);
+  rpc PurchaseBundle(PurchaseAddonBundleGrpcRequest) returns (PurchaseAddonBundleGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
