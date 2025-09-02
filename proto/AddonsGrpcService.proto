@@ -14,8 +14,8 @@ enum AddonModifierTypeGrpc {
 }
 
 message AddonModifierGrpcModel {
-    AddonModifierTypeGrpc Type = 1;
-    string Value = 2;
+  AddonModifierTypeGrpc Type = 1;
+  string Value = 2;
 }
 
 message AvailableAddonGrpcModel {
@@ -24,6 +24,7 @@ message AvailableAddonGrpcModel {
   string Description = 3;
   double PricePercent = 4;
   AddonModifierGrpcModel Modifier = 5;
+  int64 UpdatedAt = 6;
 }
 
 message PurchasedAddonGrpcModel {
@@ -37,6 +38,7 @@ message PurchasedAddonGrpcModel {
   string TraderAccountId = 8;
   string OrderId = 9;
   string ParentId = 10;
+  int64 UpdatedAt = 11;
 }
 
 message AvailableAddonBundleGrpcModel {
@@ -45,6 +47,8 @@ message AvailableAddonBundleGrpcModel {
   string Description = 3;
   double DiscountPercent = 4;
   repeated string AddonIds = 5;
+  int64 UpdatedAt = 6;
+
 }
 
 message PurchasedAddonBundleGrpcModel {
@@ -57,6 +61,8 @@ message PurchasedAddonBundleGrpcModel {
   string TraderAccountId = 7;
   string OrderId = 8;
   string ParentId = 9;
+  int64 UpdatedAt = 10;
+
 }
 
 message GetAvailableAddonsGrpcRequest {}
