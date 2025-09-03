@@ -3,7 +3,7 @@ package addons;
 import "google/protobuf/empty.proto";
 
 enum AddonOrderStatusGrpc {
-  ORDER_STARTED = 0;
+  ORDER_PENDING = 0;
   ORDER_COMPLETED = 1;
 }
 
@@ -129,7 +129,7 @@ message CompleteOrderGrpcResponse {
   AddonOrderGrpcModel Item = 1;
 }
 
-message StartOrderGrpcRequest {
+message CreateOrderGrpcRequest {
   string ClientId = 1;
   double OrderPrice = 2;
   repeated string AddonIds = 3;
@@ -137,7 +137,7 @@ message StartOrderGrpcRequest {
   string OrderId = 6;
 }
 
-message StartOrderGrpcResponse {
+message CreateOrderGrpcResponse {
   AddonOrderGrpcModel Item = 1;
 }
 
@@ -150,8 +150,7 @@ service AddonsGrpcService {
   rpc DeleteBundle(DeleteBundleGrpcRequest) returns (DeleteBundleGrpcResponse);
   rpc AddOrUpdateBundles(AddOrUpdateBundlesGrpcRequest) returns (AddOrUpdateBundlesGrpcResponse);
 
-  rpc StartOrder(StartOrderGrpcRequest) returns (StartOrderGrpcResponse);
-  rpc CompleteOrder(CompleteOrderGrpcRequest) returns (CompleteOrderGrpcResponse);
+  rpc CreateOrder(CreateOrderGrpcRequest) returns (CreateOrderGrpcResponse);
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
