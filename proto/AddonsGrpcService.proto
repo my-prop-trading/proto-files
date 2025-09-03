@@ -72,13 +72,13 @@ message AddonBundleGrpcModel {
 message GetAddonsGrpcRequest {}
 
 message GetAddonsGrpcResponse {
-  AddonGrpcModel Items = 1;
+  repeated AddonGrpcModel Items = 1;
 }
 
 message GetBundlesGrpcRequest {}
 
 message GetBundlesGrpcResponse {
-  AddonBundleGrpcModel Items = 1;
+  repeated AddonBundleGrpcModel Items = 1;
 }
 
 message AddOrUpdateAddonsGrpcRequest {
