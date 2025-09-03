@@ -1,5 +1,5 @@
 syntax = "proto3";
-package rewards;
+package addons;
 import "google/protobuf/empty.proto";
 
 enum AddonStatusGrpc {
