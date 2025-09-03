@@ -40,6 +40,7 @@ message AddonPurchaseGrpcModel {
   double FullPrice = 9;
   optional double DiscountPrice = 10;
   AddonPurchaseStatusGrpc Status = 11;
+  string OrderId = 12;
 }
 
 message AddonBundleGrpcModel {
