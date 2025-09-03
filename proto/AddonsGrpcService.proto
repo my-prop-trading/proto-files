@@ -41,7 +41,7 @@ message AddonPurchaseGrpcModel {
   string OrderId = 9;
   string TraderAccountId = 10;
   double FullPrice = 11;
-  optional double DiscountPrice = 12;
+  double DiscountAmount = 12;
   string ParentId = 13;
   AddonStatusGrpc Status = 14;
   optional string BundleId = 15;
@@ -54,9 +54,9 @@ message AddonOrderGrpcModel {
   repeated AddonGrpcModel Addons = 4;
   repeated AddonBundleGrpcModel Bundles = 5;
   map<string, double> AddonFullPrices = 6;
-  map<string, double> AddonDiscountPrices = 7;
+  map<string, double> AddonDiscountAmounts = 7;
   double FullPrice = 8;
-  optional double DiscountPrice = 9;
+  double DiscountAmount = 9;
   AddonOrderStatusGrpc Status = 10;
 }
 
