@@ -23,7 +23,7 @@ message AddonGrpcModel {
   string Id = 1;
   string Name = 2;
   string Description = 3;
-  double Price = 4;
+  double PricePercent = 4;
   AddonParameterTypeGrpc ParameterType = 5;
   string ParameterValue = 6;
   int64 UpdatedAt = 7;
@@ -33,7 +33,7 @@ message AddonPurchaseGrpcModel {
   string Id = 1;
   string Name = 2;
   string Description = 3;
-  double Price = 4;
+  double PricePercent = 4;
   AddonParameterTypeGrpc ParameterType = 5;
   string ParameterValue = 6;
   int64 UpdatedAt = 7;
