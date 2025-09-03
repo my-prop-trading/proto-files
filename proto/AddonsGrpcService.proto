@@ -29,16 +29,15 @@ message AddonGrpcModel {
 
 message AddonOrderGrpcModel {
   string ClientId = 1;
-  string TraderAccountId = 2;
-  int64 UpdatedAt = 3;
-  repeated AddonGrpcModel Addons = 4;
-  repeated AddonBundleGrpcModel Bundles = 5;
-  map<string, double> AddonFullPrices = 6;
-  map<string, double> AddonDiscountPrices = 7;
-  double FullPrice = 8;
-  optional double DiscountPrice = 9;
-  AddonOrderStatusGrpc Status = 10;
-  string OrderId = 11;
+  int64 UpdatedAt = 2;
+  repeated AddonGrpcModel Addons = 3;
+  repeated AddonBundleGrpcModel Bundles = 4;
+  map<string, double> AddonFullPrices = 5;
+  map<string, double> AddonDiscountPrices = 6;
+  double FullPrice = 7;
+  optional double DiscountPrice = 8;
+  AddonOrderStatusGrpc Status = 9;
+  string OrderId = 10;
 }
 
 message AddonBundleGrpcModel {
@@ -102,6 +101,7 @@ message DeleteBundleGrpcResponse {}
 
 message CompleteOrderGrpcRequest {
   string OrderId = 1;
+  string TraderAccountId = 2;
 }
 
 message CompleteOrderGrpcResponse {
@@ -110,10 +110,9 @@ message CompleteOrderGrpcResponse {
 
 message StartOrderGrpcRequest {
   string ClientId = 1;
-  string TraderAccountId = 2;
-  double OrderPrice = 3;
-  repeated string AddonIds = 4;
-  repeated string BundleIds = 5;
+  double OrderPrice = 2;
+  repeated string AddonIds = 3;
+  repeated string BundleIds = 4;
   string OrderId = 6;
 }
 
