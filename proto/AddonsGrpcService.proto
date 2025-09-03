@@ -63,17 +63,17 @@ message GetBundlesGrpcResponse {
   AddonBundleGrpcModel Items = 1;
 }
 
-message CreateOrUpdateAddonsGrpcRequest {
+message AddOrUpdateAddonsGrpcRequest {
   repeated AddonGrpcModel Items = 1;
 }
 
-message CreateOrUpdateAddonsGrpcResponse {}
+message AddOrUpdateAddonsGrpcResponse {}
 
-message CreateOrUpdateBundlesGrpcRequest {
+message AddOrUpdateBundlesGrpcRequest {
   repeated AddonGrpcModel Items = 1;
 }
 
-message CreateOrUpdateBundlesGrpcResponse {}
+message AddOrUpdateBundlesGrpcResponse {}
 
 message GetPurchasesGrpcRequest {
   uint32 Limit = 1;
@@ -129,11 +129,11 @@ message StartPurchaseGrpcResponse {
 service AddonsGrpcService {
   rpc GetAddons(GetAddonsGrpcRequest) returns (GetAddonsGrpcResponse);
   rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
-  rpc CreateOrUpdateAddons(CreateOrUpdateAddonsGrpcRequest) returns (CreateOrUpdateAddonsGrpcResponse);
+  rpc AddOrUpdateAddons(AddOrUpdateAddonsGrpcRequest) returns (AddOrUpdateAddonsGrpcResponse);
 
   rpc GetBundles(GetBundlesGrpcRequest) returns (GetBundlesGrpcResponse);
   rpc DeleteBundle(DeleteBundleGrpcRequest) returns (DeleteBundleGrpcResponse);
-  rpc CreateOrUpdateBundles(CreateOrUpdateBundlesGrpcRequest) returns (CreateOrUpdateBundlesGrpcResponse);
+  rpc AddOrUpdateBundles(AddOrUpdateBundlesGrpcRequest) returns (AddOrUpdateBundlesGrpcResponse);
 
   rpc StartPurchase(StartPurchaseGrpcRequest) returns (StartPurchaseGrpcResponse);
   rpc CompletePurchase(CompletePurchaseGrpcRequest) returns (CompletePurchaseGrpcResponse);
