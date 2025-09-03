@@ -7,6 +7,12 @@ message CreateOrderRequest {
     repeated woocoommerce_integration.MetaData meta_data = 2;
     string trader_package_id = 3;
     optional string coupon_code = 4;
+    repeated Addon addons = 5;
+}
+
+message Addon {
+  string id = 1;
+  double price = 2;
 }
 
 message MetaData {
