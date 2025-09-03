@@ -14,8 +14,9 @@ enum AddonStatusGrpc {
 }
 
 enum AddonModifierTypeGrpc {
-  PAYOUT_SCHEDULE = 0;
-  PROFIT_SPLIT = 1;
+  PAYOUT_SCHEDULE_DAYS = 0;
+  PAYOUT_SCHEDULE_MINUTES = 1;
+  PROFIT_SPLIT = 2;
 }
 
 message AddonModifierGrpcModel {
