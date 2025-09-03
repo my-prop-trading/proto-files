@@ -22,7 +22,7 @@ message AvailableAddonGrpcModel {
   string Id = 1;
   string Name = 2;
   string Description = 3;
-  double PricePercent = 4;
+  double Price = 4;
   AddonModifierGrpcModel Modifier = 5;
   int64 UpdatedAt = 6;
 }
@@ -31,7 +31,7 @@ message PurchasedAddonGrpcModel {
   string Id = 1;
   string Name = 2;
   string Description = 3;
-  double PricePercent = 4;
+  double Price = 4;
   AddonStatusGrpc Status = 5;
   AddonModifierGrpcModel Modifier = 6;
   string ClientId = 7;
@@ -118,6 +118,7 @@ message PurchaseAddonGrpcRequest {
   string ClientId = 2;
   string TraderAccountId = 3;
   string OrderId = 4;
+  double PaidAmount = 5;
 }
 
 message PurchaseAddonGrpcResponse {
@@ -141,6 +142,7 @@ message PurchaseAddonBundleGrpcRequest {
   string ClientId = 2;
   string TraderAccountId = 3;
   string OrderId = 4;
+  double PaidAmount = 5;
 }
 
 message PurchaseAddonBundleGrpcResponse {
