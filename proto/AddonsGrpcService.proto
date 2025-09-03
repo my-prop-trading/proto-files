@@ -2,11 +2,9 @@ syntax = "proto3";
 package addons;
 import "google/protobuf/empty.proto";
 
-enum AddonPurchaseStatusGrpc {
-  STARTED = 0;
-  COMPLETED = 1;
-  REFUNDED = 2;
-  LOST = 3;
+enum AddonOrderStatusGrpc {
+  ORDER_STARTED = 0;
+  ORDER_COMPLETED = 1;
 }
 
 enum AddonModifierTypeGrpc {
@@ -26,21 +24,21 @@ message AddonGrpcModel {
   double Price = 4;
   AddonModifierGrpcModel Modifier = 5;
   int64 UpdatedAt = 6;
+  bool Disabled = 7;
 }
 
-message AddonPurchaseGrpcModel {
+message AddonOrderGrpcModel {
   string ClientId = 1;
   string TraderAccountId = 2;
-  string PurchaseId = 3;
-  int64 UpdatedAt = 4;
-  repeated AddonGrpcModel Addons = 5;
-  repeated AddonBundleGrpcModel Bundles = 6;
-  map<string, double> AddonFullPrices = 7;
-  map<string, double> AddonDiscountPrices = 8;
-  double FullPrice = 9;
-  optional double DiscountPrice = 10;
-  AddonPurchaseStatusGrpc Status = 11;
-  string OrderId = 12;
+  int64 UpdatedAt = 3;
+  repeated AddonGrpcModel Addons = 4;
+  repeated AddonBundleGrpcModel Bundles = 5;
+  map<string, double> AddonFullPrices = 6;
+  map<string, double> AddonDiscountPrices = 7;
+  double FullPrice = 8;
+  optional double DiscountPrice = 9;
+  AddonOrderStatusGrpc Status = 10;
+  string OrderId = 11;
 }
 
 message AddonBundleGrpcModel {
@@ -50,6 +48,7 @@ message AddonBundleGrpcModel {
   double DiscountPercent = 4;
   repeated string AddonIds = 5;
   int64 UpdatedAt = 6;
+  bool Disabled = 7;
 }
 
 message GetAddonsGrpcRequest {}
@@ -76,17 +75,17 @@ message AddOrUpdateBundlesGrpcRequest {
 
 message AddOrUpdateBundlesGrpcResponse {}
 
-message GetPurchasesGrpcRequest {
+message GetOrdersGrpcRequest {
   uint32 Limit = 1;
   uint32 Offset = 2;
   repeated string ClientIds = 3;
   repeated string TraderAccountIds = 4;
-  repeated string PurchaseIds = 5;
-  repeated AddonPurchaseStatusGrpc Statuses = 6;
+  repeated string OrderIds = 5;
+  repeated AddonOrderStatusGrpc Statuses = 6;
 }
 
-message GetPurchasesGrpcResponse {
-  AddonPurchaseGrpcModel Items = 1;
+message GetOrdersGrpcResponse {
+  AddonOrderGrpcModel Items = 1;
 }
 
 message DeleteAddonGrpcRequest {
@@ -101,30 +100,30 @@ message DeleteBundleGrpcRequest {
 
 message DeleteBundleGrpcResponse {}
 
-message CompletePurchaseGrpcRequest {
+message CompleteOrderGrpcRequest {
   string Id = 1;
   string ClientId = 2;
   string TraderAccountId = 3;
-  string PurchaseId = 4;
+  string OrderId = 4;
   double TotalPaidAmount = 5;
   map<string, double> PaidAmountsByAddonIds = 6;
 }
 
-message CompletePurchaseGrpcResponse {
-  AddonPurchaseGrpcModel Item = 1;
+message CompleteOrderGrpcResponse {
+  AddonOrderGrpcModel Item = 1;
 }
 
-message StartPurchaseGrpcRequest {
+message StartOrderGrpcRequest {
   string ClientId = 1;
   string TraderAccountId = 2;
-  string PurchaseId = 3;
-  double PurchasePrice = 4;
-  repeated string AddonIds = 5;
-  repeated string BundleIds = 6;
+  double OrderPrice = 3;
+  repeated string AddonIds = 4;
+  repeated string BundleIds = 5;
+  string OrderId = 6;
 }
 
-message StartPurchaseGrpcResponse {
-  AddonPurchaseGrpcModel Item = 1;
+message StartOrderGrpcResponse {
+  AddonOrderGrpcModel Item = 1;
 }
 
 service AddonsGrpcService {
@@ -136,9 +135,9 @@ service AddonsGrpcService {
   rpc DeleteBundle(DeleteBundleGrpcRequest) returns (DeleteBundleGrpcResponse);
   rpc AddOrUpdateBundles(AddOrUpdateBundlesGrpcRequest) returns (AddOrUpdateBundlesGrpcResponse);
 
-  rpc StartPurchase(StartPurchaseGrpcRequest) returns (StartPurchaseGrpcResponse);
-  rpc CompletePurchase(CompletePurchaseGrpcRequest) returns (CompletePurchaseGrpcResponse);
-  rpc GetPurchases(GetPurchasesGrpcRequest) returns (GetPurchasesGrpcResponse);
+  rpc StartOrder(StartOrderGrpcRequest) returns (StartOrderGrpcResponse);
+  rpc CompleteOrder(CompleteOrderGrpcRequest) returns (CompleteOrderGrpcResponse);
+  rpc GetOrders(GetOrdersGrpcRequest) returns (GetOrdersGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
