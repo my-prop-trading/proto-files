@@ -95,17 +95,17 @@ message AddOrUpdateBundlesGrpcRequest {
 
 message AddOrUpdateBundlesGrpcResponse {}
 
-message GetOrdersGrpcRequest {
+message GetAddonPurchasesGrpcRequest {
   uint32 Limit = 1;
   uint32 Offset = 2;
   repeated string ClientIds = 3;
   repeated string TraderAccountIds = 4;
   repeated string OrderIds = 5;
-  repeated AddonOrderStatusGrpc Statuses = 6;
+  repeated AddonStatusGrpc Statuses = 6;
 }
 
-message GetOrdersGrpcResponse {
-  AddonOrderGrpcModel Items = 1;
+message GetAddonPurchasesGrpcResponse {
+  AddonPurchaseGrpcModel Items = 1;
 }
 
 message DeleteAddonGrpcRequest {
@@ -152,7 +152,7 @@ service AddonsGrpcService {
 
   rpc StartOrder(StartOrderGrpcRequest) returns (StartOrderGrpcResponse);
   rpc CompleteOrder(CompleteOrderGrpcRequest) returns (CompleteOrderGrpcResponse);
-  rpc GetOrders(GetOrdersGrpcRequest) returns (GetOrdersGrpcResponse);
+  rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
