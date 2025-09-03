@@ -7,6 +7,12 @@ enum AddonOrderStatusGrpc {
   ORDER_COMPLETED = 1;
 }
 
+enum AddonStatusGrpc {
+  ACTIVE = 0;
+  REFUNDED = 1;
+  LOST = 2;
+}
+
 enum AddonModifierTypeGrpc {
   PAYOUT_SCHEDULE = 0;
   PROFIT_SPLIT = 1;
@@ -24,20 +30,36 @@ message AddonGrpcModel {
   double Price = 4;
   AddonModifierGrpcModel Modifier = 5;
   int64 UpdatedAt = 6;
-  bool Disabled = 7;
+}
+
+message AddonPurchaseGrpcModel {
+  string Id = 1;
+  string Name = 2;
+  string Description = 3;
+  double Price = 4;
+  AddonModifierGrpcModel Modifier = 5;
+  int64 UpdatedAt = 6;
+  string ClientId = 8;
+  string OrderId = 9;
+  string TraderAccountId = 10;
+  double FullPrice = 11;
+  optional double DiscountPrice = 12;
+  string ParentId = 13;
+  AddonStatusGrpc Status = 14;
+  optional string BundleId = 15;
 }
 
 message AddonOrderGrpcModel {
-  string ClientId = 1;
-  int64 UpdatedAt = 2;
-  repeated AddonGrpcModel Addons = 3;
-  repeated AddonBundleGrpcModel Bundles = 4;
-  map<string, double> AddonFullPrices = 5;
-  map<string, double> AddonDiscountPrices = 6;
-  double FullPrice = 7;
-  optional double DiscountPrice = 8;
-  AddonOrderStatusGrpc Status = 9;
-  string OrderId = 10;
+  string OrderId = 1;
+  string ClientId = 2;
+  int64 UpdatedAt = 3;
+  repeated AddonGrpcModel Addons = 4;
+  repeated AddonBundleGrpcModel Bundles = 5;
+  map<string, double> AddonFullPrices = 6;
+  map<string, double> AddonDiscountPrices = 7;
+  double FullPrice = 8;
+  optional double DiscountPrice = 9;
+  AddonOrderStatusGrpc Status = 10;
 }
 
 message AddonBundleGrpcModel {
@@ -47,7 +69,6 @@ message AddonBundleGrpcModel {
   double DiscountPercent = 4;
   repeated string AddonIds = 5;
   int64 UpdatedAt = 6;
-  bool Disabled = 7;
 }
 
 message GetAddonsGrpcRequest {}
