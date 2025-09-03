@@ -13,15 +13,10 @@ enum AddonStatusGrpc {
   LOST = 2;
 }
 
-enum AddonModifierTypeGrpc {
+enum AddonParameterTypeGrpc {
   PAYOUT_SCHEDULE_DAYS = 0;
   PAYOUT_SCHEDULE_MINUTES = 1;
   PROFIT_SPLIT = 2;
-}
-
-message AddonModifierGrpcModel {
-  AddonModifierTypeGrpc Type = 1;
-  string Value = 2;
 }
 
 message AddonGrpcModel {
@@ -29,8 +24,9 @@ message AddonGrpcModel {
   string Name = 2;
   string Description = 3;
   double Price = 4;
-  AddonModifierGrpcModel Modifier = 5;
-  int64 UpdatedAt = 6;
+  AddonParameterTypeGrpc ParameterType = 5;
+  string ParameterValue = 6;
+  int64 UpdatedAt = 7;
 }
 
 message AddonPurchaseGrpcModel {
@@ -38,8 +34,9 @@ message AddonPurchaseGrpcModel {
   string Name = 2;
   string Description = 3;
   double Price = 4;
-  AddonModifierGrpcModel Modifier = 5;
-  int64 UpdatedAt = 6;
+  AddonParameterTypeGrpc ParameterType = 5;
+  string ParameterValue = 6;
+  int64 UpdatedAt = 7;
   string ClientId = 8;
   string OrderId = 9;
   string TraderAccountId = 10;
