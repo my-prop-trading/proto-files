@@ -142,7 +142,8 @@ message PurchaseAddonBundleGrpcRequest {
   string ClientId = 2;
   string TraderAccountId = 3;
   string OrderId = 4;
-  double PaidAmount = 5;
+  double TotalPaidAmount = 5;
+  map<string, double> PaidAmountsByAddonIds = 6;
 }
 
 message PurchaseAddonBundleGrpcResponse {
