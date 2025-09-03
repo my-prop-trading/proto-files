@@ -21,9 +21,16 @@ message LeaderboardGrpcModel {
 }
 
 message HighlightCardGrpcModel {
-  double HighestTotalReward = 1;
-  int32 LongestFundedAccountDuration = 2;
-  double HighestSingleReward = 3;
+  AmountClientModel HighestTotalReward = 1;
+  AmountClientModel LongestFundedAccountDuration = 2;
+  AmountClientModel HighestSingleReward = 3;
+}
+
+message AmountClientModel {
+  string ClientId = 1;
+  string FullName = 2;
+  string Region = 3;
+  string Amount = 4;
 }
 
 message GetLeaderboardPageGrpcRequest {}

@@ -413,6 +413,8 @@ message GetHighestTotalWithdrawalRequest { }
     
 message GetHighestTotalWithdrawalResponse {
     double TotalWithdrawal = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
 service PayoutsGrpcService {
