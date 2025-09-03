@@ -103,7 +103,7 @@ message GetAddonPurchasesGrpcRequest {
 }
 
 message GetAddonPurchasesGrpcResponse {
-  AddonPurchaseGrpcModel Items = 1;
+  repeated AddonPurchaseGrpcModel Items = 1;
 }
 
 message DeleteAddonGrpcRequest {
