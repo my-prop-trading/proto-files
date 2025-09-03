@@ -88,7 +88,7 @@ message AddOrUpdateAddonsGrpcRequest {
 message AddOrUpdateAddonsGrpcResponse {}
 
 message AddOrUpdateBundlesGrpcRequest {
-  repeated AddonGrpcModel Items = 1;
+  repeated AddonBundleGrpcModel Items = 1;
 }
 
 message AddOrUpdateBundlesGrpcResponse {}
