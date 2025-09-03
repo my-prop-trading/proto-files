@@ -101,12 +101,7 @@ message DeleteBundleGrpcRequest {
 message DeleteBundleGrpcResponse {}
 
 message CompleteOrderGrpcRequest {
-  string Id = 1;
-  string ClientId = 2;
-  string TraderAccountId = 3;
-  string OrderId = 4;
-  double TotalPaidAmount = 5;
-  map<string, double> PaidAmountsByAddonIds = 6;
+  string OrderId = 1;
 }
 
 message CompleteOrderGrpcResponse {
