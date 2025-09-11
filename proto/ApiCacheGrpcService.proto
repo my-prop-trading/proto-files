@@ -57,6 +57,8 @@ message SubscribeClientGrpcRequest {
   string trading_package_id = 12;
   int32 trading_platform_id = 13;
   optional string discount_code = 14;
+  repeated string addon_ids = 15;
+  repeated string addon_bundle_ids = 16;
 }
 
 message SubscribeClientGrpcResponse {
