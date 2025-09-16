@@ -3,8 +3,8 @@ package addons;
 import "google/protobuf/empty.proto";
 
 enum AddonOrderStatusGrpc {
-  ORDER_PENDING = 0;
-  ORDER_COMPLETED = 1;
+  ORDER_UNPAID = 0;
+  ORDER_PAID = 1;
 }
 
 enum AddonStatusGrpc {
@@ -58,6 +58,8 @@ message AddonOrderGrpcModel {
   double FullPrice = 8;
   double DiscountAmount = 9;
   AddonOrderStatusGrpc Status = 10;
+  double FinalPrice = 11;
+  map<string, doublFinalPricerice12s = 12;
 }
 
 message AddonBundleGrpcModel {
