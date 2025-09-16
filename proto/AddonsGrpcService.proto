@@ -59,7 +59,7 @@ message AddonOrderGrpcModel {
   double DiscountAmount = 9;
   AddonOrderStatusGrpc Status = 10;
   double FinalPrice = 11;
-  map<string, doubl> FinalPricerices = 12;
+  map<string, doubl> AddonFinalPrices = 12;
 }
 
 message AddonBundleGrpcModel {
