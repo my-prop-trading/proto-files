@@ -132,6 +132,17 @@ message CreateOrderGrpcResponse {
   AddonOrderGrpcModel Item = 1;
 }
 
+message CreateAddonPurchaseGrpcRequest {
+  string ClientId = 1;
+  string TraderAccountId = 2;
+  string OrderId = 3;
+  string AddonId = 4;
+}
+
+message CreateAddonPurchaseGrpcResponse {
+  AddonPurchaseGrpcModel Item = 1;
+}
+
 service AddonsGrpcService {
   rpc GetAddons(GetAddonsGrpcRequest) returns (GetAddonsGrpcResponse);
   rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
@@ -143,6 +154,7 @@ service AddonsGrpcService {
 
   rpc CreateOrder(CreateOrderGrpcRequest) returns (CreateOrderGrpcResponse);
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
+  rpc CreateAddonPurchase(CreateAddonPurchaseGrpcRequest) return (CreateAddonPurchaseGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
