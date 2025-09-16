@@ -154,7 +154,7 @@ service AddonsGrpcService {
 
   rpc CreateOrder(CreateOrderGrpcRequest) returns (CreateOrderGrpcResponse);
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
-  rpc CreateAddonPurchase(CreateAddonPurchaseGrpcRequest) return (CreateAddonPurchaseGrpcResponse);
+  rpc CreateAddonPurchase(CreateAddonPurchaseGrpcRequest) returns (CreateAddonPurchaseGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
