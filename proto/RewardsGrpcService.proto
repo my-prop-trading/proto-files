@@ -109,6 +109,7 @@ message GetBalanceGrpcResponse {
 message UpdateBalanceGrpcRequest {
   string ClientId = 1;
   double AvailablePoints = 2;
+  string ManagerId = 3;
 }
 
 message UpdateBalanceGrpcResponse {
