@@ -27,6 +27,7 @@ message AddonGrpcModel {
   AddonParameterTypeGrpc ParameterType = 5;
   string ParameterValue = 6;
   int64 UpdatedAt = 7;
+  bool Published = 8;
 }
 
 message AddonPurchaseGrpcModel {
