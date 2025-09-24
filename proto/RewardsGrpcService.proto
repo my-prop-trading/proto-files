@@ -113,6 +113,7 @@ message UpdateBalanceGrpcRequest {
 }
 
 message UpdateBalanceGrpcResponse {
+  BalanceGrpcModel item = 1;
 }
 
 message SubmitTaskGrpcRequest {
