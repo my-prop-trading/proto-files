@@ -106,6 +106,14 @@ message GetBalanceGrpcResponse {
   BalanceGrpcModel item = 1;
 }
 
+message UpdateBalanceGrpcRequest {
+  string ClientId = 1;
+  double AvailablePoints = 2;
+}
+
+message UpdateBalanceGrpcResponse {
+}
+
 message SubmitTaskGrpcRequest {
   string ClientId = 1;
   string TaskId = 2;
@@ -201,18 +209,21 @@ message FulfillRewardGrpcResponse {
 
 service RewardsGrpcService {
     rpc GetRewardsPage(GetRewardsPageGrpcRequest) returns (GetRewardsPageGrpcResponse);
-    rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
     rpc CreateOrUpdateRewards(CreateOrUpdateRewardsGrpcRequest) returns (CreateOrUpdateRewardsGrpcResponse);
+    rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
+    rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
+    rpc FulfillReward(FulfillRewardGrpcRequest) returns (FulfillRewardGrpcResponse);
+
+    rpc GetTasksPage(GetTasksPageGrpcRequest) returns (GetTasksPageGrpcResponse);
     rpc CreateOrUpdateTasks(CreateOrUpdateTasksGrpcRequest) returns (CreateOrUpdateTasksGrpcResponse);
-    rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
     rpc SubmitTask(SubmitTaskGrpcRequest) returns (SubmitTaskGrpcResponse);
+    rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
     rpc ApproveTask(ApproveTaskGrpcRequest) returns (ApproveTaskGrpcResponse);
     rpc RejectTask(RejectTaskGrpcRequest) returns (RejectTaskGrpcResponse);
-    rpc ClaimReward(ClaimRewardGrpcRequest) returns (ClaimRewardGrpcResponse);
-    rpc DeleteReward(DeleteRewardGrpcRequest) returns (DeleteRewardGrpcResponse);
-    rpc DeleteTask(DeleteTaskGrpcRequest) returns (DeleteTaskGrpcResponse);
     rpc GetTaskScreenshot(GetTaskScreenshotGrpcRequest) returns (GetTaskScreenshotGrpcResponse);
-    rpc FulfillReward(FulfillRewardGrpcRequest) returns (FulfillRewardGrpcResponse);
+
+    rpc GetBalance(GetBalanceGrpcRequest) returns (GetBalanceGrpcResponse);
+    rpc UpdateBalance(UpdateBalanceGrpcRequest) returns (UpdateBalanceGrpcResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
