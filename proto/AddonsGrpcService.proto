@@ -144,6 +144,14 @@ message CreateAddonPurchaseGrpcResponse {
   AddonPurchaseGrpcModel Item = 1;
 }
 
+message GetAddonOrderGrpcRequest {
+    string OrderId = 1;
+}
+
+message GetAddonOrderGrpcResponse {
+    AddonOrderGrpcModel Item = 1;
+}
+
 service AddonsGrpcService {
   rpc GetAddons(GetAddonsGrpcRequest) returns (GetAddonsGrpcResponse);
   rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
@@ -154,6 +162,8 @@ service AddonsGrpcService {
   rpc AddOrUpdateBundles(AddOrUpdateBundlesGrpcRequest) returns (AddOrUpdateBundlesGrpcResponse);
 
   rpc CreateOrder(CreateOrderGrpcRequest) returns (CreateOrderGrpcResponse);
+  rpc GetAddonOrder(GetAddonOrderGrpcRequest) returns (GetAddonOrderGrpcResponse);
+
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
   rpc CreateAddonPurchase(CreateAddonPurchaseGrpcRequest) returns (CreateAddonPurchaseGrpcResponse);
 
