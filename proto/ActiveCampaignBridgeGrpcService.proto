@@ -1,0 +1,16 @@
+syntax = "proto3";
+package active_acmpaign_bridge;
+import "google/protobuf/empty.proto";
+
+message CreateContactRequest {
+  string Email = 1;
+  string LeadType = 2;
+}
+
+message CreateContactResponse { }
+
+service ActiveCampaignBridgeGrpcService {
+    rpc CreateContact(CreateContactRequest) returns (CreateContactResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
