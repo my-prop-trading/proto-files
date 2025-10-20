@@ -89,7 +89,7 @@ message TemplateModel {
 }
 
 message GetAllTemplateRequest {
-    optional string LanguageIso2 = 1; 
+    optional string LanguageIso2 = 1;
 }
 
 message GenerateTemplateRequest {
@@ -101,11 +101,11 @@ message GenerateTemplateResponse {
     oneof response {
         GenerateTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message GenerateTemplateResponseBody {
-    string TemplateProviderId = 1; 
+    string TemplateProviderId = 1;
 }
 
 message ReloadFromDefaultTemplateRequest {
@@ -118,11 +118,11 @@ message ReloadFromDefaultTemplateResponse {
     oneof response {
         ReloadFromDefaultTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message ReloadFromDefaultTemplateResponseBody {
-    optional string TemplateVersionId = 1; 
+    optional string TemplateVersionId = 1;
 }
 
 message GetTemplateEditLinkRequest {
@@ -133,11 +133,11 @@ message GetTemplateEditLinkResponse {
     oneof response {
         GetTemplateEditLinkResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message GetTemplateEditLinkResponseBody {
-    optional string EditLink = 1; 
+    optional string EditLink = 1;
 }
 
 message SendEmailTemplateRequest {
@@ -154,7 +154,7 @@ message SendEmailTemplateResponse {
     oneof response {
         SendEmailTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message SendEmailTemplateResponseBody {
@@ -203,6 +203,11 @@ message BrandSettingsModel {
     optional string EconomicCalendarUrl = 41;
     optional string GoogleAdsFloodlightKey = 42;
     ChatWidget ChatWidget = 43;
+    map<int32, StringListModel> EmailBccsByEmailTypes = 44;
+}
+
+message StringListModel {
+  repeated string items = 1;
 }
 
 message EmailSenderSettingsModel {
@@ -228,7 +233,7 @@ message GetSettingsTemplateResponse {
     oneof response {
         GetSettingsTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message GetSettingsTemplateResponseBody {
@@ -245,7 +250,7 @@ message UpdateSettingsTemplateResponse {
     oneof response {
         UpdateSettingsTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message UpdateSettingsTemplateResponseBody {
@@ -261,7 +266,7 @@ message AddLanguageTemplateResponse {
     oneof response {
         AddLanguageTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message AddLanguageTemplateResponseBody {
@@ -276,16 +281,16 @@ message DeleteLanguageTemplateResponse {
     oneof response {
         DeleteLanguageTemplateResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
 }
 
 message DeleteLanguageTemplateResponseBody {
-    
+
 }
 
 message UpdateTemplateRequest {
     TemplateModel Template = 1;
-    string OfficerId = 2;   
+    string OfficerId = 2;
 }
 
 service EmailTemplateGrpcService {
