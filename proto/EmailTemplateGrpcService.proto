@@ -204,7 +204,7 @@ message BrandSettingsModel {
     optional string GoogleAdsFloodlightKey = 42;
     ChatWidget ChatWidget = 43;
     map<int32, StringListModel> EmailBccsByEmailTypes = 44;
-    repeated string DisabledFeatures = 45;
+    repeated int32 DisabledFeatures = 45;
 }
 
 message StringListModel {
