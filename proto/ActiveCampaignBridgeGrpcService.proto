@@ -1,5 +1,5 @@
 syntax = "proto3";
-package active_acmpaign_bridge;
+package active_campaign_bridge;
 import "google/protobuf/empty.proto";
 
 message CreateContactRequest {
