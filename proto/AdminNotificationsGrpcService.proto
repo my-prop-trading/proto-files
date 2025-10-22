@@ -3,6 +3,6 @@ package admin_notifications;
 import "google/protobuf/empty.proto";
 
 
-service AdminNofiticationsGrpcService {
+service AdminNotificationsGrpcService {
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
