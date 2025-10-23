@@ -40,7 +40,7 @@ message TradingMetricsGrpcModel {
   double day_entry_equity = 27;
   string trader_account_id = 28;
   string client_id = 29;
-  TradingObjectiveFailReasonGrpc objective_fail_reason = 30;
+  optional TradingObjectiveFailReasonGrpc objective_fail_reason = 30;
 }
 
 message GetTradingMetricsGrpcRequest {
