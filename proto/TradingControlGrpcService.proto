@@ -5,7 +5,7 @@ package trading_control;
 enum TradingObjectiveFailReasonGrpc {
     DAILY_LOSS_LEVEL = 0;
     OVERALL_LOSS_LEVEL = 1;
-    TARGET_DATA = 2;
+    TARGET_DATE = 2;
     LEGACY = 3;
     INACTIVITY = 4;
 }
