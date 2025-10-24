@@ -56,6 +56,7 @@ message AdminNofiticationSettingsGrpcModel {
     optional CardSharedNameSettingsGrpcModel card_shared_name = 3;
     optional FailSuspiciousPatternSettingsGrpcModel fail_suspicious_pattern = 4;
     optional ExcessiveActiveAccountsSettingsGrpcModel excessive_active_accounts = 5;
+    optional LargeAccountSizeSettingsGrpcModel large_account_size = 6;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
@@ -86,6 +87,11 @@ message FailSuspiciousPatternSettingsGrpcModel {
 
 message ExcessiveActiveAccountsSettingsGrpcModel {
     int64 accounts_count = 2;
+}
+
+message LargeAccountSizeSettingsGrpcModel {
+    double account_size = 1;
+    double no_discount_price = 2;
 }
 
 service AdminNotificationsGrpcService {
