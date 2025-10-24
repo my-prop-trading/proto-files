@@ -90,8 +90,8 @@ message ExcessiveActiveAccountsSettingsGrpcModel {
 }
 
 message LargeAccountSizeSettingsGrpcModel {
-    double account_size = 1;
-    double no_discount_price = 2;
+    double biggest_account_size = 1;
+    double no_discount_account_size = 2;
 }
 
 service AdminNotificationsGrpcService {
