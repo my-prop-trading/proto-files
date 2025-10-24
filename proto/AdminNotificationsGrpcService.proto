@@ -27,9 +27,9 @@ message AdminNotificationGrpcModel {
     AdminNotificationTriggerGrpc trigger = 5;
     string client_id = 6;
     optional string order_id = 7;
-    optinal string trader_account_id = 8;
+    optional string trader_account_id = 8;
     map<string, string> metadata = 9;
-    string category = 10;
+    string category_name = 10;
 }
 
 message GetAdminNotificationsGrpcRequest {
@@ -44,7 +44,20 @@ message GetAdminNotificationsGrpcResponse {
     repeated AdminNotificationGrpcModel items = 1;
 }
 
+message AdminNotificationCategoryGrpcModel {
+    string id = 1;
+    string name = 2;
+    string slack_url = 3;
+}
+
+message GetAdminNotificationCategoriesGrpcRequest {}
+
+message GetAdminNotificationCategoriesGrpcResponse {
+    repeated AdminNotificationCategoryGrpcModel items = 1;
+}
+
 service AdminNotificationsGrpcService {
     rpc GetNotifications(GetAdminNotificationsGrpcRequest) returns (GetAdminNotificationsGrpcResponse);
+    rpc GetCategories(GetAdminNotificationCategoriesGrpcRequest) returns (GetAdminNotificationCategoriesGrpcResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
