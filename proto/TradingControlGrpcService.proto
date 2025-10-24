@@ -52,12 +52,6 @@ message GetTradingMetricsGrpcResponse {
   TradingMetricsGrpcModel item = 1;
 }
 
-enum TradingObjectiveFailReasonGrpc {
-  daily_loss_level = 0;
-  overall_loss_level = 1;
-  target_date = 2;
-}
-
 message FailTradingObjectiveGrpcRequest {
   string TraderAccountId = 1;
   TradingObjectiveFailReasonGrpc fail_reason = 2;
