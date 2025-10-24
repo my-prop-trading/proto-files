@@ -5,13 +5,13 @@ import "google/protobuf/empty.proto";
 enum AdminNotificationTriggerGrpc {
     CARD_MULTIPLE_GEOS = 0;
     CARD_SHARED_NAME = 1;
-    PAYIN_FAIL_PAIN_PATTERN = 2;
+    FAIL_SUSPICIOUS_PATTERN = 2;
     EXCESSIVE_ACTIVE_ACCOUNTS = 3;
     LARGE_ACCOUNT_SIZE = 4;
-    FAST_SUCCESS_PAYIN_SEQUENCE = 6;
-    EXCESSIVE_SUCCESSFUL_PAYINS = 7;
-    FAST_AFFILIATE_PAYMENTS = 8;
-    MULTIACCOUNT = 9;
+    FAST_SUCCESS_PAYIN_SEQUENCE = 5;
+    EXCESSIVE_SUCCESSFUL_PAYINS = 6;
+    FAST_AFFILIATE_PAYMENTS = 7;
+    MULTIACCOUNT = 8;
 }
 
 enum AdminNotificationStatusGrpc {
@@ -50,14 +50,47 @@ message AdminNotificationCategoryGrpcModel {
     string slack_url = 3;
 }
 
-message GetAdminNotificationCategoriesGrpcRequest {}
+message AdminNofiticationSettingsGrpcModel {
+    repeated AdminNotificationCategoryGrpcModel categories = 1;
+    optional CardMultipleGeoSettingsGrpcModel card_multiple_geo = 2;
+    optional CardSharedNameSettingsGrpcModel card_shared_name = 3;
+    optional FailSuspiciousPatternSettingsGrpcModel fail_suspicious_pattern = 4;
+    optional ExcessiveActiveAccountsSettingsGrpcModel excessive_active_accounts = 5;
+}
 
-message GetAdminNotificationCategoriesGrpcResponse {
-    repeated AdminNotificationCategoryGrpcModel items = 1;
+message SetAdminNotificationSettingsGrpcRequest {
+    AdminNofiticationSettingsGrpcModel item = 1;
+}
+
+message SetAdminNotificationSettingsGrpcResponse {
+}
+
+message GetAdminNotificationSettingsGrpcRequest {}
+
+message GetAdminNotificationSettingsGrpcResponse {
+    AdminNofiticationSettingsGrpcModel item = 1;
+}
+
+message CardMultipleGeoSettingsGrpcModel {
+    int64 period_minutes = 1;
+}
+
+message CardSharedNameSettingsGrpcModel {
+    int64 clients_count = 1;
+}
+
+message FailSuspiciousPatternSettingsGrpcModel {
+    int64 period_minutes = 1;
+    int64 payins_count = 2;
+}
+
+message ExcessiveActiveAccountsSettingsGrpcModel {
+    int64 accounts_count = 2;
 }
 
 service AdminNotificationsGrpcService {
     rpc GetNotifications(GetAdminNotificationsGrpcRequest) returns (GetAdminNotificationsGrpcResponse);
-    rpc GetCategories(GetAdminNotificationCategoriesGrpcRequest) returns (GetAdminNotificationCategoriesGrpcResponse);
+    rpc GetSettings(GetAdminNotificationSettingsGrpcRequest) returns (GetAdminNotificationSettingsGrpcResponse);
+    rpc SetSettings(SetAdminNotificationSettingsGrpcRequest) returns (SetAdminNotificationSettingsGrpcResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
