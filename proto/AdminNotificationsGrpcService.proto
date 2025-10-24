@@ -5,20 +5,18 @@ import "google/protobuf/empty.proto";
 enum AdminNotificationTriggerGrpc {
     CARD_MULTIPLE_GEOS = 0;
     CARD_SHARED_NAME = 1;
-    SUCCESS_FAIL_SUCCESS_PATTERN = 2;
-    THIRD_ACTIVE_ACCOUNT = 3;
-    LARGE_ACCOUNT_SIZE_PURCHASE = 4;
-    LARGE_PAYMENT_WITHOUT_DISCOUNT = 5;
-    THIRD_SUCCESS_WITHIN_HOUR = 6;
-    FOURTH_SUCCESS_WITHIN_DAY = 7;
-    AFFILIATE_RAPID_PAYMENTS = 8;
-    MULTIACCOUNT_IP_OVERLAP = 9;
-    MULTIACCOUNT_USER_AGENT_OVERLAP = 10;
+    PAYIN_FAIL_PAIN_PATTERN = 2;
+    EXCESSIVE_ACTIVE_ACCOUNTS = 3;
+    LARGE_ACCOUNT_SIZE = 4;
+    FAST_SUCCESS_PAYIN_SEQUENCE = 6;
+    EXCESSIVE_SUCCESSFUL_PAYINS = 7;
+    FAST_AFFILIATE_PAYMENTS = 8;
+    MULTIACCOUNT = 9;
 }
 
 enum AdminNotificationStatusGrpc {
     NEW = 0;
-    DELIVERED = 1;
+    NOTIFIED = 1;
 }
 
 message AdminNotificationGrpcModel {
@@ -27,12 +25,19 @@ message AdminNotificationGrpcModel {
     int64 updated_at = 3;
     AdminNotificationStatusGrpc status = 4;
     AdminNotificationTriggerGrpc trigger = 5;
-    string message = 6;
+    string client_id = 6;
+    optional string order_id = 7;
+    optinal string trader_account_id = 8;
+    map<string, string> metadata = 9;
+    string category = 10;
 }
 
 message GetAdminNotificationsGrpcRequest {
     repeated AdminNotificationStatusGrpc statuses = 1;
     repeated AdminNotificationTriggerGrpc triggers = 2;
+    repeated string client_ids = 3;
+    repeated string order_ids = 4;
+    repeated string trader_account_ids = 5;
 }
 
 message GetAdminNotificationsGrpcResponse {
