@@ -9,7 +9,7 @@ enum AdminNotificationTriggerGrpc {
     EXCESSIVE_ACTIVE_ACCOUNTS = 3;
     LARGE_ACCOUNT_SIZE = 4;
     FAST_SUCCESS_PAYIN_SEQUENCE = 5;
-    EXCESSIVE_SUCCESSFUL_PAYINS = 6;
+    EXCESSIVE_SUCCESS_PAYINS = 6;
     FAST_AFFILIATE_PAYMENTS = 7;
     MULTIACCOUNT = 8;
 }
@@ -57,6 +57,10 @@ message AdminNofiticationSettingsGrpcModel {
     optional FailSuspiciousPatternSettingsGrpcModel fail_suspicious_pattern = 4;
     optional ExcessiveActiveAccountsSettingsGrpcModel excessive_active_accounts = 5;
     optional LargeAccountSizeSettingsGrpcModel large_account_size = 6;
+    optional FastSuccessPayinSequenceGrpcModel fast_success_payin_sequence = 7;
+    optional ExessiveSuccessPayinsGrpcModel exessive_success_payins = 8;
+    optional FastAffiliatePayinsGrpcModel fast_affiliate_payins = 9;
+    optional MultiaccountSettingsGrpcModel multiaccount = 10;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
@@ -74,29 +78,50 @@ message GetAdminNotificationSettingsGrpcResponse {
 
 message CardMultipleGeoSettingsGrpcModel {
     string channel_id = 1;
-    int64 period_minutes = 2;
+    int32 period_minutes = 2;
 }
 
 message CardSharedNameSettingsGrpcModel {
     string channel_id = 1;
-    int64 clients_count = 2;
+    int32 clients_count = 2;
 }
 
 message FailSuspiciousPatternSettingsGrpcModel {
     string channel_id = 1;
-    int64 period_minutes = 2;
-    int64 payins_count = 3;
+    int32 period_minutes = 2;
+    int32 payins_count = 3;
 }
 
 message ExcessiveActiveAccountsSettingsGrpcModel {
     string channel_id = 1;
-    int64 accounts_count = 2;
+    int32 accounts_count = 2;
 }
 
 message LargeAccountSizeSettingsGrpcModel {
     string channel_id = 1;
     double biggest_account_size = 2;
     double no_discount_account_size = 3;
+}
+
+message FastSuccessPayinSequenceGrpcModel {
+    string channel_id = 1;
+    int32 payins_count = 2;
+    int32 interval_minutes = 3;
+}
+
+message ExessiveSuccessPayinsGrpcModel {
+    string channel_id = 1;
+    int32 payins_count = 2;
+    int32 interval_minutes = 3;
+}
+
+message FastAffiliatePayinsGrpcModel {
+    string channel_id = 1;
+    int32 interval_minutes = 2;
+}
+
+message MultiaccountSettingsGrpcModel {
+    string channel_id = 1;
 }
 
 service AdminNotificationsGrpcService {
