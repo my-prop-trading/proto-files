@@ -39,6 +39,8 @@ message GetAdminNotificationsGrpcRequest {
     repeated string order_ids = 4;
     repeated string trader_account_ids = 5;
     repeated string ids = 6;
+    int32 limit = 7;
+    int32 offset = 8;
 }
 
 message GetAdminNotificationsGrpcResponse {
