@@ -29,7 +29,7 @@ message AdminNotificationGrpcModel {
     optional string order_id = 7;
     optional string trader_account_id = 8;
     map<string, string> metadata = 9;
-    string category_name = 10;
+    string channel_id = 10;
 }
 
 message GetAdminNotificationsGrpcRequest {
@@ -44,14 +44,14 @@ message GetAdminNotificationsGrpcResponse {
     repeated AdminNotificationGrpcModel items = 1;
 }
 
-message AdminNotificationCategoryGrpcModel {
+message AdminNotificationChannelGrpcModel {
     string id = 1;
     string name = 2;
     string slack_url = 3;
 }
 
 message AdminNofiticationSettingsGrpcModel {
-    repeated AdminNotificationCategoryGrpcModel categories = 1;
+    repeated AdminNotificationChannelGrpcModel channels = 1;
     optional CardMultipleGeoSettingsGrpcModel card_multiple_geo = 2;
     optional CardSharedNameSettingsGrpcModel card_shared_name = 3;
     optional FailSuspiciousPatternSettingsGrpcModel fail_suspicious_pattern = 4;
@@ -73,25 +73,30 @@ message GetAdminNotificationSettingsGrpcResponse {
 }
 
 message CardMultipleGeoSettingsGrpcModel {
-    int64 period_minutes = 1;
+    string channel_id = 1;
+    int64 period_minutes = 2;
 }
 
 message CardSharedNameSettingsGrpcModel {
-    int64 clients_count = 1;
+    string channel_id = 1;
+    int64 clients_count = 2;
 }
 
 message FailSuspiciousPatternSettingsGrpcModel {
-    int64 period_minutes = 1;
-    int64 payins_count = 2;
+    string channel_id = 1;
+    int64 period_minutes = 2;
+    int64 payins_count = 3;
 }
 
 message ExcessiveActiveAccountsSettingsGrpcModel {
+    string channel_id = 1;
     int64 accounts_count = 2;
 }
 
 message LargeAccountSizeSettingsGrpcModel {
-    double biggest_account_size = 1;
-    double no_discount_account_size = 2;
+    string channel_id = 1;
+    double biggest_account_size = 2;
+    double no_discount_account_size = 3;
 }
 
 service AdminNotificationsGrpcService {
