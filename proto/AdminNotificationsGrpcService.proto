@@ -38,6 +38,7 @@ message GetAdminNotificationsGrpcRequest {
     repeated string client_ids = 3;
     repeated string order_ids = 4;
     repeated string trader_account_ids = 5;
+    repeated string ids = 6;
 }
 
 message GetAdminNotificationsGrpcResponse {
