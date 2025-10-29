@@ -42,6 +42,7 @@ message TradingMetricsGrpcModel {
   string trader_account_id = 28;
   string client_id = 29;
   optional TradingObjectiveFailReasonGrpc objective_fail_reason = 30;
+  double best_day_profit = 31;
 }
 
 message GetTradingMetricsGrpcRequest {
