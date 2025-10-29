@@ -8,6 +8,7 @@ enum TradingObjectiveFailReasonGrpc {
     TARGET_DATE = 2;
     LEGACY = 3;
     INACTIVITY = 4;
+    NONE = 999;
 }
 
 message TradingMetricsGrpcModel {
