@@ -27,6 +27,11 @@ message TraderPackageGroup {
   int32 Order = 4;
 }
 
+enum TradingPackageCompensationType {
+    REFUND = 0;
+    FREE_PACKAGE = 0;
+}
+
 message TraderPackage {
   string Id = 1;
   string Title = 2;
@@ -76,6 +81,15 @@ message TraderPackage {
   repeated PlatformGroup platform_group_live = 52;
   trader_packages.TradingConditionType TradingCondition = 53;
   int32 RefundPayoutNumber = 54;
+  TradingPackageCompensationType CompensationType = 55;
+  int32 Phase1InactivityDays = 56;
+  int32 Phase2InactivityDays = 57;
+  int32 Phase3InactivityDays = 58;
+  int32 LiveInactivityDays = 59;
+  double Phase1BestDayCap = 60;
+  double Phase2BestDayCap = 61;
+  double Phase3BestDayCap = 62;
+  double LiveBestDayCap = 63;
 }
 
 message PlatformGroup {
