@@ -85,11 +85,11 @@ message TraderPackage {
   int32 Phase1InactivityDays = 56;
   int32 Phase2InactivityDays = 57;
   int32 Phase3InactivityDays = 58;
-  int32 LiveInactivityDays = 59;
+  int32 InactivityDays = 59;
   double Phase1BestDayCap = 60;
   double Phase2BestDayCap = 61;
   double Phase3BestDayCap = 62;
-  double LiveBestDayCap = 63;
+  double BestDayCap = 63;
 }
 
 message PlatformGroup {
