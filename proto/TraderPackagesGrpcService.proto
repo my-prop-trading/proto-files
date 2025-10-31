@@ -29,7 +29,7 @@ message TraderPackageGroup {
 
 enum TradingPackageCompensationType {
     REFUND = 0;
-    FREE_PACKAGE = 0;
+    FREE_PACKAGE = 1;
 }
 
 message TraderPackage {
