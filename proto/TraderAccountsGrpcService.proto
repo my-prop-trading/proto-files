@@ -72,7 +72,7 @@ message TraderAccount {
     optional string PlatformGroupLive = 60;
 
     optional double RefundGrantedByManager = 61;
-    
+
     trader_accounts.DailyLossFormulaSelector DailyLossFormulaSelector = 62;
     trader_accounts.OverallLossFormulaSelector OverallLossFormulaSelector = 63;
 
@@ -86,7 +86,15 @@ message TraderAccount {
     int32 PhaseType = 69;
     int32 RefundPayoutNumber = 70;
     string TradingPackageId = 71;
-}
+    TradingPackageCompensationType CompensationType = 72;
+    int32 Phase1InactivityDays = 73;
+    int32 Phase2InactivityDays = 74;
+    int32 Phase3InactivityDays = 75;
+    int32 InactivityDays = 76;
+    double Phase1BestDayCap = 77;
+    double Phase2BestDayCap = 78;
+    double Phase3BestDayCap = 79;
+    double BestDayCap = 80;
 
 enum TraderAccountTypeModel {
   DEMO = 0;
@@ -162,7 +170,7 @@ message CreateTraderAccountRequest {
 
 message CreateTraderAccountResponse{
   string OrderId = 1;
-  string TraderAccId = 2; 
+  string TraderAccId = 2;
   string AggregateId = 3;
 }
 
@@ -181,11 +189,11 @@ message GetTraderAccountCredentialsResponse {
 message GetTraderAccountCredentialsResponseBody {
   string ClientId = 1;
   string AccountId = 2;
-  string TradePassword = 3;      
-  string ViewPassword = 4; 
+  string TradePassword = 3;
+  string ViewPassword = 4;
   string Login = 5;
   string Server = 6;
-  string PlatformAccountId = 7; 
+  string PlatformAccountId = 7;
   int32 CredentialType = 8;
   string Email = 9;
 }
@@ -304,7 +312,7 @@ message GetBlockedTraderAccountsResponseBody {
 message CreatePaidTraderAccountRequest {
   string TradingPackageId = 1;
   int32 PlatformId = 2;
-  
+
   string ClientId = 12;
   string ProcessId = 13;
   string OrderId = 14;
@@ -323,7 +331,7 @@ message CreatePaidTraderAccountRequest {
 
 message CreatePaidTraderAccountResponse{
 string OrderId = 1;
-string TraderAccId = 2; 
+string TraderAccId = 2;
 string AggregateId = 3;
 }
 
