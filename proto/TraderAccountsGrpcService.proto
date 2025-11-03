@@ -86,7 +86,7 @@ message TraderAccount {
     int32 PhaseType = 69;
     int32 RefundPayoutNumber = 70;
     string TradingPackageId = 71;
-    TradingPackageCompensationType CompensationType = 72;
+    trader_packages.TradingPackageCompensationType CompensationType = 72;
     int32 Phase1InactivityDays = 73;
     int32 Phase2InactivityDays = 74;
     int32 Phase3InactivityDays = 75;
