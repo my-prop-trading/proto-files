@@ -95,6 +95,7 @@ message TraderAccount {
     double Phase2BestDayCap = 78;
     double Phase3BestDayCap = 79;
     double BestDayCap = 80;
+}
 
 enum TraderAccountTypeModel {
   DEMO = 0;
