@@ -44,6 +44,14 @@ message TradingMetricsGrpcModel {
   optional TradingObjectiveFailReasonGrpc objective_fail_reason = 30;
   double best_day_profit = 31;
   double best_day_ratio = 32;
+  double best_day_cap = 33;
+  BestDayRuleStatusGrpc best_day_rule_status = 34;
+}
+
+enum BestDayRuleStatusGrpc {
+    GOOD = 0;
+    WARNING = 1;
+    BREACHED = 2;
 }
 
 message GetTradingMetricsGrpcRequest {
