@@ -24,7 +24,7 @@ enum PaymentMethod {
     BankTransfer = 0;
     CryptoWithdrawal = 1;
     Both = 2;
-}   
+}
 
 message BankTransferDetails {
     double ProfitAmountToBeWithdrawn = 1;
@@ -90,7 +90,7 @@ message PayoutRequest {
 
 message ProfitWidget {
     double withdrawn_profit = 1;
-    
+
     double pending_profit = 2;
 
     double refund_fee_amount = 3;
@@ -100,6 +100,7 @@ message ProfitWidget {
     double left_to_withdraw_in_profit_period = 5;
 
     double trader_account_revenue_share_percentage = 6;
+    bool best_day_rule_breached = 7;
 }
 
 
@@ -155,7 +156,7 @@ message GetByFiltersRequest {
     optional string ClientId = 1;
 
     optional string TraderAccountId = 2;
-    
+
     optional int64 FromDate = 3;
 
     optional int64 ToDate = 4;
@@ -163,16 +164,16 @@ message GetByFiltersRequest {
     repeated payouts.PayoutStatus Status = 5;
 
     optional string TransactionId = 6;
-    
+
     optional payouts.PaymentMethod PaymentMethod = 7;
 
     repeated payouts.PayoutType Types = 8;
 
     int64 Offset = 20;
-    
+
     int64 Limit = 21;
 }
-    
+
 message GetByFiltersResponse {
     repeated payouts.PayoutRequest Payouts = 1;
     uint64 TotalCount = 2;
@@ -189,7 +190,7 @@ message ApprovePayoutRequest {
 
     string OfficerId = 5;
 }
-    
+
 message ApprovePayoutResponse {
      oneof response {
         payouts.PayoutRequest Payout = 1;
@@ -204,7 +205,7 @@ message DeclinePayoutRequest {
 
     string OfficerId = 5;
 }
-    
+
 message DeclinePayoutResponse {
      oneof response {
         payouts.PayoutRequest Payout = 1;
@@ -244,7 +245,7 @@ message TraderAccountStatistic {
 
 message GetRevenueShareByFiltersRequest {
     optional string TraderAccountId = 1;
-    
+
     optional int64 FromDate = 2;
 
     optional int64 ToDate = 3;
@@ -254,10 +255,10 @@ message GetRevenueShareByFiltersRequest {
     optional string ClientId = 5;
 
     int64 Offset = 20;
-    
+
     int64 Limit = 21;
 }
-    
+
 message GetRevenueShareByFiltersResponse {
     repeated payouts.RevenueShareItem Payouts = 1;
 
@@ -268,7 +269,7 @@ message GetRevenueShareByFiltersResponse {
 
 message GetExcessiveProfitByFiltersRequest {
     optional string TraderAccountId = 1;
-    
+
     optional int64 FromDate = 2;
 
     optional int64 ToDate = 3;
@@ -278,10 +279,10 @@ message GetExcessiveProfitByFiltersRequest {
     optional string ClientId = 5;
 
     int64 Offset = 20;
-    
+
     int64 Limit = 21;
 }
-    
+
 message GetExcessiveProfitByFiltersResponse {
     repeated payouts.PayoutRequest Payouts = 1;
 
@@ -396,13 +397,13 @@ message GetExcessiveProfitByClientIdsRequest {
 
     repeated string ClientIds = 5;
 }
-    
+
 message GetExcessiveProfitByClientIdsResponse {
     double TotalAmount = 2;
 }
 
 message GetHighestWithdrawalRequest { }
-    
+
 message GetHighestWithdrawalResponse {
     double Withdrawal = 1;
     string ClientId = 2;
@@ -410,7 +411,7 @@ message GetHighestWithdrawalResponse {
 }
 
 message GetHighestTotalWithdrawalRequest { }
-    
+
 message GetHighestTotalWithdrawalResponse {
     double TotalWithdrawal = 1;
     string ClientId = 2;
@@ -454,6 +455,6 @@ service PayoutsGrpcService {
     rpc GetHighestWithdrawal(payouts.GetHighestWithdrawalRequest) returns (payouts.GetHighestWithdrawalResponse);
 
     rpc GetHighestTotalWithdrawal(payouts.GetHighestTotalWithdrawalRequest) returns (payouts.GetHighestTotalWithdrawalResponse);
-    
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
