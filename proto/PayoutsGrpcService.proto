@@ -90,19 +90,20 @@ message PayoutRequest {
 
 message ProfitWidget {
     double withdrawn_profit = 1;
-
     double pending_profit = 2;
-
     double refund_fee_amount = 3;
-
     double current_profit = 4;
-
     double left_to_withdraw_in_profit_period = 5;
-
     double trader_account_revenue_share_percentage = 6;
-    bool best_day_rule_breached = 7;
+    PayoutRestriction restriction = 7;
 }
 
+enum PayoutRestriction {
+    NONE = 0;
+    PERIOD_PENDING = 1;
+    PAYOUT_PENDING = 2;
+    BEST_DAY_RULE_BREACHED = 3;
+}
 
 message GetByClientIdRequest {
     string ClientId = 1;
