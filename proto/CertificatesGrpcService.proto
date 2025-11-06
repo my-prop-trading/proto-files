@@ -49,6 +49,21 @@ message GetResourceResponse {
   bytes content = 1;
 }
 
+message CreateCertificateRequest {
+  certificates.Certificate certificate = 1;
+  string first_last_name = 2;
+  optional string currency = 3;
+  optional double max_allocation = 4;
+  optional double payout_amount = 5;
+  optional double overall_payout = 6;
+  optional string challenge_title = 7;
+  optional double initial_balance = 8;
+}
+
+message CreateCertificateResponse {
+  certificates.Certificate certificate = 1;
+}
+
 message GetTemplateRequest {
   certificates.CertificateType type = 1;
 }
@@ -130,6 +145,7 @@ service CertificatesGrpcService {
   //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
   rpc GetResource(certificates.GetResourceRequest) returns (stream certificates.GetResourceResponse);
+  rpc CreateCertificate(CreateCertificateRequest) returns (certificates.CreateCertificateResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
   // Template management RPCs
