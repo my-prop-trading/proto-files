@@ -255,6 +255,7 @@ message GetPayinsPaginatedRequest {
   optional int64 ToDate = 8;
   optional string TraderAggregatedId = 9;
   optional bool IsFirstPayin = 10;
+  optional string affiliate_id = 11;
 }
 
 
