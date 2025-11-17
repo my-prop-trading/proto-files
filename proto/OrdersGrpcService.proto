@@ -304,6 +304,14 @@ message GetOrderRequest {
   string ClientId = 2;
 }
 
+message GetClientIdsRequest {
+  string CreditCardToken = 1;
+}
+
+message GetClientIdsResponse {
+  repeated string ClientIds = 1;
+}
+
 message GetOrderResponse {
   oneof response {
     orders.GetOrderResponseBody Body = 1;
@@ -379,6 +387,8 @@ service OrdersGrpcService {
   rpc PayForOrder(orders.PayForOrderRequest) returns (orders.PayForOrderResponse);
 
   rpc CancelOrder(orders.CancelOrderRequest) returns (orders.CancelOrderResponse);
+
+  rpc GetOrdersClientIdsByCardToken(orders.GetClientIdsRequest) returns (orders.GetClientIdsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
