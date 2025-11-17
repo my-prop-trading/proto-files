@@ -67,6 +67,7 @@ message Order {
   orders.TraderPackageChallengeType TraderPackageChallengeType = 36;
   optional string PspOrderId = 37;
   optional int32 PaymentProviderId = 38;
+  string CreditCardToken = 39;
 }
 
 message CreateTraderAccountOrderRequest {
