@@ -3,7 +3,7 @@ package account_balances;
 import "google/protobuf/empty.proto";
 
 message AccountBalance {
-  string TraderAccountId = 1;
+  stringg TraderAccountId = 1;
   int64 UpdatedAt = 2; // Assuming DateTimeAsMicroseconds is equivalent to a timestamp represented as microseconds
   double Balance = 3;
   double Equity = 4;
