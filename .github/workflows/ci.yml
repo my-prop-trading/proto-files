@@ -1,0 +1,26 @@
+name: Validate Proto Files
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install protoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+
+      - name: Validate .proto files
+        run: |
+          find proto -name "*.proto" -print0 | \
+            xargs -0 -I {} \
+              protoc --proto_path=proto --descriptor_set_out=/dev/null {}
