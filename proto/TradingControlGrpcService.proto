@@ -46,6 +46,7 @@ message TradingMetricsGrpcModel {
   double best_day_ratio = 32;
   double best_day_cap = 33;
   BestDayRuleStatusGrpc best_day_rule_status = 34;
+  double total_realized_profit = 35;
 }
 
 enum BestDayRuleStatusGrpc {
