@@ -26,7 +26,7 @@ message GeneratePaymentPageGrpcResponse {
     string page = 1;
 }
 
-service BridgerpayBridgeGrpcService {
+service BillerixBridgeGrpcService {
     rpc GeneratePaymentPage(GeneratePaymentPageGrpcRequest) returns (GeneratePaymentPageGrpcResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
