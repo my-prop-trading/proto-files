@@ -20,6 +20,7 @@ message GeneratePaymentPageGrpcRequest {
     optional string affiliate_id = 15;
     optional string address = 16;
     optional string state = 17;
+    string ip = 18;
 }
 
 message GeneratePaymentPageGrpcResponse {
