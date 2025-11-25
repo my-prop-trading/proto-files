@@ -1,0 +1,32 @@
+syntax = "proto3";
+package billerix_bridge;
+import "google/protobuf/empty.proto";
+
+message GeneratePaymentPageGrpcRequest {
+    string order_id = 1;
+    string currency = 2;
+    string country = 3;
+    string client_id = 4;
+    double amount = 5;
+    string product_id = 6;
+    optional string first_name = 7;
+    optional string last_name = 8;
+    optional string city = 9;
+    optional string zip_code = 10;
+    optional string email = 11;
+    optional string phone = 12;
+    optional string platform_id = 13;
+    optional string tracking_id = 14;
+    optional string affiliate_id = 15;
+    optional string address = 16;
+    optional string state = 17;
+}
+
+message GeneratePaymentPageGrpcResponse {
+    string page = 1;
+}
+
+service BridgerpayBridgeGrpcService {
+    rpc GeneratePaymentPage(GeneratePaymentPageGrpcRequest) returns (GeneratePaymentPageGrpcResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
