@@ -68,6 +68,7 @@ message Order {
   optional string PspOrderId = 37;
   optional int32 PaymentProviderId = 38;
   optional string CardToken = 39;
+  optional string CardBin = 40;
 }
 
 message CreateTraderAccountOrderRequest {
