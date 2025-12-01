@@ -59,6 +59,7 @@ message SubscribeClientGrpcRequest {
   optional string discount_code = 14;
   repeated string addon_ids = 15;
   repeated string addon_bundle_ids = 16;
+  string ip = 17;
 }
 
 message SubscribeClientGrpcResponse {
