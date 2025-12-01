@@ -89,6 +89,7 @@ message CreateTraderAccountOrderRequest {
   optional string email = 16;
   repeated string addon_ids = 17;
   repeated string addon_bundle_ids = 18;
+  string ip = 19;
 }
 
 message CreateTraderAccountOrderResponse {
