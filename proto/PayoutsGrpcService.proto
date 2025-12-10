@@ -96,6 +96,7 @@ message ProfitWidget {
     double left_to_withdraw_in_profit_period = 5;
     double trader_account_revenue_share_percentage = 6;
     PayoutRestriction restriction = 7;
+    string trading_package_id = 8;
 }
 
 enum PayoutRestriction {
