@@ -325,7 +325,7 @@ message GetPayoutSettingsResponse {
     repeated PayoutSettings items = 1;
 }
 
-message SetPayoutsWithdrawalSettingsRequest {
+message SetPayoutSettingsRequest {
     PayoutSettings item = 1;
 }
 
