@@ -322,15 +322,15 @@ message PayoutSettings {
 }
 
 message GetPayoutSettingsResponse {
-    repeated PayoutSetting items = 1;
+    repeated PayoutSettings items = 1;
 }
 
 message SetPayoutsWithdrawalSettingsRequest {
-    PayoutWithdrawalSetting item = 1;
+    PayoutSettings item = 1;
 }
 
 message SetPayoutSettingsResponse {
-    PayoutSetting item = 1;
+    PayoutSettings item = 1;
 }
 
 message GetRevenueShareAmountByClientIdsRequest {
