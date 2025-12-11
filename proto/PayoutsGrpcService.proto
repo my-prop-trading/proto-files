@@ -447,8 +447,6 @@ service PayoutsGrpcService {
 
     rpc SetPayoutsWithdrawalSettings(payouts.SetPayoutsWithdrawalSettingsRequest) returns (payouts.SetPayoutsWithdrawalSettingsResponse);
 
-    rpc SetPayoutLimitsPercentage(payouts.SetPayoutLimitsPercentageRequest) returns (payouts.SetPayoutLimitsPercentageResponse);
-
     //For internal clients
     rpc GetRevenueShareAmountByClientIds(payouts.GetRevenueShareAmountByClientIdsRequest) returns (payouts.GetRevenueShareAmountByClientIdsResponse);
 
