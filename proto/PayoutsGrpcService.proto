@@ -1,6 +1,8 @@
 syntax = "proto3";
 package payouts;
+
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 enum RevenueShareType {
     Timetable = 0;
@@ -59,9 +61,9 @@ message NotSelectedPaymentDetails {}
 
 message PaymentDetails {
     oneof detail {
-        payouts.NotSelectedPaymentDetails NotSelected = 1;
-        payouts.BankTransferDetails BankTransfer = 2;
-        payouts.CryptoWithdrawalDetails CryptoWithdrawal = 3;
+        NotSelectedPaymentDetails NotSelected = 1;
+        BankTransferDetails BankTransfer = 2;
+        CryptoWithdrawalDetails CryptoWithdrawal = 3;
     }
 }
 
@@ -72,10 +74,10 @@ message PayoutRequest {
     string TxId = 4;
     string ClientId = 5;
     string TraderAccountId = 6;
-    payouts.PaymentDetails PaymentDetails = 7;
-    payouts.PayoutStatus Status = 8;
+    PaymentDetails PaymentDetails = 7;
+    PayoutStatus Status = 8;
     int32 AccountType = 9;
-    payouts.PayoutType PayoutType = 10;
+    PayoutType PayoutType = 10;
     int32 PlatformId = 11;
     double WithdrawalAmount = 12;
     string WithdrawalCurrency = 13;
@@ -108,115 +110,92 @@ enum PayoutRestriction {
 
 message GetByClientIdRequest {
     string ClientId = 1;
-
     int64 Offset = 2;
-
     int64 Limit = 3;
-
     optional string TraderAccountId = 4;
-
-    repeated payouts.PayoutType PayoutType = 5;
+    repeated PayoutType PayoutType = 5;
 }
 
 message GetByClientIdResponse {
-    repeated payouts.PayoutRequest Payouts = 1;
-
+    repeated PayoutRequest Payouts = 1;
     uint64 TotalCount = 2;
 }
-
 
 message CreatePayoutRequest {
     string ClientId = 1;
     string TraderAccountId = 2;
     string ProcessId = 3;
-    payouts.PaymentDetails PaymentDetails = 4;
+    PaymentDetails PaymentDetails = 4;
     double WithdrawalAmount = 5;
     string WithdrawalCurrency = 6;
 }
 
 message CreatePayoutResponse {
     oneof response {
-        payouts.PayoutRequest Payout = 1;
-        payouts.PayoutsGrpcServiceErrorWithMessage Error = 2;
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceErrorWithMessage Error = 2;
     }
 }
 
 message GetProfitWidgetRequest {
     string ClientId = 1;
-
     string TraderAccountId = 2;
 }
 
 message GetProfitWidgetResponse {
     oneof Response {
-        payouts.ProfitWidget ProfitWidget = 1;
-        payouts.PayoutsGrpcServiceError Error = 2;
+        ProfitWidget ProfitWidget = 1;
+        PayoutsGrpcServiceError Error = 2;
     }
 }
 
 message GetByFiltersRequest {
     optional string ClientId = 1;
-
     optional string TraderAccountId = 2;
-
     optional int64 FromDate = 3;
-
     optional int64 ToDate = 4;
-
-    repeated payouts.PayoutStatus Status = 5;
-
+    repeated PayoutStatus Status = 5;
     optional string TransactionId = 6;
-
-    optional payouts.PaymentMethod PaymentMethod = 7;
-
-    repeated payouts.PayoutType Types = 8;
-
+    optional PaymentMethod PaymentMethod = 7;
+    repeated PayoutType Types = 8;
     int64 Offset = 20;
-
     int64 Limit = 21;
 }
 
 message GetByFiltersResponse {
-    repeated payouts.PayoutRequest Payouts = 1;
+    repeated PayoutRequest Payouts = 1;
     uint64 TotalCount = 2;
 }
 
 message ApprovePayoutRequest {
     string PayoutId = 1;
-
     string ProcessId = 2;
-
     string Currency = 3;
-
     double Amount = 4;
-
     string OfficerId = 5;
 }
 
 message ApprovePayoutResponse {
      oneof response {
-        payouts.PayoutRequest Payout = 1;
-        payouts.PayoutsGrpcServiceError Error = 2;
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceError Error = 2;
     }
 }
 
 message DeclinePayoutRequest {
     string PayoutId = 1;
-
     string ProcessId = 2;
-
     string OfficerId = 5;
 }
 
 message DeclinePayoutResponse {
      oneof response {
-        payouts.PayoutRequest Payout = 1;
-        payouts.PayoutsGrpcServiceError Error = 2;
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceError Error = 2;
     }
 }
 
-message GetPayoutsStatisticRequest {
-}
+message GetPayoutsStatisticRequest {}
 
 message GetPayoutsStatisticResponse {
     double ProfitToBeWithdrawn = 1;
@@ -233,12 +212,11 @@ message GetPayoutsStatisticForClientRequest {
 }
 
 message GetPayoutsStatisticForClientResponse {
-    repeated payouts.TraderAccountStatistic TraderAccountStatistic = 1;
+    repeated TraderAccountStatistic TraderAccountStatistic = 1;
 }
 
 message TraderAccountStatistic {
     string TraderAccountId = 1;
-
     double ProfitToBeWithdrawn = 2;
     double TotalCurrentUsersProfit = 3;
     double TotallyWithdrawn = 4;
@@ -247,49 +225,33 @@ message TraderAccountStatistic {
 
 message GetRevenueShareByFiltersRequest {
     optional string TraderAccountId = 1;
-
     optional int64 FromDate = 2;
-
     optional int64 ToDate = 3;
-
     optional string TransactionId = 4;
-
     optional string ClientId = 5;
-
     int64 Offset = 20;
-
     int64 Limit = 21;
 }
 
 message GetRevenueShareByFiltersResponse {
-    repeated payouts.RevenueShareItem Payouts = 1;
-
+    repeated RevenueShareItem Payouts = 1;
     double TotalAmount = 2;
-
     uint64 TotalCount = 3;
 }
 
 message GetExcessiveProfitByFiltersRequest {
     optional string TraderAccountId = 1;
-
     optional int64 FromDate = 2;
-
     optional int64 ToDate = 3;
-
     optional string TransactionId = 4;
-
     optional string ClientId = 5;
-
     int64 Offset = 20;
-
     int64 Limit = 21;
 }
 
 message GetExcessiveProfitByFiltersResponse {
-    repeated payouts.PayoutRequest Payouts = 1;
-
+    repeated PayoutRequest Payouts = 1;
     double TotalAmount = 2;
-
     uint64 TotalCount = 3;
 }
 
@@ -303,7 +265,7 @@ message RevenueShareItem {
     double Amount = 7;
     string Currency = 8;
     double RevenueSharePercent = 9;
-    payouts.RevenueShareType RevenueShareType = 10;
+    RevenueShareType RevenueShareType = 10;
 }
 
 enum PayoutsGrpcServiceError {
@@ -319,7 +281,7 @@ enum PayoutsGrpcServiceError {
 }
 
 message PayoutsGrpcServiceErrorWithMessage {
-    payouts.PayoutsGrpcServiceError Error = 1;
+    PayoutsGrpcServiceError Error = 1;
     string Message = 2;
 }
 
@@ -329,62 +291,51 @@ message GetByIdRequest {
 
 message GetByIdResponse {
     oneof response {
-        payouts.PayoutRequest Payout = 1;
-        payouts.PayoutsGrpcServiceError Error = 2;
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceError Error = 2;
     }
 }
 
+message GetPayoutSettingsRequest {}
 
-enum MinMaxValueType {
-    Min = 0;
-    Max = 1;
+message CryptoCurrency {
+    string crypto = 1;
+    repeated string networks = 2;
 }
 
-message PayoutWithdrawalSetting {
-    string Currency = 1;
-    double Value = 2;
-    payouts.PaymentMethod PaymentMethod = 3;
-    payouts.MinMaxValueType Type = 4;
+message PayoutLimitsSettings {
+    double min_amount = 1;
+    double max_amount = 2;
+    string min_currency = 3;
+    string max_currency = 4;
 }
 
-
-message RevenueShareSettings {
-    bool PaymentLimitsEnabled = 1;
-
-    double PaymentLimitsPercentage = 2;
-
-    bool RevenueSharePerTransactionEnabled = 3;
+message PayoutSettings {
+    repeated string currencies = 1;
+    repeated CryptoCurrency cryptos = 2;
+    bool is_bank_transfer_enabled = 3;
+    PayoutLimitsSettings bank_transfer_limits = 4;
+    PayoutLimitsSettings crypto_limits = 5;
+    // Optional in Rust → wrappers.DoubleValue in proto3
+    google.protobuf.DoubleValue excessive_profit_percent = 6;
+    optional string trading_package_id = 7;
 }
 
-message GetPayoutsWithdrawalSettingsRequest {
-}
-
-message GetPayoutsWithdrawalSettingsResponse {
-    repeated payouts.PayoutWithdrawalSetting Settings = 1;
-    payouts.RevenueShareSettings RevenueShareSettings = 2;
+message GetPayoutSettingsResponse {
+    repeated PayoutSetting items = 1;
 }
 
 message SetPayoutsWithdrawalSettingsRequest {
-    payouts.PayoutWithdrawalSetting Setting = 1;
+    PayoutWithdrawalSetting item = 1;
 }
 
-message SetPayoutsWithdrawalSettingsResponse {
-    payouts.PayoutWithdrawalSetting Setting = 1;
-}
-
-message SetPayoutLimitsPercentageRequest {
-    double Value = 1;
-    bool Enabled = 2;
-}
-
-message SetPayoutLimitsPercentageResponse {
+message SetPayoutSettingsResponse {
+    PayoutSetting item = 1;
 }
 
 message GetRevenueShareAmountByClientIdsRequest {
     optional int64 FromDate = 2;
-
     optional int64 ToDate = 3;
-
     repeated string ClientIds = 5;
 }
 
@@ -394,9 +345,7 @@ message GetRevenueShareAmountByClientIdsResponse {
 
 message GetExcessiveProfitByClientIdsRequest {
     optional int64 FromDate = 2;
-
     optional int64 ToDate = 3;
-
     repeated string ClientIds = 5;
 }
 
@@ -412,7 +361,7 @@ message GetHighestWithdrawalResponse {
     string TraderAccountId = 3;
 }
 
-message GetHighestTotalWithdrawalRequest { }
+message GetHighestTotalWithdrawalRequest {}
 
 message GetHighestTotalWithdrawalResponse {
     double TotalWithdrawal = 1;
@@ -421,40 +370,28 @@ message GetHighestTotalWithdrawalResponse {
 }
 
 service PayoutsGrpcService {
-    rpc GetById(payouts.GetByIdRequest) returns (payouts.GetByIdResponse);
+    rpc GetById(GetByIdRequest) returns (GetByIdResponse);
+    rpc GetByClientId(GetByClientIdRequest) returns (GetByClientIdResponse);
+    rpc GetByFilters(GetByFiltersRequest) returns (GetByFiltersResponse);
+    rpc GetRevenueShareByFilters(GetRevenueShareByFiltersRequest) returns (GetRevenueShareByFiltersResponse);
+    rpc GetExcessiveProfitByFilters(GetExcessiveProfitByFiltersRequest) returns (GetExcessiveProfitByFiltersResponse);
 
-    rpc GetByClientId(payouts.GetByClientIdRequest) returns (payouts.GetByClientIdResponse);
+    rpc CreatePayout(CreatePayoutRequest) returns (CreatePayoutResponse);
+    rpc ApprovePayout(ApprovePayoutRequest) returns (ApprovePayoutResponse);
+    rpc DeclinePayout(DeclinePayoutRequest) returns (DeclinePayoutResponse);
 
-    rpc GetByFilters(payouts.GetByFiltersRequest) returns (payouts.GetByFiltersResponse);
+    rpc GetProfitWidget(GetProfitWidgetRequest) returns (GetProfitWidgetResponse);
+    rpc GetPayoutsStatistic(GetPayoutsStatisticRequest) returns (GetPayoutsStatisticResponse);
+    rpc GetPayoutsStatisticForClient(GetPayoutsStatisticForClientRequest) returns (GetPayoutsStatisticForClientResponse);
 
-    rpc GetRevenueShareByFilters(payouts.GetRevenueShareByFiltersRequest) returns (payouts.GetRevenueShareByFiltersResponse);
-
-    rpc GetExcessiveProfitByFilters(payouts.GetExcessiveProfitByFiltersRequest) returns (payouts.GetExcessiveProfitByFiltersResponse);
-
-    rpc CreatePayout(payouts.CreatePayoutRequest) returns (payouts.CreatePayoutResponse);
-
-    rpc ApprovePayout(payouts.ApprovePayoutRequest) returns (payouts.ApprovePayoutResponse);
-
-    rpc DeclinePayout(payouts.DeclinePayoutRequest) returns (payouts.DeclinePayoutResponse);
-
-    rpc GetProfitWidget(payouts.GetProfitWidgetRequest) returns (payouts.GetProfitWidgetResponse);
-
-    rpc GetPayoutsStatistic(payouts.GetPayoutsStatisticRequest) returns (payouts.GetPayoutsStatisticResponse);
-
-    rpc GetPayoutsStatisticForClient(payouts.GetPayoutsStatisticForClientRequest) returns (payouts.GetPayoutsStatisticForClientResponse);
-
-    rpc GetPayoutsWithdrawalSettings(payouts.GetPayoutsWithdrawalSettingsRequest) returns (payouts.GetPayoutsWithdrawalSettingsResponse);
-
-    rpc SetPayoutsWithdrawalSettings(payouts.SetPayoutsWithdrawalSettingsRequest) returns (payouts.SetPayoutsWithdrawalSettingsResponse);
+    rpc GetPayoutSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
+    rpc SetPayoutSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
 
     //For internal clients
-    rpc GetRevenueShareAmountByClientIds(payouts.GetRevenueShareAmountByClientIdsRequest) returns (payouts.GetRevenueShareAmountByClientIdsResponse);
-
-    rpc GetExcessiveProfitByClientIds(payouts.GetExcessiveProfitByClientIdsRequest) returns (payouts.GetExcessiveProfitByClientIdsResponse);
-
-    rpc GetHighestWithdrawal(payouts.GetHighestWithdrawalRequest) returns (payouts.GetHighestWithdrawalResponse);
-
-    rpc GetHighestTotalWithdrawal(payouts.GetHighestTotalWithdrawalRequest) returns (payouts.GetHighestTotalWithdrawalResponse);
+    rpc GetRevenueShareAmountByClientIds(GetRevenueShareAmountByClientIdsRequest) returns (GetRevenueShareAmountByClientIdsResponse);
+    rpc GetExcessiveProfitByClientIds(GetExcessiveProfitByClientIdsRequest) returns (GetExcessiveProfitByClientIdsResponse);
+    rpc GetHighestWithdrawal(GetHighestWithdrawalRequest) returns (GetHighestWithdrawalResponse);
+    rpc GetHighestTotalWithdrawal(GetHighestTotalWithdrawalRequest) returns (GetHighestTotalWithdrawalResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
