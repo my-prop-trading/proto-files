@@ -318,7 +318,7 @@ message PayoutSettings {
     PayoutLimitsSettings crypto_limits = 5;
     // Optional in Rust → wrappers.DoubleValue in proto3
     google.protobuf.DoubleValue excessive_profit_percent = 6;
-    optional string trading_package_id = 7;
+    string trading_package_id = 7;
 }
 
 message GetPayoutSettingsResponse {
