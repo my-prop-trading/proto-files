@@ -407,11 +407,11 @@ service PayoutsGrpcService {
     rpc GetPayoutsStatisticForClient(GetPayoutsStatisticForClientRequest) returns (GetPayoutsStatisticForClientResponse);
 
     rpc GetPayoutSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
-    rpc SetPayoutSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
+    rpc SetPayoutSettings(GetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
 
-    rpc GetPayoutSchedulingSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
-    rpc SetPayoutSchedulingSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
-    
+    rpc GetPayoutSchedulingSettings(GetPayoutSchedulingSettingsRequest) returns (GetPayoutSchedulingSettingsResponse);
+    rpc SetPayoutSchedulingSettings(SetPayoutSchedulingSettingsRequest) returns (SetPayoutSchedulingSettingsResponse);
+
     //For internal clients
     rpc GetRevenueShareAmountByClientIds(GetRevenueShareAmountByClientIdsRequest) returns (GetRevenueShareAmountByClientIdsResponse);
     rpc GetExcessiveProfitByClientIds(GetExcessiveProfitByClientIdsRequest) returns (GetExcessiveProfitByClientIdsResponse);
