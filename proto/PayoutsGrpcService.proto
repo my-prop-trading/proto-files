@@ -333,6 +333,28 @@ message SetPayoutSettingsResponse {
     PayoutSettings item = 1;
 }
 
+message PayoutSchedulingSettings {
+    int64 FirstPayoutInDays = 1;
+    int64 FirstPayoutInMinutes = 2;
+    int64 FurtherPayoutsInDays = 3;
+    int64 FurtherPayoutsInMinutes = 4;
+    string Phase = 5;
+}
+
+message GetPayoutSchedulingSettingsRequest {}
+
+message GetPayoutSchedulingSettingsResponse {
+    repeated PayoutSchedulingSettings items = 1;
+}
+
+message SetPayoutSchedulingSettingsRequest {
+    PayoutSchedulingSettings item = 1;
+}
+
+message SetPayoutSchedulingSettingsResponse {
+    PayoutSchedulingSettings item = 1;
+}
+
 message GetRevenueShareAmountByClientIdsRequest {
     optional int64 FromDate = 2;
     optional int64 ToDate = 3;
@@ -387,6 +409,9 @@ service PayoutsGrpcService {
     rpc GetPayoutSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
     rpc SetPayoutSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
 
+    rpc GetPayoutSchedulingSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
+    rpc SetPayoutSchedulingSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
+    
     //For internal clients
     rpc GetRevenueShareAmountByClientIds(GetRevenueShareAmountByClientIdsRequest) returns (GetRevenueShareAmountByClientIdsResponse);
     rpc GetExcessiveProfitByClientIds(GetExcessiveProfitByClientIdsRequest) returns (GetExcessiveProfitByClientIdsResponse);
