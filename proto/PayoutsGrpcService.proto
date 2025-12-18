@@ -407,7 +407,7 @@ service PayoutsGrpcService {
     rpc GetPayoutsStatisticForClient(GetPayoutsStatisticForClientRequest) returns (GetPayoutsStatisticForClientResponse);
 
     rpc GetPayoutSettings(GetPayoutSettingsRequest) returns (GetPayoutSettingsResponse);
-    rpc SetPayoutSettings(GetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
+    rpc SetPayoutSettings(SetPayoutSettingsRequest) returns (SetPayoutSettingsResponse);
 
     rpc GetPayoutSchedulingSettings(GetPayoutSchedulingSettingsRequest) returns (GetPayoutSchedulingSettingsResponse);
     rpc SetPayoutSchedulingSettings(SetPayoutSchedulingSettingsRequest) returns (SetPayoutSchedulingSettingsResponse);
