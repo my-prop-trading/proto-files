@@ -339,6 +339,7 @@ message PayoutSchedulingSettings {
     int64 FurtherPayoutsInDays = 3;
     int64 FurtherPayoutsInMinutes = 4;
     string Phase = 5;
+    string TradingPackageId = 6;
 }
 
 message GetPayoutSchedulingSettingsRequest {}
