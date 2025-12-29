@@ -145,6 +145,26 @@ message TopTradingMetricsGrpcResponse {
   repeated TradingMetricsGrpcModel items = 1;
 }
 
+message InactivityItemGrpcModel {
+    string trader_account_id = 1;
+    string client_id = 2;
+    string platform_id = 3;
+    string platform_account_id = 4;
+    int32 account_type = 5;
+    int64 inactivity_deadline = 6;
+}
+
+message GetInactivityReportGrpcRequest {
+    uint64 limit = 1;
+    uint64 offset = 2;
+    optional uint64 from_date = 3;
+    optional uint64 to_date = 4;
+}
+
+message GetInactivityReportGrpcResponse {
+    repeated InactivityItemGrpcModel items = 1
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
@@ -152,6 +172,7 @@ service TradingControlGrpcService {
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
   rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
+  rpc GetInactivityReport(GetInactivityReportGrpcRequest) returns (GetInactivityReportGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
