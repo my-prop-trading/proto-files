@@ -162,7 +162,7 @@ message GetInactivityReportGrpcRequest {
 }
 
 message GetInactivityReportGrpcResponse {
-    repeated InactivityItemGrpcModel items = 1
+    repeated InactivityItemGrpcModel items = 1;
 }
 
 service TradingControlGrpcService {
