@@ -65,6 +65,7 @@ message AdminNofiticationSettingsGrpcModel {
     optional ExessiveSuccessPayinsGrpcModel exessive_success_payins = 8;
     optional FastAffiliatePayinsGrpcModel fast_affiliate_payins = 9;
     optional MultiaccountGrpcModel multiaccount = 10;
+    optional MultiaccountGrpcModel new_payout = 11;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
