@@ -129,7 +129,7 @@ message SendSuccessfulProofOfAddressRequest{
 message SendRetryProofOfAddressRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
-}   
+}
 
 message SendFailedProofOfAddressRequest{
     email_sender.EmailDestination Destination = 1;
@@ -239,7 +239,7 @@ message SendRevenueShareTakenRequest {
 }
 
 message EmailSentResponse {
-    
+
 }
 
 message SendDemoAccountBlockRequest {
@@ -293,28 +293,28 @@ service EmailSenderGrpcService {
     rpc SendSuccesfullScenarioPhase3ContractRequired(email_sender.SendSuccesfullScenarioPhase3ContractRequiredRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccessfulProofOfIdentity(email_sender.SendSuccessfulProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendRetryProofOfIdentity(email_sender.SendRetryProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendFailedProofOfIdentity(email_sender.SendFailedProofOfIdentityRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendSuccessfulProofOfAddress(email_sender.SendSuccessfulProofOfAddressRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendRetryProofOfAddress(email_sender.SendRetryProofOfAddressRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendFailedProofOfAddress(email_sender.SendFailedProofOfAddressRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendContractToClient(email_sender.SendContractToClientRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendServiceDeniedDueToViolationTermsAndCondOnContractSigning(
         email_sender.SendServiceDeniedDueToViolationTermsAndCondOnContractSigningRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendServiceDeniedOnAllAccountsDueToViolationTermsAndCond(
         email_sender.SendServiceDeniedOnAllAccountsDueToViolationTermsAndCondRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendServiceDeniedDueToViolationOfOurTermsAndCond(
         email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondRequest) returns (email_sender.EmailSentResponse);
-            
+
     rpc SendServiceDeniedDueToViolationOfOurTermsAndCondFutureProfitBlocked(
         email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondFutureProfitBlockedRequest) returns (email_sender.EmailSentResponse);
 
@@ -324,7 +324,7 @@ service EmailSenderGrpcService {
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc SendPaymentReceived(email_sender.SendPaymentReceivedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendInstantPaymentReceivedKycRequired(email_sender.SendInstantPaymentReceivedKycRequired) returns (email_sender.EmailSentResponse);
@@ -346,11 +346,12 @@ service EmailSenderGrpcService {
     rpc SendProfitSplitDay(email_sender.SendProfitSplitDayRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendRevenueShareTaken(email_sender.SendRevenueShareTakenRequest) returns (email_sender.EmailSentResponse);
-    
+
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
     rpc SendDemoAccountBlock(SendDemoAccountBlockRequest) returns (email_sender.EmailSentResponse);
     rpc SendDemoAccountUnblock(SendDemoAccountUnblockRequest) returns (email_sender.EmailSentResponse);
     rpc SendReactivateAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
+    rpc SendAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
     rpc SendRegistrationSuccessfulWithoutPassword(SendRegistrationSuccessfulWithoutPasswordRequest) returns (email_sender.EmailSentResponse);
 }
