@@ -64,8 +64,9 @@ message AdminNofiticationSettingsGrpcModel {
     optional FastSuccessPayinSequenceGrpcModel fast_success_payin_sequence = 7;
     optional ExessiveSuccessPayinsGrpcModel exessive_success_payins = 8;
     optional FastAffiliatePayinsGrpcModel fast_affiliate_payins = 9;
-    optional MultiaccountGrpcModel multiaccount = 10;
-    optional MultiaccountGrpcModel new_payout = 11;
+    optional BasicChannelGrpcModel multiaccount = 10;
+    optional BasicChannelGrpcModel new_payout = 11;
+    optional BasicChannelGrpcModel new_contractor = 12;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
@@ -125,7 +126,7 @@ message FastAffiliatePayinsGrpcModel {
     int32 interval_minutes = 2;
 }
 
-message MultiaccountGrpcModel {
+message BasicChannelGrpcModel {
     string channel_id = 1;
 }
 
