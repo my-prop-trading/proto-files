@@ -265,6 +265,14 @@ message SendRegistrationSuccessfulWithoutPasswordRequest {
     string ClientId = 2;
 }
 
+message SendAccountInactivityAlertRequest {
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    int32 TraderAccountType = 4;
+    int64 InactivityDealineDate = 5;
+}
+
 service EmailSenderGrpcService {
     rpc SendRegistrationConfirmation(email_sender.RegistrationConfirmationRequest) returns (email_sender.EmailSentResponse);
 
@@ -352,6 +360,6 @@ service EmailSenderGrpcService {
     rpc SendDemoAccountBlock(SendDemoAccountBlockRequest) returns (email_sender.EmailSentResponse);
     rpc SendDemoAccountUnblock(SendDemoAccountUnblockRequest) returns (email_sender.EmailSentResponse);
     rpc SendReactivateAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
-    rpc SendAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
+    rpc SendAccountInactivityAlert(SendAccountInactivityAlertRequest) returns (email_sender.EmailSentResponse);
     rpc SendRegistrationSuccessfulWithoutPassword(SendRegistrationSuccessfulWithoutPasswordRequest) returns (email_sender.EmailSentResponse);
 }
