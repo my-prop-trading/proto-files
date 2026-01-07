@@ -13,6 +13,8 @@ enum AdminNotificationTriggerGrpc {
     FAST_AFFILIATE_PAYMENTS = 7;
     MULTIACCOUNT = 8;
     NEW_PAYOUT_REQUEST = 9;
+    NEW_CONTRACTOR = 10;
+    SUCCESSFUL_PAYIN = 11;
 }
 
 enum AdminNotificationStatusGrpc {
