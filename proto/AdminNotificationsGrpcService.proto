@@ -67,6 +67,7 @@ message AdminNofiticationSettingsGrpcModel {
     optional BasicChannelGrpcModel multiaccount = 10;
     optional BasicChannelGrpcModel new_payout = 11;
     optional BasicChannelGrpcModel new_contractor = 12;
+    optional BasicChannelGrpcModel successful_payin = 13;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
