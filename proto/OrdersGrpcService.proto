@@ -294,6 +294,7 @@ message Payin {
   LifetimeMetaData lifetime_metadata = 24; //YURA!!!!
   optional string PaymentMethodTitle = 25;
   orders.TraderPackageChallengeType ChallengeType = 26;
+  optional string DeclineReason = 27;
 }
 
 message GetPayinsPaginatedResponse {
