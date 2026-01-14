@@ -45,14 +45,10 @@ message GetAllByValueGrpcRequestModel {
     uint64 Offset = 4;
 }
 
-message GetAllByValueGrpcResponseModel {
-    repeated GetKeyValueGrpcResponseModel Items = 1;
-}
-
 service KeyValueFlowsGrpcService {
     rpc Get(stream GetKeyValueGrpcRequestModel) returns (stream GetKeyValueGrpcResponseModel);
     rpc GetAllByUser(keyvalue.GetAllByUserGrpcRequestModel) returns (stream GetKeyValueGrpcResponseModel);
-    rpc GetAllByValue(keyvalue.GetAllByValueGrpcRequestModel) returns (stream GetAllByValueGrpcResponseModel);
+    rpc GetAllByValue(keyvalue.GetAllByValueGrpcRequestModel) returns (stream GetKeyValueGrpcResponseModel);
     rpc Set(stream SetKeyValueGrpcRequestModel) returns (google.protobuf.Empty);    
     rpc Delete(stream DeleteKeyValueGrpcRequestModel) returns (google.protobuf.Empty);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
