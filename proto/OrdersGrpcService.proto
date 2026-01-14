@@ -295,6 +295,7 @@ message Payin {
   optional string PaymentMethodTitle = 25;
   orders.TraderPackageChallengeType ChallengeType = 26;
   optional string DeclineReason = 27;
+  double TotalPaid = 28;
 }
 
 message GetPayinsPaginatedResponse {
