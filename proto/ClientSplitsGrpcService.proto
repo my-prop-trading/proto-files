@@ -81,15 +81,29 @@ message GetClientGroupResponse {
 }
 
 message GetAssigmentsRequest {
-    uint32 limit = 1;
-    uint32 offset = 2;
-    repeated string client_ids = 3;
-    repeated string group_ids = 4;
-    repeated string experiment_ids = 5;
+  uint32 limit = 1;
+  uint32 offset = 2;
+  repeated string client_ids = 3;
+  repeated string group_ids = 4;
+  repeated string experiment_ids = 5;
 }
 
 message GetAssigmentsResponse {
-    repeated Assigment assigments = 1;
+  repeated Assigment assigments = 1;
+}
+
+message CreateOrUpdateAssigmentsRequest {
+  repeated Assigment assiments = 1;
+}
+
+message CreateOrUpdateAssigmentsResponse {}
+
+message DeleteAssigmentRequest {
+  string assigment_id = 1;
+}
+
+message DeleteAssigmentResponse {
+  bool deleted = 1;
 }
 
 service ClientSplitsGrpcService {
@@ -98,6 +112,8 @@ service ClientSplitsGrpcService {
   rpc DeleteExperiment(DeleteExperimentRequest) returns (DeleteExperimentResponse);
   rpc GetClientGroup(GetClientGroupRequest) returns (GetClientGroupResponse);
   rpc GetAssigments(GetAssigmentsRequest) returns (GetAssigmentsResponse);
+  rpc CreateOrUpdateAssigments(CreateOrUpdateAssigmentsRequest) returns (CreateOrUpdateAssigmentsResponse);
+  rpc DeleteAssigment(DeleteAssigmentRequest) returns (DeleteAssigmentResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
