@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 message Rule {
   float percent = 1;
   repeated string countries = 2;
+  bool only_new_clients = 3;
 }
 
 enum FeatureKind {
