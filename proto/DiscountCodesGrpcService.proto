@@ -23,6 +23,7 @@ message DiscountCode {
     int64 count_in_group = 24;
     optional int32 client_usage_limit = 25;
     DiscountCodeSource source = 26;
+    DiscountCodeApplyType apply_type = 27;
 }
 
 enum DiscountCodeSource {
@@ -33,6 +34,12 @@ enum DiscountCodeSource {
 enum DiscountCodeType {
     FIXED = 0; // default
     PERCENT = 1;
+}
+
+enum DiscountCodeApplyType {
+    FIRST_PAYN = 0;
+    NEXT_PAYN = 1;
+    ALL_PAYN = 1;
 }
 
 message DiscountCodesList {
