@@ -63,6 +63,7 @@ message CreateDiscountCodeRequest{
     bool is_all_trading_package_ids = 20;
     optional int32 client_usage_limit = 21;
     DiscountCodeSource source = 22;
+    DiscountCodeApplyType apply_type = 23;
 }
 
 message CreateDiscountCodeResponse {
@@ -87,6 +88,7 @@ message UpdateDiscountCodeRequest{
     bool is_all_trading_package_ids = 20;
     optional int32 client_usage_limit = 21;
     DiscountCodeSource source = 22;
+    DiscountCodeApplyType apply_type = 23;
 }
 
 message UpdateDiscountCodeResponse {
