@@ -39,7 +39,7 @@ enum DiscountCodeType {
 enum DiscountCodeApplyType {
     FIRST_PAYN = 0;
     NEXT_PAYN = 1;
-    ALL_PAYN = 1;
+    ALL_PAYN = 2;
 }
 
 message DiscountCodesList {
