@@ -170,14 +170,15 @@ message PreviewBodyDiscountForAnotherPackageResponseBody {
   repeated string TradingPackageIds = 1;
 }
 
-message PreviewOrderDiscountInvalidResponseBody {
+
+message PreviewOrderDiscountInvalidForFistApplyResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
   int32 ApplyType = 4;
 }
 
-message PreviewOrderDiscountInvalidResponseBody {
+message PreviewOrderDiscountInvalidForNextApplyResponseBody {
   int64 CreatedAt = 1;
   double Price = 2;
   string PriceCurrency = 3;
