@@ -170,6 +170,20 @@ message PreviewBodyDiscountForAnotherPackageResponseBody {
   repeated string TradingPackageIds = 1;
 }
 
+message PreviewOrderDiscountInvalidResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+  int32 ApplyType = 4;
+}
+
+message PreviewOrderDiscountInvalidResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+  int32 ApplyType = 4;
+}
+
 enum DiscountCodeType {
   FIXED = 0; // default
   PERCENT = 1;
