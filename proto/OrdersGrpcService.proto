@@ -254,6 +254,8 @@ enum OrdersError {
   DiscountCodeUsageExceeded = 6;
   DiscountCodeExpired = 7;
   FailedToUpdateLifetime = 8;
+  InvalidDiscountCodeMustBeFirstPayn = 9;
+  InvalidDiscountCodeMustBeNextPayn = 10;
 }
 
 message GetPayinsPaginatedRequest {
