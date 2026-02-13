@@ -94,6 +94,22 @@ message GetListRequest {
     uint64 limit = 2;
 }
 
+message GetListWithFilterRequest {
+    optional string ClientId = 1;
+    optional int64 RegistrationDateFrom = 2;
+    optional int64 RegistrationDateTo = 3;
+    optional string CountryOfRegistration = 4;
+    optional string CountryOfRegistrationByIp = 5;
+    optional string Phone = 6;
+    optional string Email = 7;
+    uint64 Offest = 8;
+    uint64 Limit = 9;
+}
+
+message GetListWithFilterResponse {
+    repeated pd.PersonalDataModel Items = 1;
+}
+
 message GetListResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
@@ -110,6 +126,7 @@ service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
     rpc GetList(pd.GetListRequest) returns (pd.GetListResponse);
+    rpc GetListWithFilter(pd.GetListWithFilterRequest) returns (pd.GetListWithFilterResponse);
 
     rpc GetForOrder(pd.GetOrderPersonalDataRequest) returns (pd.GetOrderPersonalDataResponse);
     rpc SetForOrder(pd.SetOrderPersonalDataRequest) returns (google.protobuf.Empty);
