@@ -143,6 +143,8 @@ message PreviewOrderDiscountResponse {
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidUsageExceeded = 5;
     orders.PreviewOrderDiscountInvalidResponseBody BodyInvalidDiscountExpired = 6;
     orders.PreviewBodyDiscountForAnotherPackageResponseBody BodyDiscountForAnotherPackage = 7;
+    orders.PreviewOrderDiscountInvalidApplyTypeResponseBody BodyDiscountMustBeFirstPayin = 8;
+    orders.PreviewOrderDiscountInvalidApplyTypeResponseBody BodyDiscountMustBeNextPayin = 9;
   }
 }
 
@@ -168,6 +170,13 @@ message PreviewOrderDiscountInvalidResponseBody {
 
 message PreviewBodyDiscountForAnotherPackageResponseBody {
   repeated string TradingPackageIds = 1;
+}
+
+message PreviewOrderDiscountInvalidApplyTypeResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+  int32 ApplyType = 4;
 }
 
 enum DiscountCodeType {
@@ -245,6 +254,8 @@ enum OrdersError {
   DiscountCodeUsageExceeded = 6;
   DiscountCodeExpired = 7;
   FailedToUpdateLifetime = 8;
+  InvalidDiscountCodeMustBeFirstPayn = 9;
+  InvalidDiscountCodeMustBeNextPayn = 10;
 }
 
 message GetPayinsPaginatedRequest {

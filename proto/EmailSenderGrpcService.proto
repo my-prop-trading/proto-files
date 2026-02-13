@@ -2,6 +2,21 @@ syntax = "proto3";
 package email_sender;
 import "google/protobuf/empty.proto";
 
+enum DeclineReasonType {
+    NONE = 0;
+    UNKNOWN = 1;
+    BANK_DECLINE = 2;
+    INCORRECT_PAYMENT_DETAILS = 3;
+    INSUFFICIENT_FUNDS = 4;
+    LIMIT_EXCEEDED = 5;
+    BANK_RESTRICTIONS = 6;
+    SUSPECTED_FRAUD = 7;
+    AUTHENTICATION_ISSUES = 8;
+    CARD_ACCOUNT_ISSUES = 9;
+    TRANSACTION_CANCELLED_BY_USER = 10;
+    TEMPORARY_TECHNICAL_ISSUES = 11;
+}
+
 message EmailDestination{
     string ProcessId = 1;
     string Brand = 2;
@@ -204,6 +219,7 @@ message SendPaymentFailedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderPackagesName = 3;
+    DeclineReasonType DeclineReasonType = 4;
 }
 
 message SendPayoutSuccessRequest {

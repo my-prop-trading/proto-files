@@ -20,6 +20,7 @@ enum AdminNotificationTriggerGrpc {
 enum AdminNotificationStatusGrpc {
     NEW = 0;
     NOTIFIED = 1;
+    SKIPPED = 2;
 }
 
 message AdminNotificationGrpcModel {
