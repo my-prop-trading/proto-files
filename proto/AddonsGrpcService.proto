@@ -20,11 +20,10 @@ enum AddonParameterTypeGrpc {
 }
 
 enum DiscountType {
-    NONE = 0;
+    NONE = 0; // default
     FIXED = 1;
     PERCENT = 2;
 }
-
 message AddonGrpcModel {
   string Id = 1;
   string Name = 2;
@@ -135,6 +134,7 @@ message CreateOrderGrpcRequest {
   string OrderId = 6;
   double DiscountAmount = 7;
   DiscountType DiscountType = 8;
+  repeated string DiscountAddonIds = 9;
 }
 
 message PreviewOrderGrpcResponse {
@@ -149,6 +149,7 @@ message PreviewOrderGrpcRequest {
   string OrderId = 6;
   double DiscountAmount = 7;
   DiscountType DiscountType = 8;
+  repeated string DiscountAddonIds = 9;
 }
 
 message CreateOrderGrpcResponse {
