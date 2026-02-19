@@ -39,12 +39,6 @@ enum DiscountCodeType {
     PERCENT = 1;
 }
 
-enum DiscountType {
-    NONE = 0;
-    FIXED = 1; // default
-    PERCENT = 2;
-}
-
 enum DiscountCodeApplyType {
     ALL_PAYIN = 0;
     NEXT_PAYIN = 1;
@@ -74,7 +68,7 @@ message CreateDiscountCodeRequest{
     DiscountCodeSource source = 22;
     DiscountCodeApplyType apply_type = 23;
     repeated string addon_ids = 24;
-    DiscountType discount_addon_type = 25;
+    DiscountCodeType discount_addon_type = 25;
     double addon_amount = 26;
     bool is_all_addon_ids = 27;
 }
