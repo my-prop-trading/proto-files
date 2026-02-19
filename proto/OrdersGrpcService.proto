@@ -132,6 +132,7 @@ message PreviewOrderDiscountRequest {
   //string ProcessId = 5;
   optional string ClientId = 6;
   //string Brand = 7;
+  repeated string AddonIds = 8;
 }
 
 message PreviewOrderDiscountResponse {
