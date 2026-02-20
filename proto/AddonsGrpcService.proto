@@ -19,6 +19,11 @@ enum AddonParameterTypeGrpc {
   PROFIT_SPLIT = 2;
 }
 
+enum DiscountType {
+    NONE = 0; // default
+    FIXED = 1;
+    PERCENT = 2;
+}
 message AddonGrpcModel {
   string Id = 1;
   string Name = 2;
@@ -127,6 +132,24 @@ message CreateOrderGrpcRequest {
   repeated string AddonIds = 3;
   repeated string BundleIds = 4;
   string OrderId = 6;
+  double DiscountAmount = 7;
+  DiscountType DiscountType = 8;
+  repeated string DiscountAddonIds = 9;
+}
+
+message PreviewOrderGrpcResponse {
+  AddonOrderGrpcModel Item = 1;
+}
+
+message PreviewOrderGrpcRequest {
+  string ClientId = 1;
+  double OrderPrice = 2;
+  repeated string AddonIds = 3;
+  repeated string BundleIds = 4;
+  string OrderId = 6;
+  double DiscountAmount = 7;
+  DiscountType DiscountType = 8;
+  repeated string DiscountAddonIds = 9;
 }
 
 message CreateOrderGrpcResponse {
@@ -162,6 +185,7 @@ service AddonsGrpcService {
   rpc AddOrUpdateBundles(AddOrUpdateBundlesGrpcRequest) returns (AddOrUpdateBundlesGrpcResponse);
 
   rpc CreateOrder(CreateOrderGrpcRequest) returns (CreateOrderGrpcResponse);
+  rpc PreviewOrder(PreviewOrderGrpcRequest) returns (PreviewOrderGrpcResponse);
   rpc GetAddonOrder(GetAddonOrderGrpcRequest) returns (GetAddonOrderGrpcResponse);
 
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);

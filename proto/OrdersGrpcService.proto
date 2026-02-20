@@ -133,6 +133,7 @@ message PreviewOrderDiscountRequest {
   //string ProcessId = 5;
   optional string ClientId = 6;
   //string Brand = 7;
+  repeated string AddonIds = 8;
 }
 
 message PreviewOrderDiscountResponse {
@@ -155,6 +156,7 @@ message PreviewOrderDiscountResponseBody {
   string PriceCurrency = 3;
   double DiscountAmount = 4;
   orders.DiscountCodeType DiscountType = 5;
+  map<string, double> AddonFinalPrices = 6;
 }
 
 message PreviewOrderDiscountWithoutResponseBody {

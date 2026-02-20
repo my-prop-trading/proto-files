@@ -24,6 +24,10 @@ message DiscountCode {
     optional int32 client_usage_limit = 25;
     DiscountCodeSource source = 26;
     DiscountCodeApplyType apply_type = 27;
+    repeated string addon_ids = 28;
+    discount_codes.DiscountCodeType discount_addon_type = 29;
+    double addon_amount = 30;
+    bool is_all_addon_ids = 31;
 }
 
 enum DiscountCodeSource {
@@ -64,6 +68,10 @@ message CreateDiscountCodeRequest{
     optional int32 client_usage_limit = 21;
     DiscountCodeSource source = 22;
     DiscountCodeApplyType apply_type = 23;
+    repeated string addon_ids = 24;
+    DiscountCodeType discount_addon_type = 25;
+    double addon_amount = 26;
+    bool is_all_addon_ids = 27;
 }
 
 message CreateDiscountCodeResponse {
@@ -89,6 +97,9 @@ message UpdateDiscountCodeRequest{
     optional int32 client_usage_limit = 21;
     DiscountCodeSource source = 22;
     DiscountCodeApplyType apply_type = 23;
+    repeated string addon_ids = 24;
+    discount_codes.DiscountCodeType discount_addon_type = 25;
+    double addon_amount = 26;
 }
 
 message UpdateDiscountCodeResponse {
