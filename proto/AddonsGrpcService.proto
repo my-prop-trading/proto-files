@@ -135,6 +135,7 @@ message CreateOrderGrpcRequest {
   double DiscountAmount = 7;
   DiscountType DiscountType = 8;
   repeated string DiscountAddonIds = 9;
+  bool is_all_addon_ids = 10;
 }
 
 message PreviewOrderGrpcResponse {
@@ -150,6 +151,7 @@ message PreviewOrderGrpcRequest {
   double DiscountAmount = 7;
   DiscountType DiscountType = 8;
   repeated string DiscountAddonIds = 9;
+  bool is_all_addon_ids = 10;
 }
 
 message CreateOrderGrpcResponse {
