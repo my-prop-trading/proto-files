@@ -100,6 +100,7 @@ message UpdateDiscountCodeRequest{
     repeated string addon_ids = 24;
     discount_codes.DiscountCodeType discount_addon_type = 25;
     double addon_amount = 26;
+    bool is_all_addon_ids = 27;
 }
 
 message UpdateDiscountCodeResponse {
