@@ -20,7 +20,6 @@ enum AddonParameterTypeGrpc {
 }
 
 enum DiscountType {
-    NONE = 0; // default
     FIXED = 1;
     PERCENT = 2;
 }
