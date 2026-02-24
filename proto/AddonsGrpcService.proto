@@ -20,8 +20,8 @@ enum AddonParameterTypeGrpc {
 }
 
 enum DiscountType {
-    FIXED = 1;
-    PERCENT = 2;
+    FIXED = 0;
+    PERCENT = 1;
 }
 message AddonGrpcModel {
   string Id = 1;
