@@ -144,13 +144,11 @@ message PreviewOrderGrpcResponse {
 message PreviewOrderGrpcRequest {
   string ClientId = 1;
   double OrderPrice = 2;
-  repeated string AddonIds = 3;
-  repeated string BundleIds = 4;
-  string OrderId = 6;
-  double DiscountAmount = 7;
-  optional DiscountType DiscountType = 8;
-  repeated string DiscountAddonIds = 9;
-  bool is_all_addon_ids = 10;
+  string OrderId = 3;
+  double DiscountAmount = 4;
+  optional DiscountType DiscountType = 5;
+  repeated string DiscountAddonIds = 6;
+  bool is_all_addon_ids = 7;
 }
 
 message CreateOrderGrpcResponse {
