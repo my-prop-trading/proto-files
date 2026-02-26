@@ -127,14 +127,8 @@ enum PaymentPageType {
 
 message PreviewOrderDiscountRequest {
   string TradingPackageId = 1;
-  //int32 PlatformId = 2;
-  //int32 AccountType = 3;
-  optional string DiscountCode = 4;
-  //string ProcessId = 5;
-  optional string ClientId = 6;
-  //string Brand = 7;
-  repeated string AddonIds = 8;
-  repeated string BundleIds = 9;
+  optional string DiscountCode = 2;
+  optional string ClientId = 3;
 }
 
 message PreviewOrderDiscountResponse {
