@@ -328,6 +328,15 @@ message GetClientIdsResponse {
   repeated string ClientIds = 1;
 }
 
+message GetClientTotalPayinRequest {
+  string ClientId = 1;
+}
+
+message GetClientTotalPayinResponse {
+  string ClientId = 1;
+  double Amount = 2;
+}
+
 message GetOrderResponse {
   oneof response {
     orders.GetOrderResponseBody Body = 1;
@@ -406,5 +415,7 @@ service OrdersGrpcService {
 
   rpc GetOrdersClientIdsByCardToken(orders.GetClientIdsRequest) returns (orders.GetClientIdsResponse);
 
+  rpc GetClientTotalPayinAmount(orders.GetClientTotalPayinRequest) returns (orders.GetClientTotalPayinResponse);
+  
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
