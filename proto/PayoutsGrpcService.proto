@@ -425,7 +425,7 @@ service PayoutsGrpcService {
     rpc GetPayoutSchedulingSettings(GetPayoutSchedulingSettingsRequest) returns (GetPayoutSchedulingSettingsResponse);
     rpc SetPayoutSchedulingSettings(SetPayoutSchedulingSettingsRequest) returns (SetPayoutSchedulingSettingsResponse);
 
-    rpc GetClientTotalPayoutAmount(orders.GetClientTotalPayoutRequest) returns (orders.GetClientTotalPayoutResponse);
+    rpc GetClientTotalPayoutAmount(GetClientTotalPayoutRequest) returns (GetClientTotalPayoutResponse);
     
     //For internal clients
     rpc GetRevenueShareAmountByClientIds(GetRevenueShareAmountByClientIdsRequest) returns (GetRevenueShareAmountByClientIdsResponse);
