@@ -395,6 +395,15 @@ message GetHighestTotalWithdrawalResponse {
     string TraderAccountId = 3;
 }
 
+message GetClientTotalPayoutRequest {
+  string ClientId = 1;
+}
+
+message GetClientTotalPayoutResponse {
+  string ClientId = 1;
+  double Amount = 2;
+}
+
 service PayoutsGrpcService {
     rpc GetById(GetByIdRequest) returns (GetByIdResponse);
     rpc GetByClientId(GetByClientIdRequest) returns (GetByClientIdResponse);
@@ -416,6 +425,8 @@ service PayoutsGrpcService {
     rpc GetPayoutSchedulingSettings(GetPayoutSchedulingSettingsRequest) returns (GetPayoutSchedulingSettingsResponse);
     rpc SetPayoutSchedulingSettings(SetPayoutSchedulingSettingsRequest) returns (SetPayoutSchedulingSettingsResponse);
 
+    rpc GetClientTotalPayoutAmount(GetClientTotalPayoutRequest) returns (GetClientTotalPayoutResponse);
+    
     //For internal clients
     rpc GetRevenueShareAmountByClientIds(GetRevenueShareAmountByClientIdsRequest) returns (GetRevenueShareAmountByClientIdsResponse);
     rpc GetExcessiveProfitByClientIds(GetExcessiveProfitByClientIdsRequest) returns (GetExcessiveProfitByClientIdsResponse);
