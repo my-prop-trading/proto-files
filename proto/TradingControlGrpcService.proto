@@ -1,14 +1,27 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
 package trading_control;
 
+import "google/protobuf/empty.proto";
+
 enum TradingObjectiveFailReasonGrpc {
-    DAILY_LOSS_LEVEL = 0;
-    OVERALL_LOSS_LEVEL = 1;
-    TARGET_DATE = 2;
-    LEGACY = 3;
-    INACTIVITY = 4;
-    NONE = 999;
+  DAILY_LOSS_LEVEL = 0;
+  OVERALL_LOSS_LEVEL = 1;
+  TARGET_DATE = 2;
+  LEGACY = 3;
+  INACTIVITY = 4;
+  NONE = 999;
+}
+
+enum TradingObjectivePassRequirement {
+  PASS_REQUIREMENT_UNSPECIFIED = 0;
+  LIVE_ACCOUNT_NOT_ALLOWED = 1;
+  TARGET_PROFIT_NOT_REACHED = 2;
+  HAS_OPENED_POSITIONS = 3;
+  NOT_ENOUGH_TRADING_DAYS = 4;
+  DAILY_LOSS_LEVEL_BREACHED = 5;
+  OVERALL_LOSS_LEVEL_BREACHED = 6;
+  TARGET_DATE_EXPIRED = 7;
+  BEST_DAY_RULE_BREACHED = 8;
 }
 
 message TradingMetricsGrpcModel {
@@ -47,12 +60,13 @@ message TradingMetricsGrpcModel {
   double best_day_cap = 33;
   BestDayRuleStatusGrpc best_day_rule_status = 34;
   double total_realized_profit = 35;
+  repeated TradingObjectivePassRequirement pass_requirements = 36;
 }
 
 enum BestDayRuleStatusGrpc {
-    GOOD = 0;
-    WARNING = 1;
-    BREACHED = 2;
+  GOOD = 0;
+  WARNING = 1;
+  BREACHED = 2;
 }
 
 message GetTradingMetricsGrpcRequest {
@@ -98,7 +112,6 @@ message AccountCandleDataGrpcModel {
   double high = 3;
   double low = 4;
   double low_after_height = 5;
-
 }
 
 message GetAccountCandlesGrpcRequest {
@@ -146,23 +159,23 @@ message TopTradingMetricsGrpcResponse {
 }
 
 message InactivityItemGrpcModel {
-    string trader_account_id = 1;
-    string client_id = 2;
-    string platform_id = 3;
-    string platform_account_id = 4;
-    int32 account_type = 5;
-    int64 inactivity_deadline = 6;
+  string trader_account_id = 1;
+  string client_id = 2;
+  string platform_id = 3;
+  string platform_account_id = 4;
+  int32 account_type = 5;
+  int64 inactivity_deadline = 6;
 }
 
 message GetInactivityReportGrpcRequest {
-    uint64 limit = 1;
-    uint64 offset = 2;
-    optional uint64 from_date = 3;
-    optional uint64 to_date = 4;
+  uint64 limit = 1;
+  uint64 offset = 2;
+  optional uint64 from_date = 3;
+  optional uint64 to_date = 4;
 }
 
 message GetInactivityReportGrpcResponse {
-    repeated InactivityItemGrpcModel items = 1;
+  repeated InactivityItemGrpcModel items = 1;
 }
 
 service TradingControlGrpcService {
