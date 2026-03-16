@@ -20,6 +20,7 @@ message GetPageGrpcRequest {
   string ref_id = 3;
   bool include_related = 4;
   optional string label = 5;
+  repeated string related_ids = 6;
 }
 
 message GetPageGrpcResponse {
