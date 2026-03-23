@@ -25,7 +25,8 @@ enum PayoutType {
 enum PaymentMethod {
     BankTransfer = 0;
     CryptoWithdrawal = 1;
-    Both = 2;
+    AllOfThem = 2;
+    Rise = 3;
 }
 
 message BankTransferDetails {
@@ -88,6 +89,7 @@ message PayoutRequest {
     int64 UpdatedAt = 18;
     int64 ProcessedAt = 19;
     optional string OfficerId = 20;
+    string ExternalId = 21;
 }
 
 message ProfitWidget {
@@ -106,9 +108,6 @@ enum PayoutRestriction {
     PERIOD_PENDING = 1;
     PAYOUT_PENDING = 2;
     BEST_DAY_RULE_BREACHED = 3;
-    TradingNotStarted = 4;
-    AccountDisabled = 5;
-    PayoutAlreadyRequested = 6;
 }
 
 message GetByClientIdRequest {
@@ -322,6 +321,8 @@ message PayoutSettings {
     // Optional in Rust → wrappers.DoubleValue in proto3
     google.protobuf.DoubleValue excessive_profit_percent = 6;
     string trading_package_id = 7;
+    bool is_rise_transfer_enabled = 8;
+    PayoutLimitsSettings rise_limits = 9;
 }
 
 message GetPayoutSettingsResponse {
