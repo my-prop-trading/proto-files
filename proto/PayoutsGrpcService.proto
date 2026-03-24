@@ -89,7 +89,7 @@ message PayoutRequest {
     int64 UpdatedAt = 18;
     int64 ProcessedAt = 19;
     optional string OfficerId = 20;
-    string ExternalId = 21;
+    optional string ExternalAccountId = 21;
 }
 
 message ProfitWidget {
