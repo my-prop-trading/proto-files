@@ -108,6 +108,9 @@ enum PayoutRestriction {
     PERIOD_PENDING = 1;
     PAYOUT_PENDING = 2;
     BEST_DAY_RULE_BREACHED = 3;
+    TradingNotStarted = 4;
+    AccountDisabled = 5;
+    PayoutAlreadyRequested = 6;
 }
 
 message GetByClientIdRequest {
