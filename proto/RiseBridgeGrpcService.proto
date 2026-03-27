@@ -2,13 +2,19 @@ syntax = "proto3";
 package rise_bridge;
 import "google/protobuf/empty.proto";
 
+enum RiseStatus {
+    NONE = 0;
+    PENDING = 1;
+    READY = 2;
+}
+
 message GetStatusGrpcRequest {
     string client_id = 1;
 }
 
 message GetStatusGrpcResponse {
     string client_id = 1;
-    int32 status = 2;
+    RiseStatus status = 2;
     optional string rise_id = 3;
     optional string email = 4;
 }
@@ -21,7 +27,7 @@ message InviteGrpcRequest {
 message InviteGrpcResponse {
     string client_id = 1;
     string email = 2;
-    int32 status = 3;
+    RiseStatus status = 3;
 }
 
 service RiseBridgeGrpcService {
