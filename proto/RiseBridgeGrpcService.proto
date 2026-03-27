@@ -24,7 +24,7 @@ message InviteGrpcResponse {
     int32 status = 3;
 }
 
-service BillerixBridgeGrpcService {
+service RiseBridgeGrpcService {
     rpc GetStatus(GetStatusGrpcRequest) returns (GetStatusGrpcResponse);
     rpc Invite(InviteGrpcRequest) returns (InviteGrpcResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
