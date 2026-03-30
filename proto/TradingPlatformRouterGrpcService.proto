@@ -367,27 +367,28 @@ message ResolveTradingPlatformByIdResponse {
 
 message GetClosedTradesRequest {
   int32 PlatformId = 1;
-  int64 FromDate = 2;
+  AccountType AccountType = 2;
+  int64 FromDate = 3;
 }
 
 message GetOpenedTradesRequest {
   int32 PlatformId = 1;
-  AccountFilterModel AccountFilter = 2;
+  AccountType AccountType = 2;
+  AccountFilterModel AccountFilter = 3;
 }
 
 message AccountFilterModel {
   string PlatformAccountId = 1;
-  AccountType AccountType = 2;
-  string TraderAccountId = 3;
-  string ClientId = 4;
+  string TraderAccountId = 2;
+  string ClientId = 3;
 }
 
 message GetAccountHistoryRequest {
-    string PlatformAccountId = 1;
-    AccountType AccountType = 3;
-    int32 PlatformId = 4;
-    string TraderAccountId = 5;
-    string ClientId = 6;
+  string PlatformAccountId = 1;
+  AccountType AccountType = 3;
+  int32 PlatformId = 4;
+  string TraderAccountId = 5;
+  string ClientId = 6;
 }
 
 service TradingPlatformRouterGrpcService {
