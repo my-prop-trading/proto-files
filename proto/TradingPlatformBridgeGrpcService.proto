@@ -341,6 +341,14 @@ message AccountFilterModel {
   string ClientId = 4;
 }
 
+message GetAccountHistoryRequest {
+    string PlatformAccountId = 1;
+    AccountType AccountType = 3;
+    int32 PlatformId = 4;
+    string TraderAccountId = 5;
+    string ClientId = 6;
+}
+
 service TradingPlatformBridgeGrpcService {
   rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
 
@@ -376,6 +384,7 @@ service TradingPlatformBridgeGrpcService {
 
   rpc GetPlatformInstruments(GetPlatformInstrumentsRequest) returns (stream InstrumentModel);
 
+  rpc GetAccountHistory(GetAccountHistoryRequest) returns (stream AccountTradeModel);
   rpc GetClosedTrades(GetClosedTradesRequest) returns (stream AccountTradeModel);
   rpc GetOpenedTrades(GetOpenedTradesRequest) returns (stream AccountTradeModel);
 }
