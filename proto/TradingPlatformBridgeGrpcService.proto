@@ -329,10 +329,10 @@ message GetClosedTradesRequest {
 message GetOpenedTradesRequest {
   int32 PlatformId = 1;
   AccountType AccountType = 2;
-  AccountFilterModel AccountFilter = 3;
+  AccountInfoModel AccountInfo = 3;
 }
 
-message AccountFilterModel {
+message AccountInfoModel {
   string PlatformAccountId = 1;
   string TraderAccountId = 2;
   string ClientId = 3;
