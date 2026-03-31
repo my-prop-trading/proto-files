@@ -320,24 +320,6 @@ message GetPlatformInstrumentsRequest {
   optional AccountType AccountType = 2;
 }
 
-message GetClosedTradesRequest {
-  int32 PlatformId = 1;
-  AccountType AccountType = 2;
-  int64 FromDate = 3;
-}
-
-message GetOpenedTradesRequest {
-  int32 PlatformId = 1;
-  AccountType AccountType = 2;
-  AccountInfoModel AccountInfo = 3;
-}
-
-message AccountInfoModel {
-  string PlatformAccountId = 1;
-  string TraderAccountId = 2;
-  string ClientId = 3;
-}
-
 message GetAccountHistoryRequest {
     string PlatformAccountId = 1;
     AccountType AccountType = 3;
@@ -382,6 +364,4 @@ service TradingPlatformBridgeGrpcService {
   rpc GetPlatformInstruments(GetPlatformInstrumentsRequest) returns (stream InstrumentModel);
 
   rpc GetAccountHistory(GetAccountHistoryRequest) returns (stream AccountTradeModel);
-  rpc GetClosedTrades(GetClosedTradesRequest) returns (stream AccountTradeModel);
-  rpc GetOpenedTrades(GetOpenedTradesRequest) returns (stream AccountTradeModel);
 }
