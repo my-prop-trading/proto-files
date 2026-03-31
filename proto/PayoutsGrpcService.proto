@@ -60,11 +60,19 @@ message CryptoWithdrawalDetails {
 
 message NotSelectedPaymentDetails {}
 
+message RiseTransferDetails {
+    double ProfitAmountToBeWithdrawn = 1;
+    string Currency = 2;
+    double FeeAmountToBeWithdrawn = 3;
+    string RiseId = 4;
+}
+
 message PaymentDetails {
     oneof detail {
         NotSelectedPaymentDetails NotSelected = 1;
         BankTransferDetails BankTransfer = 2;
         CryptoWithdrawalDetails CryptoWithdrawal = 3;
+        RiseTransferDetails RiseTransfer = 4;
     }
 }
 
