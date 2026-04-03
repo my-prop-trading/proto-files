@@ -15,6 +15,7 @@ message GetStatusGrpcRequest {
 message GetStatusGrpcResponse {
     string client_id = 1;
     RiseStatus status = 2;
+    string rise_id = 3;
 }
 
 message InviteGrpcRequest {
