@@ -64,6 +64,7 @@ message RiseTransferDetails {
     double ProfitAmountToBeWithdrawn = 1;
     string Currency = 2;
     double FeeAmountToBeWithdrawn = 3;
+    string RiseId = 4;
 }
 
 message PaymentDetails {
