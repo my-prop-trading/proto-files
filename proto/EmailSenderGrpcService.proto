@@ -220,6 +220,7 @@ message SendPaymentFailedRequest{
     string ClientId = 2;
     string TraderPackagesName = 3;
     DeclineReasonType DeclineReasonType = 4;
+    string OrderId = 5;
 }
 
 message SendPayoutSuccessRequest {
