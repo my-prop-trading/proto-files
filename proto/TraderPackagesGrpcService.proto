@@ -20,6 +20,11 @@ enum TraderPackagePhaseType {
   INSTANT_FUNDING = 3;
 }
 
+enum AccountLifeTimeType {
+    UNLIMITED = 0;
+    TRIAL = 1;
+}
+
 message TraderPackageGroup {
   string Id = 1;
   string Name = 2;
@@ -90,6 +95,8 @@ message TraderPackage {
   double Phase2BestDayCap = 61;
   double Phase3BestDayCap = 62;
   double BestDayCap = 63;
+  int32 TrialDays = 64;
+  AccountLifeTimeType AccountLifeTimeType = 65;
 }
 
 message PlatformGroup {
