@@ -15,6 +15,11 @@ enum TradingPlatformBridgeError {
   ACCOUNT_HAS_OPEN_POSITIONS = 3;
 }
 
+enum AccountLifeTimeType {
+    UNLIMITED = 0;
+    TRIAL = 1;
+}
+
 message CreateAccountRequest {
   string FullName = 1;
   string TradePassword = 2;
@@ -28,6 +33,7 @@ message CreateAccountRequest {
   int32 PlatformId = 10;
   string ClientId = 11;
   optional string PlatformGroup = 12;
+  optional AccountLifeTimeType AccountLifeTimeType = 13;
 }
 
 message CreateAccountResponseBody {
