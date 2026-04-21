@@ -95,6 +95,13 @@ message TraderAccount {
     double Phase2BestDayCap = 78;
     double Phase3BestDayCap = 79;
     double BestDayCap = 80;
+    AccountLifeTimeType AccountLifeTimeType = 81;
+    int32 TrialDays = 82;
+}
+
+enum AccountLifeTimeType {
+    UNLIMITED = 0;
+    TRIAL = 1;
 }
 
 enum TraderAccountTypeModel {

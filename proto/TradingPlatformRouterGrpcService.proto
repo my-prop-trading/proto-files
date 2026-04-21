@@ -33,7 +33,7 @@ message CreateAccountRequest {
   int32 PlatformId = 10;
   string ClientId = 11;
   optional string PlatformGroup = 12;
-  optional AccountLifeTimeType AccountLifeTimeType = 13;
+  AccountLifeTimeType AccountLifeTimeType = 13;
 }
 
 message CreateAccountResponseBody {
