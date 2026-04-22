@@ -96,7 +96,7 @@ message TraderAccount {
     double Phase3BestDayCap = 79;
     double BestDayCap = 80;
     AccountLifeTimeType AccountLifeTimeType = 81;
-    int32 TrialDaysInMinutes = 82;
+    int32 TrialDays = 82;
 }
 
 enum AccountLifeTimeType {
