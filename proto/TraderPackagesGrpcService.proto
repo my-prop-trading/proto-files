@@ -97,6 +97,10 @@ message TraderPackage {
   double BestDayCap = 63;
   int32 TrialDaysInMinutes = 64;
   AccountLifeTimeType AccountLifeTimeType = 65;
+  bool ExposureLossEnabled = 66;
+  double SoftBreachCap = 67;
+  double HadrdBreachCap = 68;
+  int32 TradeIdeaIntervalSecs = 69;
 }
 
 message PlatformGroup {

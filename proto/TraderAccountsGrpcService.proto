@@ -97,6 +97,10 @@ message TraderAccount {
     double BestDayCap = 80;
     AccountLifeTimeType AccountLifeTimeType = 81;
     int32 TrialDays = 82;
+    bool ExposureLossEnabled = 83;
+    double SoftBreachCap = 84;
+    double HadrdBreachCap = 85;
+    int32 TradeIdeaIntervalSecs = 86;
 }
 
 enum AccountLifeTimeType {
