@@ -99,7 +99,7 @@ message TraderPackage {
   AccountLifeTimeType AccountLifeTimeType = 65;
   bool ExposureLossEnabled = 66;
   double SoftBreachCap = 67;
-  double HadrdBreachCap = 68;
+  double HardBreachCap = 68;
   int32 TradeIdeaIntervalSecs = 69;
 }
 
