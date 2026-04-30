@@ -99,7 +99,7 @@ message TraderAccount {
     int32 TrialDays = 82;
     bool ExposureLossEnabled = 83;
     double SoftBreachCap = 84;
-    double HadrdBreachCap = 85;
+    double HardBreachCap = 85;
     int32 TradeIdeaIntervalSecs = 86;
 }
 
