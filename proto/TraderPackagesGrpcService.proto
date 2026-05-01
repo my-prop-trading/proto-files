@@ -101,6 +101,7 @@ message TraderPackage {
   double SoftBreachCap = 67;
   double HardBreachCap = 68;
   int32 TradeIdeaIntervalSecs = 69;
+  int32 SoftBreachCount = 70;
 }
 
 message PlatformGroup {
