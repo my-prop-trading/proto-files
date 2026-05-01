@@ -101,6 +101,7 @@ message TraderAccount {
     double SoftBreachCap = 84;
     double HardBreachCap = 85;
     int32 TradeIdeaIntervalSecs = 86;
+    int32 SoftBreachCount = 87;
 }
 
 enum AccountLifeTimeType {
