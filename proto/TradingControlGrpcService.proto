@@ -178,6 +178,28 @@ message GetInactivityReportGrpcResponse {
   repeated InactivityItemGrpcModel items = 1;
 }
 
+message TradeIdeaGrpcModel {
+  string trader_account_id = 1;
+  string symbol = 2;
+  int32 direction = 3;
+  int64 end_date = 4;
+  double pnl_open = 5;
+  double pnl_close = 6;
+  double pnl_high = 7;
+  double pnl_low = 8;
+  repeated string trade_ids = 9;
+}
+
+message GetTradeIdeasGrpcRequest {
+  string trader_account_id = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
+}
+
+message GetTradeIdeasGrpcResponse {
+  repeated TradeIdeaGrpcModel items = 1;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
@@ -186,6 +208,7 @@ service TradingControlGrpcService {
   rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
   rpc GetInactivityReport(GetInactivityReportGrpcRequest) returns (GetInactivityReportGrpcResponse);
+  rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
