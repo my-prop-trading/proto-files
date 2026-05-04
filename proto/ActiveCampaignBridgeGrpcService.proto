@@ -5,6 +5,7 @@ import "google/protobuf/empty.proto";
 message CreateContactRequest {
   string Email = 1;
   string LeadType = 2;
+  map<string, string> Fields = 3;
 }
 
 message CreateContactResponse { }
