@@ -61,12 +61,17 @@ message TradingMetricsGrpcModel {
   BestDayRuleStatusGrpc best_day_rule_status = 34;
   double total_realized_profit = 35;
   repeated TradingObjectivePassRequirement pass_requirements = 36;
+  repeated TradingMetricWarningGrpc warnings = 37;
 }
 
 enum BestDayRuleStatusGrpc {
   GOOD = 0;
   WARNING = 1;
   BREACHED = 2;
+}
+
+enum TradingMetricWarningGrpc {
+  EXPOSURE_LOSS_SOFT_BREACH = 0;
 }
 
 message GetTradingMetricsGrpcRequest {
