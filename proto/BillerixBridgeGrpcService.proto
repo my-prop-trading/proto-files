@@ -31,6 +31,7 @@ message CancelSubscriptionGrpcRequest {
     string buyer_id = 1;
     string subscription_id = 2;
     string reason = 3;
+    string ip = 4;
 }
 
 service BillerixBridgeGrpcService {
