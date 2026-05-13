@@ -27,7 +27,14 @@ message GeneratePaymentPageGrpcResponse {
     string page = 1;
 }
 
+message CancelSubscriptionGrpcRequest {
+    string buyer_id = 1;
+    string subscription_id = 2;
+    string reason = 3;
+}
+
 service BillerixBridgeGrpcService {
     rpc GeneratePaymentPage(GeneratePaymentPageGrpcRequest) returns (GeneratePaymentPageGrpcResponse);
+    rpc CancelSubscription(CancelSubscriptionGrpcRequest) returns (google.protobuf.Empty);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
