@@ -16,6 +16,7 @@ enum AdminNotificationTriggerGrpc {
     NEW_CONTRACTOR = 10;
     SUCCESSFUL_PAYIN = 11;
     EXTERNAL_PAYMENT = 12;
+    POTENTIAL_PAYOUT = 13;
 }
 
 enum AdminNotificationStatusGrpc {
@@ -73,6 +74,7 @@ message AdminNofiticationSettingsGrpcModel {
     optional BasicChannelGrpcModel new_contractor = 12;
     optional BasicChannelGrpcModel successful_payin = 13;
     optional BasicChannelGrpcModel external_payment = 14;
+    optional PotentialPayoutGrpcModel potential_payout = 15;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
@@ -134,6 +136,12 @@ message FastAffiliatePayinsGrpcModel {
 
 message BasicChannelGrpcModel {
     string channel_id = 1;
+}
+
+message PotentialPayoutGrpcModel {
+    string channel_id = 1;
+    double alert_ratio = 2;
+    int32 look_ahead_hours = 3;
 }
 
 service AdminNotificationsGrpcService {
