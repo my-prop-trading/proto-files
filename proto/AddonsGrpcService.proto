@@ -77,7 +77,9 @@ message AddonBundleGrpcModel {
   int64 UpdatedAt = 6;
 }
 
-message GetAddonsGrpcRequest {}
+message GetAddonsGrpcRequest {
+  optional string TradingPackageId = 1;
+}
 
 message GetAddonsGrpcResponse {
   repeated AddonGrpcModel Items = 1;
