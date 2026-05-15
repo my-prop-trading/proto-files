@@ -32,6 +32,7 @@ message AddonGrpcModel {
   string ParameterValue = 6;
   int64 UpdatedAt = 7;
   bool Published = 8;
+  repeated string TradingPackageIds = 9;
 }
 
 message AddonPurchaseGrpcModel {
