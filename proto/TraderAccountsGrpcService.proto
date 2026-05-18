@@ -102,6 +102,10 @@ message TraderAccount {
     double HardBreachCap = 85;
     int32 TradeIdeaIntervalSecs = 86;
     int32 SoftBreachCount = 87;
+    bool MarginRuleEnabled = 88;
+    double MarginRuleSoftCapPercent = 89;
+    double MarginRuleHardCapPercent = 90;
+    int32 MarginRuleSoftBreachCount = 91;
 }
 
 enum AccountLifeTimeType {
