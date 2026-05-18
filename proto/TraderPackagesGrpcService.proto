@@ -102,6 +102,10 @@ message TraderPackage {
   double HardBreachCap = 68;
   int32 TradeIdeaIntervalSecs = 69;
   int32 SoftBreachCount = 70;
+  bool MarginRuleEnabled = 71;
+  double MarginRuleSoftCapPercent = 72;
+  double MarginRuleHardCapPercent = 73;
+  int32 MarginRuleSoftBreachCount = 74;
 }
 
 message PlatformGroup {
