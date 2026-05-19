@@ -9,6 +9,9 @@ enum TradingObjectiveFailReasonGrpc {
   TARGET_DATE = 2;
   LEGACY = 3;
   INACTIVITY = 4;
+  TRIAL_ENDED = 5;
+  EXPOSURE_LOSS_BREACH = 6;
+  MARGIN_RULE = 7;
   NONE = 999;
 }
 
@@ -62,6 +65,8 @@ message TradingMetricsGrpcModel {
   double total_realized_profit = 35;
   repeated TradingObjectivePassRequirement pass_requirements = 36;
   repeated TradingMetricWarningGrpc warnings = 37;
+  double margin_utilization_percent = 38;
+  int32 margin_rule_soft_breaches = 39;
 }
 
 enum BestDayRuleStatusGrpc {
@@ -72,6 +77,7 @@ enum BestDayRuleStatusGrpc {
 
 enum TradingMetricWarningGrpc {
   EXPOSURE_LOSS_SOFT_BREACH = 0;
+  MARGIN_RULE_SOFT_BREACH = 1;
 }
 
 message GetTradingMetricsGrpcRequest {
