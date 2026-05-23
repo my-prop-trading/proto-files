@@ -52,6 +52,7 @@ message AccountTradeModel {
   int32 PlatformId = 22;
   AccountType AccountType = 23;
   string ClientId = 24;
+  double UsedMargin = 25;
 }
 
 message GetByTraderAccountIdRequest {

@@ -231,6 +231,7 @@ message AccountTradeModel {
   double Taxes = 16; // taxes
   string Comment = 17; // comment
   int64 Timestamp = 18; // timestamp
+  double UsedMargin = 19; // used margin per position (0 for closed trades)
 }
 
 message GetTimeRequest {
