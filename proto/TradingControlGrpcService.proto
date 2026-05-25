@@ -12,6 +12,7 @@ enum TradingObjectiveFailReasonGrpc {
   TRIAL_ENDED = 5;
   EXPOSURE_LOSS_BREACH = 6;
   MARGIN_RULE = 7;
+  MARGIN_RULE_PER_IDEA = 8;
   NONE = 999;
 }
 
@@ -77,6 +78,7 @@ enum BestDayRuleStatusGrpc {
 enum TradingMetricWarningGrpc {
   EXPOSURE_LOSS_SOFT_BREACH = 0;
   MARGIN_RULE_SOFT_BREACH = 1;
+  MARGIN_RULE_PER_IDEA_SOFT_BREACH = 2;
 }
 
 message GetTradingMetricsGrpcRequest {
