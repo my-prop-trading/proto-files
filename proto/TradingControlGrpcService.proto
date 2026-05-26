@@ -200,6 +200,10 @@ message TradeIdeaGrpcModel {
   double pnl_high = 7;
   double pnl_low = 8;
   repeated string trade_ids = 9;
+  double used_margin_open = 10;
+  double used_margin_close = 11;
+  double used_margin_high = 12;
+  double used_margin_low = 13;
 }
 
 message GetTradeIdeasGrpcRequest {
