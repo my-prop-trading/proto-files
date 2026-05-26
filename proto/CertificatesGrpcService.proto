@@ -141,7 +141,7 @@ message SetHtmlMetadataResponse {
   HtmlMetadata metadata = 1;
 }
 
-message PublicStatisticsItem {
+message StatisticsItem {
   string id = 1;
   double withdrawal_amount = 2;
   string currency = 3;
@@ -149,13 +149,13 @@ message PublicStatisticsItem {
   int64 created_at = 5;
 }
 
-message GetPublicStatisticsRequest {}
+message GetStatisticsRequest {}
 
-message GetPublicStatisticsResponse {
+message GetStatisticsResponse {
   double total_amount = 1;
   string currency = 2;
   uint32 period_days = 3;
-  repeated PublicStatisticsItem items = 4;
+  repeated StatisticsItem items = 4;
 }
 
 message StatisticsSettings {
@@ -198,10 +198,8 @@ service CertificatesGrpcService {
   rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (certificates.GetHtmlMetadataResponse);
   rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (certificates.SetHtmlMetadataResponse);
 
-  // Public statistics (no auth, for website)
-  rpc GetPublicStatistics(certificates.GetPublicStatisticsRequest) returns (certificates.GetPublicStatisticsResponse);
-
-  // Statistics settings management (BO)
+  // Statistics
+  rpc GetStatistics(certificates.GetStatisticsRequest) returns (certificates.GetStatisticsResponse);
   rpc GetStatisticsSettings(certificates.GetStatisticsSettingsRequest) returns (certificates.GetStatisticsSettingsResponse);
   rpc SetStatisticsSettings(certificates.SetStatisticsSettingsRequest) returns (certificates.SetStatisticsSettingsResponse);
 }
