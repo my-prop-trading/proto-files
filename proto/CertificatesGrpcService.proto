@@ -141,6 +141,23 @@ message SetHtmlMetadataResponse {
   HtmlMetadata metadata = 1;
 }
 
+message StatisticsItem {
+  string id = 1;
+  double withdrawal_amount = 2;
+  string currency = 3;
+  string trader_name = 4;
+  int64 created_at = 5;
+}
+
+message GetStatisticsRequest {}
+
+message GetStatisticsResponse {
+  double total_amount = 1;
+  string currency = 2;
+  uint32 period_days = 3;
+  repeated StatisticsItem items = 4;
+}
+
 service CertificatesGrpcService {
   //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
@@ -161,4 +178,7 @@ service CertificatesGrpcService {
   // For Html Shared
   rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (certificates.GetHtmlMetadataResponse);
   rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (certificates.SetHtmlMetadataResponse);
+
+  //  Statistics
+  rpc GetStatistics(certificates.GetStatisticsRequest) returns (certificates.GetStatisticsResponse);
 }
