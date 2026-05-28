@@ -296,11 +296,11 @@ message OpenTradeGrpc {
   double fee = 11;
 }
 
-message GetTradesBreakdownGrpcRequest {
+message GetTradesMetricsGrpcRequest {
   string trader_account_id = 1;
 }
 
-message GetTradesBreakdownGrpcResponse {
+message GetTradesMetricsGrpcResponse {
   repeated SideAggregateGrpc sides = 1;
   repeated InstrumentAggregateGrpc instruments = 2;
   repeated WeekdayAggregateGrpc weekdays = 3;
@@ -325,7 +325,7 @@ service TradingControlGrpcService {
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
   rpc GetInactivityReport(GetInactivityReportGrpcRequest) returns (GetInactivityReportGrpcResponse);
   rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
-  rpc GetTradesBreakdown(GetTradesBreakdownGrpcRequest) returns (GetTradesBreakdownGrpcResponse);
+  rpc GetTradesMetrics(GetTradesMetricsGrpcRequest) returns (GetTradesMetricsGrpcResponse);
   rpc GetOpenTrades(GetOpenTradesGrpcRequest) returns (GetOpenTradesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
