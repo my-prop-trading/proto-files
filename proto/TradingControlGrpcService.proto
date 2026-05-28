@@ -67,6 +67,11 @@ message TradingMetricsGrpcModel {
   repeated TradingObjectivePassRequirement pass_requirements = 36;
   repeated TradingMetricWarningGrpc warnings = 37;
   double margin_utilization_percent = 38;
+  double max_profit = 39;
+  double max_loss = 40;
+  double avg_duration_sec = 41;
+  double sharpe_ratio = 42;
+  double expectancy_ratio = 43;
 }
 
 enum BestDayRuleStatusGrpc {
@@ -216,6 +221,101 @@ message GetTradeIdeasGrpcResponse {
   repeated TradeIdeaGrpcModel items = 1;
 }
 
+enum TradeSideGrpc {
+  Long = 0;   // Buy
+  Short = 1;  // Sell
+}
+
+enum WeekdayGrpc {
+  Monday = 0;
+  Tuesday = 1;
+  Wednesday = 2;
+  Thursday = 3;
+  Friday = 4;
+  Saturday = 5;
+  Sunday = 6;
+}
+
+enum TradeDurationBucketGrpc {
+  UnderOneMinute = 0;        // [0, 60)
+  OneToFiveMinutes = 1;      // [60, 300)
+  FiveToFifteenMinutes = 2;  // [300, 900)
+  FifteenMinutesToOneHour = 3;  // [900, 3600)
+  OneToFourHours = 4;        // [3600, 14400)
+  FourToTwelveHours = 5;     // [14400, 43200)
+  TwelveToTwentyFourHours = 6;  // [43200, 86400)
+  OverOneDay = 7;            // [86400, +inf)
+}
+
+message SideAggregateGrpc {
+  TradeSideGrpc side = 1;
+  uint32 trades = 2;
+  double result = 3;       // sum(net_profit)
+  double win_rate = 4;     // 0..1
+  double avg_profit = 5;   // mean(net_profit) of winning trades only
+  double rr = 6;           // per-side avg_win / |avg_loss|, 0 if no losing trades
+}
+
+message InstrumentAggregateGrpc {
+  string symbol = 1;
+  uint32 trades_long = 2;
+  double result_long = 3;
+  uint32 trades_short = 4;
+  double result_short = 5;
+  uint32 trades_total = 6;
+  double result_total = 7;
+}
+
+message WeekdayAggregateGrpc {
+  WeekdayGrpc weekday = 1;
+  double pnl = 2;
+}
+
+message DurationAggregateGrpc {
+  TradeDurationBucketGrpc bucket = 1;
+  double pnl = 2;
+}
+
+message CalendarDayGrpc {
+  int64 date = 1;     // unix seconds, UTC midnight
+  uint32 trades = 2;
+  double pnl = 3;
+}
+
+message OpenTradeGrpc {
+  string ticket = 1;
+  string symbol = 2;
+  TradeSideGrpc side = 3;
+  double current_price = 4;
+  double size = 5;
+  int64 open_time = 6;
+  double tp = 7;
+  double sl = 8;
+  double enter_price = 9;
+  double pnl = 10;
+  double fee = 11;
+}
+
+message GetTradesBreakdownGrpcRequest {
+  string trader_account_id = 1;
+}
+
+message GetTradesBreakdownGrpcResponse {
+  repeated SideAggregateGrpc sides = 1;
+  repeated InstrumentAggregateGrpc instruments = 2;
+  repeated WeekdayAggregateGrpc weekdays = 3;
+  repeated DurationAggregateGrpc durations = 4;
+  repeated CalendarDayGrpc calendar = 5;
+}
+
+message GetOpenTradesGrpcRequest {
+  string trader_account_id = 1;
+}
+
+message GetOpenTradesGrpcResponse {
+  repeated OpenTradeGrpc items = 1;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
@@ -225,6 +325,8 @@ service TradingControlGrpcService {
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
   rpc GetInactivityReport(GetInactivityReportGrpcRequest) returns (GetInactivityReportGrpcResponse);
   rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
+  rpc GetTradesBreakdown(GetTradesBreakdownGrpcRequest) returns (GetTradesBreakdownGrpcResponse);
+  rpc GetOpenTrades(GetOpenTradesGrpcRequest) returns (GetOpenTradesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
