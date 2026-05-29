@@ -109,6 +109,7 @@ message TraderPackage {
   double MarginRuleIdeaSoftCapPercent = 75;
   double MarginRuleIdeaHardCapPercent = 76;
   int32 MarginRuleIdeaSoftBreachCount = 77;
+  optional int32 MinTradingDays = 78;
 }
 
 message PlatformGroup {

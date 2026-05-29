@@ -109,6 +109,7 @@ message TraderAccount {
     double MarginRuleIdeaSoftCapPercent = 92;
     double MarginRuleIdeaHardCapPercent = 93;
     int32 MarginRuleIdeaSoftBreachCount = 94;
+    optional int32 MinTradingDays = 95;
 }
 
 enum AccountLifeTimeType {
