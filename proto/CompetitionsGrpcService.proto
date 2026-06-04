@@ -1,0 +1,156 @@
+syntax = "proto3";
+package competitions;
+import "google/protobuf/empty.proto";
+
+enum CompetitionStatus {
+  Draft = 0;
+  RegistrationOpen = 1;
+  Active = 2;
+  Ended = 3;
+}
+
+message Competition {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  optional string prize_pool_title = 4;
+  optional string prize_pool_description = 5;
+  optional string prize_distribution_notes = 6;
+  optional string prize_disclaimer = 7;
+  optional string rules = 8;
+  string package_id = 9;
+  int32 max_participants = 10;
+  int64 registration_opens_at = 11;
+  int64 registration_closes_at = 12;
+  int64 starts_at = 13;
+  int64 ends_at = 14;
+  competitions.CompetitionStatus status = 15;
+  int64 created_at = 16;
+  int64 updated_at = 17;
+  int32 enrolled_count = 18;
+}
+
+message CompetitionPrizeTier {
+  string id = 1;
+  string competition_id = 2;
+  string place_label = 3;
+  string prize_label = 4;
+  int32 sort_order = 5;
+}
+
+message CompetitionEnrollment {
+  string id = 1;
+  string competition_id = 2;
+  string client_id = 3;
+  string trader_account_id = 4;
+  double profit_pct = 5;
+  bool is_disqualified = 6;
+  int64 enrolled_at = 7;
+}
+
+message LeaderboardEntry {
+  int32 rank = 1;
+  string client_id = 2;
+  string trader_account_id = 3;
+  double profit_pct = 4;
+  bool is_disqualified = 5;
+  int64 enrolled_at = 6;
+}
+
+// --- Competition CRUD ---
+
+message GetPaginatedCompetitionsRequest {
+  uint64 limit = 1;
+  int64 offset = 2;
+  optional competitions.CompetitionStatus status = 3;
+}
+
+message GetPaginatedCompetitionsResponse {
+  repeated competitions.Competition items = 1;
+  uint64 total = 2;
+}
+
+message GetCompetitionByIdRequest {
+  string id = 1;
+}
+
+message GetCompetitionByIdResponse {
+  competitions.Competition competition = 1;
+  repeated competitions.CompetitionPrizeTier prize_tiers = 2;
+}
+
+message SaveCompetitionRequest {
+  competitions.Competition competition = 1;
+  repeated competitions.CompetitionPrizeTier prize_tiers = 2;
+}
+
+message SaveCompetitionResponse {
+  competitions.Competition competition = 1;
+  repeated competitions.CompetitionPrizeTier prize_tiers = 2;
+}
+
+message DeleteCompetitionRequest {
+  string id = 1;
+}
+
+message SetCompetitionStatusRequest {
+  string id = 1;
+  competitions.CompetitionStatus status = 2;
+}
+
+message SetCompetitionStatusResponse {
+  competitions.Competition competition = 1;
+}
+
+// --- Enrollments ---
+
+message GetEnrollmentsRequest {
+  string competition_id = 1;
+  uint64 limit = 2;
+  int64 offset = 3;
+}
+
+message GetEnrollmentsResponse {
+  repeated competitions.CompetitionEnrollment enrollments = 1;
+  uint64 total = 2;
+}
+
+message EnrollClientRequest {
+  string competition_id = 1;
+  string client_id = 2;
+}
+
+message EnrollClientResponse {
+  competitions.CompetitionEnrollment enrollment = 1;
+}
+
+// --- Leaderboard ---
+
+message GetLeaderboardRequest {
+  string competition_id = 1;
+  uint64 limit = 2;
+  int64 offset = 3;
+}
+
+message GetLeaderboardResponse {
+  repeated competitions.LeaderboardEntry entries = 1;
+  uint64 total = 2;
+}
+
+service CompetitionsGrpcService {
+  // Competition management
+  rpc GetPaginated(competitions.GetPaginatedCompetitionsRequest) returns (competitions.GetPaginatedCompetitionsResponse);
+  rpc GetById(competitions.GetCompetitionByIdRequest) returns (competitions.GetCompetitionByIdResponse);
+  rpc Save(competitions.SaveCompetitionRequest) returns (competitions.SaveCompetitionResponse);
+  rpc Delete(competitions.DeleteCompetitionRequest) returns (google.protobuf.Empty);
+  rpc SetStatus(competitions.SetCompetitionStatusRequest) returns (competitions.SetCompetitionStatusResponse);
+
+  // Enrollment
+  rpc GetEnrollments(competitions.GetEnrollmentsRequest) returns (competitions.GetEnrollmentsResponse);
+  rpc Enroll(competitions.EnrollClientRequest) returns (competitions.EnrollClientResponse);
+
+  // Leaderboard
+  rpc GetLeaderboard(competitions.GetLeaderboardRequest) returns (competitions.GetLeaderboardResponse);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
