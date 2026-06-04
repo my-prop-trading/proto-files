@@ -20,7 +20,7 @@ message Certificate {
   string client_id = 4;
   optional string tx_id = 5;
   optional string trader_account_id = 6;
-  int64 updatedAt = 7;
+  int64 updated_at = 7;
 }
 
 message CertificateTemplate {
