@@ -10,7 +10,63 @@ message CancelSubscriptionGrpcRequest {
     string ip = 3;
 }
 
+// SolidGate "Manage webhooks" endpoint. Status is "active" | "inactive".
+// created_at / updated_at use SolidGate's "YYYY-MM-DD HH:MM:SS" format.
+message SolidGateWebhookEndpointGrpcModel {
+    string id = 1;
+    string url = 2;
+    repeated string event_types = 3;
+    string name = 4;
+    string status = 5;
+    string created_at = 6;
+    string updated_at = 7;
+}
+
+message CreateWebhookEndpointGrpcRequest {
+    string url = 1;
+    repeated string event_types = 2;
+    optional string name = 3;
+    optional string status = 4; // active|inactive; omitted → SolidGate default (active)
+}
+
+message CreateWebhookEndpointGrpcResponse {
+    SolidGateWebhookEndpointGrpcModel endpoint = 1;
+}
+
+message ListWebhookEndpointsGrpcRequest {
+    optional string filter_id = 1;
+    optional int64 limit = 2;
+    optional int64 offset = 3;
+}
+
+message ListWebhookEndpointsGrpcResponse {
+    repeated SolidGateWebhookEndpointGrpcModel endpoints = 1;
+    int64 total_count = 2;
+}
+
+// Partial update. Unset optional fields are left unchanged.
+// event_types: a non-empty list replaces the current list; an empty list leaves it unchanged.
+message UpdateWebhookEndpointGrpcRequest {
+    string id = 1;
+    optional string url = 2;
+    repeated string event_types = 3;
+    optional string name = 4;
+    optional string status = 5;
+}
+
+message UpdateWebhookEndpointGrpcResponse {
+    SolidGateWebhookEndpointGrpcModel endpoint = 1;
+}
+
+message DeleteWebhookEndpointGrpcRequest {
+    string id = 1;
+}
+
 service SolidGateBridgeGrpcService {
     rpc CancelSubscription(CancelSubscriptionGrpcRequest) returns (google.protobuf.Empty);
+    rpc CreateWebhookEndpoint(CreateWebhookEndpointGrpcRequest) returns (CreateWebhookEndpointGrpcResponse);
+    rpc ListWebhookEndpoints(ListWebhookEndpointsGrpcRequest) returns (ListWebhookEndpointsGrpcResponse);
+    rpc UpdateWebhookEndpoint(UpdateWebhookEndpointGrpcRequest) returns (UpdateWebhookEndpointGrpcResponse);
+    rpc DeleteWebhookEndpoint(DeleteWebhookEndpointGrpcRequest) returns (google.protobuf.Empty);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
