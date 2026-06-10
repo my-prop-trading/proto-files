@@ -95,6 +95,30 @@ message GetTradingMetricsGrpcResponse {
   TradingMetricsGrpcModel item = 1;
 }
 
+message AccountPeaksGrpcModel {
+  string trader_account_id = 1;
+  int64 updated_at = 2;
+  double high_balance = 3;
+  double low_equity_after_high_balance = 4;
+  double high_max_overall_loss_recorded = 5;
+  double best_day_profit = 6;
+  int64 best_day_date = 7;
+  int32 exposure_loss_soft_breach_count = 8;
+  double last_low_exposure_pnl = 9;
+  int32 margin_rule_soft_breaches = 10;
+  int32 margin_rule_idea_soft_breaches = 11;
+  optional int64 exposure_loss_last_soft_breach_at = 12;
+  optional int64 margin_rule_last_soft_breach_at = 13;
+}
+
+message GetAccountPeaksGrpcRequest {
+  string TraderAccountId = 1;
+}
+
+message GetAccountPeaksGrpcResponse {
+  AccountPeaksGrpcModel item = 1;
+}
+
 message FailTradingObjectiveGrpcRequest {
   string TraderAccountId = 1;
   TradingObjectiveFailReasonGrpc fail_reason = 2;
@@ -318,6 +342,7 @@ message GetOpenTradesGrpcResponse {
 
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
+  rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
   rpc FailTradingObjective(FailTradingObjectiveGrpcRequest) returns (FailTradingObjectiveGrpcResponse);
   rpc PassTradingObjective(PassTradingObjectiveGrpcRequest) returns (PassTradingObjectiveGrpcResponse);
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
