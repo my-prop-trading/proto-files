@@ -37,6 +37,11 @@ enum TradingPackageCompensationType {
     FREE_PACKAGE = 1;
 }
 
+enum DrawdownType {
+    STATIC = 0;
+    TRAILING = 1;
+}
+
 message TraderPackage {
   string Id = 1;
   string Title = 2;
@@ -110,6 +115,7 @@ message TraderPackage {
   double MarginRuleIdeaHardCapPercent = 76;
   int32 MarginRuleIdeaSoftBreachCount = 77;
   optional int32 MinTradingDays = 78;
+  trader_packages.DrawdownType DrawdownType = 79;
 }
 
 message PlatformGroup {
