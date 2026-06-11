@@ -72,6 +72,8 @@ message TradingMetricsGrpcModel {
   double avg_duration_sec = 41;
   double sharpe_ratio = 42;
   double expectancy_ratio = 43;
+  double high_equity = 44;
+  int32 drawdown_type = 45;
 }
 
 enum BestDayRuleStatusGrpc {
@@ -109,6 +111,7 @@ message AccountPeaksGrpcModel {
   int32 margin_rule_idea_soft_breaches = 11;
   optional int64 exposure_loss_last_soft_breach_at = 12;
   optional int64 margin_rule_last_soft_breach_at = 13;
+  double high_equity = 14;
 }
 
 message GetAccountPeaksGrpcRequest {
