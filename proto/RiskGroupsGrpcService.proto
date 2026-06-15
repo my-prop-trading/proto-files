@@ -1,0 +1,176 @@
+syntax = "proto3";
+package risk_groups;
+
+import "google/protobuf/empty.proto";
+
+// ===================== Override sections =====================
+// Presence of a section message = "configured" (fully replaces the package
+// values for that rule). Absence = fall through to the trading package default.
+
+message ExposureLossOverride {
+  bool enabled = 1;            // on/off of the rule itself (may enable a package-disabled rule)
+  double soft_breach_cap = 2;
+  double hard_breach_cap = 3;
+  int32 soft_breach_count = 4;
+  int32 timer_secs = 5;
+}
+
+message MarginRuleOverride {
+  bool enabled = 1;            // on/off of the rule itself
+  double soft_cap_percent = 2;
+  double hard_cap_percent = 3;
+  int32 soft_breach_count = 4;
+  double idea_soft_cap_percent = 5;
+  double idea_hard_cap_percent = 6;
+  int32 idea_soft_breach_count = 7;
+  int32 idea_timer_secs = 8;
+}
+
+message PayoutOverride {
+  double min_amount = 1;
+  double max_amount = 2;
+  double limit_profit_percent = 3;  // == PayoutSettings.excessive_profit_percent
+}
+
+// ===================== Entities =====================
+
+message RiskGroup {
+  string id = 1;                          // empty on create
+  string name = 2;                        // unique
+  string description = 3;
+  ExposureLossOverride exposure_loss = 4; // absent = section not configured
+  MarginRuleOverride margin_rule = 5;     // absent = section not configured
+  PayoutOverride payout = 6;              // absent = section not configured
+  int64 created_at = 7;
+  int64 updated_at = 8;
+  int32 assigned_count = 9;               // derived (for "Users assigned" column); ignored on write
+}
+
+message RiskGroupAssignment {
+  string id = 1;
+  string client_id = 2;
+  string risk_group_id = 3;
+  string assigned_by = 4;
+  int64 assigned_at = 5;
+}
+
+// Resolved overrides for a single client. Each section absent = not overridden
+// (caller uses the trading package default for that rule).
+message RiskOverride {
+  ExposureLossOverride exposure_loss = 1;
+  MarginRuleOverride margin_rule = 2;
+  PayoutOverride payout = 3;
+  string risk_group_id = 4;               // empty if the client is in no group
+}
+
+// ===================== Errors =====================
+// On success the `error` field of a response is absent (None). On failure it is
+// set and the payload field is left at its default.
+
+enum RiskGroupsError {
+  RISK_GROUPS_ERROR_UNKNOWN = 0;
+  RISK_GROUPS_ERROR_GROUP_NOT_FOUND = 1;
+  RISK_GROUPS_ERROR_NAME_ALREADY_EXISTS = 2;
+  RISK_GROUPS_ERROR_GROUP_HAS_ASSIGNMENTS = 3;   // delete blocked while users assigned
+  RISK_GROUPS_ERROR_ASSIGNMENT_NOT_FOUND = 4;
+  RISK_GROUPS_ERROR_INVALID_OVERRIDE = 5;        // validation (e.g. hard cap <= soft cap)
+}
+
+message RiskGroupsErrorWithMessage {
+  RiskGroupsError error = 1;
+  string message = 2;
+}
+
+// ===================== Group management =====================
+
+message GetGroupsRequest {}
+
+message GetGroupsResponse {
+  repeated RiskGroup groups = 1;
+}
+
+message GetGroupRequest {
+  string id = 1;
+}
+
+message GetGroupResponse {
+  RiskGroup group = 1;                    // absent on error
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+message SetGroupRequest {
+  RiskGroup group = 1;  // id empty = create, id set = update
+}
+
+message SetGroupResponse {
+  RiskGroup group = 1;                    // the saved group; absent on error
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+message DeleteGroupRequest {
+  string id = 1;
+}
+
+message DeleteGroupResponse {
+  bool deleted = 1;
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+// ===================== Assignment management =====================
+
+message GetAssignmentsRequest {
+  uint32 limit = 1;
+  uint32 offset = 2;
+  repeated string risk_group_ids = 3;  // optional filter
+}
+
+message GetAssignmentsResponse {
+  repeated RiskGroupAssignment assignments = 1;
+}
+
+// Assigns a client to a group. One group per client — replaces the existing
+// assignment if the client already belongs to a group.
+message AssignUserRequest {
+  string client_id = 1;
+  string risk_group_id = 2;
+  string assigned_by = 3;
+}
+
+message AssignUserResponse {
+  RiskGroupAssignment assignment = 1;     // absent on error
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+message RemoveAssignmentRequest {
+  string client_id = 1;
+}
+
+message RemoveAssignmentResponse {
+  bool removed = 1;
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+// ===================== Resolution (internal) =====================
+
+message GetRiskOverrideRequest {
+  string client_id = 1;
+}
+
+message GetRiskOverrideResponse {
+  RiskOverride override = 1;  // absent = client is in no group
+}
+
+service RiskGroupsGrpcService {
+  rpc GetGroups(GetGroupsRequest) returns (GetGroupsResponse);
+  rpc GetGroup(GetGroupRequest) returns (GetGroupResponse);
+  rpc SetGroup(SetGroupRequest) returns (SetGroupResponse);
+  rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
+
+  rpc GetAssignments(GetAssignmentsRequest) returns (GetAssignmentsResponse);
+  rpc AssignUser(AssignUserRequest) returns (AssignUserResponse);
+  rpc RemoveAssignment(RemoveAssignmentRequest) returns (RemoveAssignmentResponse);
+
+  rpc GetRiskOverride(GetRiskOverrideRequest) returns (GetRiskOverrideResponse);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
