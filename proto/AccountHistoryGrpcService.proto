@@ -18,6 +18,15 @@ enum AccountType {
   LIVE = 1;
 }
 
+enum CloseReason {
+  CLOSE_REASON_UNKNOWN = 0;
+  CLOSE_REASON_MANUAL = 1;
+  CLOSE_REASON_STOP_LOSS = 2;
+  CLOSE_REASON_TAKE_PROFIT = 3;
+  CLOSE_REASON_STOP_OUT = 4;
+  CLOSE_REASON_OTHER = 5;
+}
+
 message GetTradesPageRequest {
   uint64 Limit = 1;
   uint64 Offset = 2;
@@ -53,6 +62,7 @@ message AccountTradeModel {
   AccountType AccountType = 23;
   string ClientId = 24;
   double UsedMargin = 25;
+  CloseReason CloseReason = 26;
 }
 
 message GetByTraderAccountIdRequest {

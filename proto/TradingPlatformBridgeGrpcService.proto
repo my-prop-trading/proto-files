@@ -212,6 +212,15 @@ enum TradeType {
   Credit = 7;
 }
 
+enum CloseReason {
+  CLOSE_REASON_UNKNOWN = 0;
+  CLOSE_REASON_MANUAL = 1;
+  CLOSE_REASON_STOP_LOSS = 2;
+  CLOSE_REASON_TAKE_PROFIT = 3;
+  CLOSE_REASON_STOP_OUT = 4;
+  CLOSE_REASON_OTHER = 5;
+}
+
 message AccountTradeModel {
   string Id = 1; // order ticket
   string PlatformAccountId = 2; // owner's login
@@ -232,6 +241,7 @@ message AccountTradeModel {
   string Comment = 17; // comment
   int64 Timestamp = 18; // timestamp
   double UsedMargin = 19; // used margin per position (0 for closed trades)
+  CloseReason CloseReason = 20; // what triggered the close (manual / SL / TP / stop-out / other)
 }
 
 message GetTimeRequest {
