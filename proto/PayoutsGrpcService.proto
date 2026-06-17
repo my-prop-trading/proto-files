@@ -117,6 +117,7 @@ enum PayoutRestriction {
     TradingNotStarted = 4;
     AccountDisabled = 5;
     PayoutAlreadyRequested = 6;
+    MIN_TRADING_NOT_MET = 7;
 }
 
 message GetByClientIdRequest {
