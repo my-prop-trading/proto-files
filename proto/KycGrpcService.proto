@@ -230,6 +230,8 @@ message GetContractorsRequest {
     optional string ClientId = 3;
     optional int64 FromDate = 4;
     optional int64 ToDate = 5;
+    optional kyc.ContractStatus Status = 6;
+    optional kyc.ContractSignStatus SignStatus = 7;
 }
 
 enum ContractStatus {
