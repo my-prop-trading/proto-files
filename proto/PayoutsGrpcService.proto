@@ -161,6 +161,25 @@ message GetProfitWidgetResponse {
     }
 }
 
+message GetResolvedPayoutTermsRequest {
+    string TraderAccountId = 1;
+}
+
+message ResolvedPayoutTerms {
+    double revenue_share_percentage = 1;
+    int64 first_payout_in_days = 2;
+    int64 first_payout_in_minutes = 3;
+    int64 further_payouts_in_days = 4;
+    int64 further_payouts_in_minutes = 5;
+}
+
+message GetResolvedPayoutTermsResponse {
+    oneof Response {
+        ResolvedPayoutTerms Terms = 1;
+        PayoutsGrpcServiceError Error = 2;
+    }
+}
+
 message GetByFiltersRequest {
     optional string ClientId = 1;
     optional string TraderAccountId = 2;
@@ -427,6 +446,7 @@ service PayoutsGrpcService {
     rpc DeclinePayout(DeclinePayoutRequest) returns (DeclinePayoutResponse);
 
     rpc GetProfitWidget(GetProfitWidgetRequest) returns (GetProfitWidgetResponse);
+    rpc GetResolvedPayoutTerms(GetResolvedPayoutTermsRequest) returns (GetResolvedPayoutTermsResponse);
     rpc GetPayoutsStatistic(GetPayoutsStatisticRequest) returns (GetPayoutsStatisticResponse);
     rpc GetPayoutsStatisticForClient(GetPayoutsStatisticForClientRequest) returns (GetPayoutsStatisticForClientResponse);
 
