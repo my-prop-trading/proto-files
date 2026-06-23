@@ -59,6 +59,20 @@ message KycBridgePersonalDataModel {
     optional string LastName = 2;
     optional int64 DateOfBirth = 3;
     optional string CountryOfResidence = 4;
+    optional string Email = 5;
+    optional KycBridgeAddressModel Address = 6;
+}
+
+message KycBridgeAddressModel {
+    optional string Country = 1;
+    optional string PostCode = 2;
+    optional string Town = 3;
+    optional string Street = 4;
+    optional string SubStreet = 5;
+    optional string State = 6;
+    optional string BuildingName = 7;
+    optional string BuildingNumber = 8;
+    optional string FlatNumber = 9;
 }
 
 enum KycBridgeDocumentStatus
