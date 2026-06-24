@@ -2,25 +2,32 @@ syntax = "proto3";
 package boldsign_bridge;
 import "google/protobuf/empty.proto";
 
-// One template form field to pre-fill, keyed by the template's field id.
-message BoldSignFormFieldGrpcModel {
-    string id = 1;
-    string value = 2;
-}
-
-// Send a contract to the trader from an existing BoldSign template, pre-filling its form
-// fields. The trader is the only signing party — bound to the template's role 1.
+// Send the InstantFunding contract to a trader from the configured BoldSign template.
+// The bridge owns the template id and the mapping of each business value to the template's
+// form-field ids; callers pass only the resolved business data. The trader is the only
+// signing party — bound to the template's role 1.
 message SendContractGrpcRequest {
-    string template_id = 1;
-    string signer_name = 2;
-    string signer_email = 3;
-    repeated BoldSignFormFieldGrpcModel fields = 4;
-    // Optional overrides; when unset the template's own configuration applies.
-    optional string title = 5;
-    optional string message = 6;
-    repeated string labels = 7;
-    optional string brand_id = 8;
-    optional bool disable_emails = 9;
+    // Signer — the trader who receives and signs the contract.
+    string signer_name = 1;
+    string signer_email = 2;
+
+    // Contract variables, already resolved/formatted by the caller. An unset field — or one
+    // whose template field id is not configured on the bridge — is simply not written into
+    // the document (never sent with a placeholder value).
+    optional string full_name = 3;
+    optional string address = 4;
+    optional string document_id = 5;
+    optional string profit_split = 6;
+    optional string payout_window = 7;
+    optional string daily_loss = 8;
+    optional string max_loss = 9;
+
+    // Optional document-level overrides; when unset the template's own configuration applies.
+    optional string title = 10;
+    optional string message = 11;
+    repeated string labels = 12;
+    optional string brand_id = 13;
+    optional bool disable_emails = 14;
 }
 
 message SendContractGrpcResponse {
