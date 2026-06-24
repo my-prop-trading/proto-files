@@ -116,6 +116,8 @@ message TraderPackage {
   int32 MarginRuleIdeaSoftBreachCount = 77;
   optional int32 MinTradingDays = 78;
   trader_packages.DrawdownType DrawdownType = 79;
+  bool FairShotEnabled = 80;
+  double FairShotThresholdPct = 81;
 }
 
 message PlatformGroup {
