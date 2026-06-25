@@ -114,6 +114,7 @@ message AccountPeaksGrpcModel {
   optional int64 exposure_loss_last_soft_breach_at = 12;
   optional int64 margin_rule_last_soft_breach_at = 13;
   double high_equity = 14;
+  double balance_peak = 15;
 }
 
 message GetAccountPeaksGrpcRequest {
