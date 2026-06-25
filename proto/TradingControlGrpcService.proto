@@ -74,6 +74,8 @@ message TradingMetricsGrpcModel {
   double expectancy_ratio = 43;
   double high_equity = 44;
   int32 drawdown_type = 45;
+  double max_profit_pct = 46;
+  double progress_pass_pct = 47;
 }
 
 enum BestDayRuleStatusGrpc {
