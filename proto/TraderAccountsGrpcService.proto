@@ -111,6 +111,8 @@ message TraderAccount {
     int32 MarginRuleIdeaSoftBreachCount = 94;
     optional int32 MinTradingDays = 95;
     trader_packages.DrawdownType DrawdownType = 96;
+    bool FairShotEnabled = 97;
+    double FairShotThresholdPct = 98;
 }
 
 enum AccountLifeTimeType {
