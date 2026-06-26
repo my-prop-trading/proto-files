@@ -256,6 +256,9 @@ enum OrdersError {
   FailedToUpdateLifetime = 8;
   InvalidDiscountCodeMustBeFirstPayn = 9;
   InvalidDiscountCodeMustBeNextPayn = 10;
+  // Fair Shot (PROP25-2225)
+  FairShotAlreadyGranted = 11;        // this purchase already produced a Fair Shot grant
+  FairShotChainingNotAllowed = 12;    // the source order is itself a Fair Shot grant
 }
 
 message GetPayinsPaginatedRequest {
@@ -363,6 +366,10 @@ message CreatePaidTraderAccountOrderRequest {
   bool is_first_purchase = 12;
   optional string psp_order_id = 13;
   optional PaymentProvider payment_provider = 14;
+  // Fair Shot (PROP25-2225): id of the originating order. Set only for Fair Shot
+  // grants so the orders side can enforce once-per-purchase and no-chaining
+  // against the source order. Empty for all other order creations.
+  optional string source_order_id = 15;
 }
 
 message CreatePaidTraderAccountOrderResponse {
