@@ -192,6 +192,7 @@ message ProofModel {
     int64 UpdatedAt = 13;
     string Brand = 14;
     ProviderType Provider = 15;
+    bool IsManual = 16;
 }
 
 message GetProofsOfIdentityRequest {
