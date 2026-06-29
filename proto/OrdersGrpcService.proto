@@ -273,6 +273,7 @@ message GetPayinsPaginatedRequest {
   optional string TraderAggregatedId = 9;
   optional bool IsFirstPayin = 10;
   optional string affiliate_id = 11;
+  optional string PaymentMethodTitle = 12;
 }
 
 
