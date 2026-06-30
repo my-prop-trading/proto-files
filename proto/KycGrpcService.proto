@@ -258,6 +258,8 @@ message ContractorModel {
     int64 ContractId = 13;
     optional kyc.ContractSignStatus SignStatus = 14;
     string Id = 15;
+    int32 SendAttemptNo = 16;
+    optional int64 LastSendAttemptAt = 17;
 }
     
 message ContractorCommentModel {
