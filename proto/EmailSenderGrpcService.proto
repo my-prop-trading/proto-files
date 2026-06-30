@@ -203,6 +203,12 @@ message SendPaymentReceivedRequest{
     string TraderPackagesName = 3;
 }
 
+message SendFairShotGrantedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+}
+
 message SendInstantPaymentReceivedKycRequired {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -347,6 +353,7 @@ service EmailSenderGrpcService {
         email_sender.SendServiceDeniedDueToViolationOfOurTermsAndCondFutureAndCurrentProfitBlockedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
+    rpc SendFairShotGranted(email_sender.SendFairShotGrantedRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
 
