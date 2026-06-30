@@ -113,6 +113,7 @@ message TraderAccount {
     trader_packages.DrawdownType DrawdownType = 96;
     bool FairShotEnabled = 97;
     double FairShotThresholdPct = 98;
+    bool IsFairShot = 99;
 }
 
 enum AccountLifeTimeType {
@@ -351,6 +352,7 @@ message CreatePaidTraderAccountRequest {
 
   optional double RefundGrantedByManager = 22;
   optional string AggregatedId = 23;
+  bool IsFairShot = 24;
 }
 
 message CreatePaidTraderAccountResponse{
