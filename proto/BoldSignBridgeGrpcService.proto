@@ -28,6 +28,9 @@ message SendContractGrpcRequest {
     repeated string labels = 12;
     optional string brand_id = 13;
     optional bool disable_emails = 14;
+
+    // Caller's client id — carried for log context only; not written into the document.
+    string client_id = 15;
 }
 
 message SendContractGrpcResponse {
