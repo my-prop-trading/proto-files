@@ -205,6 +205,17 @@ message TopTradingMetricsGrpcResponse {
   repeated TradingMetricsGrpcModel items = 1;
 }
 
+// Batch metrics for a specific set of accounts (competition leaderboard /
+// enrollment list). Unlike TopTradingMetrics (top-N across all), this returns
+// metrics for exactly the requested account ids.
+message GetTradingMetricsByAccountIdsGrpcRequest {
+  repeated string trader_account_ids = 1;
+}
+
+message GetTradingMetricsByAccountIdsGrpcResponse {
+  repeated TradingMetricsGrpcModel items = 1;
+}
+
 message InactivityItemGrpcModel {
   string trader_account_id = 1;
   string client_id = 2;
@@ -407,6 +418,7 @@ service TradingControlGrpcService {
   rpc GetAccountCandles(GetAccountCandlesGrpcRequest) returns (GetAccountCandlesGrpcResponse);
   rpc GetTotalNetProfit(GetTotalNetProfitGrpcRequest) returns (GetTotalNetProfitGrpcResponse);
   rpc TopTradingMetrics(TopTradingMetricsGrpcRequest) returns (TopTradingMetricsGrpcResponse);
+  rpc GetTradingMetricsByAccountIds(GetTradingMetricsByAccountIdsGrpcRequest) returns (GetTradingMetricsByAccountIdsGrpcResponse);
   rpc GetInactivityReport(GetInactivityReportGrpcRequest) returns (GetInactivityReportGrpcResponse);
   rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
   rpc GetTradesMetrics(GetTradesMetricsGrpcRequest) returns (GetTradesMetricsGrpcResponse);
