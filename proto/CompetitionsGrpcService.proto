@@ -144,6 +144,10 @@ message GetLeaderboardRequest {
   string competition_id = 1;
   uint64 limit = 2;
   int64 offset = 3;
+  // Set from the token at the REST facade for authenticated calls; empty for
+  // anonymous. Used to mark the caller's row (is_current_user) — resolved per
+  // request, not stored in the cache.
+  optional string caller_client_id = 4;
 }
 
 message GetLeaderboardResponse {
