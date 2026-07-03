@@ -118,6 +118,10 @@ message GetEnrollmentsResponse {
 message EnrollClientRequest {
   string competition_id = 1;
   string client_id = 2;
+  // Brand comes from the request context at the REST facade (get_brand_id),
+  // like client_id — the internal gRPC call must receive it explicitly to
+  // create the trader-account order under the right brand.
+  string brand = 3;
 }
 
 message EnrollClientResponse {
