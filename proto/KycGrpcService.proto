@@ -260,6 +260,7 @@ message ContractorModel {
     string Id = 15;
     int32 SendAttemptNo = 16;
     optional int64 LastSendAttemptAt = 17;
+    optional string ExternalDocumentId = 18;
 }
     
 message ContractorCommentModel {
