@@ -49,6 +49,10 @@ message Competition {
   // caller participates.
   optional competitions.EnrollmentStatus enrollment_status = 19;
   optional competitions.MyCompetitionResult my_result = 20;
+  // Prize preview shown on both the list card and the detail page (per Figma).
+  // Ordered by sort_order, same shape as GetById's prize_tiers. Empty when the
+  // competition has no tiers.
+  repeated competitions.CompetitionPrizeTier prize_tiers = 21;
 }
 
 message CompetitionPrizeTier {
@@ -167,6 +171,33 @@ message EnrollClientResponse {
   competitions.CompetitionEnrollment enrollment = 1;
 }
 
+// --- My enrollment (client area: GET /competitions/:id/my-enrollment) ---
+
+message GetMyEnrollmentRequest {
+  string competition_id = 1;
+  string client_id = 2;
+}
+
+// Present only once the account is provisioned (enrollment Active). Mirrors the
+// contract's `activeResult` block. Absent while Pending (account still being
+// created). rank/profit_pct are absent for a disqualified participant.
+message MyEnrollmentActiveResult {
+  string trader_account_id = 1;
+  optional int32 rank = 2;
+  optional double profit_pct = 3;
+  bool is_disqualified = 4;
+  // Total participants in the competition (= enrolled_count) — for "#7 of N".
+  int32 total_participants = 5;
+}
+
+message GetMyEnrollmentResponse {
+  // NotEnrolled/Pending/Active. `active_result` is set only for Active.
+  competitions.EnrollmentStatus enrollment_status = 1;
+  // enrolled_at is 0 when the caller is not enrolled.
+  int64 enrolled_at = 2;
+  optional competitions.MyEnrollmentActiveResult active_result = 3;
+}
+
 // --- Leaderboard ---
 
 message GetLeaderboardRequest {
@@ -195,6 +226,7 @@ service CompetitionsGrpcService {
   // Enrollment
   rpc GetEnrollments(competitions.GetEnrollmentsRequest) returns (competitions.GetEnrollmentsResponse);
   rpc Enroll(competitions.EnrollClientRequest) returns (competitions.EnrollClientResponse);
+  rpc GetMyEnrollment(competitions.GetMyEnrollmentRequest) returns (competitions.GetMyEnrollmentResponse);
 
   // Leaderboard
   rpc GetLeaderboard(competitions.GetLeaderboardRequest) returns (competitions.GetLeaderboardResponse);
