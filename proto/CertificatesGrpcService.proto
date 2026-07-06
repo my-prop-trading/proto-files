@@ -178,9 +178,28 @@ message SetStatisticsSettingsResponse {
   certificates.StatisticsSettings settings = 1;
 }
 
+// ===== Trader Card: per-type summary for a trader (grouped by CertificateType) =====
+
+message GetCertificatesSummaryRequest {
+  string client_id = 1;
+}
+
+message CertificatesSummaryItem {
+  certificates.CertificateType type = 1;
+  string label = 2;          // human-readable per-type label, resolved server-side
+  uint32 count = 3;          // how many certificates of this type the trader holds
+  string thumbnail_url = 4;  // {base_url}/{id}.html of a representative certificate of this type
+}
+
+message GetCertificatesSummaryResponse {
+  repeated CertificatesSummaryItem items = 1;
+  uint32 grand_total = 2;   // total across all types
+}
+
 service CertificatesGrpcService {
   //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
+  rpc GetCertificatesSummary(certificates.GetCertificatesSummaryRequest) returns (certificates.GetCertificatesSummaryResponse);
   rpc GetResource(certificates.GetResourceRequest) returns (stream certificates.GetResourceResponse);
   rpc CreateCertificate(CreateCertificateRequest) returns (certificates.CreateCertificateResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);

@@ -346,6 +346,59 @@ message GetOpenTradesGrpcResponse {
   repeated OpenTradeGrpc items = 1;
 }
 
+// ===== Trader Card (per-trader, lifetime across ALL of the trader's accounts) =====
+
+message GetTraderCardGrpcRequest {
+  string client_id = 1;
+}
+
+message TraderCardCoreGrpc {
+  double total_capital = 1;         // sum(initial_balance), one per purchase (dedup by aggregated_id)
+  uint32 total_accounts = 2;        // count of all account records (each phase counts once)
+  double avg_trades_per_day = 3;    // total_closed_trades / distinct trade days (UTC)
+  string most_traded_symbol = 4;    // symbol with the most closed trades
+  double lifetime_win_rate = 5;     // wins / total_closed, 0..1
+  double profit_factor = 6;         // sum(net>0) / |sum(net<0)|
+  double max_profit_per_trade = 7;  // highest net_profit on a single trade
+  uint32 best_win_streak = 8;       // longest run of consecutive wins, chronological across accounts
+}
+
+message TraderCardFundedGrpc {
+  bool unlocked = 1;                // ever earned >=1 funded (live) account; permanent
+  double funded_capital = 2;        // sum(initial_balance) of live accounts (dedup by aggregated_id)
+  uint32 total_days_funded = 3;     // distinct calendar days holding >=1 funded account (UTC)
+  // payouts_count / total_payout / highest_payout come from the payouts service, joined in the REST layer
+}
+
+message HighlightedTradeGrpc {
+  double net_profit = 1;            // profit + fee + swap
+  double account_size = 2;          // initial_balance of the trade's account
+  int32 account_type = 3;           // 0 = demo, 1 = live
+  string account_title = 4;         // TraderAccount.Title (package/challenge title)
+  int64 duration_sec = 5;           // close - open, seconds
+  string symbol = 6;
+  TradeSideGrpc side = 7;
+  int64 close_date = 8;             // unix microseconds
+  double volume = 9;                // lots
+}
+
+message GetTraderCardGrpcResponse {
+  TraderCardCoreGrpc core = 1;
+  TraderCardFundedGrpc funded = 2;
+  repeated HighlightedTradeGrpc highlighted = 3;   // top-N preview
+}
+
+message GetHighlightedTradesGrpcRequest {
+  string client_id = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
+}
+
+message GetHighlightedTradesGrpcResponse {
+  repeated HighlightedTradeGrpc items = 1;
+  uint32 total = 2;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -358,6 +411,9 @@ service TradingControlGrpcService {
   rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
   rpc GetTradesMetrics(GetTradesMetricsGrpcRequest) returns (GetTradesMetricsGrpcResponse);
   rpc GetOpenTrades(GetOpenTradesGrpcRequest) returns (GetOpenTradesGrpcResponse);
+
+  rpc GetTraderCard(GetTraderCardGrpcRequest) returns (GetTraderCardGrpcResponse);
+  rpc GetHighlightedTrades(GetHighlightedTradesGrpcRequest) returns (GetHighlightedTradesGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
