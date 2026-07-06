@@ -209,6 +209,15 @@ message SendFairShotGrantedRequest{
     string TraderPackagesName = 3;
 }
 
+// Competition enrollment confirmation (PROP25-2151). Sent when the demo account
+// is provisioned for an enrollment. Destination + ClientId only — content (and
+// any merge fields) is owned by the marketer's SendGrid template; no credentials
+// are carried by email.
+message SendCompetitionEnrolledRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 message SendInstantPaymentReceivedKycRequired {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -354,6 +363,7 @@ service EmailSenderGrpcService {
 
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendFairShotGranted(email_sender.SendFairShotGrantedRequest) returns (email_sender.EmailSentResponse);
+    rpc SendCompetitionEnrolled(email_sender.SendCompetitionEnrolledRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
 
