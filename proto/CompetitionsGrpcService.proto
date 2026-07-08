@@ -122,6 +122,34 @@ message GetCompetitionByIdResponse {
   repeated competitions.CompetitionPrizeTier prize_tiers = 2;
 }
 
+// --- Client-area reads (distinct types; server excludes Draft) ---
+// Same fields as the BO reads, but separate messages so the generated gRPC
+// client emits distinct trait impls (reusing the BO types collides).
+
+message GetPublicCompetitionsRequest {
+  uint64 limit = 1;
+  int64 offset = 2;
+  // Set from the token at the REST facade; enriches enrollment_status/my_result.
+  optional string caller_client_id = 3;
+  // ?participated=true — only the caller's competitions (requires caller_client_id).
+  bool participated_only = 4;
+}
+
+message GetPublicCompetitionsResponse {
+  repeated competitions.Competition items = 1;
+  uint64 total = 2;
+}
+
+message GetPublicCompetitionByIdRequest {
+  string id = 1;
+  optional string caller_client_id = 2;
+}
+
+message GetPublicCompetitionByIdResponse {
+  competitions.Competition competition = 1;
+  repeated competitions.CompetitionPrizeTier prize_tiers = 2;
+}
+
 message SaveCompetitionRequest {
   competitions.Competition competition = 1;
   repeated competitions.CompetitionPrizeTier prize_tiers = 2;
@@ -223,10 +251,11 @@ service CompetitionsGrpcService {
   rpc Delete(competitions.DeleteCompetitionRequest) returns (google.protobuf.Empty);
   rpc SetStatus(competitions.SetCompetitionStatusRequest) returns (competitions.SetCompetitionStatusResponse);
 
-  // Client area (REST facade) — NEVER returns Draft. Same request/response
-  // shapes as the BO reads; the difference is the server excludes Draft.
-  rpc GetPublicCompetitions(competitions.GetPaginatedCompetitionsRequest) returns (competitions.GetPaginatedCompetitionsResponse);
-  rpc GetPublicCompetitionById(competitions.GetCompetitionByIdRequest) returns (competitions.GetCompetitionByIdResponse);
+  // Client area (REST facade) — NEVER returns Draft. Distinct request/response
+  // types (not reused from the BO reads) so the generated client emits separate
+  // trait impls; the server excludes Draft.
+  rpc GetPublicCompetitions(competitions.GetPublicCompetitionsRequest) returns (competitions.GetPublicCompetitionsResponse);
+  rpc GetPublicCompetitionById(competitions.GetPublicCompetitionByIdRequest) returns (competitions.GetPublicCompetitionByIdResponse);
 
   // Enrollment
   rpc GetEnrollments(competitions.GetEnrollmentsRequest) returns (competitions.GetEnrollmentsResponse);
