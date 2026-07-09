@@ -356,6 +356,24 @@ message GetOpenTradesGrpcResponse {
   repeated OpenTradeGrpc items = 1;
 }
 
+// Soft-breach counters for the client-facing "how many breaches / max before hard breach" notification.
+// Values are read live from the account trading state. Fields keep the `soft_breach` prefix so hard-breach
+// fields can be added later without ambiguity.
+message AccountBreachesGrpcModel {
+  bool exposure_loss_enabled = 1;
+  int32 exposure_loss_soft_breach_count = 2;
+  int32 exposure_loss_soft_breach_max = 3;
+  bool margin_rule_enabled = 4;
+  int32 margin_rule_soft_breach_count = 5;
+  int32 margin_rule_soft_breach_max = 6;
+}
+message GetAccountBreachesGrpcRequest {
+  string trader_account_id = 1;
+}
+message GetAccountBreachesGrpcResponse {
+  optional AccountBreachesGrpcModel item = 1;
+}
+
 // ===== Trader Card (per-trader, lifetime across ALL of the trader's accounts) =====
 
 message GetTraderCardGrpcRequest {
@@ -422,6 +440,7 @@ service TradingControlGrpcService {
   rpc GetTradeIdeas(GetTradeIdeasGrpcRequest) returns (GetTradeIdeasGrpcResponse);
   rpc GetTradesMetrics(GetTradesMetricsGrpcRequest) returns (GetTradesMetricsGrpcResponse);
   rpc GetOpenTrades(GetOpenTradesGrpcRequest) returns (GetOpenTradesGrpcResponse);
+  rpc GetAccountBreaches(GetAccountBreachesGrpcRequest) returns (GetAccountBreachesGrpcResponse);
 
   rpc GetTraderCard(GetTraderCardGrpcRequest) returns (GetTraderCardGrpcResponse);
   rpc GetHighlightedTrades(GetHighlightedTradesGrpcRequest) returns (GetHighlightedTradesGrpcResponse);
