@@ -322,6 +322,14 @@ message CalendarDayGrpc {
   double pnl = 3;
 }
 
+// One point of the by-trade chart: the running realized balance
+// (initial_balance + cumulative net profit of closed trades in close order).
+// The leading anchor point carries the initial balance at account start.
+message ChartPointGrpc {
+  int64 date = 1;      // unix microseconds, UTC (trade close time; anchor = first trade open)
+  double balance = 2;  // initial_balance + cumulative realized net profit
+}
+
 message OpenTradeGrpc {
   string ticket = 1;
   string symbol = 2;
@@ -346,6 +354,8 @@ message GetTradesMetricsGrpcResponse {
   repeated WeekdayAggregateGrpc weekdays = 3;
   repeated DurationAggregateGrpc durations = 4;
   repeated CalendarDayGrpc calendar = 5;
+  // By-trade chart: anchor at initial balance + last N closed-trade points.
+  repeated ChartPointGrpc points = 6;
 }
 
 message GetOpenTradesGrpcRequest {
