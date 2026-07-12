@@ -115,6 +115,18 @@ message CloseAllTradesResponse {
   int32 Count = 1;
 }
 
+message GetClosedTradesByCursorRequest {
+  string TraderAccountId = 1;
+  uint64 Limit = 2;
+  // Cursor: return closed trades with CloseTime strictly less than this (unix micros).
+  // Absent = newest page.
+  optional int64 BeforeCloseTime = 3;
+}
+
+message GetClosedTradesByCursorResponse {
+  repeated AccountTradeModel Items = 1;
+}
+
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
     rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
@@ -122,6 +134,7 @@ service AccountHistoryGrpcService {
     rpc InsertOrUpdate(InsertOrUpdateGrpcRequest) returns (InsertOrUpdateGrpcResponse);
     rpc CloseAll(CloseAllTradesRequest) returns (CloseAllTradesResponse);
     rpc GetTradesPage(GetTradesPageRequest) returns (GetTradesPageResponse);
+    rpc GetClosedTradesByCursor(GetClosedTradesByCursorRequest) returns (GetClosedTradesByCursorResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
