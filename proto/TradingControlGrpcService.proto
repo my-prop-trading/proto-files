@@ -356,6 +356,12 @@ message GetTradesMetricsGrpcResponse {
   repeated CalendarDayGrpc calendar = 5;
   // By-trade chart: anchor at initial balance + last N closed-trade points.
   repeated ChartPointGrpc points = 6;
+  // Clean per-trade sums/counts (no balance corrections). Sources for Account
+  // Review Net P/L, win rate, profit factor, R:R. From TradesMetrics.
+  double realised_net_win = 7;   // Σ net of winning closed trades
+  double realised_net_loss = 8;  // Σ net of losing closed trades (negative)
+  uint32 win_trades_count = 9;
+  uint32 loss_trades_count = 10;
 }
 
 message GetOpenTradesGrpcRequest {
