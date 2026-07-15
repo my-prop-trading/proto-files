@@ -10,6 +10,15 @@ message CancelSubscriptionGrpcRequest {
     string ip = 3;
 }
 
+// Restore a previously cancelled subscription. SolidGate requires the subscription to be in
+// `cancelled` status. The bridge sends only subscription_id (no expired_at override).
+message RestoreSubscriptionGrpcRequest {
+    string subscription_id = 1;
+    // Free-form audit reason carried to bridge logs/audit trail.
+    string reason = 2;
+    string ip = 3;
+}
+
 // SolidGate "Manage webhooks" endpoint. Status is "active" | "inactive".
 // created_at / updated_at use SolidGate's "YYYY-MM-DD HH:MM:SS" format.
 message SolidGateWebhookEndpointGrpcModel {
@@ -64,6 +73,7 @@ message DeleteWebhookEndpointGrpcRequest {
 
 service SolidGateBridgeGrpcService {
     rpc CancelSubscription(CancelSubscriptionGrpcRequest) returns (google.protobuf.Empty);
+    rpc RestoreSubscription(RestoreSubscriptionGrpcRequest) returns (google.protobuf.Empty);
     rpc CreateWebhookEndpoint(CreateWebhookEndpointGrpcRequest) returns (CreateWebhookEndpointGrpcResponse);
     rpc ListWebhookEndpoints(ListWebhookEndpointsGrpcRequest) returns (ListWebhookEndpointsGrpcResponse);
     rpc UpdateWebhookEndpoint(UpdateWebhookEndpointGrpcRequest) returns (UpdateWebhookEndpointGrpcResponse);
