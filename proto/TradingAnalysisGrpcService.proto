@@ -1,0 +1,189 @@
+syntax = "proto3";
+package trading_analysis;
+import "google/protobuf/empty.proto";
+
+// ─── snippet config (rule-engine tunables, backoffice-editable) ───────────────
+
+// One rule-engine snippet's tunable surface. `preview_text` is the code-owned
+// template (read-only in the backoffice — copy is never editable, PRD §4.7);
+// `enabled` and `thresholds_json` are what the backoffice may change.
+// `thresholds_json` is a JSON object of named thresholds, e.g.
+// {"ratio":3,"abs_floor_pct":2}; "{}" for always-on snippets with no threshold.
+message SnippetConfigItem {
+  int32 snippet_id = 1;
+  string snippet_key = 2;      // human-readable id, e.g. "c1_stop_discipline"
+  string preview_text = 3;     // template text, read-only
+  bool enabled = 4;
+  string thresholds_json = 5;
+}
+
+message GetSnippetsConfigResponse {
+  repeated SnippetConfigItem items = 1;
+}
+
+// One snippet's editable fields for a batch update.
+message SnippetConfigUpdate {
+  int32 snippet_id = 1;
+  bool enabled = 2;
+  string thresholds_json = 3;
+}
+
+// Batch update. All-or-nothing on VALIDATION: the whole set is validated first,
+// and if ANY item is invalid the request is rejected (invalid_argument) with
+// nothing written. Writes themselves are not transactional (no transaction on
+// this stack) — a DB failure partway through can leave earlier items committed.
+// Every write is an idempotent UPDATE-by-PK, so on an error reply the safe action
+// is to retry the whole batch.
+message UpdateSnippetsConfigRequest {
+  repeated SnippetConfigUpdate items = 1;
+}
+
+// ─── feature settings (service-level toggles) ─────────────────────────────────
+
+// A service-level flag, e.g. "feature_enabled", "ai_enabled".
+message FeatureSettingItem {
+  string key = 1;
+  bool enabled = 2;
+}
+
+message GetFeatureSettingsResponse {
+  repeated FeatureSettingItem items = 1;
+}
+
+message UpdateFeatureSettingsRequest {
+  repeated FeatureSettingItem items = 1;
+}
+
+// ─── account review (dashboard read) ──────────────────────────────────────────
+
+// Fetch one account's persisted review by trader account id. Read-only; the
+// dashboard (via dashboard-rest-api) calls this to render the report.
+message GetAccountReviewRequest {
+  string trader_account_id = 1;
+}
+
+// Style label (by median hold time) — mirrors the engine's Style enum.
+enum TradingStyle {
+  Scalper = 0;   // median hold < 30 min
+  Intraday = 1;  // 30 min .. 1 day
+  Swing = 2;     // > 1 day
+}
+
+// Zone 1 (§3.0) — the numeric tiles. A flat, fixed set of already-computed values
+// the FE renders as tiles without parsing any text. All C/D numbers are always
+// computed (thresholds only decide whether a section STRING shows), so they're all
+// present here regardless of which snippets fired. `optional` = value undefined
+// (e.g. profit_factor when there were no losses).
+message AccountReviewMetrics {
+  // Snapshot (§4.2)
+  double net_pl = 1;
+  double gross = 2;
+  double fees = 3;
+  uint32 trades_count = 4;
+  uint32 active_days = 5;
+  uint32 wins = 6;
+  uint32 losses = 7;
+  double win_rate = 8;
+  optional double profit_factor = 9;   // undefined when no losses
+  double realised_win = 10;
+  double realised_loss_abs = 11;
+  // Profile (§4.3)
+  TradingStyle style = 12;
+  repeated string symbols = 13;
+  uint32 sells = 14;
+  uint32 buys = 15;
+  optional double avg_target_percent = 16; // undefined if no trade had a TP
+  double frequency = 17;
+  double avg_win = 18;
+  double avg_loss = 19;
+  optional double reward_risk = 20;    // undefined if no wins or no losses
+  // Working (§4.4, C1..C5) — always computed
+  double stop_coverage_percent = 21;
+  optional double risk_min_percent = 22; // undefined if every trade was no-stop
+  optional double risk_max_percent = 23;
+  double max_daily_loss_percent = 24;
+  uint32 profitable_days = 25;
+  // Improve (§4.5, D1..D7) — always computed
+  uint32 no_stop_count = 26;
+  double largest_loss = 27;            // net, signed (negative)
+  double largest_loss_percent = 28;
+  optional double largest_vs_avg_ratio = 29; // undefined if no avg loss
+  optional double avg_win_hold_secs = 30;    // undefined if no wins
+  optional double avg_loss_hold_secs = 31;   // undefined if no losses
+  uint32 final_losing_streak = 32;
+}
+
+// One fact line in a section, carrying the snippet id so the FE knows what it is
+// (icon / style / ordering) rather than rendering a blind string. snippet_id
+// matches SnippetIdDto / the backoffice ids (200=C1, 302=D3, ...).
+message ReviewSnippet {
+  int32 snippet_id = 1;
+  string text = 2;
+}
+
+// AI (or templated) prose, one paragraph per section (PRD §5.3). Absent until the
+// AI narration ticket lands / on template fallback.
+message ReviewNarrative {
+  string snapshot = 1;
+  string profile = 2;
+  string working = 3;
+  string improve = 4;
+}
+
+// Zone 2 (§3.0) — the prose. Section arrays are variable length (C/D fire by
+// threshold); intro/closing are the closure-tone wrappers (not snippets, no id).
+message AccountReviewSections {
+  string intro = 1;
+  repeated ReviewSnippet snapshot = 2;
+  repeated ReviewSnippet profile = 3;
+  repeated ReviewSnippet working = 4;
+  repeated ReviewSnippet improve = 5;
+  string closing = 6;
+  optional ReviewNarrative narrative = 7;
+}
+
+// The persisted review. Two blocks: `metrics` (typed tiles) + `sections` (prose),
+// per the two-zone design — the FE renders each without parsing the other.
+message AccountReview {
+  string trader_account_id = 1;
+  string client_id = 2;
+  AccountReviewMetrics metrics = 3;
+  AccountReviewSections sections = 4;
+  // 0 = template (deterministic fallback), 1 = ai — mirrors RenderPathDto.
+  int32 render_path = 5;
+  // True if built on incomplete data (max-wait fallback).
+  bool partial = 6;
+  int64 created_at_unix_micros = 7;
+  int64 updated_at_unix_micros = 8;
+}
+
+// No review exists for the account yet (never closed eligibly, or still being
+// processed). Distinct from an error — the FE shows "no review" rather than fail.
+message AccountReviewNotFound {
+}
+
+message GetAccountReviewResponse {
+  oneof response {
+    AccountReview review = 1;
+    AccountReviewNotFound not_found = 2;
+  }
+}
+
+// ─── service ──────────────────────────────────────────────────────────────────
+
+service TradingAnalysisGrpcService {
+  // Account review (dashboard read) — one report by trader account id.
+  rpc GetAccountReview(trading_analysis.GetAccountReviewRequest) returns (trading_analysis.GetAccountReviewResponse);
+
+  // Snippet config (backoffice editor).
+  rpc GetSnippetsConfig(google.protobuf.Empty) returns (trading_analysis.GetSnippetsConfigResponse);
+  // Batch, all-or-nothing. Success = Empty; validation failure = invalid_argument
+  // Status with a message naming the offending snippet_id.
+  rpc UpdateSnippetsConfig(trading_analysis.UpdateSnippetsConfigRequest) returns (google.protobuf.Empty);
+
+  // Feature-level toggles (feature on/off, AI on/off).
+  rpc GetFeatureSettings(google.protobuf.Empty) returns (trading_analysis.GetFeatureSettingsResponse);
+  rpc UpdateFeatureSettings(trading_analysis.UpdateFeatureSettingsRequest) returns (google.protobuf.Empty);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
