@@ -28,8 +28,12 @@ message SnippetConfigUpdate {
   string thresholds_json = 3;
 }
 
-// Batch update: the whole set is validated first; if ANY item is invalid the
-// request is rejected (invalid_argument) and NOTHING is written — all-or-nothing.
+// Batch update. All-or-nothing on VALIDATION: the whole set is validated first,
+// and if ANY item is invalid the request is rejected (invalid_argument) with
+// nothing written. Writes themselves are not transactional (no transaction on
+// this stack) — a DB failure partway through can leave earlier items committed.
+// Every write is an idempotent UPDATE-by-PK, so on an error reply the safe action
+// is to retry the whole batch.
 message UpdateSnippetsConfigRequest {
   repeated SnippetConfigUpdate items = 1;
 }
