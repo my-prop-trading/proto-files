@@ -54,9 +54,49 @@ message UpdateFeatureSettingsRequest {
   repeated FeatureSettingItem items = 1;
 }
 
+// ─── account review (dashboard read) ──────────────────────────────────────────
+
+// Fetch one account's persisted review by trader account id. Read-only; the
+// dashboard (via dashboard-rest-api) calls this to render the report.
+message GetAccountReviewRequest {
+  string trader_account_id = 1;
+}
+
+// The persisted review payload. `review_json` is the full report as a JSON string
+// (the four fact sections + intro/closing + optional narrative — PRD §5.2); the
+// caller parses it. Kept as an opaque string on purpose: the JSON shape still
+// evolves (AI narrative, raw metrics), and the wire contract shouldn't churn with
+// it. Metadata fields let the FE show freshness / partial / AI-vs-template.
+message AccountReview {
+  string trader_account_id = 1;
+  string client_id = 2;
+  string review_json = 3;
+  // 0 = template (deterministic fallback), 1 = ai — mirrors RenderPathDto.
+  int32 render_path = 4;
+  // True if built on incomplete data (max-wait fallback).
+  bool partial = 5;
+  int64 created_at_unix_micros = 6;
+  int64 updated_at_unix_micros = 7;
+}
+
+// No review exists for the account yet (never closed eligibly, or still being
+// processed). Distinct from an error — the FE shows "no review" rather than fail.
+message AccountReviewNotFound {
+}
+
+message GetAccountReviewResponse {
+  oneof response {
+    AccountReview review = 1;
+    AccountReviewNotFound not_found = 2;
+  }
+}
+
 // ─── service ──────────────────────────────────────────────────────────────────
 
 service TradingAnalysisGrpcService {
+  // Account review (dashboard read) — one report by trader account id.
+  rpc GetAccountReview(trading_analysis.GetAccountReviewRequest) returns (trading_analysis.GetAccountReviewResponse);
+
   // Snippet config (backoffice editor).
   rpc GetSnippetsConfig(google.protobuf.Empty) returns (trading_analysis.GetSnippetsConfigResponse);
   // Batch, all-or-nothing. Success = Empty; validation failure = invalid_argument
