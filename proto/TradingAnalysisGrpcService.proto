@@ -1,0 +1,67 @@
+syntax = "proto3";
+package trading_analysis;
+import "google/protobuf/empty.proto";
+
+// ─── snippet config (rule-engine tunables, backoffice-editable) ───────────────
+
+// One rule-engine snippet's tunable surface. `preview_text` is the code-owned
+// template (read-only in the backoffice — copy is never editable, PRD §4.7);
+// `enabled` and `thresholds_json` are what the backoffice may change.
+// `thresholds_json` is a JSON object of named thresholds, e.g.
+// {"ratio":3,"abs_floor_pct":2}; "{}" for always-on snippets with no threshold.
+message SnippetConfigItem {
+  int32 snippet_id = 1;
+  string snippet_key = 2;      // human-readable id, e.g. "c1_stop_discipline"
+  string preview_text = 3;     // template text, read-only
+  bool enabled = 4;
+  string thresholds_json = 5;
+}
+
+message GetSnippetsConfigResponse {
+  repeated SnippetConfigItem items = 1;
+}
+
+// One snippet's editable fields for a batch update.
+message SnippetConfigUpdate {
+  int32 snippet_id = 1;
+  bool enabled = 2;
+  string thresholds_json = 3;
+}
+
+// Batch update: the whole set is validated first; if ANY item is invalid the
+// request is rejected (invalid_argument) and NOTHING is written — all-or-nothing.
+message UpdateSnippetsConfigRequest {
+  repeated SnippetConfigUpdate items = 1;
+}
+
+// ─── feature settings (service-level toggles) ─────────────────────────────────
+
+// A service-level flag, e.g. "feature_enabled", "ai_enabled".
+message FeatureSettingItem {
+  string key = 1;
+  bool enabled = 2;
+}
+
+message GetFeatureSettingsResponse {
+  repeated FeatureSettingItem items = 1;
+}
+
+message UpdateFeatureSettingsRequest {
+  repeated FeatureSettingItem items = 1;
+}
+
+// ─── service ──────────────────────────────────────────────────────────────────
+
+service TradingAnalysisGrpcService {
+  // Snippet config (backoffice editor).
+  rpc GetSnippetsConfig(google.protobuf.Empty) returns (trading_analysis.GetSnippetsConfigResponse);
+  // Batch, all-or-nothing. Success = Empty; validation failure = invalid_argument
+  // Status with a message naming the offending snippet_id.
+  rpc UpdateSnippetsConfig(trading_analysis.UpdateSnippetsConfigRequest) returns (google.protobuf.Empty);
+
+  // Feature-level toggles (feature on/off, AI on/off).
+  rpc GetFeatureSettings(google.protobuf.Empty) returns (trading_analysis.GetFeatureSettingsResponse);
+  rpc UpdateFeatureSettings(trading_analysis.UpdateFeatureSettingsRequest) returns (google.protobuf.Empty);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
