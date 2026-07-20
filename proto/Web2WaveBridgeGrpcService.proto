@@ -3,6 +3,22 @@ package web2wave_bridge;
 import "google/protobuf/empty.proto";
 
 
+// Web2wave user identifier: email or user GUID.
+message GetUserPropertiesRequest {
+    string User = 1;
+}
+
+message Web2WaveUserProperty {
+    string Key = 1;
+    string Value = 2;
+}
+
+message GetUserPropertiesResponse {
+    bool Found = 1; // false when web2wave has no such user
+    repeated Web2WaveUserProperty Properties = 2;
+}
+
 service Web2WaveGrpcService {
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc GetUserProperties(GetUserPropertiesRequest) returns (GetUserPropertiesResponse);
 }
