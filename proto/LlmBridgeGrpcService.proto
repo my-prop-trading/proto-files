@@ -1,5 +1,6 @@
 syntax = "proto3";
 package llm_bridge;
+import "google/protobuf/empty.proto";
 
 // Provider-agnostic LLM bridge. `CreateMessage` is a thin wrapper over a
 // provider's messages API: the bridge selects the provider by enum, injects the
@@ -120,10 +121,9 @@ message CreateMessageResponse {
   }
 }
 
-message PingRequest {}
-message PingResponse {}
-
 service LlmBridgeGrpcService {
   rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
-  rpc Ping(PingRequest) returns (PingResponse);
+  // Health check. google.protobuf.Empty (not a custom message) so the generated
+  // client's built-in ping health-check resolves — matches every other service.
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
