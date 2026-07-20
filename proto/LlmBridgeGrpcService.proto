@@ -1,0 +1,129 @@
+syntax = "proto3";
+package llm_bridge;
+
+// Provider-agnostic LLM bridge. `CreateMessage` is a thin wrapper over a
+// provider's messages API: the bridge selects the provider by enum, injects the
+// provider's API key from its own settings, and returns the raw result plus
+// token usage and per-model prices. All task knowledge (prompt, facts,
+// validation, fallback) lives in the CONSUMER, not here.
+
+// Providers the bridge actually supports. Only real variants are listed — a new
+// provider is a new variant AND a compile error in the bridge's exhaustive
+// match (never a silent runtime miss).
+enum LlmProvider {
+  ANTHROPIC = 0;
+}
+
+// Models the bridge actually supports. Same rule as LlmProvider: only real
+// variants. provider↔model compatibility is enforced in Rust (a nested enum on
+// both consumer and bridge sides makes an illegal pair unrepresentable);
+// protobuf cannot express it across two flat fields.
+enum LlmModel {
+  CLAUDE_HAIKU_4_5 = 0;
+}
+
+// Anthropic has no `system` role inside messages (system is a top-level field —
+// see CreateMessageRequest.System), so only user/assistant here.
+enum MessageRole {
+  USER = 0;
+  ASSISTANT = 1;
+}
+
+message ChatMessage {
+  MessageRole Role = 1;
+  string Content = 2;
+}
+
+message CreateMessageRequest {
+  LlmProvider Provider = 1;
+  LlmModel Model = 2;
+
+  // System prompt (the rules — PRD §5.3). Kept byte-stable by the consumer so
+  // the bridge can cache it. REQUIRED — empty string is rejected with
+  // INVALID_REQUEST (proto3 has no real `required`; the bridge enforces it).
+  string System = 3;
+
+  // The facts to rephrase (PRD §5.2), as user-turn message(s).
+  repeated ChatMessage Messages = 4;
+
+  // Hard output-token ceiling. A per-FEATURE knob (narrative length), owned by
+  // the consumer (trading-analysis settings), not a per-model constant — sent
+  // on every request.
+  uint32 MaxTokens = 5;
+
+  // JSON Schema (as a string) constraining the response shape via structured
+  // outputs. REQUIRED — without it the model invents headers/markdown and the
+  // response "silently breaks". Empty string → INVALID_REQUEST. A string
+  // because an arbitrary JSON Schema can't be expressed as a proto message.
+  string OutputJsonSchema = 6;
+
+  // Version of the System prompt (e.g. "v1"). REQUIRED by design — disciplines
+  // the consumer and lets the bridge log which prompt produced a call. Empty
+  // string → INVALID_REQUEST.
+  string PromptVersion = 7;
+}
+
+// Token accounting from the provider. Four counters, three input prices — the
+// consumer needs all four for honest cost (InputTokens is only the UNCACHED
+// remainder). Also doubles as cache diagnostics: CacheReadInputTokens > 0 means
+// the cache was warm; CacheCreationInputTokens > 0 with read == 0 means it had
+// expired and was rewritten (gap between calls exceeded the cache TTL).
+message Usage {
+  uint32 InputTokens = 1;
+  uint32 OutputTokens = 2;
+  uint32 CacheCreationInputTokens = 3;
+  uint32 CacheReadInputTokens = 4;
+}
+
+// Per-million-token prices for the selected model, from the bridge's settings.
+// The bridge returns the PRICE (a fact about the model); the consumer computes
+// cost = tokens x price on the fly and stores it. The bridge does not compute cost.
+message TokenPrice {
+  double InputPricePerMTok = 1;
+  double OutputPricePerMTok = 2;
+}
+
+message CreateMessageResponseBody {
+  // Concatenated text of the provider's text blocks. With structured outputs
+  // this is the JSON string the consumer parses into narrative sections.
+  string Text = 1;
+
+  // Raw provider stop_reason (e.g. "end_turn" / "max_tokens" / "refusal"). Kept
+  // as a string — interpretation is the consumer's job, and a closed enum here
+  // would break if the provider adds a new value. NB: "max_tokens" means the
+  // text is TRUNCATED — the consumer must check for "end_turn" before trusting it.
+  string StopReason = 2;
+
+  Usage Usage = 3;
+  TokenPrice Price = 4;
+
+  // Wall-clock time of the LLM call as measured by the bridge (not derivable
+  // from token counters). Separate from cache diagnostics.
+  uint32 LatencyMs = 5;
+}
+
+enum Error {
+  OK = 0;
+  INTERNAL_ERROR = 1;
+  // The provider's API returned a non-200 / transport failure.
+  LLM_PROVIDER_ERROR = 2;
+  // The requested provider has no API key configured in the bridge's settings.
+  PROVIDER_NOT_CONFIGURED = 3;
+  // A required field (System / OutputJsonSchema / PromptVersion) was empty.
+  INVALID_REQUEST = 4;
+}
+
+message CreateMessageResponse {
+  oneof response {
+    CreateMessageResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message PingRequest {}
+message PingResponse {}
+
+service LlmBridgeGrpcService {
+  rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
+  rpc Ping(PingRequest) returns (PingResponse);
+}
