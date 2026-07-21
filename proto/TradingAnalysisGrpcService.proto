@@ -171,6 +171,22 @@ message GetAccountReviewResponse {
 
 // ─── backoffice stats table + recompute (PROP25-2251) ──────────────────────────
 
+// One LLM call from the journal (first build or a recompute) — the per-call
+// breakdown shown in the backoffice "call history" details dialog. Returned
+// inline with the row (the data is already gathered when aggregating the row),
+// so the dialog needs no extra round-trip.
+message LlmCallDetail {
+  bool is_recompute = 1;         // false = first build, true = recompute
+  int64 called_at_unix_micros = 2;
+  // AiStatusDto (0 Success / 1 Disabled / 2 Failed) of this call.
+  int32 ai_status = 3;
+  string model = 4;
+  int64 input_tokens = 5;
+  int64 output_tokens = 6;
+  double input_cost = 7;
+  double output_cost = 8;
+}
+
 // One row of the backoffice stats table: the current report state plus the
 // aggregated LLM spend across ALL its calls (first build + recomputes), summed
 // from the llm_calls journal so a recompute never hides the earlier cost.
@@ -195,6 +211,10 @@ message AccountReviewStatsRow {
   double total_input_cost = 13;        // summed cost across all calls
   double total_output_cost = 14;
   int64 last_call_at_unix_micros = 15; // most recent call time (nullable → 0)
+
+  // Per-call breakdown for the details dialog (first build + each recompute),
+  // oldest first. Inline so the dialog needs no extra call.
+  repeated LlmCallDetail calls = 16;
 }
 
 message ListAccountReviewsRequest {
