@@ -185,6 +185,7 @@ message LlmCallDetail {
   int64 output_tokens = 6;
   double input_cost = 7;
   double output_cost = 8;
+  string provider = 9;           // e.g. "anthropic" — shown as provider:model
 }
 
 // One row of the backoffice stats table: the current report state plus the
@@ -204,13 +205,22 @@ message AccountReviewStatsRow {
   int64 updated_at_unix_micros = 8;
 
   // Aggregates over the llm_calls journal for this account:
-  uint32 call_count = 9;               // number of LLM calls (>=1 if any ran)
-  uint32 recompute_count = 10;         // how many of them were recomputes
+  // total_llm_calls = every LLM call (first build + each recompute); the BO
+  // doesn't show it as a column (recompute_count + the details dialog cover it),
+  // but it's here so a consumer can tell "no call at all" (0) from "recomputed 0
+  // times but built once" (1).
+  uint32 total_llm_calls = 9;
+  uint32 recompute_count = 10;         // how many of those were recomputes
   int64 total_input_tokens = 11;
   int64 total_output_tokens = 12;
   double total_input_cost = 13;        // summed cost across all calls
   double total_output_cost = 14;
   int64 last_call_at_unix_micros = 15; // most recent call time (nullable → 0)
+
+  // Provider + model of the LATEST call (for the "provider:model" table column).
+  // Empty when no call ran (AI disabled).
+  string provider = 17;
+  string model = 18;
 
   // Per-call breakdown for the details dialog (first build + each recompute),
   // oldest first. Inline so the dialog needs no extra call.
