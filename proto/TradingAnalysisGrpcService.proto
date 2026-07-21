@@ -169,6 +169,66 @@ message GetAccountReviewResponse {
   }
 }
 
+// ─── backoffice stats table + recompute (PROP25-2251) ──────────────────────────
+
+// One row of the backoffice stats table: the current report state plus the
+// aggregated LLM spend across ALL its calls (first build + recomputes), summed
+// from the llm_calls journal so a recompute never hides the earlier cost.
+message AccountReviewStatsRow {
+  string trader_account_id = 1;
+  string client_id = 2;
+  // 0 = template, 1 = ai (RenderPathDto) — the current render path.
+  int32 render_path = 3;
+  // AiStatusDto of the latest build: 0 Success / 1 Disabled / 2 Failed.
+  int32 ai_status = 4;
+  // AiFailureReasonDto when ai_status = Failed; -1 when not applicable.
+  int32 ai_failure_reason = 5;
+  bool partial = 6;
+  int64 created_at_unix_micros = 7;
+  int64 updated_at_unix_micros = 8;
+
+  // Aggregates over the llm_calls journal for this account:
+  uint32 call_count = 9;               // number of LLM calls (>=1 if any ran)
+  uint32 recompute_count = 10;         // how many of them were recomputes
+  int64 total_input_tokens = 11;
+  int64 total_output_tokens = 12;
+  double total_input_cost = 13;        // summed cost across all calls
+  double total_output_cost = 14;
+  int64 last_call_at_unix_micros = 15; // most recent call time (nullable → 0)
+}
+
+message ListAccountReviewsRequest {
+  // Inclusive date range on account_reviews.created_at (unix micros). 0 = unbounded.
+  int64 created_from_unix_micros = 1;
+  int64 created_to_unix_micros = 2;
+  // Optional filters: -1 = any.
+  int32 ai_status = 3;    // AiStatusDto or -1
+  int32 render_path = 4;  // RenderPathDto or -1
+  // Optional exact account id ("" = any).
+  string trader_account_id = 5;
+  // Pagination.
+  uint32 limit = 6;
+  uint32 offset = 7;
+}
+
+message ListAccountReviewsResponse {
+  repeated AccountReviewStatsRow rows = 1;
+}
+
+message RecomputeReviewsRequest {
+  // Explicit list of account ids the operator selected (checkboxes) — never a
+  // filter, so the operator sees exactly what will be recomputed.
+  repeated string trader_account_ids = 1;
+}
+
+message RecomputeReviewsResponse {
+  // Rows actually reset Done/Failed → Ready (will be rebuilt by the timer).
+  uint32 reset_count = 1;
+  // Ids NOT reset because they weren't in a terminal state (still processing,
+  // skipped, or absent) — the operator sees why they were left out.
+  repeated string skipped_ids = 2;
+}
+
 // ─── service ──────────────────────────────────────────────────────────────────
 
 service TradingAnalysisGrpcService {
@@ -184,6 +244,13 @@ service TradingAnalysisGrpcService {
   // Feature-level toggles (feature on/off, AI on/off).
   rpc GetFeatureSettings(google.protobuf.Empty) returns (trading_analysis.GetFeatureSettingsResponse);
   rpc UpdateFeatureSettings(trading_analysis.UpdateFeatureSettingsRequest) returns (google.protobuf.Empty);
+
+  // Backoffice stats table: list reviews with aggregated LLM spend (filters +
+  // pagination). Reads account_reviews joined with the llm_calls journal.
+  rpc ListAccountReviews(trading_analysis.ListAccountReviewsRequest) returns (trading_analysis.ListAccountReviewsResponse);
+  // Recompute selected reviews: reset terminal (Done/Failed) rows to Ready so the
+  // timer rebuilds them. Returns how many were reset and which were skipped.
+  rpc RecomputeReviews(trading_analysis.RecomputeReviewsRequest) returns (trading_analysis.RecomputeReviewsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
