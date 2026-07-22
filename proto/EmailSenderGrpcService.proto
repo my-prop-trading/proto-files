@@ -218,6 +218,11 @@ message SendCompetitionEnrolledRequest{
     string ClientId = 2;
 }
 
+message SendAccountReviewReadyRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+}
+
 message SendInstantPaymentReceivedKycRequired {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -364,6 +369,7 @@ service EmailSenderGrpcService {
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendFairShotGranted(email_sender.SendFairShotGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendCompetitionEnrolled(email_sender.SendCompetitionEnrolledRequest) returns (email_sender.EmailSentResponse);
+    rpc SendAccountReviewReady(email_sender.SendAccountReviewReadyRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
 
