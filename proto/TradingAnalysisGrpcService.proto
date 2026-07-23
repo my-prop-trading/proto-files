@@ -186,6 +186,15 @@ message LlmCallDetail {
   double input_cost = 7;
   double output_cost = 8;
   string provider = 9;           // e.g. "anthropic" — shown as provider:model
+  // The two cache diagnostics behind input_tokens: how many input tokens were
+  // served from the prompt cache vs written to it. Lets the BO see whether the
+  // shared system-prompt prefix is being cached (cheaper repeat calls).
+  int64 cache_read_input_tokens = 10;
+  int64 cache_creation_input_tokens = 11;
+  // Model price per 1M tokens for this call (from the bridge) — so the BO can
+  // show the cost FORMULA (tokens x price / 1M), not just the total.
+  double input_price_per_mtok = 12;
+  double output_price_per_mtok = 13;
 }
 
 // One row of the backoffice stats table: the current report state plus the
@@ -225,6 +234,15 @@ message AccountReviewStatsRow {
   // Per-call breakdown for the details dialog (first build + each recompute),
   // oldest first. Inline so the dialog needs no extra call.
   repeated LlmCallDetail calls = 16;
+
+  // Number of trades the report was computed over — the volume of work behind
+  // the numbers, shown as a table column. From the stored review's metrics.
+  uint32 trades_count = 19;
+  // Human-readable reason the AI narrative fell back to the template, written
+  // for a non-technical operator (e.g. "The AI narrative dropped the number
+  // '6 min' from the 'areas to improve' section"). Empty unless ai_status =
+  // Failed. The coarse ai_failure_reason enum stays for filtering/stats.
+  string ai_failure_detail = 20;
 }
 
 message ListAccountReviewsRequest {
@@ -245,6 +263,16 @@ message ListAccountReviewsRequest {
 
 message ListAccountReviewsResponse {
   repeated AccountReviewStatsRow rows = 1;
+
+  // Totals over the WHOLE filtered set (every matching report, not just this
+  // page) so the BO summary strip reflects the filter, not the current page.
+  // total_count = number of matching reports; the token/cost sums are over all
+  // their LLM calls.
+  uint32 total_count = 2;
+  int64 filtered_input_tokens = 3;
+  int64 filtered_output_tokens = 4;
+  double filtered_input_cost = 5;
+  double filtered_output_cost = 6;
 }
 
 message RecomputeReviewsRequest {
