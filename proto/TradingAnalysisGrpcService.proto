@@ -195,6 +195,10 @@ message LlmCallDetail {
   // show the cost FORMULA (tokens x price / 1M), not just the total.
   double input_price_per_mtok = 12;
   double output_price_per_mtok = 13;
+  // Extra attempts made before this outcome (0 = first try, 1 = one retry). The
+  // token/cost fields already hold the SUMMED spend across all attempts; this is
+  // how many calls that spend covers, shown as a column in the BO call history.
+  int64 retry_count = 14;
 }
 
 // One row of the backoffice stats table: the current report state plus the
