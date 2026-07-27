@@ -53,6 +53,11 @@ message Competition {
   // Ordered by sort_order, same shape as GetById's prize_tiers. Empty when the
   // competition has no tiers.
   repeated competitions.CompetitionPrizeTier prize_tiers = 21;
+  // Trading platforms this competition may issue accounts on (platform_id codes:
+  // MT4=0, MT5=1, Cfd=2, Yft=3, CTrader=4, TradeLocker=5). Set by BO on Save;
+  // returned on detail (not on the list card). Empty = legacy competition with no
+  // explicit platforms — enroll falls back to the default platform.
+  repeated int32 platforms = 22;
 }
 
 message CompetitionPrizeTier {
@@ -193,6 +198,11 @@ message EnrollClientRequest {
   // like client_id — the internal gRPC call must receive it explicitly to
   // create the trader-account order under the right brand.
   string brand = 3;
+  // Platform the trader account is created on (platform_id code). Optional: the
+  // client UI does not send it yet, so when absent the service uses the default
+  // platform (CTrader). When present it must be one of the competition's
+  // `platforms`.
+  optional int32 platform_id = 4;
 }
 
 message EnrollClientResponse {
