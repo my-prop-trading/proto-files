@@ -16,6 +16,12 @@ enum EnrollmentStatus {
   EnrollmentNotEnrolled = 0;
   EnrollmentPending = 1;
   EnrollmentActive = 2;
+  // Enrolled: the trader is registered but their account is not created yet — it
+  // is provisioned close to the competition start, not at enroll time. The client
+  // shows "account will be ready at start" instead of polling for creds. Ordered
+  // after Active by value (appending; existing codes unchanged), though it
+  // logically precedes Pending in the lifecycle.
+  EnrollmentEnrolled = 3;
 }
 
 // Current user's result in a competition (list card / detail enrichment).
