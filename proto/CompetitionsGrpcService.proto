@@ -82,6 +82,10 @@ message CompetitionEnrollment {
   double profit_pct = 5;
   bool is_disqualified = 6;
   int64 enrolled_at = 7;
+  // Provisioning state (BO enrollment list): Enrolled = account not created yet
+  // (before start), Pending = order placed / account being created, Active =
+  // account ready. Lets BO show the real state instead of assuming Active.
+  competitions.EnrollmentStatus status = 8;
 }
 
 message LeaderboardEntry {
