@@ -2,6 +2,19 @@ syntax = "proto3";
 package email_sender;
 import "google/protobuf/empty.proto";
 
+// Why the account was closed, as told to the trader in the "- Lose" emails.
+// Subset of trading-control's TradingObjectiveFailReasonGrpc: only the reasons
+// the emails name explicitly. Everything else stays UNSPECIFIED and the email
+// falls back to the generic "a violation of our trading rules" wording.
+enum FailReason {
+    FAIL_REASON_UNSPECIFIED = 0;
+    FAIL_REASON_DAILY_LOSS = 1;
+    FAIL_REASON_OVERALL_LOSS = 2;
+    FAIL_REASON_INACTIVITY = 3;
+    FAIL_REASON_EXPOSURE_LOSS = 4;
+    FAIL_REASON_MAX_MARGIN_UTILIZATION = 5;
+}
+
 enum DeclineReasonType {
     NONE = 0;
     UNKNOWN = 1;
@@ -107,12 +120,14 @@ message SendFailedScenarioPhase1Request {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderAccountId = 3;
+    email_sender.FailReason FailReason = 4;
 }
 
 message SendFailedScenarioPhase2Request {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderAccountId = 3;
+    email_sender.FailReason FailReason = 4;
 }
 
 message SendFailedScenarioPhase3Request {
@@ -195,6 +210,7 @@ message SendLiveAccountGrantedRequest {
 message SendLiveAccountLostRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    email_sender.FailReason FailReason = 3;
 }
 
 message SendPaymentReceivedRequest{
