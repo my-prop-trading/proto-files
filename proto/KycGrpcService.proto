@@ -233,6 +233,8 @@ message GetContractorsRequest {
     optional int64 ToDate = 5;
     optional kyc.ContractStatus Status = 6;
     optional kyc.ContractSignStatus SignStatus = 7;
+    // true = only contracts approved for auto-send; false = only not-approved ones.
+    optional bool OnlyApproved = 8;
 }
 
 enum ContractStatus {
@@ -261,6 +263,8 @@ message ContractorModel {
     int32 SendAttemptNo = 16;
     optional int64 LastSendAttemptAt = 17;
     optional string ExternalDocumentId = 18;
+    optional int64 ApprovedAt = 19;
+    optional string ApprovedBy = 20;
 }
     
 message ContractorCommentModel {
@@ -296,6 +300,23 @@ message ContractorGrantLiveAccountResponse {
         kyc.KycError Error = 2;
       }
 }   
+
+message ContractorApproveRequest {
+    string TraderAccountAggregatedId = 1;
+    string ClientId = 2;
+    int64 ContractId = 3;
+    string OfficerId = 4;
+}
+
+message ContractorApproveResponseBody{
+}
+
+message ContractorApproveResponse {
+    oneof response {
+        kyc.ContractorApproveResponseBody Body = 1;
+        kyc.KycError Error = 2;
+      }
+}
 
 message ContractorSignContractRequest {
     string TraderAccountAggregatedId = 1;
@@ -477,6 +498,9 @@ service KycGrpcService {
 
     rpc GetContractors(kyc.GetContractorsRequest)
     returns (kyc.GetContractorsResponse);
+
+    rpc ContractorApprove(kyc.ContractorApproveRequest)
+    returns (kyc.ContractorApproveResponse);
 
     rpc ContractorSignContract(kyc.ContractorSignContractRequest)
     returns (kyc.ContractorSignContractResponse);
