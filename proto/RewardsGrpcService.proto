@@ -10,6 +10,24 @@ enum TaskStatusGrpc {
   REJECTED = 4;
 }
 
+// Lifecycle ladder — cumulative: PaidOut implies Funded implies Purchased implies Everyone.
+// Used as a task's required eligibility stage and as a user's highest reached milestone.
+enum EligibilityStageGrpc {
+  EVERYONE = 0;   // registered account (default)
+  PURCHASED = 1;  // at least one pay-in ever (any order, including zero-price grants)
+  FUNDED = 2;     // ever earned a LIVE (funded) account
+  PAID_OUT = 3;   // ever received an approved payout
+}
+
+// Projection of a task's unmet requirement onto a user-facing lock reason.
+// Distinct axis from EligibilityStageGrpc: there is no Everyone reason,
+// because an Everyone task can never be locked.
+enum TaskLockReasonGrpc {
+  NEEDS_PURCHASE = 0;
+  NEEDS_FUNDED = 1;
+  NEEDS_PAYOUT = 2;
+}
+
 enum RewardStatusGrpc {
   REWARD_AVAILABLE = 0;
   REWARD_CLAIMED = 1;
@@ -78,6 +96,11 @@ message TaskGrpcModel {
   string ManagerId = 11;
   optional string ParentId = 12;
   optional string ScreenshotFileId = 13;
+  // Eligibility gate required to submit this task. Set in backoffice, default Everyone.
+  EligibilityStageGrpc RequiredStage = 14;
+  // Computed per client_id in GetTasksPage only: the unmet requirement, or unset when eligible.
+  // Left unset by every other RPC.
+  optional TaskLockReasonGrpc LockReason = 15;
 }
 
 message GetTasksPageGrpcRequest {
