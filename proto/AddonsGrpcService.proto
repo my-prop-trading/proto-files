@@ -180,7 +180,6 @@ message GetAddonOrderGrpcResponse {
 
 message CancelAddonPurchaseGrpcRequest {
   string Id = 1;
-  string OfficerId = 2;
 }
 
 message CancelAddonPurchaseGrpcResponse {
