@@ -322,6 +322,14 @@ message CalendarDayGrpc {
   double pnl = 3;
 }
 
+// Calendar week (Monday–Sunday, UTC) aggregate of the same closed trades as
+// CalendarDayGrpc: a trading day belongs to exactly one week.
+message CalendarWeekGrpc {
+  int64 week_start = 1;  // unix seconds, Monday 00:00 UTC
+  uint32 trades = 2;
+  double pnl = 3;
+}
+
 // One point of the by-trade chart: the running realized balance
 // (initial_balance + cumulative net profit of closed trades in close order).
 // The leading anchor point carries the initial balance at account start.
@@ -362,6 +370,8 @@ message GetTradesMetricsGrpcResponse {
   double realised_net_loss = 8;  // Σ net of losing closed trades (negative)
   uint32 win_trades_count = 9;
   uint32 loss_trades_count = 10;
+  // Weekly rollup of `calendar`, for the Days calendar Week mode.
+  repeated CalendarWeekGrpc weeks = 11;
 }
 
 message GetOpenTradesGrpcRequest {
