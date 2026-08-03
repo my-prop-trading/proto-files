@@ -11,6 +11,7 @@ enum AddonStatusGrpc {
   ACTIVE = 0;
   REFUNDED = 1;
   LOST = 2;
+  CANCELED = 3;
 }
 
 enum AddonParameterTypeGrpc {
@@ -177,6 +178,15 @@ message GetAddonOrderGrpcResponse {
     AddonOrderGrpcModel Item = 1;
 }
 
+message CancelAddonPurchaseGrpcRequest {
+  string Id = 1;
+  string OfficerId = 2;
+}
+
+message CancelAddonPurchaseGrpcResponse {
+  AddonPurchaseGrpcModel Item = 1;
+}
+
 service AddonsGrpcService {
   rpc GetAddons(GetAddonsGrpcRequest) returns (GetAddonsGrpcResponse);
   rpc DeleteAddon(DeleteAddonGrpcRequest) returns (DeleteAddonGrpcResponse);
@@ -192,6 +202,7 @@ service AddonsGrpcService {
 
   rpc GetAddonPurchases(GetAddonPurchasesGrpcRequest) returns (GetAddonPurchasesGrpcResponse);
   rpc CreateAddonPurchase(CreateAddonPurchaseGrpcRequest) returns (CreateAddonPurchaseGrpcResponse);
+  rpc CancelAddonPurchase(CancelAddonPurchaseGrpcRequest) returns (CancelAddonPurchaseGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
