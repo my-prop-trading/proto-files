@@ -114,6 +114,15 @@ message TraderAccount {
     bool FairShotEnabled = 97;
     double FairShotThresholdPct = 98;
     bool IsFairShot = 99;
+
+    // PROP25-2196 Profit Carryover.
+    // Stored on the account (copied from the package / written on phase pass):
+    bool ProfitCarryoverEnabled = 100; // package toggle, duplicated across phases
+    double BaseSize = 101;             // original account size before carry
+    double PhaseCarry = 102;           // realized carry of THIS phase (0 until pass / on funded)
+    // Derived (summed across phases of the aggregated_id), not persisted:
+    double TotalCarry = 103;           // Σ PhaseCarry across all phases
+    double PriorPhasesCarry = 104;     // TotalCarry − PhaseCarry(current); for live "banked"
 }
 
 enum AccountLifeTimeType {
