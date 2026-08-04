@@ -20,19 +20,20 @@ message SharedCardDay {
 }
 
 // Frozen at share time: the public page always renders these numbers, never live ones.
+// The period end is not carried: it follows from period_type + period_start, and a second
+// source for it could only ever drift.
 message SharedCardSnapshot {
   shared_cards.SharedCardPeriodType period_type = 1;
   int64 period_start = 2; // unix microseconds, UTC midnight (Monday / 1st of month)
-  int64 period_end = 3;   // unix microseconds, exclusive
-  double pnl = 4;
-  uint32 trades = 5;
-  uint32 trading_days = 6;
-  double best_day_pnl = 7;
-  double worst_day_pnl = 8;
-  string trader_name = 9;
-  string account_label = 10;
-  string currency = 11;
-  repeated shared_cards.SharedCardDay days = 12;
+  double pnl = 3;
+  uint32 trades = 4;
+  uint32 trading_days = 5;
+  double best_day_pnl = 6;
+  double worst_day_pnl = 7;
+  string trader_name = 8;
+  string account_label = 9;
+  string currency = 10;
+  repeated shared_cards.SharedCardDay days = 11;
 }
 
 message SharedCard {
@@ -42,6 +43,8 @@ message SharedCard {
   int64 created_at = 4;
   int32 template_version = 5;
   shared_cards.SharedCardSnapshot snapshot = 6;
+  // Rendered server-side so the public page never repeats the date arithmetic.
+  string period_label = 7;
 }
 
 message CreateSharedCardRequest {
