@@ -43,8 +43,10 @@ message SharedCard {
   int64 created_at = 4;
   int32 template_version = 5;
   shared_cards.SharedCardSnapshot snapshot = 6;
-  // Rendered server-side so the public page never repeats the date arithmetic.
+  // Both rendered server-side, so the public page never repeats the date arithmetic or the
+  // money formatting the card itself uses.
   string period_label = 7;
+  string pnl_label = 8;
 }
 
 message CreateSharedCardRequest {
