@@ -106,6 +106,9 @@ message GetSharedCardTemplateRequest {
 
 message GetSharedCardTemplateResponse {
   shared_cards.SharedCardTemplate template = 1;
+  // Public page of the reserved preview card for this period, built server-side from
+  // ShareBaseUrl so the backoffice never assembles the route by string surgery.
+  string preview_url = 2;
 }
 
 message SetSharedCardTemplateRequest {
