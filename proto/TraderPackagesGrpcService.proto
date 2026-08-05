@@ -120,7 +120,9 @@ message TraderPackage {
   double FairShotThresholdPct = 81;
   // PROP25-2196 Profit Carryover: when On, realized profit of each eval phase is
   // carried and added to the funded account's initial balance. Eval packages only.
-  bool ProfitCarryover = 82;
+  // Named ...Enabled to match the sibling feature toggles (ExposureLossEnabled,
+  // MarginRuleEnabled, FairShotEnabled).
+  bool ProfitCarryoverEnabled = 82;
 }
 
 message PlatformGroup {
