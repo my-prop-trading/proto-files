@@ -7,11 +7,6 @@ enum SharedCardPeriodType {
   Month = 1;
 }
 
-enum SharedCardImageFormat {
-  Svg = 0;
-  Png = 1;
-}
-
 // One calendar cell. Days with no closed trades are not sent.
 message SharedCardDay {
   int64 date = 1; // unix microseconds, UTC midnight
@@ -41,10 +36,9 @@ message SharedCard {
   string client_id = 2;
   string trader_account_id = 3;
   int64 created_at = 4;
-  int32 template_version = 5;
   shared_cards.SharedCardSnapshot snapshot = 6;
-  // Both rendered server-side, so the public page never repeats the date arithmetic or the
-  // money formatting the card itself uses.
+  // Both formatted server-side, so the page never repeats the date arithmetic or the money
+  // formatting, and two cards of the same period always read the same.
   string period_label = 7;
   string pnl_label = 8;
 }
@@ -64,100 +58,11 @@ message GetSharedCardRequest { string id = 1; }
 
 message GetSharedCardResponse { shared_cards.SharedCard card = 1; }
 
-message GetSharedCardResourceRequest {
-  string id = 1;
-  shared_cards.SharedCardImageFormat format = 2;
-}
-
-// Renders without persisting anything: the engine behind the in-app preview.
-message RenderSharedCardRequest {
-  shared_cards.SharedCardSnapshot snapshot = 1;
-  shared_cards.SharedCardImageFormat format = 2;
-}
-
-message SharedCardResourceChunk { bytes content = 1; }
-
-message SharedCardTemplate {
-  shared_cards.SharedCardPeriodType period_type = 1;
-  int32 version = 2;
-  string content = 3;
-  int64 created_at = 4;
-  string created_by = 5;
-}
-
-message SharedCardTemplateVersion {
-  int32 version = 1;
-  int64 created_at = 2;
-  string created_by = 3;
-}
-
-message GetSharedCardTemplateVersionsRequest {
-  shared_cards.SharedCardPeriodType period_type = 1;
-}
-
-message GetSharedCardTemplateVersionsResponse {
-  repeated shared_cards.SharedCardTemplateVersion versions = 1;
-}
-
-message GetSharedCardTemplateRequest {
-  shared_cards.SharedCardPeriodType period_type = 1;
-  optional int32 version = 2; // omitted = active version
-}
-
-message GetSharedCardTemplateResponse {
-  shared_cards.SharedCardTemplate template = 1;
-  // Public page of the reserved preview card for this period, built server-side from
-  // ShareBaseUrl so the backoffice never assembles the route by string surgery.
-  string preview_url = 2;
-}
-
-message SetSharedCardTemplateRequest {
-  shared_cards.SharedCardPeriodType period_type = 1;
-  string content = 2;
-  string created_by = 3;
-}
-
-// A non-empty validation_errors means the upload was rejected and the previously
-// active version is still serving every already-shared link.
-message SetSharedCardTemplateResponse {
-  shared_cards.SharedCardTemplate template = 1;
-  repeated string validation_errors = 2;
-  repeated string warnings = 3;
-}
-
-// Rollback is forward-only: the old version is copied as a new one.
-message RestoreSharedCardTemplateRequest {
-  shared_cards.SharedCardPeriodType period_type = 1;
-  int32 version = 2;
-  string created_by = 3;
-}
-
-message RestoreSharedCardTemplateResponse {
-  shared_cards.SharedCardTemplate template = 1;
-  repeated string validation_errors = 2;
-}
-
-message GetSharedCardTemplateTokensRequest {
-  shared_cards.SharedCardPeriodType period_type = 1;
-}
-
-message GetSharedCardTemplateTokensResponse {
-  repeated string required = 1;
-  repeated string optional = 2;
-}
-
+// The card is data only: the page and its og:image are rendered by the frontend, so nothing
+// here knows how a card looks.
 service SharedCardsGrpcService {
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
   rpc CreateSharedCard(shared_cards.CreateSharedCardRequest) returns (shared_cards.CreateSharedCardResponse);
   rpc GetSharedCard(shared_cards.GetSharedCardRequest) returns (shared_cards.GetSharedCardResponse);
-  rpc GetSharedCardResource(shared_cards.GetSharedCardResourceRequest) returns (stream shared_cards.SharedCardResourceChunk);
-  rpc RenderSharedCard(shared_cards.RenderSharedCardRequest) returns (stream shared_cards.SharedCardResourceChunk);
-
-  // Template management (backoffice)
-  rpc GetSharedCardTemplateVersions(shared_cards.GetSharedCardTemplateVersionsRequest) returns (shared_cards.GetSharedCardTemplateVersionsResponse);
-  rpc GetSharedCardTemplate(shared_cards.GetSharedCardTemplateRequest) returns (shared_cards.GetSharedCardTemplateResponse);
-  rpc SetSharedCardTemplate(shared_cards.SetSharedCardTemplateRequest) returns (shared_cards.SetSharedCardTemplateResponse);
-  rpc RestoreSharedCardTemplate(shared_cards.RestoreSharedCardTemplateRequest) returns (shared_cards.RestoreSharedCardTemplateResponse);
-  rpc GetSharedCardTemplateTokens(shared_cards.GetSharedCardTemplateTokensRequest) returns (shared_cards.GetSharedCardTemplateTokensResponse);
 }
