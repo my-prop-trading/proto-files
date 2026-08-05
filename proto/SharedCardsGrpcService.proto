@@ -17,7 +17,7 @@ message SharedCardDay {
 // Frozen at share time: the public page always renders these numbers, never live ones.
 // The period end is not carried: it follows from period_type + period_start, and a second
 // source for it could only ever drift.
-message SharedCardSnapshot {
+message SharedCardCalendarSnapshot {
   shared_cards.SharedCardPeriodType period_type = 1;
   int64 period_start = 2; // unix microseconds, UTC midnight (Monday / 1st of month)
   double pnl = 3;
@@ -31,27 +31,79 @@ message SharedCardSnapshot {
   repeated shared_cards.SharedCardDay days = 11;
 }
 
+// The identity both trader-card blocks draw. The app composes this header client-side out of the
+// session; a public page has no session, so it is frozen here or the card cannot show it.
+message SharedCardTraderHeader {
+  string trader_name = 1;
+  string currency = 2;
+  uint32 days_with_us = 3;
+  string country = 4; // country of registration as stored, empty when unknown
+}
+
+// Lifetime Core block, aggregated across every account the trader has ever owned. Raw numbers,
+// no formatted labels: GetTraderCard already serves these tiles unformatted to the app, and a
+// formatted copy would only give the same tile a second way to be rendered.
+message SharedCardCoreSnapshot {
+  shared_cards.SharedCardTraderHeader header = 1;
+  double total_capital = 2;
+  uint32 total_accounts = 3;
+  double avg_trades_per_day = 4;
+  string most_traded_symbol = 5;
+  double lifetime_win_rate = 6; // 0..1, same scale as GetTraderCard
+  double profit_factor = 7;
+  double max_profit_per_trade = 8;
+  uint32 best_win_streak = 9;
+}
+
+// Lifetime Funded block. Only created while the trader's funded block is unlocked: a locked
+// block has nothing to freeze.
+message SharedCardFundedSnapshot {
+  shared_cards.SharedCardTraderHeader header = 1;
+  double funded_capital = 2;
+  uint32 total_days_funded = 3;
+  uint32 payouts_count = 4;
+  double total_payout = 5;
+  double highest_payout = 6;
+}
+
 message SharedCard {
+  reserved 5; // template_version, retired when the frontend took over the rendering
+
   string id = 1;
   string client_id = 2;
-  string trader_account_id = 3;
+  string trader_account_id = 3; // calendar cards only: a trader-card block spans every account
   int64 created_at = 4;
-  shared_cards.SharedCardSnapshot snapshot = 6;
-  // Both formatted server-side, so the page never repeats the date arithmetic or the money
-  // formatting, and two cards of the same period always read the same.
+
+  // Which snapshot is set is what kind of card this is. There is no separate type field, which
+  // could only ever disagree with the payload it labels.
+  oneof snapshot {
+    shared_cards.SharedCardCalendarSnapshot calendar = 6;
+    shared_cards.SharedCardCoreSnapshot core = 9;
+    shared_cards.SharedCardFundedSnapshot funded = 10;
+  }
+
+  // Calendar cards only, both formatted server-side so the page never repeats the date
+  // arithmetic and two cards of the same period always read the same.
   string period_label = 7;
   string pnl_label = 8;
 }
 
 message CreateSharedCardRequest {
   string client_id = 1;
-  string trader_account_id = 2;
-  shared_cards.SharedCardSnapshot snapshot = 3;
+  string trader_account_id = 2; // calendar cards only
+
+  oneof snapshot {
+    shared_cards.SharedCardCalendarSnapshot calendar = 3;
+    shared_cards.SharedCardCoreSnapshot core = 4;
+    shared_cards.SharedCardFundedSnapshot funded = 5;
+  }
 }
 
 // Only the id: the page lives in the frontend, so the frontend owns its route and composes
 // the link. A path spelled out here could only drift from the page it points at.
 message CreateSharedCardResponse {
+  reserved 2; // public_url, retired with the backend-owned page
+
   string id = 1;
 }
 
