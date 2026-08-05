@@ -114,6 +114,29 @@ message TraderAccount {
     bool FairShotEnabled = 97;
     double FairShotThresholdPct = 98;
     bool IsFairShot = 99;
+
+    // PROP25-2196 Profit Carryover. Present only when the package has carryover enabled;
+    // absent (None) otherwise, so consumers show the "banked"/composed-balance UI only
+    // when the group is set instead of inspecting a bool + zeroed values.
+    optional ProfitCarryover ProfitCarryover = 100;
+}
+
+// PROP25-2196 Profit Carryover breakdown for a trader account.
+message ProfitCarryover {
+    // Realized carry of each already-passed evaluation phase of this aggregated_id.
+    // Does NOT include the live realized profit of an in-progress phase — that lives in
+    // trading-control (total_realized_profit) and is added on the REST layer for "banked".
+    repeated PhaseCarry Phases = 1;
+    // Original account size before any carry (survives account_balance being bumped at funding).
+    double BaseSize = 2;
+    // Σ carry across the passed phases = the "banked" total from prior phases. The live part
+    // of the current phase is summed in by REST; total_carry alone is carry already recorded.
+    double TotalCarry = 3;
+}
+
+message PhaseCarry {
+    int32 Phase = 1;
+    double Carry = 2; // realized carry recorded when this phase passed
 }
 
 enum AccountLifeTimeType {
