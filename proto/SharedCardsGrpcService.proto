@@ -49,9 +49,10 @@ message CreateSharedCardRequest {
   shared_cards.SharedCardSnapshot snapshot = 3;
 }
 
+// Only the id: the page lives in the frontend, so the frontend owns its route and composes
+// the link. A path spelled out here could only drift from the page it points at.
 message CreateSharedCardResponse {
   string id = 1;
-  string public_url = 2;
 }
 
 message GetSharedCardRequest { string id = 1; }
