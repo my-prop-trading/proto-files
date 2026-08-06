@@ -21,6 +21,8 @@ message SendContractGrpcRequest {
     optional string payout_window = 7;
     optional string daily_loss = 8;
     optional string max_loss = 9;
+    // Consistency (best-day) rule cap that will apply on the trader's live account.
+    optional string consistency_rule = 16;
 
     // Optional document-level overrides; when unset the template's own configuration applies.
     optional string title = 10;
