@@ -13,6 +13,14 @@ enum TradingPlatformRouterError {
   INTERNAL_ERROR = 1;
   NO_SUCH_ACCOUNT = 2;
   ACCOUNT_HAS_OPEN_POSITIONS = 3;
+  NOT_SUPPORTED = 4;
+}
+
+// What the caller wants a URL for. Platforms that do not serve a given target answer
+// with NOT_SUPPORTED.
+enum PlatformRedirectTarget {
+  PLATFORM_REDIRECT_TARGET_TERMINAL = 0;
+  PLATFORM_REDIRECT_TARGET_COPY_TRADING = 1;
 }
 
 enum AccountLifeTimeType {
@@ -306,6 +314,9 @@ message GetPlatformRedirectUrlRequest {
   AccountType AccountType = 3;
   int32 PlatformId = 4;
   string ClientId = 5;
+  PlatformRedirectTarget Target = 6;
+  // Needed by platforms that resolve the user by email when no platform user id is stored yet.
+  optional string Email = 7;
 }
 
 message GetPlatformRedirectUrlResponseBody {
