@@ -207,6 +207,8 @@ message BalanceModel {
   double MarginFree = 5; // free margin
   double MarginLevel = 6; // margin level
   double Profit = 7;
+  string Group = 8; // actual platform group the account currently sits in (diagnostics)
+  double Leverage = 9; // account leverage as the platform sees it (user leverage from the package)
 }
 
 enum TradeType {

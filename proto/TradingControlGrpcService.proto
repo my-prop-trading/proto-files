@@ -66,7 +66,7 @@ message TradingMetricsGrpcModel {
   double total_realized_profit = 35;
   repeated TradingObjectivePassRequirement pass_requirements = 36;
   repeated TradingMetricWarningGrpc warnings = 37;
-  double margin_utilization_percent = 38;
+  double margin_utilization_percent = 38; // OUR metric: used_margin / initial_balance * 100. NOT the platform's margin level (see platform_margin_level).
   double max_profit = 39;
   double max_loss = 40;
   double avg_duration_sec = 41;
@@ -76,6 +76,10 @@ message TradingMetricsGrpcModel {
   int32 drawdown_type = 45;
   double max_profit_pct = 46;
   double progress_pass_pct = 47;
+  // Raw margin figures straight from the trading platform (MT5), no local processing.
+  double platform_used_margin = 48; // MT5 margin requirements (used margin)
+  double platform_free_margin = 49; // MT5 free margin (margin_free)
+  double platform_margin_level = 50; // MT5 margin level = equity / used_margin * 100. Distinct from margin_utilization_percent above.
 }
 
 enum BestDayRuleStatusGrpc {
