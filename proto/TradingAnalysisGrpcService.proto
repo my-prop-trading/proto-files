@@ -208,6 +208,28 @@ message GetAccountReviewResponse {
   }
 }
 
+// Batch existence check: for a set of accounts, does a READY-TO-READ report exist
+// (a persisted row in account_reviews). The dashboard account list (via
+// trader-accounts-rest-api) calls this once for the whole page to decide whether to
+// show the "view report" control per account — so a click never lands on a missing
+// report. `has_review = true` means GetAccountReview will return a review, not
+// not_found: it mirrors the persisted account_reviews row exactly (NOT queue.status),
+// so an account still being processed reads false until the report is actually stored.
+message ReviewExistsRequest {
+  repeated string trader_account_ids = 1;
+}
+
+message ReviewExistsItem {
+  string trader_account_id = 1;
+  bool has_review = 2;
+}
+
+// One item per REQUESTED id (an id with no report comes back has_review=false, not
+// omitted) so the caller maps by id without guessing about missing entries.
+message ReviewExistsResponse {
+  repeated ReviewExistsItem items = 1;
+}
+
 // ─── backoffice stats table + recompute (PROP25-2251) ──────────────────────────
 
 // One LLM call from the journal (first build or a recompute) — the per-call
@@ -337,6 +359,9 @@ message RecomputeReviewsResponse {
 service TradingAnalysisGrpcService {
   // Account review (dashboard read) — one report by trader account id.
   rpc GetAccountReview(trading_analysis.GetAccountReviewRequest) returns (trading_analysis.GetAccountReviewResponse);
+  // Batch "does a report exist" for a page of accounts — backs the dashboard
+  // account-list "view report" control (show only when a report is ready to read).
+  rpc ReviewExists(trading_analysis.ReviewExistsRequest) returns (trading_analysis.ReviewExistsResponse);
 
   // Snippet config (backoffice editor).
   rpc GetSnippetsConfig(google.protobuf.Empty) returns (trading_analysis.GetSnippetsConfigResponse);
