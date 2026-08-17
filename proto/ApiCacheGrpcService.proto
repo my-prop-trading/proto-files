@@ -32,6 +32,9 @@ message TraderAccountApiGrpcModel {
   bool hide_platform_url_for_dashboard = 27;
   int32 trader_package_type = 28;
   int32 trading_condition = 29;
+  // PROP25-2366: set means the funded account is unlocked by a second payment of this amount,
+  // which the client shows next to the awaiting-activation status_text.
+  optional double activation_fee = 30;
 }
 
 message GetTraderAccountsGrpcRequest {
