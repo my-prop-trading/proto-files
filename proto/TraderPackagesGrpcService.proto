@@ -123,6 +123,11 @@ message TraderPackage {
   // Named ...Enabled to match the sibling feature toggles (ExposureLossEnabled,
   // MarginRuleEnabled, FairShotEnabled).
   bool ProfitCarryoverEnabled = 82;
+  // PROP25-2366 Live account activation: absolute fee, in PriceCurrency, charged
+  // after the final phase is passed to unlock the funded account. Set = the package
+  // is sold evaluation-only and Price covers the evaluation alone; unset = the
+  // funded account is included in Price, which is today's behaviour.
+  optional double ActivationFee = 83;
 }
 
 message PlatformGroup {

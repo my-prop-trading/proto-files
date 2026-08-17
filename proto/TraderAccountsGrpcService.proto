@@ -119,6 +119,13 @@ message TraderAccount {
     // absent (None) otherwise, so consumers show the "banked"/composed-balance UI only
     // when the group is set instead of inspecting a bool + zeroed values.
     optional ProfitCarryover ProfitCarryover = 100;
+
+    // PROP25-2366 Live account activation, carried from the package snapshot: set means the
+    // funded account is unlocked by a second payment of this amount after the final phase.
+    optional double ActivationFee = 101;
+    // When the activation fee was paid. Until then the passed account waits and no contract
+    // is created, so the funded account is never granted.
+    optional int64 ActivationPaidAt = 102;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.
