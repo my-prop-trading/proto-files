@@ -457,6 +457,19 @@ message GetHighlightedTradesGrpcResponse {
   uint32 total = 2;
 }
 
+// PROP25-2347: mark an account so trading-control skips objective evaluation for it.
+// The payout service calls this synchronously right before withdrawing from the
+// platform, so a balance tick with the already-reduced equity cannot raise a false
+// DailyLoss breach in the window before the PayoutStatusUpdate event arrives.
+// The mark is transient (in-memory, TTL-bounded) and is removed once the payout
+// event fills payout_metrics or the TTL elapses. Empty response: the mark is a
+// fire-and-forget insert with nothing to report back.
+message IgnoreAccountGrpcRequest {
+  string trader_account_id = 1;
+}
+
+message IgnoreAccountGrpcResponse {}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -474,6 +487,8 @@ service TradingControlGrpcService {
 
   rpc GetTraderCard(GetTraderCardGrpcRequest) returns (GetTraderCardGrpcResponse);
   rpc GetHighlightedTrades(GetHighlightedTradesGrpcRequest) returns (GetHighlightedTradesGrpcResponse);
+
+  rpc IgnoreAccount(IgnoreAccountGrpcRequest) returns (IgnoreAccountGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
