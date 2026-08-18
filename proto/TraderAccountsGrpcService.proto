@@ -351,6 +351,30 @@ enum TraderAccountError {
   TRADER_ACCOUNT_WRONG_STATUS = 5;
 }
 
+// Live account activation (PROP25-2366): the activation fee of an evaluation-only package has
+// been paid, so the account that passed the final phase is released to the contract chain.
+// Idempotent — marking an already paid account only republishes the event.
+message MarkActivationPaidRequest {
+  string TraderAccountAggregatedId = 1;
+  // Activation order that was paid
+  string OrderId = 2;
+  // Unix microseconds
+  int64 PaidAt = 3;
+  string ProcessId = 4;
+}
+
+message MarkActivationPaidResponse {
+  oneof response {
+    trader_accounts.MarkActivationPaidResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message MarkActivationPaidResponseBody {
+  string TraderAccId = 1;
+  int64 ActivationPaidAt = 2;
+}
+
 message GetBlockedTraderAccountsRequest {
   string ClientId = 1;
 }
@@ -626,6 +650,8 @@ service TraderAccountsGrpcService {
     rpc GetTraderAccountByOrderId(trader_accounts.GetTraderAccountByOrderIdRequest) returns (trader_accounts.GetTraderAccountByOrderIdResponse);
     //this is only through admin panel
     rpc CreatePaidTraderAccount(trader_accounts.CreatePaidTraderAccountRequest) returns (trader_accounts.CreatePaidTraderAccountResponse);
+
+    rpc MarkActivationPaid(trader_accounts.MarkActivationPaidRequest) returns (trader_accounts.MarkActivationPaidResponse);
 
     rpc GetTraderAccountsByAggregatedId(trader_accounts.GetTraderAccountsByAggregatedIRequest) returns (trader_accounts.GetTraderAccountsByAggregatedIResponse);
     rpc GetTraderAccountByIdPrefix(trader_accounts.GetTraderAccountByIdPrefixRequest) returns (trader_accounts.GetTraderAccountByIdPrefixResponse);

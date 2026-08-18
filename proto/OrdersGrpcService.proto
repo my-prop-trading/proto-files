@@ -259,6 +259,10 @@ enum OrdersError {
   // Fair Shot (PROP25-2225)
   FairShotAlreadyGranted = 11;        // this purchase already produced a Fair Shot grant
   FairShotChainingNotAllowed = 12;    // the source order is itself a Fair Shot grant
+  // Live account activation (PROP25-2366)
+  TraderAccountNotFound = 13;         // no such account, or it belongs to another client
+  ActivationNotRequired = 14;         // the account is not awaiting an activation payment
+  ActivationAlreadyPaid = 15;         // the fee is paid, the funded account is already on its way
 }
 
 message GetPayinsPaginatedRequest {
@@ -380,6 +384,25 @@ message CreatePaidTraderAccountOrderResponse {
   }
 }
 
+// Live account activation (PROP25-2366): the second payment that unlocks the funded account of
+// an evaluation-only package. One order per aggregated id; every call returns a fresh payment
+// page for it until it is paid.
+message CreateActivationOrderRequest {
+  string ClientId = 1;
+  // Account that passed the final phase and carries the activation fee
+  string TraderAccountId = 2;
+  string Brand = 3;
+  string ProcessId = 4;
+  string ip = 5;
+}
+
+message CreateActivationOrderResponse {
+  oneof response {
+    orders.CreateTraderAccountOrderResponseBody Body = 1;
+    orders.OrdersError Error = 2;
+  }
+}
+
 message MarkPayinAsSuccessfulOrderRequest {
   string OrderId = 1;
   string ProcessId = 2;
@@ -408,6 +431,8 @@ service OrdersGrpcService {
 
   //this is through admin panel
   rpc CreatePaidTraderAccountOrder(orders.CreatePaidTraderAccountOrderRequest) returns (orders.CreatePaidTraderAccountOrderResponse);
+
+  rpc CreateActivationOrder(orders.CreateActivationOrderRequest) returns (orders.CreateActivationOrderResponse);
 
   rpc MarkPayinAsSuccessfulOrder(orders.MarkPayinAsSuccessfulOrderRequest) returns (orders.MarkPayinAsSuccessfulOrderResponse);
 
