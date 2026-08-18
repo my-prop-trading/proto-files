@@ -371,8 +371,10 @@ message MarkActivationPaidResponse {
 }
 
 message MarkActivationPaidResponseBody {
-  string TraderAccId = 1;
-  int64 ActivationPaidAt = 2;
+  trader_accounts.TraderAccount TraderAccount = 1;
+  // Concurrency counter of the account row; the TraderAccount message does not carry it and the
+  // account-history log keys its entries by it.
+  int64 ETag = 2;
 }
 
 message GetBlockedTraderAccountsRequest {
