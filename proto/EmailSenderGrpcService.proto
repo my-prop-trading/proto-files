@@ -225,6 +225,18 @@ message SendFairShotGrantedRequest{
     string TraderPackagesName = 3;
 }
 
+// Live account activation (PROP25-2366). Sent when the final evaluation phase of an
+// evaluation-only package is passed: the funded account stays locked until the activation fee is
+// paid. The amount is carried so the template can state it, and the account id so the call to
+// action can point at the account that is waiting.
+message SendActivationRequiredRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    double ActivationFee = 4;
+    string ActivationFeeCurrency = 5;
+}
+
 // Competition enrollment confirmation (PROP25-2151). Sent when the demo account
 // is provisioned for an enrollment. Destination + ClientId only — content (and
 // any merge fields) is owned by the marketer's SendGrid template; no credentials
@@ -386,6 +398,7 @@ service EmailSenderGrpcService {
     rpc SendFairShotGranted(email_sender.SendFairShotGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendCompetitionEnrolled(email_sender.SendCompetitionEnrolledRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountReviewReady(email_sender.SendAccountReviewReadyRequest) returns (email_sender.EmailSentResponse);
+    rpc SendActivationRequired(email_sender.SendActivationRequiredRequest) returns (email_sender.EmailSentResponse);
 
     rpc SendLiveAccountLost(email_sender.SendLiveAccountLostRequest) returns (email_sender.EmailSentResponse);
 

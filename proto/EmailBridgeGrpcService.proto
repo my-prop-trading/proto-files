@@ -60,6 +60,7 @@ enum EmailType {
     FAIR_SHOT_GRANTED = 53;
     COMPETITION_ENROLLED = 54;
     ACCOUNT_REVIEW_READY = 55;
+    ACTIVATION_REQUIRED = 56;
 }
 
 enum Error {
