@@ -30,6 +30,12 @@ message TraderPackageGroup {
   string Name = 2;
   optional string IconUrl = 3;
   int32 Order = 4;
+  // Trading platforms the packages of this group may be traded on (platform_id codes, as in
+  // TradingPlatformRouter). Empty = every enabled platform, which is how all groups behaved
+  // before the field existed.
+  repeated int32 Platforms = 5;
+  // ISO 3166-1 alpha-2 codes of the countries the group is offered in. Empty = everywhere.
+  repeated string Countries = 6;
 }
 
 enum TradingPackageCompensationType {
