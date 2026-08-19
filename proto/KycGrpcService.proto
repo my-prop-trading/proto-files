@@ -389,7 +389,6 @@ message ContractorRejectAndBlockResponse {
 message ContractorCheckSettingModel {
     string Key = 1;
     int32 Threshold = 2;
-    bool Enabled = 3;
 }
 
 message GetContractorCheckSettingsResponseBody {
