@@ -383,6 +383,39 @@ message ContractorRejectAndBlockResponse {
     }
 }
 
+// Contractor auto-approve check thresholds (PROP25-2360). Editable from the back-office
+// Contractors tab. These are NOT risk rules and NOT part of trading-package config — they
+// gate automatic contract sending only.
+message ContractorCheckSettingModel {
+    string Key = 1;
+    int32 Threshold = 2;
+}
+
+message GetContractorCheckSettingsResponseBody {
+    repeated kyc.ContractorCheckSettingModel Items = 1;
+}
+
+message GetContractorCheckSettingsResponse {
+    oneof response {
+        kyc.GetContractorCheckSettingsResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+}
+
+message UpdateContractorCheckSettingsRequest {
+    repeated kyc.ContractorCheckSettingModel Items = 1;
+}
+
+message UpdateContractorCheckSettingsResponseBody {
+}
+
+message UpdateContractorCheckSettingsResponse {
+    oneof response {
+        kyc.UpdateContractorCheckSettingsResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+}
+
 message GetClientProofsRequest {
     string ClientId = 1;
 }   
@@ -517,7 +550,14 @@ service KycGrpcService {
     rpc ContractorRejectAndBlock(kyc.ContractorRejectAndBlockRequest)
     returns (kyc.ContractorRejectAndBlockResponse);
 
-    rpc ManualProof(kyc.ManualProofRequest) 
+    // Contractor auto-approve check thresholds (PROP25-2360)
+    rpc GetContractorCheckSettings(google.protobuf.Empty)
+    returns (kyc.GetContractorCheckSettingsResponse);
+
+    rpc UpdateContractorCheckSettings(kyc.UpdateContractorCheckSettingsRequest)
+    returns (kyc.UpdateContractorCheckSettingsResponse);
+
+    rpc ManualProof(kyc.ManualProofRequest)
     returns (google.protobuf.Empty);
 
     // Retry info
