@@ -28,6 +28,13 @@ enum PaymentProvider {
   FUNNELFOX = 2;
 }
 
+enum OrderType {
+  CHALLENGE = 0;
+  // Live account activation (PROP25-2366): the second payment of an evaluation-only package,
+  // which unlocks the funded account instead of buying a challenge.
+  ACTIVATION = 1;
+}
+
 message Order {
   string Id = 1;
   optional int64 CreatedAt = 2;
@@ -52,7 +59,7 @@ message Order {
   optional string PaymentMethodTitle = 21;
   optional int64 PaidAt = 22;
   optional int64 UpdatedAt = 23;
-  int32 OrderType = 24;
+  orders.OrderType OrderType = 24;
   string TradingPackageId = 25;
   optional double DiscountAmount = 26;
   optional orders.DiscountCodeType DiscountType = 27;
@@ -278,6 +285,7 @@ message GetPayinsPaginatedRequest {
   optional bool IsFirstPayin = 10;
   optional string affiliate_id = 11;
   optional string PaymentMethodTitle = 12;
+  optional orders.OrderType OrderType = 13;
 }
 
 
@@ -315,6 +323,7 @@ message Payin {
   orders.TraderPackageChallengeType ChallengeType = 26;
   optional string DeclineReason = 27;
   double TotalPaid = 28;
+  orders.OrderType OrderType = 29;
 }
 
 message GetPayinsPaginatedResponse {
