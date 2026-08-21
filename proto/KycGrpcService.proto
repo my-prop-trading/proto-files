@@ -416,6 +416,31 @@ message UpdateContractorCheckSettingsResponse {
     }
 }
 
+// Measured contractor-check values for one challenge phase (PROP25-2361). These are the same numbers
+// the auto-approve checks compute (busiest single day's trade count and distinct login IP count),
+// surfaced so the NEW_CONTRACTOR Slack alert can show them to a reviewer. Values only — thresholds
+// are served separately by GetContractorCheckSettings.
+message PhaseCheckMetrics {
+    int32 Phase = 1;
+    int32 MaxTradesPerDay = 2;
+    int32 UniqueIpCount = 3;
+}
+
+message GetContractorCheckMetricsRequest {
+    string AggregatedId = 1;
+}
+
+message GetContractorCheckMetricsResponseBody {
+    repeated kyc.PhaseCheckMetrics Phases = 1;
+}
+
+message GetContractorCheckMetricsResponse {
+    oneof response {
+        kyc.GetContractorCheckMetricsResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+}
+
 message GetClientProofsRequest {
     string ClientId = 1;
 }   
@@ -556,6 +581,10 @@ service KycGrpcService {
 
     rpc UpdateContractorCheckSettings(kyc.UpdateContractorCheckSettingsRequest)
     returns (kyc.UpdateContractorCheckSettingsResponse);
+
+    // Measured per-phase contractor-check values for the NEW_CONTRACTOR Slack alert (PROP25-2361)
+    rpc GetContractorCheckMetrics(kyc.GetContractorCheckMetricsRequest)
+    returns (kyc.GetContractorCheckMetricsResponse);
 
     rpc ManualProof(kyc.ManualProofRequest)
     returns (google.protobuf.Empty);
