@@ -126,6 +126,12 @@ message TraderAccount {
     // When the activation fee was paid. Until then the passed account waits and no contract
     // is created, so the funded account is never granted.
     optional int64 ActivationPaidAt = 102;
+
+    // PROP25-2396 Home tab: trader-chosen display name for the challenge. Set only via the
+    // trader app (SetAccountDisplayName); absent (None) means the trader never renamed it and
+    // the frontend falls back to the generated default. Trader-facing only — never surfaced in
+    // back office / Orders.
+    optional string DisplayName = 103;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.
@@ -375,6 +381,26 @@ message MarkActivationPaidResponseBody {
   // Concurrency counter of the account row; the TraderAccount message does not carry it and the
   // account-history log keys its entries by it.
   int64 ETag = 2;
+}
+
+// PROP25-2396 Home tab: rename a challenge from the trader app. Owner is verified by ClientId
+// (mismatch -> UNAUTHORIZED). DisplayName is required and capped at 40 chars; no uniqueness check.
+message SetAccountDisplayNameRequest {
+  string TraderAccountId = 1;
+  // Owner check — must match the account's ClientId.
+  string ClientId = 2;
+  string DisplayName = 3;
+}
+
+message SetAccountDisplayNameResponse {
+  oneof response {
+    trader_accounts.SetAccountDisplayNameResponseBody Body = 1;
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message SetAccountDisplayNameResponseBody {
+  trader_accounts.TraderAccount TraderAccount = 1;
 }
 
 message GetBlockedTraderAccountsRequest {
@@ -632,6 +658,8 @@ message TraderAccountCacheModel {
   bool HidePlatformUrlForDashboard = 27;
   trader_packages.TraderPackageType TraderPackageType = 28;
   trader_packages.TradingConditionType TradingCondition = 29;
+  // PROP25-2396 Home tab: trader-chosen display name (see TraderAccount.DisplayName). None until renamed.
+  optional string DisplayName = 30;
 }
 
 message GetLongestActivatedAccountRequest { }
@@ -654,6 +682,8 @@ service TraderAccountsGrpcService {
     rpc CreatePaidTraderAccount(trader_accounts.CreatePaidTraderAccountRequest) returns (trader_accounts.CreatePaidTraderAccountResponse);
 
     rpc MarkActivationPaid(trader_accounts.MarkActivationPaidRequest) returns (trader_accounts.MarkActivationPaidResponse);
+
+    rpc SetAccountDisplayName(trader_accounts.SetAccountDisplayNameRequest) returns (trader_accounts.SetAccountDisplayNameResponse);
 
     rpc GetTraderAccountsByAggregatedId(trader_accounts.GetTraderAccountsByAggregatedIRequest) returns (trader_accounts.GetTraderAccountsByAggregatedIResponse);
     rpc GetTraderAccountByIdPrefix(trader_accounts.GetTraderAccountByIdPrefixRequest) returns (trader_accounts.GetTraderAccountByIdPrefixResponse);
