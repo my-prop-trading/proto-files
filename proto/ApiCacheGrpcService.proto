@@ -35,6 +35,10 @@ message TraderAccountApiGrpcModel {
   // PROP25-2366: set means the funded account is unlocked by a second payment of this amount,
   // which the client shows next to the awaiting-activation status_text.
   optional double activation_fee = 30;
+  // PROP25-2396 Home tab: trader-chosen challenge name, or the generated default when never
+  // renamed (see TraderAccount.DisplayName). Always set for trader-facing consumers. The
+  // Active/Inactive split stays on the existing status/status_text — no new outcome field.
+  optional string display_name = 31;
 }
 
 message GetTraderAccountsGrpcRequest {
