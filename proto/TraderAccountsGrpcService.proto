@@ -285,6 +285,17 @@ message GetLoginByTraderAccIdResponse {
   repeated trader_accounts.LoginTradAccId LoginTradAccIds = 1;
 }
 
+// PROP25-2396 Home tab: batch platform login (real account number) by account id,
+// across platforms/types in one call. Unlike GetLoginByTraderAccId, no platform/type
+// filter — the Home card grid mixes platforms, and the login is unique per account.
+message GetLoginsByAccountIdsRequest {
+  repeated string AccountIds = 1;
+}
+
+message GetLoginsByAccountIdsResponse {
+  repeated trader_accounts.LoginTradAccId Items = 1;
+}
+
 message GetTraderAccountByIdRequest {
   string TraderAccId = 1;
 }
@@ -672,6 +683,8 @@ service TraderAccountsGrpcService {
     rpc GetByClientId(trader_accounts.GetByClientIdRequest) returns (trader_accounts.GetByClientIdResponse);
     rpc GetTraderAccIdByCredentialsLogin(trader_accounts.GetTraderAccIdByCredentialsLoginRequest) returns (trader_accounts.GetTraderAccIdByCredentialsLoginResponse);
     rpc GetLoginByTraderAccId(trader_accounts.GetLoginByTraderAccIdRequest) returns (trader_accounts.GetLoginByTraderAccIdResponse);
+    // PROP25-2396 Home tab: batch platform login by account id, no platform/type filter.
+    rpc GetLoginsByAccountIds(trader_accounts.GetLoginsByAccountIdsRequest) returns (trader_accounts.GetLoginsByAccountIdsResponse);
     rpc CreateTraderAccount(trader_accounts.CreateTraderAccountRequest) returns (trader_accounts.CreateTraderAccountResponse);
     rpc GetTraderAccountCredentials(trader_accounts.GetTraderAccountCredentialsRequest) returns (trader_accounts.GetTraderAccountCredentialsResponse);
     rpc GetTraderAccountById(trader_accounts.GetTraderAccountByIdRequest) returns (trader_accounts.GetTraderAccountByIdResponse);
