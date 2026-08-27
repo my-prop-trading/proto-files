@@ -17,6 +17,7 @@ enum AdminNotificationTriggerGrpc {
     SUCCESSFUL_PAYIN = 11;
     EXTERNAL_PAYMENT = 12;
     POTENTIAL_PAYOUT = 13;
+    CONTRACT_DATA_INCOMPLETE = 14;
 }
 
 enum AdminNotificationStatusGrpc {
