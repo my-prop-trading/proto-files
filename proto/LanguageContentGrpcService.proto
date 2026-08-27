@@ -87,6 +87,21 @@ message AddKeyLanguageContentResponse {
 message AddKeyLanguageContentResponseBody {
 }
 
+message AddMissingKeysLanguageContentRequest {
+    repeated TranslateModel Content = 1;
+}
+
+message AddMissingKeysLanguageContentResponse {
+    oneof response {
+        AddMissingKeysLanguageContentResponseBody Body = 1;
+        Error Error = 2;
+    }
+}
+
+message AddMissingKeysLanguageContentResponseBody {
+    repeated string CreatedKeys = 1;
+}
+
 
 service LanguageContentGrpcService {
     rpc GetLanguageContent(GetLanguageContentRequest) returns (GetLanguageContentResponse);
@@ -94,6 +109,7 @@ service LanguageContentGrpcService {
     rpc AddLanguageContent(AddLanguageContentRequest) returns (AddLanguageContentResponse);
     rpc DeleteLanguageContent(DeleteLanguageContentRequest) returns (DeleteLanguageContentResponse);
     rpc AddKeyLanguageContent(AddKeyLanguageContentRequest) returns (AddKeyLanguageContentResponse);
+    rpc AddMissingKeysLanguageContent(AddMissingKeysLanguageContentRequest) returns (AddMissingKeysLanguageContentResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
