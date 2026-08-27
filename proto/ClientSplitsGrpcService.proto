@@ -107,6 +107,13 @@ message DeleteAssignmentResponse {
   bool deleted = 1;
 }
 
+// Empty assignment = client evaluated against experiments but matched none.
+message DeleteEmptyAssignmentsRequest {}
+
+message DeleteEmptyAssignmentsResponse {
+  uint64 deleted = 1;
+}
+
 service ClientSplitsGrpcService {
   rpc GetExperiments(GetExperimentsRequest) returns (GetExperimentsResponse);
   rpc CreateOrUpdateExperiments(CreateOrUpdateExperimentsRequest) returns (CreateOrUpdateExperimentsResponse);
@@ -115,6 +122,7 @@ service ClientSplitsGrpcService {
   rpc GetAssignments(GetAssignmentsRequest) returns (GetAssignmentsResponse);
   rpc CreateOrUpdateAssignments(CreateOrUpdateAssignmentsRequest) returns (CreateOrUpdateAssignmentsResponse);
   rpc DeleteAssignment(DeleteAssignmentRequest) returns (DeleteAssignmentResponse);
+  rpc DeleteEmptyAssignments(DeleteEmptyAssignmentsRequest) returns (DeleteEmptyAssignmentsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
