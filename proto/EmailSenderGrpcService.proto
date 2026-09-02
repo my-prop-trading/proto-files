@@ -249,6 +249,7 @@ message SendCompetitionEnrolledRequest{
 message SendAccountReviewReadyRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    string TraderAccountId = 3;
 }
 
 message SendInstantPaymentReceivedKycRequired {
