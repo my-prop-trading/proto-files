@@ -1,0 +1,56 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package marketing;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// "Predict the market" quiz (London Expo) — PROP25-2459
+// One row per completed quiz attempt. The client is already authenticated when
+// finishing the quiz, so ClientId is set from the session token at the REST
+// facade, not sent by the browser.
+// ─────────────────────────────────────────────────────────────────────────────
+
+message QuizResultModel {
+    string ClientId = 1;
+    // Number of correct answers in this attempt.
+    int32 NumberOfCorrectAnswers = 2;
+    // Quiz start — when the first question was shown after authentication (unix microseconds).
+    int64 StartDate = 3;
+    // Quiz end — when the button on the last question was clicked (unix microseconds).
+    int64 EndDate = 4;
+    // Duration in microseconds, computed server-side as EndDate - StartDate.
+    int64 DurationMicros = 5;
+}
+
+// SAVE
+message SaveQuizResultRequest {
+    string ClientId = 1;
+    int32 NumberOfCorrectAnswers = 2;
+    int64 StartDate = 3;
+    int64 EndDate = 4;
+}
+
+message SaveQuizResultResponse {
+    // Id of the stored attempt row.
+    string Id = 1;
+}
+
+// GET (paginated report — Backoffice)
+// Ordering is fixed by the ticket and applied server-side:
+//   1) NumberOfCorrectAnswers DESC (primary)
+//   2) DurationMicros ASC          (secondary)
+//   3) StartDate ASC               (tie-breaker)
+message GetPaginatedQuizResultsRequest {
+    uint64 Limit = 1;
+    uint64 Offset = 2;
+}
+
+message GetPaginatedQuizResultsResponse {
+    repeated marketing.QuizResultModel Items = 1;
+    uint64 Total = 2;
+}
+
+service MarketingFlowsGrpcService {
+    rpc SaveQuizResult(marketing.SaveQuizResultRequest) returns (marketing.SaveQuizResultResponse);
+    rpc GetPaginatedQuizResults(marketing.GetPaginatedQuizResultsRequest) returns (marketing.GetPaginatedQuizResultsResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
