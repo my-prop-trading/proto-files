@@ -530,6 +530,21 @@ message ManualProofRequest {
     ManualProofStatus Status = 4;
 }
 
+message ReopenProofOfAddressRequest {
+    string ClientId = 1;
+    string OfficerId = 2;
+}
+
+message ReopenProofOfAddressResponseBody {
+}
+
+message ReopenProofOfAddressResponse {
+    oneof response {
+        kyc.ReopenProofOfAddressResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+}
+
 service KycGrpcService {
     // API
     rpc ProofOfIdentity(kyc.ProofOfIdentityRequest) 
@@ -588,6 +603,12 @@ service KycGrpcService {
 
     rpc ManualProof(kyc.ManualProofRequest)
     returns (google.protobuf.Empty);
+
+    // Gives the client another proof-of-address attempt after a provider-side final reject:
+    // reopens the step at the provider and puts the local proof back to resubmission. Resetting the
+    // whole applicant profile instead would deactivate the approved identity documents too.
+    rpc ReopenProofOfAddress(kyc.ReopenProofOfAddressRequest)
+    returns (kyc.ReopenProofOfAddressResponse);
 
     // Retry info
     rpc GetIdentityInfoFromKycProvider(kyc.GetIdentityInfoFromKycProviderRequest)
