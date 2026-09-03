@@ -69,11 +69,26 @@ message SubscribeClientGrpcRequest {
   string ip = 17;
 }
 
+// Order rejections SubscribeClient can report to the caller. Everything else stays a gRPC error,
+// because only these are actionable by the trader.
+enum SubscribeOrderError {
+  Ok = 0;
+  InvalidDiscountCode = 1;
+  DiscountCodeUsageExceeded = 2;
+  DiscountCodeExpired = 3;
+  DiscountCodeOnlyForFirstPayin = 4;
+  DiscountCodeOnlyForNextPayin = 5;
+  TradingPackageNotFound = 6;
+}
+
 message SubscribeClientGrpcResponse {
   string client_id = 1;
   string order_id = 2;
   PaymentPageGrpcModel payment_page = 3;
   int32 order_status = 4;
+  // Set when registration succeeded but the order was rejected: client_id holds the registered
+  // client and the order fields are empty.
+  optional SubscribeOrderError order_error = 5;
 }
 
 message PaymentPageGrpcModel {
