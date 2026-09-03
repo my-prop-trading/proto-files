@@ -107,7 +107,22 @@ message GetKycBridgeProofOfAddressApplicantDataResponse {
     oneof response {
         GetKycBridgeApplicantDataResponseBody Body = 1;
         Error Error = 2;
-    } 
+    }
+}
+
+message ResetKycBridgeProofOfAddressStepRequest {
+    string ApplicantId = 1;
+    string ProcessId = 2;
+}
+
+message ResetKycBridgeProofOfAddressStepResponseBody {
+}
+
+message ResetKycBridgeProofOfAddressStepResponse {
+    oneof response {
+        ResetKycBridgeProofOfAddressStepResponseBody Body = 1;
+        Error Error = 2;
+    }
 }
 
 service KycBridgeBridgeGrpcService {
@@ -120,8 +135,13 @@ service KycBridgeBridgeGrpcService {
     rpc GetKycBridgeProofOfIdentityApplicantData(GetKycBridgeProofOfIdentityApplicantDataRequest) 
     returns (GetKycBridgeProofOfIdentityApplicantDataResponse);
     
-    rpc GetKycBridgeProofOfAddressApplicantData(GetKycBridgeProofOfAddressApplicantDataRequest) 
+    rpc GetKycBridgeProofOfAddressApplicantData(GetKycBridgeProofOfAddressApplicantDataRequest)
     returns (GetKycBridgeProofOfAddressApplicantDataResponse);
+
+    // Reopens the proof-of-address step alone. A full applicant reset would deactivate every
+    // uploaded document, including an already approved identity one.
+    rpc ResetKycBridgeProofOfAddressStep(ResetKycBridgeProofOfAddressStepRequest)
+    returns (ResetKycBridgeProofOfAddressStepResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
