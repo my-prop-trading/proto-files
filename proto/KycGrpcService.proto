@@ -423,7 +423,10 @@ message UpdateContractorCheckSettingsResponse {
 message PhaseCheckMetrics {
     int32 Phase = 1;
     int32 MaxTradesPerDay = 2;
-    int32 UniqueIpCount = 3;
+    // Distinct login COUNTRIES on this phase — the value the unique-country check decides on
+    // (PROP25-2360, Iana 2026-09-04). Renamed from UniqueIpCount so the NEW_CONTRACTOR alert reports
+    // what the gate actually checks (several IPs from one country count as one).
+    int32 UniqueCountriesCount = 3;
 }
 
 message GetContractorCheckMetricsRequest {
