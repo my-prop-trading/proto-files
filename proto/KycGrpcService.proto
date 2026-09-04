@@ -428,10 +428,16 @@ message PhaseCheckMetrics {
 
 message GetContractorCheckMetricsRequest {
     string AggregatedId = 1;
+    // Needed for the challenge-wide "unique clients by IP" measurement (PROP25-2360, Iana
+    // 2026-09-04), which spans the client's whole login history rather than one aggregated challenge.
+    string ClientId = 2;
 }
 
 message GetContractorCheckMetricsResponseBody {
     repeated kyc.PhaseCheckMetrics Phases = 1;
+    // Other clients sharing a login IP with this client, across the whole login history. Not per
+    // phase, so reported once for the challenge (PROP25-2360, Iana 2026-09-04).
+    int32 UniqueClientsByIp = 2;
 }
 
 message GetContractorCheckMetricsResponse {
