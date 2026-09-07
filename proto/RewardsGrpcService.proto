@@ -219,6 +219,8 @@ message RejectTaskGrpcResponse {
 
 message GetTaskScreenshotGrpcRequest {
   string Id = 1;
+  // Set by the client-facing API to prove ownership. Backoffice leaves it unset.
+  optional string ClientId = 2;
 }
 
 message GetTaskScreenshotGrpcResponse {
