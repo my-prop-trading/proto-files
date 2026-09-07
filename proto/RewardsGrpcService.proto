@@ -28,6 +28,12 @@ enum TaskLockReasonGrpc {
   NEEDS_PAYOUT = 2;
 }
 
+// Page ordering for GetTasksPage. Left unset the storage default order is kept.
+enum TaskSortGrpc {
+  SUBMITTED_AT_DESC = 0;
+  SUBMITTED_AT_ASC = 1;
+}
+
 enum RewardStatusGrpc {
   REWARD_AVAILABLE = 0;
   REWARD_CLAIMED = 1;
@@ -101,6 +107,8 @@ message TaskGrpcModel {
   // Computed per client_id in GetTasksPage only: the unmet requirement, or unset when eligible.
   // Left unset by every other RPC.
   optional TaskLockReasonGrpc LockReason = 15;
+  // Screenshot upload time, set on every submit. Unset for tasks nobody submitted yet.
+  optional int64 SubmittedAt = 16;
 }
 
 message GetTasksPageGrpcRequest {
@@ -108,6 +116,7 @@ message GetTasksPageGrpcRequest {
   int32 offset = 2;
   optional string ClientId = 3;
   repeated TaskStatusGrpc statuses = 4;
+  optional TaskSortGrpc Sort = 5;
 }
 
 message GetTasksPageGrpcResponse {
