@@ -244,6 +244,19 @@ message SendActivationRequiredRequest{
 message SendCompetitionEnrolledRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    // Placeholders. Dates are pre-formatted strings ("15 September 2026 14:00 UTC").
+    string CompetitionName = 3;
+    string CompetitionStart = 4;
+    string CompetitionEnd = 5;
+}
+
+message SendCompetitionStartedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    // Placeholders. Dates are pre-formatted strings ("15 September 2026 14:00 UTC").
+    string CompetitionName = 3;
+    string CompetitionStart = 4;
+    string CompetitionEnd = 5;
 }
 
 message SendAccountReviewReadyRequest{
@@ -398,6 +411,7 @@ service EmailSenderGrpcService {
     rpc SendLiveAccountGranted(email_sender.SendLiveAccountGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendFairShotGranted(email_sender.SendFairShotGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendCompetitionEnrolled(email_sender.SendCompetitionEnrolledRequest) returns (email_sender.EmailSentResponse);
+    rpc SendCompetitionStarted(email_sender.SendCompetitionStartedRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountReviewReady(email_sender.SendAccountReviewReadyRequest) returns (email_sender.EmailSentResponse);
     rpc SendActivationRequired(email_sender.SendActivationRequiredRequest) returns (email_sender.EmailSentResponse);
 
