@@ -61,6 +61,7 @@ enum EmailType {
     COMPETITION_ENROLLED = 54;
     ACCOUNT_REVIEW_READY = 55;
     ACTIVATION_REQUIRED = 56;
+    COMPETITION_STARTED = 57;
 }
 
 enum Error {
