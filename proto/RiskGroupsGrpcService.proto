@@ -74,6 +74,10 @@ enum RiskGroupsError {
   RISK_GROUPS_ERROR_GROUP_HAS_ASSIGNMENTS = 3;   // delete blocked while users assigned
   RISK_GROUPS_ERROR_ASSIGNMENT_NOT_FOUND = 4;
   RISK_GROUPS_ERROR_INVALID_OVERRIDE = 5;        // validation (e.g. hard cap <= soft cap)
+  RISK_GROUPS_ERROR_ABUSE_RULE_NOT_FOUND = 6;
+  RISK_GROUPS_ERROR_INVALID_ABUSE_RULE = 7;      // validation (e.g. zero window or limit)
+  RISK_GROUPS_ERROR_ABUSE_RESTRICTION_NOT_FOUND = 8;
+  RISK_GROUPS_ERROR_INVALID_ABUSE_KEY = 9;       // key value is not parsable into a counter key
 }
 
 message RiskGroupsErrorWithMessage {
@@ -160,6 +164,171 @@ message GetRiskOverrideResponse {
   RiskOverride override = 1;  // absent = client is in no group
 }
 
+// ===================== Anti-abuse =====================
+// Velocity rules over registration-class events. Unrelated to the trading risk
+// above: it gates an action by request key (IP), not an account by its risk group.
+
+enum AbuseEventType {
+  ABUSE_EVENT_TYPE_UNKNOWN = 0;
+  ABUSE_EVENT_TYPE_REGISTRATION = 1;
+}
+
+// User agent is deliberately absent: rotating it costs an attacker one line of
+// code, so it is stored as review evidence but never keys a counter.
+enum AbuseKeyType {
+  ABUSE_KEY_TYPE_UNKNOWN = 0;
+  ABUSE_KEY_TYPE_IP = 1;
+}
+
+enum AbuseRuleMode {
+  ABUSE_RULE_MODE_BLOCK = 0;
+  ABUSE_RULE_MODE_FLAG_FOR_REVIEW = 1;  // restriction is recorded but nothing is gated
+}
+
+// Rules on the same event type combine with OR.
+message AbuseRule {
+  string id = 1;                   // empty on create
+  AbuseEventType event_type = 2;
+  AbuseKeyType key_type = 3;
+  int32 window_secs = 4;
+  int32 limit_count = 5;           // restriction triggers when the counter reaches it
+  int32 restriction_secs = 6;
+  AbuseRuleMode mode = 7;
+  bool enabled = 8;
+  string comment = 9;
+  int64 updated_at = 10;
+  string updated_by = 11;
+}
+
+message AbuseRestriction {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;            // normalized counter key: `v4_1.2.3.4` / `v6_2a01cb0812345678`
+  string rule_id = 3;
+  AbuseRuleMode mode = 4;
+  int64 restricted_until = 5;
+  int32 triggered_count = 6;       // counter snapshot at trigger time
+  int32 window_secs = 7;
+  int64 created_at = 8;
+  int64 released_at = 9;           // 0 = never released by hand
+  string released_by = 10;
+}
+
+message AbuseAllowlistEntry {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;
+  string comment = 3;
+  int64 created_at = 4;
+  string created_by = 5;
+}
+
+message AbuseEvent {
+  string id = 1;
+  AbuseEventType event_type = 2;
+  int64 occurred_at = 3;
+  string client_id = 4;
+  string ip = 5;                   // as resolved by the producer, before normalization
+  string user_agent = 6;
+  string brand = 7;
+  string country = 8;
+  string channel = 9;
+}
+
+// ----- Rule management -----
+
+message GetAbuseRulesRequest {}
+
+message GetAbuseRulesResponse {
+  repeated AbuseRule rules = 1;
+}
+
+message SetAbuseRuleRequest {
+  AbuseRule rule = 1;  // id empty = create, id set = update
+}
+
+message SetAbuseRuleResponse {
+  AbuseRule rule = 1;                     // the saved rule; absent on error
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
+}
+
+message DeleteAbuseRuleRequest {
+  string id = 1;
+}
+
+message DeleteAbuseRuleResponse {
+  bool deleted = 1;
+  RiskGroupsErrorWithMessage error = 2;
+}
+
+// ----- Restrictions -----
+
+message GetAbuseRestrictionsRequest {
+  uint32 limit = 1;
+  uint32 offset = 2;
+  bool active_only = 3;  // still within restricted_until and not released
+}
+
+message GetAbuseRestrictionsResponse {
+  repeated AbuseRestriction restrictions = 1;
+}
+
+message ReleaseAbuseRestrictionRequest {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;
+  string released_by = 3;
+}
+
+message ReleaseAbuseRestrictionResponse {
+  bool released = 1;
+  RiskGroupsErrorWithMessage error = 2;
+}
+
+// ----- Allowlist -----
+
+message GetAbuseAllowlistRequest {}
+
+message GetAbuseAllowlistResponse {
+  repeated AbuseAllowlistEntry entries = 1;
+}
+
+// `key_value` is accepted raw (a plain IP) and normalized into a counter key
+// server-side, so that the operator does not have to know the key format.
+message SetAbuseAllowlistEntryRequest {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;
+  string comment = 3;
+  string created_by = 4;
+}
+
+message SetAbuseAllowlistEntryResponse {
+  AbuseAllowlistEntry entry = 1;
+  RiskGroupsErrorWithMessage error = 2;
+}
+
+message DeleteAbuseAllowlistEntryRequest {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;
+}
+
+message DeleteAbuseAllowlistEntryResponse {
+  bool deleted = 1;
+  RiskGroupsErrorWithMessage error = 2;
+}
+
+// ----- Events -----
+
+// Either by counter key (review queue) or by client (the client card block).
+message GetAbuseEventsRequest {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;   // ignored when client_id is set
+  string client_id = 3;
+  uint32 limit = 4;
+  uint32 offset = 5;
+}
+
+message GetAbuseEventsResponse {
+  repeated AbuseEvent events = 1;
+}
+
 service RiskGroupsGrpcService {
   rpc GetGroups(GetGroupsRequest) returns (GetGroupsResponse);
   rpc GetGroup(GetGroupRequest) returns (GetGroupResponse);
@@ -171,6 +340,19 @@ service RiskGroupsGrpcService {
   rpc RemoveAssignment(RemoveAssignmentRequest) returns (RemoveAssignmentResponse);
 
   rpc GetRiskOverride(GetRiskOverrideRequest) returns (GetRiskOverrideResponse);
+
+  rpc GetAbuseRules(GetAbuseRulesRequest) returns (GetAbuseRulesResponse);
+  rpc SetAbuseRule(SetAbuseRuleRequest) returns (SetAbuseRuleResponse);
+  rpc DeleteAbuseRule(DeleteAbuseRuleRequest) returns (DeleteAbuseRuleResponse);
+
+  rpc GetAbuseRestrictions(GetAbuseRestrictionsRequest) returns (GetAbuseRestrictionsResponse);
+  rpc ReleaseAbuseRestriction(ReleaseAbuseRestrictionRequest) returns (ReleaseAbuseRestrictionResponse);
+
+  rpc GetAbuseAllowlist(GetAbuseAllowlistRequest) returns (GetAbuseAllowlistResponse);
+  rpc SetAbuseAllowlistEntry(SetAbuseAllowlistEntryRequest) returns (SetAbuseAllowlistEntryResponse);
+  rpc DeleteAbuseAllowlistEntry(DeleteAbuseAllowlistEntryRequest) returns (DeleteAbuseAllowlistEntryResponse);
+
+  rpc GetAbuseEvents(GetAbuseEventsRequest) returns (GetAbuseEventsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
