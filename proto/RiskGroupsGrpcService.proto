@@ -215,6 +215,8 @@ message AbuseRestriction {
   // again is the case a reviewer must not lose.
   int64 last_released_at = 11;
   string last_released_by = 12;
+  string reason = 13;              // set by hand; a rule states its case through the counts
+  string created_by = 14;          // empty = imposed by a rule
 }
 
 message AbuseAllowlistEntry {
@@ -273,6 +275,19 @@ message GetAbuseRestrictionsRequest {
 
 message GetAbuseRestrictionsResponse {
   repeated AbuseRestriction restrictions = 1;
+}
+
+message SetAbuseRestrictionRequest {
+  AbuseKeyType key_type = 1;
+  string key_value = 2;            // plain IP or an already normalized counter key
+  int32 restriction_secs = 3;      // from now; a manual decision overrides whatever a rule set
+  string reason = 4;
+  string created_by = 5;
+}
+
+message SetAbuseRestrictionResponse {
+  AbuseRestriction restriction = 1;       // the saved restriction; absent on error
+  RiskGroupsErrorWithMessage error = 2;   // absent on success
 }
 
 message ReleaseAbuseRestrictionRequest {
@@ -350,6 +365,7 @@ service RiskGroupsGrpcService {
   rpc DeleteAbuseRule(DeleteAbuseRuleRequest) returns (DeleteAbuseRuleResponse);
 
   rpc GetAbuseRestrictions(GetAbuseRestrictionsRequest) returns (GetAbuseRestrictionsResponse);
+  rpc SetAbuseRestriction(SetAbuseRestrictionRequest) returns (SetAbuseRestrictionResponse);
   rpc ReleaseAbuseRestriction(ReleaseAbuseRestrictionRequest) returns (ReleaseAbuseRestrictionResponse);
 
   rpc GetAbuseAllowlist(GetAbuseAllowlistRequest) returns (GetAbuseAllowlistResponse);
