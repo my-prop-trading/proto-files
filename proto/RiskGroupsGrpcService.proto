@@ -236,6 +236,8 @@ message AbuseEvent {
   string user_agent = 6;
   string brand = 7;
   string country = 8;
+  // How the event came in; the value set depends on event_type and may be empty when the kind of
+  // event has no such distinction. Never part of a counter key — mixing doors must not lift a limit.
   string channel = 9;
 }
 
