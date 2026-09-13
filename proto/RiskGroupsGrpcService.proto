@@ -323,7 +323,7 @@ message DeleteAbuseAllowlistEntryResponse {
 // Either by counter key (review queue) or by client (the client card block).
 message GetAbuseEventsRequest {
   AbuseKeyType key_type = 1;
-  string key_value = 2;   // ignored when client_id is set
+  string key_value = 2;   // ignored when client_id is set; empty = latest events, unfiltered
   string client_id = 3;
   uint32 limit = 4;
   uint32 offset = 5;
