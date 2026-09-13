@@ -211,6 +211,10 @@ message AbuseRestriction {
   int64 created_at = 8;
   int64 released_at = 9;           // 0 = never released by hand
   string released_by = 10;
+  // Survive a re-trigger, which overwrites the row: a key that was released by hand and tripped
+  // again is the case a reviewer must not lose.
+  int64 last_released_at = 11;
+  string last_released_by = 12;
 }
 
 message AbuseAllowlistEntry {
