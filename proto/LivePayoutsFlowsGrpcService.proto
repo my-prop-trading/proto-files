@@ -1,0 +1,292 @@
+syntax = "proto3";
+package live_payouts;
+
+import "google/protobuf/empty.proto";
+
+// Live-payouts: fake weekly payout feed generation for the Discord showcase
+// (PROP25-2472, epic PROP25-2458). This contract covers the BO surface for the
+// settings page and the Draft page (spec steps 1 & 3). Publication / общая таблица
+// / Discord / real payouts are a later ticket.
+service LivePayoutsFlowsGrpcService {
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  // ── Settings page ─────────────────────────────────────────────────────────
+  // The currently active settings snapshot (renders the form). Absent = none saved.
+  rpc GetActiveSettings(google.protobuf.Empty) returns (GetActiveSettingsResponse);
+  // Append-only version history (who/when), newest first.
+  rpc GetSettingsHistory(google.protobuf.Empty) returns (GetSettingsHistoryResponse);
+  // Save a new settings version. Validated server-side BEFORE insert; an invalid
+  // snapshot is rejected (shares must sum to 100%, amount ranges non-overlapping and
+  // covering the total, ≥1 package). Activates the new version (CAS on is_active).
+  rpc SaveSettings(SaveSettingsRequest) returns (SaveSettingsResponse);
+  // The full package list from TraderPackagesGrpcService.GetAll (published +
+  // unpublished) — the choices for the settings package table. Never hardcoded.
+  rpc GetAvailablePackages(google.protobuf.Empty) returns (GetAvailablePackagesResponse);
+
+  // ── Draft page ────────────────────────────────────────────────────────────
+  // Weeks currently in Draft/InvalidDraft (list with status + report + summary).
+  rpc GetDraftWeeks(google.protobuf.Empty) returns (GetDraftWeeksResponse);
+  // Rows of one week (chronological), for the day-by-day view.
+  rpc GetWeekRows(GetWeekRowsRequest) returns (GetWeekRowsResponse);
+  // Run generation by hand (spec §2 kick button). generated_by = the BO user.
+  rpc RunGeneration(RunGenerationRequest) returns (RunGenerationResponse);
+  // Regenerate a whole week in place (reuses the week row, replaces its rows).
+  rpc RegenerateWeek(RegenerateWeekRequest) returns (RegenerateWeekResponse);
+  // Regenerate a single row of a Draft week.
+  rpc RegenerateRow(RegenerateRowRequest) returns (RowResponse);
+  // Confirm a week — whole week (row_ids empty) or specific rows.
+  rpc ConfirmWeek(ConfirmWeekRequest) returns (ConfirmWeekResponse);
+  // Edit any field of a Draft row.
+  rpc UpdateRow(UpdateRowRequest) returns (RowResponse);
+  // Add a row by hand (spec §3.1).
+  rpc AddRow(AddRowRequest) returns (RowResponse);
+  // Delete a Draft row.
+  rpc DeleteRow(DeleteRowRequest) returns (google.protobuf.Empty);
+}
+
+// ── Enums (numbers frozen) ────────────────────────────────────────────────────
+
+enum WeekStatus {
+  Draft = 0;
+  Confirmed = 1;
+  Expired = 2;
+  InvalidDraft = 3;
+}
+
+enum RowStatus {
+  RowDraft = 0;      // prefixed — proto3 enum values share the package namespace
+  RowConfirmed = 1;
+  RowExcluded = 2;
+}
+
+// ── Settings messages ──────────────────────────────────────────────────────────
+
+// Mirrors postgres::snapshot shapes. Money in cents; shares/dispersion in permille.
+message VolumeSettings {
+  int64 total_min_cents = 1;
+  int64 total_max_cents = 2;
+  uint32 min_week_diff_permille = 3;
+}
+
+message PackageSetting {
+  string trading_package_id = 1;
+  uint32 share_permille = 2;
+  int64 amount_min_cents = 3;
+  int64 amount_max_cents = 4;
+}
+
+message CountryWeight {
+  string code = 1;
+  uint32 weight = 2;
+}
+
+message CountrySettings {
+  repeated CountryWeight tier1 = 1;
+  repeated CountryWeight tier2 = 2;
+  repeated CountryWeight tier3 = 3;
+  uint32 tier4_countries_per_week = 4;
+  uint32 tier4_rows_per_country = 5;
+}
+
+message GenerationSettings {
+  VolumeSettings volume = 1;
+  repeated PackageSetting packages = 2;
+  CountrySettings countries = 3;
+}
+
+message SettingsVersion {
+  string id = 1;
+  int64 version = 2;
+  bool is_active = 3;
+  string changed_by = 4;
+  optional string change_note = 5;
+  int64 created_at = 6; // unix micros
+  GenerationSettings settings = 7;
+}
+
+message GetActiveSettingsResponse {
+  optional SettingsVersion active = 1; // absent = nothing configured yet
+}
+
+message GetSettingsHistoryResponse {
+  repeated SettingsVersion versions = 1;
+}
+
+message SaveSettingsRequest {
+  GenerationSettings settings = 1;
+  string changed_by = 2;
+  optional string change_note = 3;
+}
+
+message SaveSettingsResponse {
+  bool ok = 1;
+  // On ok=false: human-readable validation errors (shares≠100%, overlap, …).
+  repeated string validation_errors = 2;
+  optional SettingsVersion saved = 3; // present on ok=true
+}
+
+// A package from GetAll, reduced to what the BO table shows.
+message AvailablePackage {
+  string id = 1;
+  string title = 2;
+  string label = 3;
+  string group_name = 4;
+  double account_balance = 5;
+}
+
+message GetAvailablePackagesResponse {
+  repeated AvailablePackage packages = 1;
+}
+
+// ── Draft messages ───────────────────────────────────────────────────────────
+
+// Summary shown next to a week (spec §3.1): totals, rows/day, per-package share.
+message PackageStat {
+  string trading_package_id = 1;
+  uint32 row_count = 2;
+  uint32 actual_permille = 3;
+  uint32 target_permille = 4;
+}
+
+message WeekSummary {
+  int64 total_cents = 1;
+  uint32 row_count = 2;
+  repeated uint32 rows_per_day = 3; // 5 entries, Mon..Fri
+  uint32 unique_surnames = 4;
+  uint32 round_count = 5;
+  repeated PackageStat package_stats = 6;
+}
+
+message PayoutWeek {
+  string id = 1;
+  int64 week_start = 2; // unix micros
+  int64 week_end = 3;
+  WeekStatus status = 4;
+  string settings_version_id = 5;
+  int64 target_total_cents = 6;
+  bool is_valid = 7;
+  optional string generated_by = 8;
+  int64 created_at = 9;
+  int64 updated_at = 10;
+  // Full validation report JSON (findings + summary), as stored. The client can
+  // render findings; `summary` is the parsed convenience copy.
+  string validation_report_json = 11;
+  WeekSummary summary = 12;
+}
+
+message PayoutRow {
+  string id = 1;
+  string week_id = 2;
+  string name = 3;
+  string surname = 4;
+  string country_code = 5;
+  string country_name = 6;
+  int64 amount_cents = 7;
+  string trading_package_id = 8;
+  int64 publish_at = 9; // unix micros
+  bool is_real = 10;
+  RowStatus row_status = 11;
+  // Service fields (empty in Draft; filled at publication — later ticket).
+  optional int32 certificate_status = 12;
+  optional string certificate_url = 13;
+  optional int32 discord_status = 14;
+  optional string discord_url = 15;
+  optional int32 retry_count = 16;
+  optional string last_error = 17;
+  optional int64 last_attempt_at = 18;
+  int64 created_at = 19;
+  int64 updated_at = 20;
+}
+
+message GetDraftWeeksResponse {
+  repeated PayoutWeek weeks = 1;
+}
+
+message GetWeekRowsRequest {
+  string week_id = 1;
+}
+
+message GetWeekRowsResponse {
+  optional PayoutWeek week = 1;
+  repeated PayoutRow rows = 2;
+}
+
+message RunGenerationRequest {
+  string generated_by = 1;
+}
+
+// Outcome mirrors bg::FlowOutcome.
+enum GenerationOutcome {
+  Generated = 0;
+  SkippedExists = 1;
+  NoSettings = 2;
+  Invalid = 3;
+}
+
+message RunGenerationResponse {
+  GenerationOutcome outcome = 1;
+  optional string week_id = 2;   // present when Generated
+  optional bool is_valid = 3;    // present when Generated
+  optional string message = 4;   // present when Invalid
+}
+
+message RegenerateWeekRequest {
+  string week_id = 1;
+  string requested_by = 2;
+}
+
+message RegenerateWeekResponse {
+  bool ok = 1;
+  bool is_valid = 2;
+  optional string message = 3;
+}
+
+message RegenerateRowRequest {
+  string row_id = 1;
+  string requested_by = 2;
+}
+
+message ConfirmWeekRequest {
+  string week_id = 1;
+  // Empty = confirm the whole week; otherwise only these rows (spec §3.1).
+  repeated string row_ids = 2;
+  string confirmed_by = 3;
+}
+
+message ConfirmWeekResponse {
+  bool ok = 1;
+  uint32 confirmed_rows = 2;
+  optional string message = 3;
+}
+
+// Editable fields of a Draft row. Absent field = leave unchanged.
+message UpdateRowRequest {
+  string row_id = 1;
+  string changed_by = 2;
+  optional string name = 3;
+  optional string surname = 4;
+  optional string country_code = 5;
+  optional int64 amount_cents = 6;
+  optional string trading_package_id = 7;
+  optional int64 publish_at = 8;
+}
+
+message AddRowRequest {
+  string week_id = 1;
+  string added_by = 2;
+  string name = 3;
+  string surname = 4;
+  string country_code = 5;
+  int64 amount_cents = 6;
+  string trading_package_id = 7;
+  int64 publish_at = 8;
+}
+
+message DeleteRowRequest {
+  string row_id = 1;
+  string deleted_by = 2;
+}
+
+message RowResponse {
+  PayoutRow row = 1;
+}
