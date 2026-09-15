@@ -50,6 +50,9 @@ service LivePayoutsFlowsGrpcService {
   rpc AddRow(AddRowRequest) returns (RowResponse);
   // Delete a Draft row.
   rpc DeleteRow(DeleteRowRequest) returns (google.protobuf.Empty);
+  // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
+  // in history). Toggles row_status Excluded⇄Draft.
+  rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -318,6 +321,12 @@ message AddRowRequest {
 message DeleteRowRequest {
   string row_id = 1;
   string deleted_by = 2;
+}
+
+message SetRowExcludedRequest {
+  string row_id = 1;
+  string changed_by = 2;
+  bool excluded = 3; // true → Excluded, false → back to Draft
 }
 
 message RowResponse {
