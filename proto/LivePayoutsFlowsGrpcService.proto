@@ -66,6 +66,11 @@ message VolumeSettings {
   int64 total_min_cents = 1;
   int64 total_max_cents = 2;
   uint32 min_week_diff_permille = 3;
+  // Target average-payout band (PROP25-2472): drives the derived row count and,
+  // with the package ranges, whether a week is generatable. A setting, not a
+  // hardcoded constant, so it is one source of truth with the packages.
+  int64 avg_min_cents = 4;
+  int64 avg_max_cents = 5;
 }
 
 message PackageSetting {
