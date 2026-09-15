@@ -99,6 +99,9 @@ message CountrySettings {
   repeated CountryWeight tier3 = 3;
   uint32 tier4_countries_per_week = 4;
   uint32 tier4_rows_per_country = 5;
+  // Tier-4 country list (PROP25-2472): tier 4 draws from these, not a hardcoded
+  // pool, so every tier-4 country is one the name engine supports.
+  repeated CountryWeight tier4 = 6;
 }
 
 message GenerationSettings {
