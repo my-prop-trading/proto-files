@@ -22,6 +22,10 @@ service LivePayoutsFlowsGrpcService {
   // The full package list from TraderPackagesGrpcService.GetAll (published +
   // unpublished) — the choices for the settings package table. Never hardcoded.
   rpc GetAvailablePackages(google.protobuf.Empty) returns (GetAvailablePackagesResponse);
+  // Countries the name engine can generate names for — the ONLY valid choices for
+  // the tier country lists, so a payout never lands on a country with no name
+  // morphology (PROP25-2472). The settings dropdown is built from this.
+  rpc GetSupportedCountries(google.protobuf.Empty) returns (GetSupportedCountriesResponse);
 
   // ── Draft page ────────────────────────────────────────────────────────────
   // Weeks currently in Draft/InvalidDraft (list with status + report + summary).
@@ -145,6 +149,15 @@ message AvailablePackage {
 
 message GetAvailablePackagesResponse {
   repeated AvailablePackage packages = 1;
+}
+
+message SupportedCountry {
+  string code = 1; // ISO 3166-1 alpha-2
+  string name = 2; // display name
+}
+
+message GetSupportedCountriesResponse {
+  repeated SupportedCountry countries = 1;
 }
 
 // ── Draft messages ───────────────────────────────────────────────────────────
