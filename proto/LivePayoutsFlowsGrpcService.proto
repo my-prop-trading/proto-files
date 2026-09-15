@@ -181,6 +181,10 @@ message PayoutWeek {
   // render findings; `summary` is the parsed convenience copy.
   string validation_report_json = 11;
   WeekSummary summary = 12;
+  // Seeded history week (imported prior channel weeks), not one this service
+  // generated/confirmed. Lets the payouts table mark history vs. real confirmed
+  // weeks (PROP25-2472).
+  bool is_seed = 13;
 }
 
 message PayoutRow {
