@@ -185,6 +185,10 @@ message PayoutWeek {
   // generated/confirmed. Lets the payouts table mark history vs. real confirmed
   // weeks (PROP25-2472).
   bool is_seed = 13;
+  // Actual number of payout rows in this week, counted from the rows table (not
+  // from the validation report — seed weeks have no report). For the week-list
+  // "Rows" column without expanding the week.
+  int32 row_count = 14;
 }
 
 message PayoutRow {
