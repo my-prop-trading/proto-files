@@ -22,6 +22,10 @@ service LivePayoutsFlowsGrpcService {
   // The full package list from TraderPackagesGrpcService.GetAll (published +
   // unpublished) — the choices for the settings package table. Never hardcoded.
   rpc GetAvailablePackages(google.protobuf.Empty) returns (GetAvailablePackagesResponse);
+  // Countries the name engine can generate names for — the ONLY valid choices for
+  // the tier country lists, so a payout never lands on a country with no name
+  // morphology (PROP25-2472). The settings dropdown is built from this.
+  rpc GetSupportedCountries(google.protobuf.Empty) returns (GetSupportedCountriesResponse);
 
   // ── Draft page ────────────────────────────────────────────────────────────
   // Weeks currently in Draft/InvalidDraft (list with status + report + summary).
@@ -46,6 +50,9 @@ service LivePayoutsFlowsGrpcService {
   rpc AddRow(AddRowRequest) returns (RowResponse);
   // Delete a Draft row.
   rpc DeleteRow(DeleteRowRequest) returns (google.protobuf.Empty);
+  // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
+  // in history). Toggles row_status Excluded⇄Draft.
+  rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -95,6 +102,9 @@ message CountrySettings {
   repeated CountryWeight tier3 = 3;
   uint32 tier4_countries_per_week = 4;
   uint32 tier4_rows_per_country = 5;
+  // Tier-4 country list (PROP25-2472): tier 4 draws from these, not a hardcoded
+  // pool, so every tier-4 country is one the name engine supports.
+  repeated CountryWeight tier4 = 6;
 }
 
 message GenerationSettings {
@@ -145,6 +155,15 @@ message AvailablePackage {
 
 message GetAvailablePackagesResponse {
   repeated AvailablePackage packages = 1;
+}
+
+message SupportedCountry {
+  string code = 1; // ISO 3166-1 alpha-2
+  string name = 2; // display name
+}
+
+message GetSupportedCountriesResponse {
+  repeated SupportedCountry countries = 1;
 }
 
 // ── Draft messages ───────────────────────────────────────────────────────────
@@ -302,6 +321,12 @@ message AddRowRequest {
 message DeleteRowRequest {
   string row_id = 1;
   string deleted_by = 2;
+}
+
+message SetRowExcludedRequest {
+  string row_id = 1;
+  string changed_by = 2;
+  bool excluded = 3; // true → Excluded, false → back to Draft
 }
 
 message RowResponse {
