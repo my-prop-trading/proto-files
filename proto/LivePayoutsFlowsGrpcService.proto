@@ -26,6 +26,10 @@ service LivePayoutsFlowsGrpcService {
   // ── Draft page ────────────────────────────────────────────────────────────
   // Weeks currently in Draft/InvalidDraft (list with status + report + summary).
   rpc GetDraftWeeks(google.protobuf.Empty) returns (GetDraftWeeksResponse);
+  // Confirmed weeks — the shared payouts table (spec §3.2). Same shape as
+  // GetDraftWeeks; a Draft leaves here after ConfirmWeek. Certificate/Discord
+  // columns are a later ticket (step 4).
+  rpc GetConfirmedWeeks(google.protobuf.Empty) returns (GetDraftWeeksResponse);
   // Rows of one week (chronological), for the day-by-day view.
   rpc GetWeekRows(GetWeekRowsRequest) returns (GetWeekRowsResponse);
   // Run generation by hand (spec §2 kick button). generated_by = the BO user.
