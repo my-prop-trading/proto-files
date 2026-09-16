@@ -53,6 +53,18 @@ service LivePayoutsFlowsGrpcService {
   // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
   // in history). Toggles row_status Excluded⇄Draft.
   rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
+
+  // ── Publication (spec §4, PROP25-2473) ────────────────────────────────────
+  // Publication settings (window, weekdays, retry policy, pause). Absent row =
+  // returns the defaults.
+  rpc GetPublicationSettings(google.protobuf.Empty) returns (GetPublicationSettingsResponse);
+  // Save the publication settings (window/weekdays/retry). Validated server-side.
+  rpc SavePublicationSettings(SavePublicationSettingsRequest) returns (GetPublicationSettingsResponse);
+  // Pause / resume all publication without touching rows (spec §4).
+  rpc SetPublicationPaused(SetPublicationPausedRequest) returns (GetPublicationSettingsResponse);
+  // Manual "retry" on a failed row (spec §4): clears the Error mark(s) and resets
+  // the retry counter so the timer picks the row up again.
+  rpc RetryRow(RetryRowRequest) returns (RowResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -331,4 +343,40 @@ message SetRowExcludedRequest {
 
 message RowResponse {
   PayoutRow row = 1;
+}
+
+// ── Publication (spec §4) ─────────────────────────────────────────────────────
+
+message PublicationSettings {
+  int32 window_start_hour = 1; // Kyiv local, inclusive
+  int32 window_end_hour = 2;   // Kyiv local, exclusive
+  repeated int32 weekdays = 3; // chrono Mon=0..Sun=6; default [0,1,2,3,4]
+  int32 retry_max_attempts = 4;
+  int32 retry_backoff_secs = 5;
+  bool is_paused = 6;
+  optional string changed_by = 7;
+  int64 updated_at = 8; // unix micros
+}
+
+message GetPublicationSettingsResponse {
+  PublicationSettings settings = 1;
+}
+
+message SavePublicationSettingsRequest {
+  int32 window_start_hour = 1;
+  int32 window_end_hour = 2;
+  repeated int32 weekdays = 3;
+  int32 retry_max_attempts = 4;
+  int32 retry_backoff_secs = 5;
+  string changed_by = 6;
+}
+
+message SetPublicationPausedRequest {
+  bool paused = 1;
+  string changed_by = 2;
+}
+
+message RetryRowRequest {
+  string row_id = 1;
+  string requested_by = 2;
 }
