@@ -1,0 +1,51 @@
+syntax = "proto3";
+package discord_bridge;
+import "google/protobuf/empty.proto";
+
+// Bridge in front of the Discord REST API. Posts one message to a channel via the
+// existing OneFunded bot application (bot-token transport), so the sender in the
+// channel does not change. The caller (live-payouts) knows only this gRPC contract,
+// never the Discord transport. Credentials (bot token, guild id) live in the bridge
+// settings — swapped between the test channel/app and the production OneFunded app
+// without any code change.
+
+enum DiscordError {
+    OK = 0;
+    INTERNAL_ERROR = 1;
+    DISCORD_PROVIDER_ERROR = 2;
+}
+
+message SendMessageRequest {
+    // Target channel id. The bridge does not hardcode a channel — the caller decides
+    // (live-payouts posts to the live-payouts channel).
+    string ChannelId = 1;
+    // Message text, already formatted by the caller (spec §4 post format). Plain
+    // content only — no embeds, attachments, threads or reactions.
+    string Content = 2;
+}
+
+message SendMessageResponse {
+    oneof response {
+        SendMessageResponseBody Body = 1;
+        DiscordError Error = 2;
+    }
+    // Human-readable provider error text, set when `response` is `Error`. The caller
+    // stores it verbatim on the payout row's last_error (spec §4: "the full error
+    // text, not just 'error'"). Empty on success.
+    string ErrorMessage = 3;
+}
+
+message SendMessageResponseBody {
+    // Created Discord message id.
+    string MessageId = 1;
+    // Permalink to the posted message
+    // (https://discord.com/channels/{guild}/{channel}/{message}), assembled by the
+    // bridge from its configured guild id. Stored on the payout row's Discord mark.
+    string MessageUrl = 2;
+}
+
+service DiscordBridgeGrpcService {
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
