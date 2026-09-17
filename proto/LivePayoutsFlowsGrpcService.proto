@@ -65,6 +65,11 @@ service LivePayoutsFlowsGrpcService {
   // Manual "retry" on a failed row (spec §4): clears the Error mark(s) and resets
   // the retry counter so the timer picks the row up again.
   rpc RetryRow(RetryRowRequest) returns (RowResponse);
+  // Manual "post now" on a row (PROP25-2473): publish it immediately (certificate →
+  // Discord) ignoring both publish_at and the publish window, for an out-of-band or
+  // stuck row — no DB aging needed. Still idempotent on the marks (an already-issued
+  // certificate / already-sent message is not repeated) and skips excluded rows.
+  rpc PublishRowNow(PublishRowNowRequest) returns (RowResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -377,6 +382,11 @@ message SetPublicationPausedRequest {
 }
 
 message RetryRowRequest {
+  string row_id = 1;
+  string requested_by = 2;
+}
+
+message PublishRowNowRequest {
   string row_id = 1;
   string requested_by = 2;
 }
