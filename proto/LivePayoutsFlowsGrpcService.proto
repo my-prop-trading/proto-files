@@ -266,6 +266,11 @@ message GetWeekRowsResponse {
 
 message RunGenerationRequest {
   string generated_by = 1;
+  // Optional target publish week (PROP25-2472): the Kyiv-local Monday 00:00 of the
+  // week to generate INTO, as unix micros. Absent → the default "next publish
+  // Monday" (a week ahead). When set it must be a Monday strictly in the future with
+  // no existing week yet; otherwise the generation is rejected / skipped.
+  optional int64 target_week_start = 2;
 }
 
 // Outcome mirrors bg::FlowOutcome.
