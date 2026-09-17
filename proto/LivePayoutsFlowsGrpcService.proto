@@ -74,6 +74,12 @@ service LivePayoutsFlowsGrpcService {
   // same time-of-day; the post date follows publish_at. Rejected once the certificate
   // is issued (row locked). Audited as Rescheduled.
   rpc RescheduleRow(RescheduleRowRequest) returns (RowResponse);
+  // TEST-ONLY (PROP25-2473): run the real-payout handler for an existing payout id,
+  // exactly as the payout-status-update bus event would — but directly, WITHOUT
+  // publishing a real bus event (which other services also consume). Posts the payout
+  // to Discord (certificate reused) and records status in payout_post. For e2e testing
+  // of the real-payout path on alpha.
+  rpc SimulateRealPayout(SimulateRealPayoutRequest) returns (SimulateRealPayoutResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -403,4 +409,19 @@ message PublishRowNowRequest {
 message RescheduleRowRequest {
   string row_id = 1;
   string requested_by = 2;
+}
+
+message SimulateRealPayoutRequest {
+  // An existing payout id in the payouts service (reached Success). The handler reads
+  // the full payout, resolves the identity, and posts it — same as the bus event.
+  string payout_id = 1;
+}
+
+message SimulateRealPayoutResponse {
+  // The publication status the handler produced for this payout (from payout_post).
+  optional int32 certificate_status = 1; // 1 issued / 2 error
+  optional string certificate_url = 2;
+  optional int32 discord_status = 3;     // 1 sent / 2 error
+  optional string discord_url = 4;
+  optional string last_error = 5;
 }
