@@ -70,6 +70,10 @@ service LivePayoutsFlowsGrpcService {
   // stuck row — no DB aging needed. Still idempotent on the marks (an already-issued
   // certificate / already-sent message is not repeated) and skips excluded rows.
   rpc PublishRowNow(PublishRowNowRequest) returns (RowResponse);
+  // Move a row that missed its window to the next working day (spec §4), keeping the
+  // same time-of-day; the post date follows publish_at. Rejected once the certificate
+  // is issued (row locked). Audited as Rescheduled.
+  rpc RescheduleRow(RescheduleRowRequest) returns (RowResponse);
 }
 
 // ── Enums (numbers frozen) ────────────────────────────────────────────────────
@@ -392,6 +396,11 @@ message RetryRowRequest {
 }
 
 message PublishRowNowRequest {
+  string row_id = 1;
+  string requested_by = 2;
+}
+
+message RescheduleRowRequest {
   string row_id = 1;
   string requested_by = 2;
 }
