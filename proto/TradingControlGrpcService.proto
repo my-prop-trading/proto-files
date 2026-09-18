@@ -327,6 +327,9 @@ message CalendarDayGrpc {
   int64 date = 1;     // unix seconds, UTC midnight
   uint32 trades = 2;
   double pnl = 3;
+  // Signed deposits/withdrawals of the day. The daily balance candle moves by them too, so a
+  // reader deriving pnl from the candle must subtract them back out.
+  double balanceOps = 4;
 }
 
 // Calendar week (Monday–Sunday, UTC) aggregate of the same closed trades as
