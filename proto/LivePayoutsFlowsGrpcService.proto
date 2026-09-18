@@ -54,6 +54,10 @@ service LivePayoutsFlowsGrpcService {
   // never deletable here. Lets an operator discard a botched generated week instead of
   // only regenerating it in place.
   rpc DeleteWeek(DeleteWeekRequest) returns (google.protobuf.Empty);
+  // Generate a plausible name+surname for a country (no persistence) — the Add/Edit
+  // row dialog calls it when the country changes or the operator asks to regenerate,
+  // so a hand-added row still gets a country-correct name.
+  rpc GenerateName(GenerateNameRequest) returns (GenerateNameResponse);
   // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
   // in history). Toggles row_status Excluded⇄Draft.
   rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
@@ -362,6 +366,15 @@ message DeleteRowRequest {
 message DeleteWeekRequest {
   string week_id = 1;
   string deleted_by = 2;
+}
+
+message GenerateNameRequest {
+  string country_code = 1; // ISO code, e.g. "PL"
+}
+
+message GenerateNameResponse {
+  string name = 1;
+  string surname = 2;
 }
 
 message SetRowExcludedRequest {
