@@ -50,6 +50,10 @@ service LivePayoutsFlowsGrpcService {
   rpc AddRow(AddRowRequest) returns (RowResponse);
   // Delete a Draft row.
   rpc DeleteRow(DeleteRowRequest) returns (google.protobuf.Empty);
+  // Delete an entire Draft/InvalidDraft week (its rows go with it). Confirmed weeks are
+  // never deletable here. Lets an operator discard a botched generated week instead of
+  // only regenerating it in place.
+  rpc DeleteWeek(DeleteWeekRequest) returns (google.protobuf.Empty);
   // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
   // in history). Toggles row_status Excluded⇄Draft.
   rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
@@ -352,6 +356,11 @@ message AddRowRequest {
 
 message DeleteRowRequest {
   string row_id = 1;
+  string deleted_by = 2;
+}
+
+message DeleteWeekRequest {
+  string week_id = 1;
   string deleted_by = 2;
 }
 
