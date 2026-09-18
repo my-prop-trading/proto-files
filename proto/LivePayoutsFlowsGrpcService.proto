@@ -58,6 +58,13 @@ service LivePayoutsFlowsGrpcService {
   // row dialog calls it when the country changes or the operator asks to regenerate,
   // so a hand-added row still gets a country-correct name.
   rpc GenerateName(GenerateNameRequest) returns (GenerateNameResponse);
+
+  // CSV import (history/weeks in the export format). Two phases: PreviewImport parses
+  // the file and reports the weeks it found (with collision/future flags) WITHOUT
+  // writing; ImportWeeks then writes the selected weeks as seed history. Strict parse:
+  // any malformed row/header fails the whole preview with row-level errors.
+  rpc PreviewImport(PreviewImportRequest) returns (PreviewImportResponse);
+  rpc ImportWeeks(ImportWeeksRequest) returns (ImportWeeksResponse);
   // Exclude / un-exclude a row (spec §3: an excluded row never publishes but stays
   // in history). Toggles row_status Excluded⇄Draft.
   rpc SetRowExcluded(SetRowExcludedRequest) returns (RowResponse);
@@ -375,6 +382,44 @@ message GenerateNameRequest {
 message GenerateNameResponse {
   string name = 1;
   string surname = 2;
+}
+
+// ── CSV import ────────────────────────────────────────────────────────────────
+message PreviewImportRequest {
+  string csv_content = 1; // whole uploaded file, UTF-8
+}
+
+// Why an imported week can't be written (drives the BO checkbox state).
+enum ImportCollision {
+  IMPORT_OK = 0;         // no existing week for this Monday → importable
+  IMPORT_OVERWRITE = 1;  // existing SEED week → importable, overwrites (warn)
+  IMPORT_BLOCKED_LIVE = 2; // existing LIVE week (not seed) → not importable
+  IMPORT_FUTURE = 3;     // week is in the future → not importable
+}
+
+message ImportWeekPreview {
+  int64 week_start = 1;   // Monday, unix micros (derived from row dates)
+  int64 week_end = 2;     // Friday, unix micros
+  int32 row_count = 3;
+  ImportCollision collision = 4;
+}
+
+message PreviewImportResponse {
+  bool ok = 1;                        // false → parse errors, weeks empty
+  repeated ImportWeekPreview weeks = 2;
+  repeated string errors = 3;         // "row N: <reason>" — strict, any error ⇒ ok=false
+}
+
+message ImportWeeksRequest {
+  string csv_content = 1;
+  repeated int64 week_starts = 2;     // which previewed weeks to import (unix micros)
+  string imported_by = 3;
+}
+
+message ImportWeeksResponse {
+  int32 imported_weeks = 1;
+  int32 imported_rows = 2;
+  repeated string errors = 3;
 }
 
 message SetRowExcludedRequest {
