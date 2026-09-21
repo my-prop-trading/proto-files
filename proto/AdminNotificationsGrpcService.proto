@@ -20,6 +20,16 @@ enum AdminNotificationTriggerGrpc {
     CONTRACT_DATA_INCOMPLETE = 14;
 }
 
+// PROP25-2548: client type used by the per-trigger alert exclusion filter.
+// Mirror of internal_clients.ClientType (InternalClientsGrpcService.proto) — keep the values in sync.
+enum NotificationClientType {
+    EXTERNAL = 0;
+    INTERNAL = 1;
+    INFLUENCER = 2;
+    CARDER = 3;
+    FRAUD = 4;
+}
+
 enum AdminNotificationStatusGrpc {
     NEW = 0;
     NOTIFIED = 1;
@@ -76,6 +86,19 @@ message AdminNofiticationSettingsGrpcModel {
     optional BasicChannelGrpcModel successful_payin = 13;
     optional BasicChannelGrpcModel external_payment = 14;
     optional PotentialPayoutGrpcModel potential_payout = 15;
+    // PROP25-2548: per-trigger client-type / payment-type exclusion filters (block-list).
+    repeated AdminNotificationTriggerFilterGrpcModel trigger_filters = 16;
+}
+
+// PROP25-2548: which client types and payment types are EXCLUDED (not notified) for one trigger.
+// Block-list semantics: an alert is sent when its client type is NOT in excluded_client_types AND
+// its payment type is NOT in excluded_payment_types. Empty lists exclude nothing.
+message AdminNotificationTriggerFilterGrpcModel {
+    AdminNotificationTriggerGrpc trigger = 1;
+    repeated NotificationClientType excluded_client_types = 2;
+    // Suppressible payment titles only (Manual / Fair Shot / Free Reward / Competition / Gift);
+    // any other payment_method_title always passes.
+    repeated string excluded_payment_types = 3;
 }
 
 message SetAdminNotificationSettingsGrpcRequest {
@@ -145,9 +168,20 @@ message PotentialPayoutGrpcModel {
     int32 look_ahead_hours = 3;
 }
 
+// PROP25-2548: options for the BackOffice filter dropdowns. Client types are enumerated in BO from
+// NotificationClientType and are echoed here only for a single source of truth; payment_types is the
+// service-owned list of suppressible payment titles.
+message GetNotificationFilterOptionsRequest {}
+
+message GetNotificationFilterOptionsResponse {
+    repeated NotificationClientType client_types = 1;
+    repeated string payment_types = 2;
+}
+
 service AdminNotificationsGrpcService {
     rpc GetNotifications(GetAdminNotificationsGrpcRequest) returns (GetAdminNotificationsGrpcResponse);
     rpc GetSettings(GetAdminNotificationSettingsGrpcRequest) returns (GetAdminNotificationSettingsGrpcResponse);
     rpc SetSettings(SetAdminNotificationSettingsGrpcRequest) returns (SetAdminNotificationSettingsGrpcResponse);
+    rpc GetNotificationFilterOptions(GetNotificationFilterOptionsRequest) returns (GetNotificationFilterOptionsResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
