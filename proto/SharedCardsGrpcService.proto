@@ -29,6 +29,8 @@ message SharedCardCalendarSnapshot {
   string account_label = 9;
   string currency = 10;
   repeated shared_cards.SharedCardDay days = 11;
+  // The account size the card was shared from. Unset on cards frozen before this field existed.
+  optional double initial_account_balance = 12;
 }
 
 // The identity both trader-card blocks draw. The app composes this header client-side out of the
