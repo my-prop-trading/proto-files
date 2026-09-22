@@ -1,0 +1,350 @@
+syntax = "proto3";
+package backoffice_flows;
+import "google/protobuf/empty.proto";
+
+// ---------------------------------------------------------------------------
+// Backoffice settings service.
+//
+// Abstracts all MyNoSql access that the Backoffice (BO) admin used to perform
+// directly. BO calls these RPCs instead of talking to MyNoSqlServer, so the
+// NoSql writer (broken by SDK 0.5 defaulting to HTTP/2) lives in one Rust
+// service that pins the writer to HTTP/1.1 via use_h1().
+//
+// Field names and partition/row keys mirror the existing NoSql entities so the
+// data layout in production is preserved verbatim.
+// ---------------------------------------------------------------------------
+
+// ===== Common =====
+
+message OperationResult {
+  bool Success = 1;
+  optional string ErrorMessage = 2;
+}
+
+// ===== Video Tutorials (table "video-tutorials", pk "video-tutorials", rk = id) =====
+
+message VideoTutorial {
+  string Id = 1; // row key; empty on create -> service generates a GUID
+  string Link = 2;
+  string Title = 3;
+  string Category = 4;
+  string Duration = 5;
+  string Description = 6;
+}
+
+message GetVideoTutorialsRequest {}
+message GetVideoTutorialsResponse {
+  repeated VideoTutorial Items = 1;
+}
+
+message SetVideoTutorialRequest {
+  VideoTutorial Item = 1;
+}
+message SetVideoTutorialResponse {
+  OperationResult Result = 1;
+  string Id = 2; // resulting row key (useful when created)
+}
+
+message DeleteVideoTutorialRequest {
+  string Id = 1;
+}
+message DeleteVideoTutorialResponse {
+  OperationResult Result = 1;
+}
+
+// ===== Banners (table "banners", pk "*", rk "banners") =====
+
+message BannerSettings {
+  string Title = 1;
+  string Description = 2;
+  bool IsEnable = 3;
+}
+
+message GetBannerRequest {}
+message GetBannerResponse {
+  optional BannerSettings Item = 1;
+}
+message SetBannerRequest {
+  BannerSettings Item = 1;
+}
+message SetBannerResponse {
+  OperationResult Result = 1;
+}
+
+// ===== Highlight Card (table "highlight-card-settings", pk "highlight-card", rk "settings") =====
+
+message HighlightCardItem {
+  optional string ClientName = 1;
+  optional string CountryCode = 2;
+  optional string Amount = 3;
+}
+
+message HighlightCardSettings {
+  optional HighlightCardItem HighestTotalReward = 1;
+  optional HighlightCardItem HighestSingleReward = 2;
+  optional HighlightCardItem LongestFundedAccount = 3;
+}
+
+message GetHighlightCardRequest {}
+message GetHighlightCardResponse {
+  optional HighlightCardSettings Item = 1;
+}
+message SetHighlightCardRequest {
+  HighlightCardSettings Item = 1;
+}
+message SetHighlightCardResponse {
+  OperationResult Result = 1;
+}
+
+// ===== Trader Packages Group (table "product-settings", pk "settings", rk "trading-packages") =====
+
+message TraderPackagesGroupSettings {
+  bool UseGroups = 1;
+}
+
+message GetTraderPackagesGroupRequest {}
+message GetTraderPackagesGroupResponse {
+  optional TraderPackagesGroupSettings Item = 1;
+}
+message SetTraderPackagesGroupRequest {
+  TraderPackagesGroupSettings Item = 1;
+}
+message SetTraderPackagesGroupResponse {
+  OperationResult Result = 1;
+}
+
+// ===== Affiliate settings (table "product-settings", pk "affiliate", rk = provider) =====
+
+message AcqufySettings {
+  string ApiKey = 1;
+  string AffiliateUrl = 2;
+  string TrafficManagementUrl = 3;
+  string ServerTrackingUrl = 4;
+}
+message KeitaroSettings {
+  string ApiKey = 1;
+  string AffiliateUrl = 2;
+}
+// NOTE: BO GA entity: pk "affiliate", rk "google-analytics",
+// fields ApiKey/AffiliateUrl/MeasurementId. This differs from the
+// GoogleAnalyticsSettingsModel currently in my-nosql-contracts.
+message GoogleAnalyticsSettings {
+  string ApiKey = 1;
+  string AffiliateUrl = 2;
+  string MeasurementId = 3;
+}
+message SentrySettings {
+  optional string Key = 1;
+  optional bool Hide = 2;
+}
+message PixelTikTokSettings {
+  optional string Id = 1;
+  optional string Token = 2;
+  optional bool Hide = 3;
+}
+
+message GetAcqufySettingsRequest {}
+message GetAcqufySettingsResponse { optional AcqufySettings Item = 1; }
+message SetAcqufySettingsRequest { AcqufySettings Item = 1; }
+message SetAcqufySettingsResponse { OperationResult Result = 1; }
+
+message GetKeitaroSettingsRequest {}
+message GetKeitaroSettingsResponse { optional KeitaroSettings Item = 1; }
+message SetKeitaroSettingsRequest { KeitaroSettings Item = 1; }
+message SetKeitaroSettingsResponse { OperationResult Result = 1; }
+
+message GetGoogleAnalyticsSettingsRequest {}
+message GetGoogleAnalyticsSettingsResponse { optional GoogleAnalyticsSettings Item = 1; }
+message SetGoogleAnalyticsSettingsRequest { GoogleAnalyticsSettings Item = 1; }
+message SetGoogleAnalyticsSettingsResponse { OperationResult Result = 1; }
+
+message GetSentrySettingsRequest {}
+message GetSentrySettingsResponse { optional SentrySettings Item = 1; }
+message SetSentrySettingsRequest { SentrySettings Item = 1; }
+message SetSentrySettingsResponse { OperationResult Result = 1; }
+
+message GetPixelTikTokSettingsRequest {}
+message GetPixelTikTokSettingsResponse { optional PixelTikTokSettings Item = 1; }
+message SetPixelTikTokSettingsRequest { PixelTikTokSettings Item = 1; }
+message SetPixelTikTokSettingsResponse { OperationResult Result = 1; }
+
+// ===== Swing Intraday =====
+
+// table "intraday-filter", pk "c", rk "intraday-filter"
+message IntradayFilter { bool Enabled = 1; }
+message GetIntradayFilterRequest {}
+message GetIntradayFilterResponse { optional IntradayFilter Item = 1; }
+message SetIntradayFilterRequest { IntradayFilter Item = 1; }
+message SetIntradayFilterResponse { OperationResult Result = 1; }
+
+// table "intraday-restrictions", pk "c", rk "intraday-restrictions"
+enum TraderAccountRestrictionsType {
+  DEMO = 0;
+  LIVE = 1;
+  DEMO_AND_LIVE = 2;
+}
+message IntradayRestrictions { TraderAccountRestrictionsType AccountType = 1; }
+message GetIntradayRestrictionsRequest {}
+message GetIntradayRestrictionsResponse { optional IntradayRestrictions Item = 1; }
+message SetIntradayRestrictionsRequest { IntradayRestrictions Item = 1; }
+message SetIntradayRestrictionsResponse { OperationResult Result = 1; }
+
+// table "intraday-settings", pk "c", rk = platform_id (one row per platform)
+message IntradaySettings {
+  int32 PlatformId = 1;
+  int32 HoursStart = 2;
+  int32 MinutesStart = 3;
+  int32 HoursEnd = 4;
+  int32 MinutesEnd = 5;
+  bool IsEnabled = 6;
+}
+message GetIntradaySettingsRequest {}
+message GetIntradaySettingsResponse { repeated IntradaySettings Items = 1; }
+message SetIntradaySettingsRequest { repeated IntradaySettings Items = 1; } // bulk upsert
+message SetIntradaySettingsResponse { OperationResult Result = 1; }
+
+// ===== Trading platform settings (read-only; table "product-settings", pk "trading-platform") =====
+
+message PlatformSettingsLinks {
+  optional string Windows = 1;
+  optional string Mac = 2;
+  optional string Ios = 3;
+  optional string Android = 4;
+  optional string Web = 5;
+}
+message PlatformSettingsGroup {
+  string GroupNameDefault = 1;
+  repeated string Groups = 2;
+}
+message TradingPlatformSettings {
+  int32 PlatformId = 1;
+  string PlatformName = 2;
+  string PlatformShortName = 3;
+  optional string PlatformIconUrl = 4;
+  optional PlatformSettingsLinks PlatformLinks = 5;
+  bool Enabled = 6;
+  string PlatformUrl = 7;
+  optional int32 PlatformCredentialType = 8;
+  optional bool HidePlatformUrlForDashboard = 9;
+  PlatformSettingsGroup PlatformGroupDemo = 10;
+  PlatformSettingsGroup PlatformGroupLive = 11;
+}
+message GetTradingPlatformSettingsRequest {}
+message GetTradingPlatformSettingsResponse {
+  repeated TradingPlatformSettings Items = 1;
+}
+
+// ===== Trader blocker (read-only; table "trader-blockers", pk = accountId, rk "Blocker") =====
+
+enum BlockerType {
+  BLOCKER_TYPE_UNKNOWN = 0;
+  BLOCK_TRADES = 1;
+  BLOCK_TRADES_AND_FUTURE = 2;
+  BLOCK_TRADES_AND_FUTURE_AND_CURRENT = 4;
+  BLOCK_TRADES_FOR_PAYOUTS = 5;
+}
+message TraderBlocker {
+  string ClientId = 1;
+  string CreatedBy = 2;
+  int64 CreatedAt = 3;
+  BlockerType BlockType = 4;
+}
+message GetTraderBlockerRequest {
+  string TraderAccountId = 1;
+}
+message GetTraderBlockerResponse {
+  optional TraderBlocker Item = 1;
+}
+
+// ===== Trader package fields order (read-only; table "trader-packages-field-order", pk "c", rk = packageId) =====
+
+message TraderPackageFieldsOrder {
+  string TraderPackageId = 1; // row key
+  optional int32 Phase1DailyDrawdown = 2;
+  optional int32 Phase1OverallDrawdown = 3;
+  optional int32 Phase1TargetProfit = 4;
+  optional int32 Phase1Duration = 5;
+  optional int32 Phase1MinTradingDays = 6;
+  optional int32 Phase1MinOpenedPositions = 7;
+  optional int32 Phase1RevenueShare = 8;
+  optional int32 Phase1Refund = 9;
+  optional int32 Phase1Attempts = 10;
+  optional int32 Phase2DailyDrawdown = 11;
+  optional int32 Phase2OverallDrawdown = 12;
+  optional int32 Phase2TargetProfit = 13;
+  optional int32 Phase2Duration = 14;
+  optional int32 Phase2MinTradingDays = 15;
+  optional int32 Phase2MinOpenedPositions = 16;
+  optional int32 Phase2RevenueShare = 17;
+  optional int32 Phase2Refund = 18;
+  optional int32 Phase2Attempts = 19;
+  optional int32 Phase3DailyDrawdown = 20;
+  optional int32 Phase3OverallDrawdown = 21;
+  optional int32 Phase3TargetProfit = 22;
+  optional int32 Phase3Duration = 23;
+  optional int32 Phase3MinTradingDays = 24;
+  optional int32 Phase3MinOpenedPositions = 25;
+  optional int32 Phase3RevenueShare = 26;
+  optional int32 Phase3Refund = 27;
+  optional int32 Phase3Attempts = 28;
+  optional int32 DailyDrawdown = 29;
+  optional int32 OverallDrawdown = 30;
+  optional int32 TargetProfit = 31;
+  optional int32 RevenueShare = 32;
+  optional int32 Refund = 33;
+  optional int32 TraderPackageType = 34;
+}
+message GetTraderPackageFieldsOrderRequest {
+  string TraderPackageId = 1;
+}
+message GetTraderPackageFieldsOrderResponse {
+  optional TraderPackageFieldsOrder Item = 1;
+}
+
+// ===== Service =====
+
+service BackofficeFlowsGrpcService {
+  // Video Tutorials
+  rpc GetVideoTutorials(GetVideoTutorialsRequest) returns (GetVideoTutorialsResponse);
+  rpc SetVideoTutorial(SetVideoTutorialRequest) returns (SetVideoTutorialResponse);
+  rpc DeleteVideoTutorial(DeleteVideoTutorialRequest) returns (DeleteVideoTutorialResponse);
+
+  // Banners
+  rpc GetBanner(GetBannerRequest) returns (GetBannerResponse);
+  rpc SetBanner(SetBannerRequest) returns (SetBannerResponse);
+
+  // Highlight Card
+  rpc GetHighlightCard(GetHighlightCardRequest) returns (GetHighlightCardResponse);
+  rpc SetHighlightCard(SetHighlightCardRequest) returns (SetHighlightCardResponse);
+
+  // Trader Packages Group
+  rpc GetTraderPackagesGroup(GetTraderPackagesGroupRequest) returns (GetTraderPackagesGroupResponse);
+  rpc SetTraderPackagesGroup(SetTraderPackagesGroupRequest) returns (SetTraderPackagesGroupResponse);
+
+  // Affiliate settings
+  rpc GetAcqufySettings(GetAcqufySettingsRequest) returns (GetAcqufySettingsResponse);
+  rpc SetAcqufySettings(SetAcqufySettingsRequest) returns (SetAcqufySettingsResponse);
+  rpc GetKeitaroSettings(GetKeitaroSettingsRequest) returns (GetKeitaroSettingsResponse);
+  rpc SetKeitaroSettings(SetKeitaroSettingsRequest) returns (SetKeitaroSettingsResponse);
+  rpc GetGoogleAnalyticsSettings(GetGoogleAnalyticsSettingsRequest) returns (GetGoogleAnalyticsSettingsResponse);
+  rpc SetGoogleAnalyticsSettings(SetGoogleAnalyticsSettingsRequest) returns (SetGoogleAnalyticsSettingsResponse);
+  rpc GetSentrySettings(GetSentrySettingsRequest) returns (GetSentrySettingsResponse);
+  rpc SetSentrySettings(SetSentrySettingsRequest) returns (SetSentrySettingsResponse);
+  rpc GetPixelTikTokSettings(GetPixelTikTokSettingsRequest) returns (GetPixelTikTokSettingsResponse);
+  rpc SetPixelTikTokSettings(SetPixelTikTokSettingsRequest) returns (SetPixelTikTokSettingsResponse);
+
+  // Swing Intraday
+  rpc GetIntradayFilter(GetIntradayFilterRequest) returns (GetIntradayFilterResponse);
+  rpc SetIntradayFilter(SetIntradayFilterRequest) returns (SetIntradayFilterResponse);
+  rpc GetIntradayRestrictions(GetIntradayRestrictionsRequest) returns (GetIntradayRestrictionsResponse);
+  rpc SetIntradayRestrictions(SetIntradayRestrictionsRequest) returns (SetIntradayRestrictionsResponse);
+  rpc GetIntradaySettings(GetIntradaySettingsRequest) returns (GetIntradaySettingsResponse);
+  rpc SetIntradaySettings(SetIntradaySettingsRequest) returns (SetIntradaySettingsResponse);
+
+  // Read-only lookups
+  rpc GetTradingPlatformSettings(GetTradingPlatformSettingsRequest) returns (GetTradingPlatformSettingsResponse);
+  rpc GetTraderBlocker(GetTraderBlockerRequest) returns (GetTraderBlockerResponse);
+  rpc GetTraderPackageFieldsOrder(GetTraderPackageFieldsOrderRequest) returns (GetTraderPackageFieldsOrderResponse);
+
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
