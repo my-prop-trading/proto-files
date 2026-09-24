@@ -98,6 +98,10 @@ message CreateTraderAccountOrderRequest {
   repeated string addon_bundle_ids = 18;
   string ip = 19;
   optional string click_id = 20;
+  // PROP25-2491 Bulk purchase: how many identical accounts to buy in one order. 0 or 1 means a
+  // single account (unchanged behaviour). Validated server-side against the package's derived
+  // maximum quantity (number of configured bulk discount fields + 1).
+  uint32 Quantity = 21;
 }
 
 message CreateTraderAccountOrderResponse {
@@ -136,6 +140,9 @@ message PreviewOrderDiscountRequest {
   string TradingPackageId = 1;
   optional string DiscountCode = 2;
   optional string ClientId = 3;
+  // PROP25-2491 Bulk purchase: quantity to preview. 0 or 1 previews a single account
+  // (unchanged). Above 1 returns the per-account breakdown in BulkBreakdown.
+  uint32 Quantity = 4;
 }
 
 message PreviewOrderDiscountResponse {
@@ -161,6 +168,24 @@ message PreviewOrderDiscountResponseBody {
   map<string, double> AddonFullPrices = 6;
   map<string, double> AddonDiscountAmounts = 7;
   map<string, double> AddonFinalPrices = 8;
+  // PROP25-2491 Bulk purchase: per-account price breakdown, present only when quantity > 1.
+  // Empty for a single-account order. The Order Summary shows the price applied to each account
+  // and the resulting package subtotal, so the saving is visible rather than hidden in the total.
+  repeated BulkAccountPreview BulkAccounts = 9;
+  // Sum of the per-account package prices after bulk discounts (before add-ons and discount code).
+  double BulkPackageSubtotal = 10;
+}
+
+// PROP25-2491 Bulk purchase: the price of one account inside a bulk order preview.
+message BulkAccountPreview {
+  // 1-based position. Account 1 is full price.
+  uint32 AccountIndex = 1;
+  // Package price before the bulk discount (same for every account).
+  double BasePrice = 2;
+  // Bulk discount percentage applied to this account (0 for account 1).
+  double BulkDiscountPercent = 3;
+  // Package price charged for this account after the bulk discount.
+  double PriceAfterBulk = 4;
 }
 
 message PreviewOrderDiscountWithoutResponseBody {
@@ -433,6 +458,79 @@ message OrderResponseBody {
   orders.OrderStatus Status = 2;
 }
 
+// ===================== PROP25-2491 Bulk purchase =====================
+
+// One bulk purchase setting: a trading package with bulk purchase enabled. The maximum quantity
+// is derived from the number of discount percentages (len + 1), so there is no separate max
+// quantity field. DiscountPercents[0] is the discount on the 2nd account, [1] on the 3rd, etc.
+// A field left at 0 still counts: that quantity becomes selectable at full price for that account.
+message BulkPurchaseSettingModel {
+  string Id = 1;
+  string TradingPackageId = 2;
+  repeated double DiscountPercents = 3;
+  int64 UpdatedAt = 4;
+}
+
+message GetBulkPurchaseSettingsRequest {
+  // Optional: when set, returns only the setting for that package (empty result if none).
+  optional string TradingPackageId = 1;
+}
+
+message GetBulkPurchaseSettingsResponse {
+  repeated BulkPurchaseSettingModel Items = 1;
+}
+
+message AddOrUpdateBulkPurchaseSettingsRequest {
+  repeated BulkPurchaseSettingModel Items = 1;
+}
+
+message AddOrUpdateBulkPurchaseSettingsResponse {
+}
+
+message DeleteBulkPurchaseSettingRequest {
+  string Id = 1;
+}
+
+message DeleteBulkPurchaseSettingResponse {
+}
+
+// One produced account inside a bulk purchase, with the price charged and discounts applied.
+message BulkPurchaseAccountModel {
+  string TraderAccountAggregatedId = 1;
+  string TraderAccountId = 2;
+  uint32 AccountIndex = 3;
+  double BasePrice = 4;
+  double BulkDiscountPercent = 5;
+  double PriceAfterBulk = 6;
+}
+
+// The record of a placed bulk order — source for the BackOffice Purchases tab.
+message BulkPurchaseModel {
+  string Id = 1;
+  string OrderId = 2;
+  string ClientId = 3;
+  string TradingPackageId = 4;
+  uint32 Quantity = 5;
+  optional string DiscountCode = 6;
+  repeated BulkPurchaseAccountModel Accounts = 7;
+  int64 CreatedAt = 8;
+}
+
+// Purchases-tab search. Any filter narrows the result. A search by trader account id returns the
+// WHOLE bulk purchase that contains it, not just the matched account — the sibling accounts stay
+// visible alongside (the main support case).
+message GetBulkPurchasesRequest {
+  uint32 Limit = 1;
+  uint32 Offset = 2;
+  repeated string OrderIds = 3;
+  repeated string ClientIds = 4;
+  repeated string TraderAccountIds = 5;
+}
+
+message GetBulkPurchasesResponse {
+  repeated BulkPurchaseModel Items = 1;
+}
+
 service OrdersGrpcService {
   rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
@@ -458,6 +556,14 @@ service OrdersGrpcService {
   rpc GetOrdersClientIdsByCardToken(orders.GetClientIdsRequest) returns (orders.GetClientIdsResponse);
 
   rpc GetClientTotalPayinAmount(orders.GetClientTotalPayinRequest) returns (orders.GetClientTotalPayinResponse);
-  
+
+  // PROP25-2491 Bulk purchase — BackOffice configuration (Settings tab).
+  rpc GetBulkPurchaseSettings(orders.GetBulkPurchaseSettingsRequest) returns (orders.GetBulkPurchaseSettingsResponse);
+  rpc AddOrUpdateBulkPurchaseSettings(orders.AddOrUpdateBulkPurchaseSettingsRequest) returns (orders.AddOrUpdateBulkPurchaseSettingsResponse);
+  rpc DeleteBulkPurchaseSetting(orders.DeleteBulkPurchaseSettingRequest) returns (orders.DeleteBulkPurchaseSettingResponse);
+
+  // PROP25-2491 Bulk purchase — BackOffice Purchases tab (read-only, searchable).
+  rpc GetBulkPurchases(orders.GetBulkPurchasesRequest) returns (orders.GetBulkPurchasesResponse);
+
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
