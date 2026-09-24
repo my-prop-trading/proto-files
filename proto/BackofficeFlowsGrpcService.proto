@@ -142,6 +142,15 @@ message PixelTikTokSettings {
   optional string Token = 2;
   optional bool Hide = 3;
 }
+// Live Payouts Discord publishing credentials (PROP25-2472). Edited in the BO
+// (Live Payouts -> Settings -> Publishing); stored in the product-settings table,
+// partition "live-payouts", row "discord". discord-bridge reads token + guild,
+// live-payouts reads channel.
+message LivePayoutsDiscordSettings {
+  optional string BotToken = 1;
+  optional string GuildId = 2;
+  optional string ChannelId = 3;
+}
 
 message GetAcqufySettingsRequest {}
 message GetAcqufySettingsResponse { optional AcqufySettings Item = 1; }
@@ -167,6 +176,11 @@ message GetPixelTikTokSettingsRequest {}
 message GetPixelTikTokSettingsResponse { optional PixelTikTokSettings Item = 1; }
 message SetPixelTikTokSettingsRequest { PixelTikTokSettings Item = 1; }
 message SetPixelTikTokSettingsResponse { OperationResult Result = 1; }
+
+message GetLivePayoutsDiscordSettingsRequest {}
+message GetLivePayoutsDiscordSettingsResponse { optional LivePayoutsDiscordSettings Item = 1; }
+message SetLivePayoutsDiscordSettingsRequest { LivePayoutsDiscordSettings Item = 1; }
+message SetLivePayoutsDiscordSettingsResponse { OperationResult Result = 1; }
 
 // ===== Swing Intraday =====
 
@@ -332,6 +346,10 @@ service BackofficeFlowsGrpcService {
   rpc SetSentrySettings(SetSentrySettingsRequest) returns (SetSentrySettingsResponse);
   rpc GetPixelTikTokSettings(GetPixelTikTokSettingsRequest) returns (GetPixelTikTokSettingsResponse);
   rpc SetPixelTikTokSettings(SetPixelTikTokSettingsRequest) returns (SetPixelTikTokSettingsResponse);
+
+  // Live Payouts Discord publishing credentials (PROP25-2472).
+  rpc GetLivePayoutsDiscordSettings(GetLivePayoutsDiscordSettingsRequest) returns (GetLivePayoutsDiscordSettingsResponse);
+  rpc SetLivePayoutsDiscordSettings(SetLivePayoutsDiscordSettingsRequest) returns (SetLivePayoutsDiscordSettingsResponse);
 
   // Swing Intraday
   rpc GetIntradayFilter(GetIntradayFilterRequest) returns (GetIntradayFilterResponse);
