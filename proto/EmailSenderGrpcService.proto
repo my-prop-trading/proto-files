@@ -219,6 +219,26 @@ message SendPaymentReceivedRequest{
     string TraderPackagesName = 3;
 }
 
+// PROP25-2491 Bulk purchase: one confirmation email for a whole bulk order, listing every account
+// it produced. AccountIds are our own trader_account_id values (not platform ids). ClientName is
+// the recipient's display name for the greeting. Two variants — demo ("Phase 1 accounts active")
+// and Instant Funding ("contract details coming soon") — share this request shape.
+message SendBulkPaymentReceivedPhase1AccountsActiveRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+    string ClientName = 4;
+    repeated string AccountIds = 5;
+}
+
+message SendBulkPaymentReceivedContractDetailsComingSoonRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+    string ClientName = 4;
+    repeated string AccountIds = 5;
+}
+
 message SendFairShotGrantedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -446,4 +466,7 @@ service EmailSenderGrpcService {
     rpc SendReactivateAccount(SendReactivateAccountRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountInactivityAlert(SendAccountInactivityAlertRequest) returns (email_sender.EmailSentResponse);
     rpc SendRegistrationSuccessfulWithoutPassword(SendRegistrationSuccessfulWithoutPasswordRequest) returns (email_sender.EmailSentResponse);
+    // PROP25-2491 Bulk purchase
+    rpc SendBulkPaymentReceivedPhase1AccountsActive(SendBulkPaymentReceivedPhase1AccountsActiveRequest) returns (email_sender.EmailSentResponse);
+    rpc SendBulkPaymentReceivedContractDetailsComingSoon(SendBulkPaymentReceivedContractDetailsComingSoonRequest) returns (email_sender.EmailSentResponse);
 }

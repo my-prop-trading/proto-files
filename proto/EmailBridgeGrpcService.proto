@@ -62,6 +62,9 @@ enum EmailType {
     ACCOUNT_REVIEW_READY = 55;
     ACTIVATION_REQUIRED = 56;
     COMPETITION_STARTED = 57;
+    // PROP25-2491 Bulk purchase: one email per bulk order (not per account).
+    BULK_PAYMENT_RECEIVED_PHASE1_ACCOUNTS_ACTIVE = 58;
+    BULK_PAYMENT_RECEIVED_CONTRACT_DETAILS_COMING_SOON = 59;
 }
 
 enum Error {
