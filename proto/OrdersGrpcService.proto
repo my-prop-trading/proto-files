@@ -190,8 +190,16 @@ message BulkAccountPreview {
 
 message PreviewOrderDiscountWithoutResponseBody {
   int64 CreatedAt = 1;
+  // For a bulk preview (quantity > 1) this is the package subtotal — the sum of the per-account
+  // prices after bulk discounts. For a single account it is the package price, unchanged.
   double Price = 2;
   string PriceCurrency = 3;
+  // PROP25-2491 Bulk purchase: per-account price breakdown, present only when quantity > 1. Empty
+  // for a single-account order. Mirrors PreviewOrderDiscountResponseBody so the Order Summary can
+  // show the per-account saving whether or not a discount code is applied.
+  repeated BulkAccountPreview BulkAccounts = 4;
+  // Sum of the per-account package prices after bulk discounts (equal to Price here, before add-ons).
+  double BulkPackageSubtotal = 5;
 }
 
 message PreviewOrderDiscountInvalidResponseBody {
@@ -295,6 +303,8 @@ enum OrdersError {
   TraderAccountNotFound = 13;         // no such account, or it belongs to another client
   ActivationNotRequired = 14;         // the account is not awaiting an activation payment
   ActivationAlreadyPaid = 15;         // the fee is paid, the funded account is already on its way
+  // Bulk purchase (PROP25-2491)
+  InvalidQuantity = 16;               // requested quantity is out of range or the package has no bulk config
 }
 
 message GetPayinsPaginatedRequest {
