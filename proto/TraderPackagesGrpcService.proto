@@ -134,6 +134,12 @@ message TraderPackage {
   // is sold evaluation-only and Price covers the evaluation alone; unset = the
   // funded account is included in Price, which is today's behaviour.
   optional double ActivationFee = 83;
+  // PROP25-2491 Bulk purchase: per-package bulk discount configuration. Each value is the discount
+  // percentage on an additional account: [0] on the 2nd account, [1] on the 3rd, and so on. The
+  // maximum quantity a trader may buy is derived = len + 1. Empty (or unset) = bulk purchase is off
+  // for this package (no quantity selector). Edited in the BackOffice Bulk purchase section; stored
+  // on the package like the other per-package toggles (FairShotEnabled, ActivationFee).
+  repeated double BulkDiscountPercents = 84;
 }
 
 message PlatformGroup {
