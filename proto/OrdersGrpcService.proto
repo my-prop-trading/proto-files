@@ -470,39 +470,9 @@ message OrderResponseBody {
 
 // ===================== PROP25-2491 Bulk purchase =====================
 
-// One bulk purchase setting: a trading package with bulk purchase enabled. The maximum quantity
-// is derived from the number of discount percentages (len + 1), so there is no separate max
-// quantity field. DiscountPercents[0] is the discount on the 2nd account, [1] on the 3rd, etc.
-// A field left at 0 still counts: that quantity becomes selectable at full price for that account.
-message BulkPurchaseSettingModel {
-  string Id = 1;
-  string TradingPackageId = 2;
-  repeated double DiscountPercents = 3;
-  int64 UpdatedAt = 4;
-}
-
-message GetBulkPurchaseSettingsRequest {
-  // Optional: when set, returns only the setting for that package (empty result if none).
-  optional string TradingPackageId = 1;
-}
-
-message GetBulkPurchaseSettingsResponse {
-  repeated BulkPurchaseSettingModel Items = 1;
-}
-
-message AddOrUpdateBulkPurchaseSettingsRequest {
-  repeated BulkPurchaseSettingModel Items = 1;
-}
-
-message AddOrUpdateBulkPurchaseSettingsResponse {
-}
-
-message DeleteBulkPurchaseSettingRequest {
-  string Id = 1;
-}
-
-message DeleteBulkPurchaseSettingResponse {
-}
+// NOTE: the bulk discount configuration is NOT a separate entity — it lives on the trading package
+// itself as TraderPackage.BulkDiscountPercents (edited in BackOffice, read here at pricing time),
+// mirroring the other per-package settings. Only the placed-purchase records below remain here.
 
 // One produced account inside a bulk purchase, with the price charged and discounts applied.
 message BulkPurchaseAccountModel {
@@ -567,12 +537,8 @@ service OrdersGrpcService {
 
   rpc GetClientTotalPayinAmount(orders.GetClientTotalPayinRequest) returns (orders.GetClientTotalPayinResponse);
 
-  // PROP25-2491 Bulk purchase — BackOffice configuration (Settings tab).
-  rpc GetBulkPurchaseSettings(orders.GetBulkPurchaseSettingsRequest) returns (orders.GetBulkPurchaseSettingsResponse);
-  rpc AddOrUpdateBulkPurchaseSettings(orders.AddOrUpdateBulkPurchaseSettingsRequest) returns (orders.AddOrUpdateBulkPurchaseSettingsResponse);
-  rpc DeleteBulkPurchaseSetting(orders.DeleteBulkPurchaseSettingRequest) returns (orders.DeleteBulkPurchaseSettingResponse);
-
-  // PROP25-2491 Bulk purchase — BackOffice Purchases tab (read-only, searchable).
+  // PROP25-2491 Bulk purchase — BackOffice Purchases tab (read-only, searchable). The bulk discount
+  // CONFIG is edited on the trading package (TraderPackage.BulkDiscountPercents), not here.
   rpc GetBulkPurchases(orders.GetBulkPurchasesRequest) returns (orders.GetBulkPurchasesResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
