@@ -100,8 +100,8 @@ message CreateTraderAccountOrderRequest {
   optional string click_id = 20;
   // PROP25-2491 Bulk purchase: how many identical accounts to buy in one order. 0 or 1 means a
   // single account (unchanged behaviour). Validated server-side against the package's derived
-  // maximum quantity (number of configured bulk discount fields + 1).
-  uint32 Quantity = 21;
+  // maximum quantity (BulkDiscountPercents length) and requires BulkPurchaseEnabled on the package.
+  uint32 quantity = 21;
 }
 
 message CreateTraderAccountOrderResponse {
@@ -178,11 +178,11 @@ message PreviewOrderDiscountResponseBody {
 
 // PROP25-2491 Bulk purchase: the price of one account inside a bulk order preview.
 message BulkAccountPreview {
-  // 1-based position. Account 1 is full price.
+  // 1-based position. The discount for this account is BulkDiscountPercents[AccountIndex - 1].
   uint32 AccountIndex = 1;
   // Package price before the bulk discount (same for every account).
   double BasePrice = 2;
-  // Bulk discount percentage applied to this account (0 for account 1).
+  // Bulk discount percentage applied to this account (BulkDiscountPercents[AccountIndex - 1]).
   double BulkDiscountPercent = 3;
   // Package price charged for this account after the bulk discount.
   double PriceAfterBulk = 4;
@@ -304,7 +304,7 @@ enum OrdersError {
   ActivationNotRequired = 14;         // the account is not awaiting an activation payment
   ActivationAlreadyPaid = 15;         // the fee is paid, the funded account is already on its way
   // Bulk purchase (PROP25-2491)
-  InvalidQuantity = 16;               // requested quantity is out of range or the package has no bulk config
+  InvalidQuantity = 16;               // requested quantity is out of range or bulk purchase is disabled for the package
 }
 
 message GetPayinsPaginatedRequest {
@@ -470,9 +470,10 @@ message OrderResponseBody {
 
 // ===================== PROP25-2491 Bulk purchase =====================
 
-// NOTE: the bulk discount configuration is NOT a separate entity — it lives on the trading package
-// itself as TraderPackage.BulkDiscountPercents (edited in BackOffice, read here at pricing time),
-// mirroring the other per-package settings. Only the placed-purchase records below remain here.
+// NOTE: the bulk purchase configuration is NOT a separate entity — it lives on the trading package
+// itself as TraderPackage.BulkPurchaseEnabled + TraderPackage.BulkDiscountPercents (edited in
+// BackOffice, read here at pricing time), mirroring the other per-package settings. Only the
+// placed-purchase records below remain here.
 
 // One produced account inside a bulk purchase, with the price charged and discounts applied.
 message BulkPurchaseAccountModel {
@@ -538,7 +539,7 @@ service OrdersGrpcService {
   rpc GetClientTotalPayinAmount(orders.GetClientTotalPayinRequest) returns (orders.GetClientTotalPayinResponse);
 
   // PROP25-2491 Bulk purchase — BackOffice Purchases tab (read-only, searchable). The bulk discount
-  // CONFIG is edited on the trading package (TraderPackage.BulkDiscountPercents), not here.
+  // CONFIG is edited on the trading package (BulkPurchaseEnabled + BulkDiscountPercents), not here.
   rpc GetBulkPurchases(orders.GetBulkPurchasesRequest) returns (orders.GetBulkPurchasesResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
