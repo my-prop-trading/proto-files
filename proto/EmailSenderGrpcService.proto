@@ -207,18 +207,24 @@ message SendServiceDeniedDueToViolationOfOurTermsAndCondFutureAndCurrentProfitBl
 message SendLiveAccountGrantedRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 3;
 }
 
 message SendLiveAccountLostRequest {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     email_sender.FailReason FailReason = 3;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 4;
 }
 
 message SendPaymentReceivedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderPackagesName = 3;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 4;
 }
 
 // PROP25-2491 Bulk purchase: one confirmation email for a whole bulk order, listing every account
@@ -231,6 +237,8 @@ message SendBulkPaymentReceivedPhase1AccountsActiveRequest{
     string TraderPackagesName = 3;
     string ClientName = 4;
     repeated string AccountIds = 5;
+    // Idempotency key source; empty skips the dedup.
+    string OrderId = 6;
 }
 
 message SendBulkPaymentReceivedContractDetailsComingSoonRequest{
@@ -239,12 +247,16 @@ message SendBulkPaymentReceivedContractDetailsComingSoonRequest{
     string TraderPackagesName = 3;
     string ClientName = 4;
     repeated string AccountIds = 5;
+    // Idempotency key source; empty skips the dedup.
+    string OrderId = 6;
 }
 
 message SendFairShotGrantedRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderPackagesName = 3;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 4;
 }
 
 // Live account activation (PROP25-2366). Sent when the final evaluation phase of an
@@ -270,6 +282,8 @@ message SendCompetitionEnrolledRequest{
     string CompetitionName = 3;
     string CompetitionStart = 4;
     string CompetitionEnd = 5;
+    // Idempotency key source; empty skips the dedup.
+    string CompetitionId = 6;
 }
 
 message SendCompetitionStartedRequest{
@@ -279,6 +293,8 @@ message SendCompetitionStartedRequest{
     string CompetitionName = 3;
     string CompetitionStart = 4;
     string CompetitionEnd = 5;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 6;
 }
 
 message SendAccountReviewReadyRequest{
@@ -291,12 +307,16 @@ message SendInstantPaymentReceivedKycRequired {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderPackagesName = 3;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 4;
 }
 
 message SendInstantPaymentReceivedContractRequired {
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
     string TraderPackagesName = 3;
+    // Idempotency key source; empty skips the dedup.
+    string TraderAccountId = 4;
 }
 
 message SendPaymentFailedRequest{
