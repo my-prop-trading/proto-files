@@ -227,6 +227,10 @@ enum DiscountCodeType {
 enum PreviewError {
   PE_OK = 0;
   PE_PACKAGE_NOT_FOUND = 1;
+  // PROP25-2491 Bulk purchase: requested quantity is out of range for the package, or above 1 for a
+  // package with bulk purchase disabled. Value kept equal to OrdersError.InvalidQuantity (16) so the
+  // preview reports the same condition as the create route.
+  PE_INVALID_QUANTITY = 16;
 }
 
 message GetOrdersPaginatedRequest {
