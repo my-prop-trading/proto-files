@@ -35,6 +35,8 @@ message EmailDestination{
     string Brand = 2;
     repeated string To = 3;
     repeated string Cc = 4;
+    // When the triggering event happened, unix microseconds; 0 when unknown.
+    int64 EventTime = 5;
 }
 
 message RegistrationConfirmationRequest{
