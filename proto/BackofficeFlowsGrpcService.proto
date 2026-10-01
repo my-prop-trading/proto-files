@@ -182,6 +182,18 @@ message GetLivePayoutsDiscordSettingsResponse { optional LivePayoutsDiscordSetti
 message SetLivePayoutsDiscordSettingsRequest { LivePayoutsDiscordSettings Item = 1; }
 message SetLivePayoutsDiscordSettingsResponse { OperationResult Result = 1; }
 
+// LiveChat API credentials (PROP25-1705). Edited in the BO Integration Settings -> Chat tab,
+// read by livechat-webhook (WebhookSecret) and livechat-bridge (ApiUrl + BasicAuth).
+message LiveChatApiSettings {
+  optional string ApiUrl = 1;
+  optional string BasicAuth = 2;
+  optional string WebhookSecret = 3;
+}
+message GetLiveChatApiSettingsRequest {}
+message GetLiveChatApiSettingsResponse { optional LiveChatApiSettings Item = 1; }
+message SetLiveChatApiSettingsRequest { LiveChatApiSettings Item = 1; }
+message SetLiveChatApiSettingsResponse { OperationResult Result = 1; }
+
 // ===== Swing Intraday =====
 
 // table "intraday-filter", pk "c", rk "intraday-filter"
@@ -350,6 +362,10 @@ service BackofficeFlowsGrpcService {
   // Live Payouts Discord publishing credentials (PROP25-2472).
   rpc GetLivePayoutsDiscordSettings(GetLivePayoutsDiscordSettingsRequest) returns (GetLivePayoutsDiscordSettingsResponse);
   rpc SetLivePayoutsDiscordSettings(SetLivePayoutsDiscordSettingsRequest) returns (SetLivePayoutsDiscordSettingsResponse);
+
+  // LiveChat API credentials (PROP25-1705).
+  rpc GetLiveChatApiSettings(GetLiveChatApiSettingsRequest) returns (GetLiveChatApiSettingsResponse);
+  rpc SetLiveChatApiSettings(SetLiveChatApiSettingsRequest) returns (SetLiveChatApiSettingsResponse);
 
   // Swing Intraday
   rpc GetIntradayFilter(GetIntradayFilterRequest) returns (GetIntradayFilterResponse);
