@@ -1,0 +1,36 @@
+syntax = "proto3";
+package livechat_bridge;
+import "google/protobuf/empty.proto";
+
+enum LiveChatChatStatus {
+    Active = 0;
+    Closed = 1;
+}
+
+message LiveChatChat {
+    string ChatId = 1;
+    string ClientId = 2;
+    string Email = 3;
+    repeated string Tags = 4;
+    livechat_bridge.LiveChatChatStatus Status = 5;
+    int64 ChatDate = 6;
+    int64 UpdatedAt = 7;
+}
+
+message GetByClientIdRequest {
+    string ClientId = 1;
+
+    int64 Offset = 20;
+    int64 Limit = 21;
+}
+
+message GetByClientIdResponse {
+    repeated LiveChatChat Chats = 1;
+    uint64 TotalCount = 2;
+}
+
+service LiveChatBridgeGrpcService {
+    rpc GetByClientId(livechat_bridge.GetByClientIdRequest) returns (livechat_bridge.GetByClientIdResponse);
+
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
