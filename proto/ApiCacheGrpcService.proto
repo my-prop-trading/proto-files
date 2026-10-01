@@ -67,6 +67,9 @@ message SubscribeClientGrpcRequest {
   repeated string addon_ids = 15;
   repeated string addon_bundle_ids = 16;
   string ip = 17;
+  // PROP25-2491 Bulk purchase: number of accounts to buy. 0/1 = single account. Forwarded to
+  // orders.CreateTraderAccountOrder, which validates it against the package's bulk settings.
+  uint32 quantity = 18;
 }
 
 // Order rejections SubscribeClient can report to the caller. Everything else stays a gRPC error,
@@ -79,6 +82,9 @@ enum SubscribeOrderError {
   DiscountCodeOnlyForFirstPayin = 4;
   DiscountCodeOnlyForNextPayin = 5;
   TradingPackageNotFound = 6;
+  // PROP25-2491 Bulk purchase: requested quantity is out of range or bulk is disabled for the
+  // package. Mirrors orders.OrdersError.InvalidQuantity.
+  AmountExceedsMax = 7;
 }
 
 message SubscribeClientGrpcResponse {
