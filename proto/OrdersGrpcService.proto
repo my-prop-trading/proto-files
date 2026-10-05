@@ -102,6 +102,10 @@ message CreateTraderAccountOrderRequest {
   // single account (unchanged behaviour). Validated server-side against the package's derived
   // maximum quantity (BulkDiscountPercents length) and requires BulkPurchaseEnabled on the package.
   uint32 quantity = 21;
+  // PROP25-2435: preferred UI language (ISO2, e.g. "en", "de") decoded from the buyer's
+  // Accept-Language / lang cookie by orders-rest-api. Forwarded to the Billerix checkout page so the
+  // embedded SDK renders the form in that language. Absent -> provider default.
+  optional string language = 22;
 }
 
 message CreateTraderAccountOrderResponse {
