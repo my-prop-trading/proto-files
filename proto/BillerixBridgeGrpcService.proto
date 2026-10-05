@@ -25,6 +25,13 @@ message GeneratePaymentPageGrpcRequest {
 
 message GeneratePaymentPageGrpcResponse {
     string page = 1;
+    PaymentPageTypeGrpc page_type = 2;
+    optional string wallet_script = 3;
+}
+
+enum PaymentPageTypeGrpc {
+    URL = 0;
+    HTML = 1;
 }
 
 message CancelSubscriptionGrpcRequest {
