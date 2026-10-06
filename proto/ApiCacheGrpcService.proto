@@ -39,6 +39,10 @@ message TraderAccountApiGrpcModel {
   // renamed (see TraderAccount.DisplayName). Always set for trader-facing consumers. The
   // Active/Inactive split stays on the existing status/status_text — no new outcome field.
   optional string display_name = 31;
+  // PROP25-2553 Hide manually-skipped phases: mirrors TraderAccount.IsManualSkipped. True for a
+  // phase an operator marked completed in the back office rather than traded; the client
+  // account-list endpoint hides such rows (StageCompleted with no trading data).
+  bool is_manual_skipped = 32;
 }
 
 message GetTraderAccountsGrpcRequest {

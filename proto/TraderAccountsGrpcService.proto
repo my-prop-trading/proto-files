@@ -136,6 +136,12 @@ message TraderAccount {
     // When the account last went Active (first activation or reactivation): the platform
     // account exists only from then on. Absent on accounts activated before it was recorded.
     optional int64 ActivatedAt = 104;
+
+    // PROP25-2553 Hide manually-skipped phases: true if this phase was marked completed by an
+    // operator in the back office ("Phase N completed") rather than traded. Such a row is
+    // StageCompleted with no trading data; the client account-list endpoint hides it so the
+    // dashboard does not show a "Passed" card with empty metrics. The funded row stays false.
+    bool IsManualSkipped = 105;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.
