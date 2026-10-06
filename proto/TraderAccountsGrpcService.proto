@@ -132,6 +132,10 @@ message TraderAccount {
     // the frontend falls back to the generated default. Trader-facing only — never surfaced in
     // back office / Orders.
     optional string DisplayName = 103;
+
+    // When the account last went Active (first activation or reactivation): the platform
+    // account exists only from then on. Absent on accounts activated before it was recorded.
+    optional int64 ActivatedAt = 104;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.
