@@ -23,6 +23,8 @@ message SendContractGrpcRequest {
     optional string max_loss = 9;
     // Consistency (best-day) rule cap that will apply on the trader's live account.
     optional string consistency_rule = 16;
+    // Exposure loss cap printed on the contract: the hard breach cap when set, else the soft one.
+    optional string exposure_loss = 17;
 
     // Optional document-level overrides; when unset the template's own configuration applies.
     optional string title = 10;
