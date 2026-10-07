@@ -9,26 +9,30 @@ enum CompetitionStatus {
   Ended = 3;
 }
 
-// Current user's enrollment state for a competition (enrichment on list/detail
-// when authenticated). Values prefixed because proto3 enum values share the
-// package namespace with CompetitionStatus. Absent (unset optional) = anonymous.
+// Whether the caller is registered for a competition. Orthogonal to
+// ActivationState: a trader joins (Enrolled), then separately activates their
+// trading account (PROP25-2582). Values prefixed because proto3 enum values share
+// the package namespace.
 enum EnrollmentStatus {
   EnrollmentNotEnrolled = 0;
-  EnrollmentPending = 1;
-  EnrollmentActive = 2;
-  // Enrolled: the trader is registered but their account is not created yet — it
-  // is provisioned close to the competition start, not at enroll time. The client
-  // shows "account will be ready at start" instead of polling for creds. Ordered
-  // after Active by value (appending; existing codes unchanged), though it
-  // logically precedes Pending in the lifecycle.
-  EnrollmentEnrolled = 3;
+  EnrollmentEnrolled = 1;
+}
+
+// State of the caller's competition trading account (PROP25-2582). Orthogonal to
+// EnrollmentStatus. The account is created on demand when the trader clicks
+// "Activate account" (not automatically): NotActive (no account yet) -> Pending
+// (order placed, account being created) -> Active (account ready).
+enum ActivationState {
+  ActivationNotActive = 0;
+  ActivationPending = 1;
+  ActivationActive = 2;
 }
 
 // Participant category a competition may be restricted to (PROP25-2582). BO
 // multi-selects any subset; empty = open to everyone. A trader falls into exactly
 // one category, resolved at Join from registration date / paid orders / prior
-// accounts. NEVER exposed to the client (only "available / not available" is).
-// Opaque codes, like platform ids.
+// accounts. NEVER exposed to the client — carried only inside CompetitionManagement
+// (which the public facade never fills). Opaque codes, like platform ids.
 enum ParticipantCategory {
   // Registered on/after the calendar day of registration_opens_at (by reg date
   // alone — a same-day buyer still counts).
@@ -42,35 +46,39 @@ enum ParticipantCategory {
   Paid = 3;
 }
 
-// Client-facing activation state for a trader's own enrollment (PROP25-2582).
-// A presentation layer over the enrollment status — NOT a stored status. Maps to
-// the Figma activation card. Only returned on the caller's own my-enrollment /
-// the ActivateAccount response.
-enum ActivationState {
-  // Enrolled, no account yet, window open → the "Activate account" button shows.
-  ActivationCanActivate = 0;
-  // Account order placed, account being created (enrollment Pending). Survives
-  // reload — "Preparing your account".
-  ActivationPreparing = 1;
-  // Account ready (enrollment Active) — the trader can trade.
-  ActivationActive = 2;
-  // Competition has not started yet (before starts_at) — activation not open.
-  ActivationNotStarted = 3;
-  // Past ends_at / Ended — activation no longer possible.
-  ActivationEnded = 4;
-  // Account limit reached — "All accounts claimed".
-  ActivationAllAccountsClaimed = 5;
-  // Caller is not enrolled in this competition.
-  ActivationNotEnrolled = 6;
-  // Account creation failed — the trader can retry.
-  ActivationError = 7;
-}
-
-// Current user's result in a competition (list card / detail enrichment).
+// The caller's own result in a competition (rank/profit on the leaderboard).
+// Present inside CallerContext only once the account is Active — rank/profit_pct
+// are absent for a disqualified participant (shown as a dash).
 message MyCompetitionResult {
-  optional int32 rank = 1;       // null for DQ
+  optional int32 rank = 1;        // null for DQ
   optional double profit_pct = 2; // null for DQ (dash)
   bool is_disqualified = 3;
+}
+
+// Per-caller enrichment on a competition (list/detail), set only when the request
+// carries a client_id (authenticated). Absent for anonymous calls / Save. Collapses
+// everything that depends on "who is asking" into one optional block.
+message CallerContext {
+  // Registration state of the caller for this competition.
+  competitions.EnrollmentStatus enrollment_status = 1;
+  // Trading-account state of the caller for this competition.
+  competitions.ActivationState activation_state = 2;
+  // Rank/profit — present only when activation_state == Active (has an account on
+  // the leaderboard). Absent otherwise.
+  optional competitions.MyCompetitionResult my_result = 3;
+  // Whether the caller may join (participant-category gate, PROP25-2582). The client
+  // learns "available / not available" — never the categories themselves.
+  bool is_eligible = 4;
+}
+
+// Management-only competition fields — filled on Backoffice reads, NEVER on public
+// reads. Kept in its own optional block so the public facade can leave it unset and
+// the restricted data (participant categories) can't leak to clients, even though
+// Competition is one shared type.
+message CompetitionManagement {
+  // Participant categories the competition is restricted to. Empty = open to
+  // everyone. BO read/write (Save carries the set here).
+  repeated competitions.ParticipantCategory participant_categories = 1;
 }
 
 message Competition {
@@ -83,6 +91,7 @@ message Competition {
   optional string prize_disclaimer = 7;
   optional string rules = 8;
   string package_id = 9;
+  // Registration limit: how many traders may join. (The "max participants" cap.)
   int32 max_participants = 10;
   int64 registration_opens_at = 11;
   int64 registration_closes_at = 12;
@@ -91,41 +100,34 @@ message Competition {
   competitions.CompetitionStatus status = 15;
   int64 created_at = 16;
   int64 updated_at = 17;
+  // Live count of joined traders (registration slots used).
   int32 enrolled_count = 18;
-  // Enrichment for authenticated list/detail calls (set when caller_client_id is
-  // provided). Absent for anonymous / Save. `my_result` present only when the
-  // caller participates.
-  optional competitions.EnrollmentStatus enrollment_status = 19;
-  optional competitions.MyCompetitionResult my_result = 20;
   // Prize preview shown on both the list card and the detail page (per Figma).
   // Ordered by sort_order, same shape as GetById's prize_tiers. Empty when the
   // competition has no tiers.
-  repeated competitions.CompetitionPrizeTier prize_tiers = 21;
+  repeated competitions.CompetitionPrizeTier prize_tiers = 19;
   // Trading platforms this competition may issue accounts on (platform_id codes:
   // MT4=0, MT5=1, Cfd=2, Yft=3, CTrader=4, TradeLocker=5). Set by BO on Save;
   // returned on detail (not on the list card). Empty = legacy competition with no
   // explicit platforms — enroll falls back to the default platform.
-  repeated int32 platforms = 22;
+  repeated int32 platforms = 20;
 
-  // --- PROP25-2582: account limit + participant category ---
+  // --- PROP25-2582: account limit ---
 
-  // Second cap: how many accounts may be activated (first come, first served).
-  // <= max_participants. Legacy rows (0) fall back to max_participants. Set by BO.
-  int32 account_limit = 23;
-  // Denormalized count of activated accounts (source of truth for the account
-  // gate). Owned by the service, ignored on Save.
-  int32 account_count = 24;
-  // account_limit - account_count (read-only enrichment, for "N accounts left").
-  // Owned by the service, ignored on Save.
-  int32 accounts_left = 25;
-  // Participant categories this competition is restricted to (BO read/write).
-  // Empty = open to everyone. NOT returned on public reads — the public facade
-  // strips it and exposes only `is_eligible`.
-  repeated competitions.ParticipantCategory participant_categories = 26;
-  // Per-caller eligibility (public reads, set only when caller_client_id given).
-  // The client learns "available / not available" — never the categories. Absent
-  // for anonymous / BO / Save.
-  optional bool is_eligible = 27;
+  // Account limit: how many accounts may be activated (first come, first served).
+  // <= max_participants (registration limit). Legacy rows (0) fall back to
+  // max_participants. Set by BO. accounts_left = account_limit - account_count is
+  // derived by the client (not sent as a field).
+  int32 account_limit = 21;
+  // Live count of activated accounts (source of truth for the account gate).
+  // Service-owned, ignored on Save.
+  int32 account_count = 22;
+
+  // Per-caller enrichment — set only when the call is authenticated (client_id
+  // given). Absent for anonymous / Save.
+  optional competitions.CallerContext caller_context = 23;
+  // Management-only fields — filled on BO reads, never on public reads.
+  optional competitions.CompetitionManagement management = 24;
 }
 
 message CompetitionPrizeTier {
@@ -136,21 +138,25 @@ message CompetitionPrizeTier {
   int32 sort_order = 5;
 }
 
-message CompetitionEnrollment {
+// One trader's participation in a competition (BO participant list). Renamed from
+// CompetitionEnrollment (PROP25-2582): enrollment and activation are now separate,
+// so the row carries both states.
+message CompetitionParticipation {
   string id = 1;
   string competition_id = 2;
   string client_id = 3;
+  // The activated trading account. Empty until the trader activates.
   string trader_account_id = 4;
   double profit_pct = 5;
   bool is_disqualified = 6;
   int64 enrolled_at = 7;
-  // Provisioning state (BO enrollment list): Enrolled = account not created yet
-  // (before start), Pending = order placed / account being created, Active =
-  // account ready. Lets BO show the real state instead of assuming Active.
-  competitions.EnrollmentStatus status = 8;
-  // When the trader activated (Enrolled -> Pending; = provisioned_at). 0 while
-  // still Enrolled (not activated). Lets BO show "activated / when" (PROP25-2582).
-  int64 activated_at = 9;
+  // When the trader activated their account. 0 if they joined but never activated.
+  int64 activated_at = 8;
+  // Registration state (every row in this list is Enrolled; kept for symmetry).
+  competitions.EnrollmentStatus enrollment_status = 9;
+  // Trading-account state: NotActive (joined, not activated), Pending (activating),
+  // Active (account ready).
+  competitions.ActivationState activation_state = 10;
 }
 
 message LeaderboardEntry {
@@ -161,7 +167,10 @@ message LeaderboardEntry {
   string trader_account_id = 3;
   optional double profit_pct = 4;
   bool is_disqualified = 5;
-  int64 enrolled_at = 6;
+  // Only activated participants appear on the leaderboard (PROP25-2582: join-only
+  // traders have no account and no result), so this is the activation time, also
+  // the tiebreaker for equal profit (earlier activation ranks higher).
+  int64 activated_at = 6;
   // Display fields resolved from personal-data (enriched at build time):
   // "First L." and country of registration.
   string trader_name = 7;
@@ -178,8 +187,8 @@ message GetPaginatedCompetitionsRequest {
   uint64 limit = 1;
   int64 offset = 2;
   optional competitions.CompetitionStatus status = 3;
-  // Set from token at REST facade for authenticated calls; enriches each item
-  // with enrollment_status / my_result. Empty for anonymous.
+  // Set from token at REST facade for authenticated calls; fills each item's
+  // caller_context. Empty for anonymous.
   optional string caller_client_id = 4;
   // ?participated=true — return only competitions the caller is enrolled in
   // (requires caller_client_id). Ignored when caller_client_id is empty.
@@ -193,7 +202,7 @@ message GetPaginatedCompetitionsResponse {
 
 message GetCompetitionByIdRequest {
   string id = 1;
-  // Enriches the returned competition with enrollment_status / my_result.
+  // Fills the returned competition's caller_context.
   optional string caller_client_id = 2;
 }
 
@@ -204,12 +213,13 @@ message GetCompetitionByIdResponse {
 
 // --- Client-area reads (distinct types; server excludes Draft) ---
 // Same fields as the BO reads, but separate messages so the generated gRPC
-// client emits distinct trait impls (reusing the BO types collides).
+// client emits distinct trait impls (reusing the BO types collides). The public
+// server never fills Competition.management (categories stay server-side).
 
 message GetPublicCompetitionsRequest {
   uint64 limit = 1;
   int64 offset = 2;
-  // Set from the token at the REST facade; enriches enrollment_status/my_result.
+  // Set from the token at the REST facade; fills caller_context.
   optional string caller_client_id = 3;
   // ?participated=true — only the caller's competitions (requires caller_client_id).
   bool participated_only = 4;
@@ -253,16 +263,16 @@ message SetCompetitionStatusResponse {
   competitions.Competition competition = 1;
 }
 
-// --- Enrollments ---
+// --- Participants (Backoffice participant list) ---
 
-message GetEnrollmentsRequest {
+message GetParticipationsRequest {
   string competition_id = 1;
   uint64 limit = 2;
   int64 offset = 3;
 }
 
-message GetEnrollmentsResponse {
-  repeated competitions.CompetitionEnrollment enrollments = 1;
+message GetParticipationsResponse {
+  repeated competitions.CompetitionParticipation participations = 1;
   uint64 total = 2;
 }
 
@@ -281,40 +291,41 @@ message EnrollClientRequest {
 }
 
 message EnrollClientResponse {
-  competitions.CompetitionEnrollment enrollment = 1;
+  competitions.CompetitionParticipation participation = 1;
 }
 
-// --- My enrollment (client area: GET /competitions/:id/my-enrollment) ---
+// --- My participation (client area: GET /competitions/:id/my-enrollment) ---
 
-message GetMyEnrollmentRequest {
+message GetMyParticipationRequest {
   string competition_id = 1;
   string client_id = 2;
 }
 
-// Present only once the account is provisioned (enrollment Active). Mirrors the
-// contract's `activeResult` block. Absent while Pending (account still being
-// created). rank/profit_pct are absent for a disqualified participant.
-message MyEnrollmentActiveResult {
+// Present only once the account is Active. rank/profit_pct are absent for a
+// disqualified participant.
+message MyParticipationResult {
   string trader_account_id = 1;
-  optional int32 rank = 2;
-  optional double profit_pct = 3;
-  bool is_disqualified = 4;
-  // Total participants in the competition (= enrolled_count) — for "#7 of N".
-  int32 total_participants = 5;
+  // When the trader activated their account.
+  int64 activated_at = 2;
+  optional int32 rank = 3;
+  optional double profit_pct = 4;
+  bool is_disqualified = 5;
+  // Participants on the leaderboard (= activated accounts, account_count) — for
+  // "#7 of N". Join-only traders are not counted (PROP25-2582).
+  int32 total_participants = 6;
 }
 
-message GetMyEnrollmentResponse {
-  // NotEnrolled/Pending/Active. `active_result` is set only for Active.
+message GetMyParticipationResponse {
+  // Registration state: NotEnrolled / Enrolled.
   competitions.EnrollmentStatus enrollment_status = 1;
-  // enrolled_at is 0 when the caller is not enrolled.
-  int64 enrolled_at = 2;
-  optional competitions.MyEnrollmentActiveResult active_result = 3;
-  // PROP25-2582: client-facing activation state (renders the Figma card on
-  // reload — CanActivate/Preparing/Active/NotStarted/Ended/AllAccountsClaimed/
-  // NotEnrolled). Derived from enrollment status + the competition window/limit.
-  competitions.ActivationState activation_state = 4;
-  // Accounts still activatable (account_limit - account_count) — "N accounts left".
-  int32 accounts_left = 5;
+  // Trading-account state: NotActive / Pending / Active. The client renders the
+  // Figma card from (enrollment_status, activation_state) + the competition window
+  // and accounts_left; this survives reload because it is read from the DB.
+  competitions.ActivationState activation_state = 2;
+  // 0 when the caller is not enrolled.
+  int64 enrolled_at = 3;
+  // Present only when activation_state == Active.
+  optional competitions.MyParticipationResult active_result = 4;
 }
 
 // --- Account activation (PROP25-2582, client area: POST /competitions/:id/activate) ---
@@ -324,13 +335,13 @@ message ActivateAccountRequest {
   string client_id = 2;
 }
 
+// Success: activation_state is Pending (order placed now, or already in progress)
+// or Active (the trader already had an account). The "can't activate" reasons
+// (not started / ended / all accounts claimed / not enrolled) come back as a gRPC
+// status with a machine-readable message prefix, mapped to REST codes at the facade
+// — the same pattern as Enroll — not as enum values here.
 message ActivateAccountResponse {
-  // Resulting state after the activation attempt. Preparing = order placed now (or
-  // already in progress); AllAccountsClaimed/NotStarted/Ended/NotEnrolled/Error =
-  // not activated (reason). Active = already had an account.
   competitions.ActivationState activation_state = 1;
-  // Accounts still activatable after this attempt (for immediate UI refresh).
-  int32 accounts_left = 2;
 }
 
 // --- Leaderboard ---
@@ -364,11 +375,11 @@ service CompetitionsGrpcService {
   rpc GetPublicCompetitions(competitions.GetPublicCompetitionsRequest) returns (competitions.GetPublicCompetitionsResponse);
   rpc GetPublicCompetitionById(competitions.GetPublicCompetitionByIdRequest) returns (competitions.GetPublicCompetitionByIdResponse);
 
-  // Enrollment
-  rpc GetEnrollments(competitions.GetEnrollmentsRequest) returns (competitions.GetEnrollmentsResponse);
+  // Participation
+  rpc GetParticipations(competitions.GetParticipationsRequest) returns (competitions.GetParticipationsResponse);
   rpc Enroll(competitions.EnrollClientRequest) returns (competitions.EnrollClientResponse);
-  rpc GetMyEnrollment(competitions.GetMyEnrollmentRequest) returns (competitions.GetMyEnrollmentResponse);
-  // Trader-triggered account creation (PROP25-2582): Enrolled -> Pending within
+  rpc GetMyParticipation(competitions.GetMyParticipationRequest) returns (competitions.GetMyParticipationResponse);
+  // Trader-triggered account creation (PROP25-2582): NotActive -> Pending within
   // starts_at..ends_at, gated by the account limit. Idempotent (repeated clicks /
   // reload never create a second account).
   rpc ActivateAccount(competitions.ActivateAccountRequest) returns (competitions.ActivateAccountResponse);
