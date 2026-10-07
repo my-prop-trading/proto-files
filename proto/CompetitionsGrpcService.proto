@@ -24,6 +24,48 @@ enum EnrollmentStatus {
   EnrollmentEnrolled = 3;
 }
 
+// Participant category a competition may be restricted to (PROP25-2582). BO
+// multi-selects any subset; empty = open to everyone. A trader falls into exactly
+// one category, resolved at Join from registration date / paid orders / prior
+// accounts. NEVER exposed to the client (only "available / not available" is).
+// Opaque codes, like platform ids.
+enum ParticipantCategory {
+  // Registered on/after the calendar day of registration_opens_at (by reg date
+  // alone — a same-day buyer still counts).
+  NewlyRegistered = 0;
+  // Registered earlier; no paid orders; never had any trading account.
+  UnpaidNoAccount = 1;
+  // Registered earlier; no paid orders; has/had >=1 trading account (manual grant,
+  // free reward, earlier competition, any route).
+  UnpaidWithAccount = 2;
+  // Registered earlier; >=1 paid order (zero-price grants do not count).
+  Paid = 3;
+}
+
+// Client-facing activation state for a trader's own enrollment (PROP25-2582).
+// A presentation layer over the enrollment status — NOT a stored status. Maps to
+// the Figma activation card. Only returned on the caller's own my-enrollment /
+// the ActivateAccount response.
+enum ActivationState {
+  // Enrolled, no account yet, window open → the "Activate account" button shows.
+  ActivationCanActivate = 0;
+  // Account order placed, account being created (enrollment Pending). Survives
+  // reload — "Preparing your account".
+  ActivationPreparing = 1;
+  // Account ready (enrollment Active) — the trader can trade.
+  ActivationActive = 2;
+  // Competition has not started yet (before starts_at) — activation not open.
+  ActivationNotStarted = 3;
+  // Past ends_at / Ended — activation no longer possible.
+  ActivationEnded = 4;
+  // Account limit reached — "All accounts claimed".
+  ActivationAllAccountsClaimed = 5;
+  // Caller is not enrolled in this competition.
+  ActivationNotEnrolled = 6;
+  // Account creation failed — the trader can retry.
+  ActivationError = 7;
+}
+
 // Current user's result in a competition (list card / detail enrichment).
 message MyCompetitionResult {
   optional int32 rank = 1;       // null for DQ
@@ -64,6 +106,26 @@ message Competition {
   // returned on detail (not on the list card). Empty = legacy competition with no
   // explicit platforms — enroll falls back to the default platform.
   repeated int32 platforms = 22;
+
+  // --- PROP25-2582: account limit + participant category ---
+
+  // Second cap: how many accounts may be activated (first come, first served).
+  // <= max_participants. Legacy rows (0) fall back to max_participants. Set by BO.
+  int32 account_limit = 23;
+  // Denormalized count of activated accounts (source of truth for the account
+  // gate). Owned by the service, ignored on Save.
+  int32 account_count = 24;
+  // account_limit - account_count (read-only enrichment, for "N accounts left").
+  // Owned by the service, ignored on Save.
+  int32 accounts_left = 25;
+  // Participant categories this competition is restricted to (BO read/write).
+  // Empty = open to everyone. NOT returned on public reads — the public facade
+  // strips it and exposes only `is_eligible`.
+  repeated competitions.ParticipantCategory participant_categories = 26;
+  // Per-caller eligibility (public reads, set only when caller_client_id given).
+  // The client learns "available / not available" — never the categories. Absent
+  // for anonymous / BO / Save.
+  optional bool is_eligible = 27;
 }
 
 message CompetitionPrizeTier {
@@ -86,6 +148,9 @@ message CompetitionEnrollment {
   // (before start), Pending = order placed / account being created, Active =
   // account ready. Lets BO show the real state instead of assuming Active.
   competitions.EnrollmentStatus status = 8;
+  // When the trader activated (Enrolled -> Pending; = provisioned_at). 0 while
+  // still Enrolled (not activated). Lets BO show "activated / when" (PROP25-2582).
+  int64 activated_at = 9;
 }
 
 message LeaderboardEntry {
@@ -244,6 +309,28 @@ message GetMyEnrollmentResponse {
   // enrolled_at is 0 when the caller is not enrolled.
   int64 enrolled_at = 2;
   optional competitions.MyEnrollmentActiveResult active_result = 3;
+  // PROP25-2582: client-facing activation state (renders the Figma card on
+  // reload — CanActivate/Preparing/Active/NotStarted/Ended/AllAccountsClaimed/
+  // NotEnrolled). Derived from enrollment status + the competition window/limit.
+  competitions.ActivationState activation_state = 4;
+  // Accounts still activatable (account_limit - account_count) — "N accounts left".
+  int32 accounts_left = 5;
+}
+
+// --- Account activation (PROP25-2582, client area: POST /competitions/:id/activate) ---
+
+message ActivateAccountRequest {
+  string competition_id = 1;
+  string client_id = 2;
+}
+
+message ActivateAccountResponse {
+  // Resulting state after the activation attempt. Preparing = order placed now (or
+  // already in progress); AllAccountsClaimed/NotStarted/Ended/NotEnrolled/Error =
+  // not activated (reason). Active = already had an account.
+  competitions.ActivationState activation_state = 1;
+  // Accounts still activatable after this attempt (for immediate UI refresh).
+  int32 accounts_left = 2;
 }
 
 // --- Leaderboard ---
@@ -281,6 +368,10 @@ service CompetitionsGrpcService {
   rpc GetEnrollments(competitions.GetEnrollmentsRequest) returns (competitions.GetEnrollmentsResponse);
   rpc Enroll(competitions.EnrollClientRequest) returns (competitions.EnrollClientResponse);
   rpc GetMyEnrollment(competitions.GetMyEnrollmentRequest) returns (competitions.GetMyEnrollmentResponse);
+  // Trader-triggered account creation (PROP25-2582): Enrolled -> Pending within
+  // starts_at..ends_at, gated by the account limit. Idempotent (repeated clicks /
+  // reload never create a second account).
+  rpc ActivateAccount(competitions.ActivateAccountRequest) returns (competitions.ActivateAccountResponse);
 
   // Leaderboard
   rpc GetLeaderboard(competitions.GetLeaderboardRequest) returns (competitions.GetLeaderboardResponse);
