@@ -1,0 +1,200 @@
+syntax = "proto3";
+package mock_trading_platform;
+
+import "google/protobuf/empty.proto";
+
+// Control API of the mock trading platform (mock-trading-platform-bridge-flows-grpc, PROP25-2252).
+//
+// The mock bridge implements TradingPlatformBridgeGrpcService for trading-platform-router like any
+// real platform, and serves the accounts and trades kept in its own storage. This service is the
+// test-only way to change that state: open, update and close positions (back-dated if needed), so
+// trading metrics, phase pass/fail and payouts can be tested without real trading.
+// Callers: mcp-gateway and the BackOffice. Never deployed to production.
+//
+// All timestamps are unix microseconds (UTC). There is no price feed: a position's profit is set
+// explicitly, the current/close price is informational. Equity = Balance + floating profit (incl.
+// swap and fee) of open positions.
+//
+// Errors are returned as gRPC statuses: NOT_FOUND (unknown account / trade), INVALID_ARGUMENT
+// (bad input), FAILED_PRECONDITION (trade disabled, position already closed).
+
+enum MockAccountType {
+  MOCK_ACCOUNT_TYPE_DEMO = 0;
+  MOCK_ACCOUNT_TYPE_LIVE = 1;
+}
+
+enum MockPositionSide {
+  MOCK_POSITION_SIDE_BUY = 0;
+  MOCK_POSITION_SIDE_SELL = 1;
+}
+
+enum MockTradeType {
+  MOCK_TRADE_TYPE_BUY = 0;
+  MOCK_TRADE_TYPE_SELL = 1;
+  // Deposit / withdrawal row (amount in Profit, signed).
+  MOCK_TRADE_TYPE_BALANCE = 2;
+}
+
+// Same numbers as TradingPlatformBridgeGrpcService.CloseReason.
+enum MockCloseReason {
+  MOCK_CLOSE_REASON_UNKNOWN = 0;
+  MOCK_CLOSE_REASON_MANUAL = 1;
+  MOCK_CLOSE_REASON_STOP_LOSS = 2;
+  MOCK_CLOSE_REASON_TAKE_PROFIT = 3;
+  MOCK_CLOSE_REASON_STOP_OUT = 4;
+  MOCK_CLOSE_REASON_OTHER = 5;
+}
+
+message MockAccountModel {
+  string PlatformAccountId = 1; // platform login (numeric)
+  string TraderAccountId = 2;
+  string ClientId = 3;
+  string Email = 4;
+  string FullName = 5;
+  MockAccountType AccountType = 6;
+  int32 PlatformId = 7;
+  int64 Leverage = 8;
+  string Group = 9;
+  bool Enabled = 10;
+  bool TradeEnabled = 11;
+  int64 CreatedAt = 12;
+  double Balance = 13;
+  double Equity = 14;
+  double FloatingProfit = 15;
+  double Margin = 16;
+  double MarginFree = 17;
+  double MarginLevel = 18;
+  int32 OpenPositionsCount = 19;
+}
+
+message MockTradeModel {
+  string Id = 1; // ticket, numeric
+  string PlatformAccountId = 2;
+  MockTradeType Type = 3;
+  string Symbol = 4;
+  int64 Digits = 5;
+  double Lots = 6;
+  int64 OpenTime = 7;
+  double OpenPrice = 8;
+  double StopLoss = 9;
+  double TakeProfit = 10;
+  optional int64 CloseTime = 11; // not set = open position
+  double ClosePrice = 12; // current price while open
+  double Profit = 13; // floating profit while open
+  double Fee = 14;
+  double Swap = 15;
+  double Taxes = 16;
+  double UsedMargin = 17; // reported as 0 once closed
+  MockCloseReason CloseReason = 18;
+  string Comment = 19;
+  int64 UpdatedAt = 20;
+}
+
+message GetAccountsRequest {
+  optional MockAccountType AccountType = 1;
+  optional string TraderAccountId = 2;
+  optional string ClientId = 3;
+}
+
+message GetAccountsResponse {
+  repeated MockAccountModel Accounts = 1;
+}
+
+// Exactly one of PlatformAccountId / TraderAccountId must be set.
+message GetAccountRequest {
+  optional string PlatformAccountId = 1;
+  optional string TraderAccountId = 2;
+}
+
+message GetAccountResponse {
+  MockAccountModel Account = 1;
+  repeated MockTradeModel Trades = 2; // newest first: open positions, closed trades, balance rows
+}
+
+message OpenPositionRequest {
+  string PlatformAccountId = 1;
+  string Symbol = 2;
+  MockPositionSide Side = 3;
+  double Lots = 4;
+  double OpenPrice = 5;
+  optional int64 OpenTime = 6; // default now; may be back-dated, never in the future
+  optional double StopLoss = 7;
+  optional double TakeProfit = 8;
+  optional double CurrentPrice = 9; // default OpenPrice
+  optional double Profit = 10; // initial floating profit, default 0
+  optional double Fee = 11; // commission, negative; default 0
+  optional double Swap = 12;
+  optional double UsedMargin = 13;
+  optional int64 Digits = 14; // default 5
+  optional string Comment = 15;
+  // Open even when the account's trading is disabled (the platform would reject it).
+  bool IgnoreTradeDisabled = 16;
+}
+
+// Only the set fields change.
+message UpdatePositionRequest {
+  string PlatformAccountId = 1;
+  string TradeId = 2;
+  optional double CurrentPrice = 3;
+  optional double Profit = 4;
+  optional double StopLoss = 5;
+  optional double TakeProfit = 6;
+  optional double Swap = 7;
+  optional double Fee = 8;
+  optional double UsedMargin = 9;
+  optional double Lots = 10;
+  optional int64 OpenTime = 11;
+  optional double OpenPrice = 12;
+}
+
+message ClosePositionRequest {
+  string PlatformAccountId = 1;
+  string TradeId = 2;
+  optional double ClosePrice = 3; // default the current price
+  optional int64 CloseTime = 4; // default now; not before OpenTime, never in the future
+  optional double Profit = 5; // realized profit, default the current floating profit
+  optional double Fee = 6;
+  optional double Swap = 7;
+  MockCloseReason CloseReason = 8; // UNKNOWN is stored as MANUAL
+}
+
+// A trade that is already closed, e.g. to back-fill history for traded days / best day.
+message AddClosedTradeRequest {
+  string PlatformAccountId = 1;
+  string Symbol = 2;
+  MockPositionSide Side = 3;
+  double Lots = 4;
+  int64 OpenTime = 5;
+  double OpenPrice = 6;
+  int64 CloseTime = 7; // not before OpenTime, never in the future
+  double ClosePrice = 8;
+  double Profit = 9;
+  optional double Fee = 10;
+  optional double Swap = 11;
+  optional double StopLoss = 12;
+  optional double TakeProfit = 13;
+  MockCloseReason CloseReason = 14; // UNKNOWN is stored as MANUAL
+  optional int64 Digits = 15;
+  optional string Comment = 16;
+}
+
+message TradeResponse {
+  MockTradeModel Trade = 1;
+  MockAccountModel Account = 2; // account state after the change
+}
+
+service MockTradingPlatformGrpcService {
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+  rpc GetAccounts(GetAccountsRequest) returns (GetAccountsResponse);
+
+  rpc GetAccount(GetAccountRequest) returns (GetAccountResponse);
+
+  rpc OpenPosition(OpenPositionRequest) returns (TradeResponse);
+
+  rpc UpdatePosition(UpdatePositionRequest) returns (TradeResponse);
+
+  rpc ClosePosition(ClosePositionRequest) returns (TradeResponse);
+
+  rpc AddClosedTrade(AddClosedTradeRequest) returns (TradeResponse);
+}
