@@ -183,6 +183,42 @@ message TradeResponse {
   MockAccountModel Account = 2; // account state after the change
 }
 
+// One trade of AddTrades: an open position, or a trade that is already closed when CloseTime is
+// set (then OpenTime, ClosePrice and Profit are required).
+message AddTradeItem {
+  string Symbol = 1;
+  MockPositionSide Side = 2;
+  double Lots = 3;
+  double OpenPrice = 4;
+  optional int64 OpenTime = 5; // open position: default now; never in the future
+  optional int64 CloseTime = 6; // set = closed trade; not before OpenTime, never in the future
+  optional double ClosePrice = 7;
+  optional double Profit = 8; // closed: realized; open: floating, default 0
+  optional double CurrentPrice = 9; // open position only; default OpenPrice
+  optional double Fee = 10;
+  optional double Swap = 11;
+  optional double StopLoss = 12;
+  optional double TakeProfit = 13;
+  optional double UsedMargin = 14; // open position only
+  MockCloseReason CloseReason = 15; // closed trade only; UNKNOWN is stored as MANUAL
+  optional int64 Digits = 16;
+  optional string Comment = 17;
+}
+
+// All or nothing: every item is validated first, and the whole batch is applied at once, so
+// trading-control never sees part of it. INVALID_ARGUMENT names the first bad item.
+message AddTradesRequest {
+  string PlatformAccountId = 1;
+  repeated AddTradeItem Trades = 2; // 1..500, applied in order
+  // Open positions even when the account's trading is disabled.
+  bool IgnoreTradeDisabled = 3;
+}
+
+message AddTradesResponse {
+  repeated MockTradeModel Trades = 1; // in request order
+  MockAccountModel Account = 2; // account state after the batch
+}
+
 service MockTradingPlatformGrpcService {
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 
@@ -197,4 +233,6 @@ service MockTradingPlatformGrpcService {
   rpc ClosePosition(ClosePositionRequest) returns (TradeResponse);
 
   rpc AddClosedTrade(AddClosedTradeRequest) returns (TradeResponse);
+
+  rpc AddTrades(AddTradesRequest) returns (AddTradesResponse);
 }
