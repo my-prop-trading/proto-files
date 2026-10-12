@@ -71,6 +71,29 @@ message SetBannerResponse {
   OperationResult Result = 1;
 }
 
+// ===== Client Notifications (table "client-notification-settings", pk "*", rk "settings") =====
+
+message ClientNotificationRule {
+  bool VisibleToClients = 1;
+  uint32 VisibilityMinutes = 2; // 0 = shown only while the breach is active
+}
+
+message ClientNotificationSettings {
+  ClientNotificationRule ExposureLossSoftBreach = 1;
+  ClientNotificationRule MarginRuleSoftBreach = 2;
+}
+
+message GetClientNotificationSettingsRequest {}
+message GetClientNotificationSettingsResponse {
+  optional ClientNotificationSettings Item = 1;
+}
+message SetClientNotificationSettingsRequest {
+  ClientNotificationSettings Item = 1;
+}
+message SetClientNotificationSettingsResponse {
+  OperationResult Result = 1;
+}
+
 // ===== Highlight Card (table "highlight-card-settings", pk "highlight-card", rk "settings") =====
 
 message HighlightCardItem {
@@ -338,6 +361,10 @@ service BackofficeFlowsGrpcService {
   // Banners
   rpc GetBanner(GetBannerRequest) returns (GetBannerResponse);
   rpc SetBanner(SetBannerRequest) returns (SetBannerResponse);
+
+  // Client Notifications
+  rpc GetClientNotificationSettings(GetClientNotificationSettingsRequest) returns (GetClientNotificationSettingsResponse);
+  rpc SetClientNotificationSettings(SetClientNotificationSettingsRequest) returns (SetClientNotificationSettingsResponse);
 
   // Highlight Card
   rpc GetHighlightCard(GetHighlightCardRequest) returns (GetHighlightCardResponse);
