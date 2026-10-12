@@ -38,6 +38,11 @@ message SendMessageResponse {
     // stores it verbatim on the payout row's last_error (spec §4: "the full error
     // text, not just 'error'"). Empty on success.
     string ErrorMessage = 3;
+    // Discord's HTTP status when `response` is `Error` and Discord answered (e.g. 401
+    // bad token, 403 no access to the channel, 404 unknown channel, 429 rate limit,
+    // 5xx); 0 when no response arrived (network, TLS, timeout) and on success. Lets the
+    // caller decide whether a retry makes sense without parsing ErrorMessage.
+    int32 HttpStatus = 4;
 }
 
 message SendMessageResponseBody {
