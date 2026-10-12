@@ -402,6 +402,11 @@ message AccountBreachesGrpcModel {
   bool margin_rule_enabled = 4;
   int32 margin_rule_soft_breach_count = 5;
   int32 margin_rule_soft_breach_max = 6;
+  // Active = breaching on the latest tick; last_at = latest breaching tick, unset if never.
+  bool exposure_loss_soft_breach_active = 7;
+  optional int64 exposure_loss_last_soft_breach_at = 8;
+  bool margin_rule_soft_breach_active = 9;
+  optional int64 margin_rule_last_soft_breach_at = 10;
 }
 message GetAccountBreachesGrpcRequest {
   string trader_account_id = 1;
