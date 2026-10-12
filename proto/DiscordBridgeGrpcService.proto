@@ -22,6 +22,11 @@ message SendMessageRequest {
     // Message text, already formatted by the caller (spec §4 post format). Plain
     // content only — no embeds, attachments, threads or reactions.
     string Content = 2;
+    // Idempotency key, at most 25 characters, stable per message (live-payouts derives
+    // it from the payout id). Sent to Discord as nonce + enforce_nonce: a repeat of the
+    // same request within Discord's window (a few minutes) returns the message the
+    // first one created instead of posting a duplicate. Empty = no idempotency.
+    string Nonce = 3;
 }
 
 message SendMessageResponse {
