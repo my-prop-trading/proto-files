@@ -520,6 +520,15 @@ message GetBulkPurchasesResponse {
   repeated BulkPurchaseModel Items = 1;
 }
 
+message GetPaymentPageHtmlRequest {
+  string OrderId = 1;
+}
+
+message GetPaymentPageHtmlResponse {
+  // Absent when the order has no stored payment page or it has expired.
+  optional string Html = 1;
+}
+
 service OrdersGrpcService {
   rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
@@ -549,6 +558,9 @@ service OrdersGrpcService {
   // PROP25-2491 Bulk purchase — BackOffice Purchases tab (read-only, searchable). The bulk discount
   // CONFIG is edited on the trading package (BulkPurchaseEnabled + BulkDiscountPercents), not here.
   rpc GetBulkPurchases(orders.GetBulkPurchasesRequest) returns (orders.GetBulkPurchasesResponse);
+
+  // Stored HTML payment page read from the primary MyNoSql, bypassing any lagging replica.
+  rpc GetPaymentPageHtml(orders.GetPaymentPageHtmlRequest) returns (orders.GetPaymentPageHtmlResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
