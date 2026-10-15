@@ -21,6 +21,10 @@ message Certificate {
   optional string tx_id = 5;
   optional string trader_account_id = 6;
   int64 updated_at = 7;
+  // Popup state, read-only (ignored by CreateCertificate). seen = true with no seen_at means the
+  // certificate predates the popup and was closed at launch rather than shown to the trader.
+  bool seen = 8;
+  optional int64 seen_at = 9;
 }
 
 message CertificateTemplate {
@@ -37,6 +41,7 @@ message GetPaginatedRequest {
   optional string client_id = 6;
   optional int64 date_from = 7;
   optional string trader_account_id = 8;
+  optional bool seen = 9;
 }
 
 message GetPaginatedResponse {
@@ -196,10 +201,42 @@ message GetCertificatesSummaryResponse {
   uint32 grand_total = 2;   // total across all types
 }
 
+// ===== Home popup: the newest unseen milestone to celebrate =====
+
+message GetCertificatePopupRequest {
+  string client_id = 1;
+}
+
+message CertificatePopupHero {
+  string id = 1;
+  certificates.CertificateType type = 2;
+  int64 created_at = 3;
+  optional string challenge_title = 4;   // evaluation types only
+  optional double initial_balance = 5;   // evaluation types only
+  optional double withdrawal_amount = 6; // PayoutByTxID only
+  string currency = 7;                   // ISO code, e.g. "USD"
+  string issued_as = 8;                  // trader name exactly as printed on the certificate
+}
+
+message GetCertificatePopupResponse {
+  optional certificates.CertificatePopupHero hero = 1; // absent = nothing to show
+  uint32 other_milestones_count = 2;                   // distinct milestones besides the hero
+  repeated string certificate_ids = 3;                 // every record represented; pass to MarkCertificatesSeen
+}
+
+message MarkCertificatesSeenRequest {
+  string client_id = 1;
+  repeated string certificate_ids = 2; // ids not owned by client_id are ignored
+}
+
+message MarkCertificatesSeenResponse {}
+
 service CertificatesGrpcService {
   //rpc GetInfoById(certificates.GetInfoByIdRequest) returns (certificates.GetInfoByIdResponse);
   rpc GetPaginated(certificates.GetPaginatedRequest) returns (certificates.GetPaginatedResponse);
   rpc GetCertificatesSummary(certificates.GetCertificatesSummaryRequest) returns (certificates.GetCertificatesSummaryResponse);
+  rpc GetCertificatePopup(certificates.GetCertificatePopupRequest) returns (certificates.GetCertificatePopupResponse);
+  rpc MarkCertificatesSeen(certificates.MarkCertificatesSeenRequest) returns (certificates.MarkCertificatesSeenResponse);
   rpc GetResource(certificates.GetResourceRequest) returns (stream certificates.GetResourceResponse);
   rpc CreateCertificate(CreateCertificateRequest) returns (certificates.CreateCertificateResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
