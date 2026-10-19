@@ -139,6 +139,18 @@ message GetHtmlMetadataResponse {
   HtmlMetadata metadata = 1;
 }
 
+// Who a shared certificate is issued to (PROP25-2649): the public name printed on it, and
+// whether that name is a nickname, so the shared page can show the "Verified" note.
+message GetCertificateOwnerRequest {
+  string id = 1;
+}
+
+message GetCertificateOwnerResponse {
+  bool found = 1;
+  string name = 2;
+  bool is_nickname = 3;
+}
+
 message SetHtmlMetadataRequest {
   HtmlMetadata metadata = 1;
 }
@@ -254,6 +266,7 @@ service CertificatesGrpcService {
   // For Html Shared
   rpc GetHtmlMetadata(certificates.GetHtmlMetadataRequest) returns (certificates.GetHtmlMetadataResponse);
   rpc SetHtmlMetadata(certificates.SetHtmlMetadataRequest) returns (certificates.SetHtmlMetadataResponse);
+  rpc GetCertificateOwner(certificates.GetCertificateOwnerRequest) returns (certificates.GetCertificateOwnerResponse);
 
   // Statistics
   rpc GetStatistics(certificates.GetStatisticsRequest) returns (certificates.GetStatisticsResponse);
