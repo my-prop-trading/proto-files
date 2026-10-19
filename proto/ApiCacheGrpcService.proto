@@ -106,6 +106,8 @@ message PaymentPageGrpcModel {
   int32 content_type = 2;
   int32 display_mode = 3;
   optional string wallet_script = 4;
+  // orders.PaymentPageProvider value.
+  int32 provider = 5;
 }
 
 service ApiCacheGrpcService {
