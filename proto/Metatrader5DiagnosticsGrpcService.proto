@@ -1,6 +1,8 @@
 syntax = "proto3";
 package metatrader5_diagnostics;
 
+import "google/protobuf/empty.proto";
+
 // MT5 trade server the request goes to.
 enum Mt5Server {
   MT5_SERVER_DEMO = 0;
@@ -56,4 +58,5 @@ message GetServerJournalResponse {
 service Metatrader5DiagnosticsGrpcService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
   rpc GetServerJournal(GetServerJournalRequest) returns (GetServerJournalResponse);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
