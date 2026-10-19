@@ -1,0 +1,62 @@
+syntax = "proto3";
+package metatrader5_diagnostics;
+
+import "google/protobuf/empty.proto";
+
+// MT5 trade server the request goes to.
+enum Mt5Server {
+  MT5_SERVER_DEMO = 0;
+  MT5_SERVER_LIVE = 1;
+}
+
+enum JournalMode {
+  JOURNAL_MODE_STANDARD = 0;
+  JOURNAL_MODE_ERRORS = 1;
+  JOURNAL_MODE_FULL = 2;
+}
+
+message GetUserRequest {
+  string Login = 1;
+  Mt5Server Server = 2;
+}
+
+message GetUserResponse {
+  string Login = 1;
+  string Group = 2;
+  uint64 Rights = 3; // MT5 EnUsersRights bitmask
+  bool Enabled = 4; // allowed to connect
+  bool TradeDisabled = 5;
+  bool ResetPassword = 6; // must change password at next login
+  int64 Registration = 7;
+  optional int64 LastAccess = 8; // unset if the account never connected
+  string LastIp = 9;
+}
+
+message GetServerJournalRequest {
+  Mt5Server Server = 1;
+  int64 From = 2;
+  int64 To = 3;
+  string Filter = 4; // substring of the record text, empty for all records
+  JournalMode Mode = 5;
+  uint32 Limit = 6; // newest records kept; 0 for the bridge default
+}
+
+message JournalRecord {
+  int64 Time = 1;
+  int32 Code = 2; // MT5 EnMTLogCode
+  uint32 Type = 3; // MT5 EnMTLogType
+  string Source = 4;
+  string Message = 5;
+}
+
+message GetServerJournalResponse {
+  repeated JournalRecord Records = 1;
+  uint32 Total = 2; // records in the window before Limit was applied
+}
+
+// Read-only MT5 diagnostics. All timestamps are unix microseconds, UTC.
+service Metatrader5DiagnosticsGrpcService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc GetServerJournal(GetServerJournalRequest) returns (GetServerJournalResponse);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
