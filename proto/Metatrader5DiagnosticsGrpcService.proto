@@ -54,9 +54,23 @@ message GetServerJournalResponse {
   uint32 Total = 2; // records in the window before Limit was applied
 }
 
-// Read-only MT5 diagnostics. All timestamps are unix microseconds, UTC.
+message SetUserGroupRequest {
+  string Login = 1;
+  Mt5Server Server = 2;
+  string Group = 3; // full group name, path included
+}
+
+message SetUserGroupResponse {
+  string Login = 1;
+  string PreviousGroup = 2; // equals Group when the user already sat there
+  string Group = 3;
+}
+
+// MT5 diagnostics and support operations. All timestamps are unix microseconds, UTC.
 service Metatrader5DiagnosticsGrpcService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  // Moves a user to another group of the same trade server.
+  rpc SetUserGroup(SetUserGroupRequest) returns (SetUserGroupResponse);
   rpc GetServerJournal(GetServerJournalRequest) returns (GetServerJournalResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
