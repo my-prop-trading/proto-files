@@ -128,6 +128,14 @@ message PaymentPage {
   PaymentPageType PageType = 2;
   PaymentPageDisplayMode DisplayMode = 3;
   optional string WalletScript = 4;
+  PaymentPageProvider Provider = 5;
+}
+
+// Provider that generated the payment page; values match the provider ids of orders settings.
+enum PaymentPageProvider {
+  PAYMENT_PAGE_PROVIDER_WOOCOMMERCE = 0;
+  PAYMENT_PAGE_PROVIDER_BRIDGERPAY = 1;
+  PAYMENT_PAGE_PROVIDER_BILLERIX = 2;
 }
 
 enum PaymentPageDisplayMode {
