@@ -122,6 +122,69 @@ message GetForClientsResponse {
     repeated pd.PersonalDataModelWithId Items = 1;
 }
 
+// PUBLIC PROFILE: how the trader's name appears on certificates and the Trader Card.
+// The legal name in PersonalDataModel is never changed by these calls.
+
+enum PublicNameDisplayOption {
+    // Default: also returned when the trader never saved the setting.
+    FullName = 0;
+    FirstNameInitial = 1;
+    Nickname = 2;
+}
+
+enum NicknameValidationResult {
+    Valid = 0;
+    Empty = 1;
+    TooShort = 2;
+    TooLong = 3;
+    InvalidCharacters = 4;
+    Blocked = 5;
+    // Another trader owns it, case-insensitive. The trader's own nickname is Valid.
+    Taken = 6;
+}
+
+message PublicProfileModel {
+    pd.PublicNameDisplayOption DisplayOption = 1;
+    // Name shown publicly right now. Null when it cannot be built (no first/last name).
+    optional string PublicName = 2;
+    // Saved nickname, whatever the selected option is: it stays reserved for the trader.
+    optional string Nickname = 3;
+    // Null when there is no first and no last name.
+    optional string FullNamePreview = 4;
+    // Null when there is no first name.
+    optional string FirstNameInitialPreview = 5;
+}
+
+message GetPublicProfileRequest {
+    string ClientId = 1;
+}
+
+message GetPublicProfileResponse {
+    pd.PublicProfileModel PublicProfile = 1;
+}
+
+message ValidateNicknameRequest {
+    string ClientId = 1;
+    string Nickname = 2;
+}
+
+message ValidateNicknameResponse {
+    pd.NicknameValidationResult Result = 1;
+}
+
+message SetPublicProfileRequest {
+    string ClientId = 1;
+    pd.PublicNameDisplayOption DisplayOption = 2;
+    // Validated only when DisplayOption = Nickname, ignored otherwise.
+    optional string Nickname = 3;
+}
+
+message SetPublicProfileResponse {
+    pd.NicknameValidationResult Result = 1;
+    // The saved profile. Present only when Result = Valid.
+    optional pd.PublicProfileModel PublicProfile = 2;
+}
+
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
@@ -133,6 +196,11 @@ service PersonalDataService {
 
     //get for clients
     rpc GetForClients(pd.GetForClientsRequest) returns (pd.GetForClientsResponse);
+
+    //public profile
+    rpc GetPublicProfile(pd.GetPublicProfileRequest) returns (pd.GetPublicProfileResponse);
+    rpc ValidateNickname(pd.ValidateNicknameRequest) returns (pd.ValidateNicknameResponse);
+    rpc SetPublicProfile(pd.SetPublicProfileRequest) returns (pd.SetPublicProfileResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
