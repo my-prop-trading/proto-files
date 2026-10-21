@@ -28,6 +28,9 @@ message DiscountCode {
     discount_codes.DiscountCodeType discount_addon_type = 29;
     double addon_amount = 30;
     bool is_all_addon_ids = 31;
+    // Back-office user email (or tool name) that created / last changed the code; empty for codes made before it was tracked
+    string created_by = 32;
+    string updated_by = 33;
 }
 
 enum DiscountCodeSource {
@@ -72,6 +75,7 @@ message CreateDiscountCodeRequest{
     DiscountCodeType discount_addon_type = 25;
     double addon_amount = 26;
     bool is_all_addon_ids = 27;
+    string created_by = 28;
 }
 
 message CreateDiscountCodeResponse {
@@ -101,6 +105,7 @@ message UpdateDiscountCodeRequest{
     discount_codes.DiscountCodeType discount_addon_type = 25;
     double addon_amount = 26;
     bool is_all_addon_ids = 27;
+    string updated_by = 28;
 }
 
 message UpdateDiscountCodeResponse {
@@ -129,6 +134,7 @@ message GetDiscountCodesPaginatedResponse {
 
 message DisableDiscountCodeRequest {
   string Code = 1;
+  string updated_by = 2;
 }
 
 message DisableDiscountCodeResponse {
@@ -165,6 +171,8 @@ enum DiscountCodesError {
   TECHNICAL_ERROR = 0;
   CODE_DOES_NOT_EXIST = 1;
   CODE_ALREADY_EXISTS = 2;
+  DATE_ENDS_BEFORE_DATE_STARTS = 3;
+  NOTHING_TO_UPDATE = 4;
 }
 
 message GetDiscountCodeForTradingPackageIdRequest {
@@ -179,16 +187,19 @@ message GetDiscountCodeForTradingPackageIdResponse {
 }
 
 message CreateDiscountGroupRequest{
+  // TemplateCode.created_by is stored as the author of every code in the group
   DiscountCode TemplateCode = 1;
   int64 Count = 2;
 }
 
 message UpdateDiscountGroupRequest{
+  // TemplateCode.updated_by is stored as the last editor of every code in the group
   DiscountCode TemplateCode = 1;
 }
 
 message DeleteDiscountGroupRequest {
   string GroupName = 1;
+  string updated_by = 2;
 }
 
 message GetDiscountCodeAggregatedByGroupRequest {
@@ -197,12 +208,16 @@ message GetDiscountCodeAggregatedByGroupRequest {
   optional int64 FromDate = 3;
   optional int64 ToDate = 4;
   optional string Code = 5;
+  // Case-insensitive substring of code, group name or description; takes precedence over Code
+  optional string search = 6;
 }
 
 message GetDiscountCodeAggregatedByGroupCountRequest {
   optional int64 FromDate = 1;
   optional int64 ToDate = 2;
   optional string Code = 3;
+  // Same filter as GetDiscountCodeAggregatedByGroupRequest.search
+  optional string search = 4;
 }
 
 message GetDiscountCodeAggregatedByGroupCountResponse {
@@ -224,6 +239,29 @@ message GetClientUsageRequest {
 
 message GetClientUsageResponse {
   int32 client_usage_count = 1;
+}
+
+message DiscountCodeTradingPackages {
+  repeated string trading_package_ids = 1;
+  bool is_all_trading_package_ids = 2;
+}
+
+message BulkUpdateDiscountCodesRequest {
+  // Codes of the back-office table rows; a group row (count_in_group > 1) updates the whole group
+  repeated string codes = 1;
+  // Absent field = keep the current value
+  optional DiscountCodeTradingPackages trading_packages = 2;
+  optional int64 date_ends = 3;
+  string updated_by = 4;
+}
+
+message BulkUpdateDiscountCodesResponse {
+  // Number of discount codes changed (a group counts every code in it)
+  uint64 updated_count = 1;
+  // Set when nothing was changed; the request is all-or-nothing
+  optional DiscountCodesError error = 2;
+  // Row codes the error refers to (missing codes, or codes whose start date is after date_ends)
+  repeated string failed_codes = 3;
 }
 
 service DiscountCodesGrpcService {
@@ -252,4 +290,5 @@ service DiscountCodesGrpcService {
       returns (GetDiscountCodeAggregatedByGroupCountResponse);
     rpc GetDiscountCodeByGroup(GetDiscountCodeByGroupRequest) returns (stream DiscountCode);
     rpc GetDiscountCodeTotalCount(google.protobuf.Empty) returns (GetDiscountCodeTotalCountResponse);
+    rpc BulkUpdateDiscountCodes(BulkUpdateDiscountCodesRequest) returns (BulkUpdateDiscountCodesResponse);
 }
