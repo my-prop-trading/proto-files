@@ -214,6 +214,10 @@ enum DiscountCodesError {
   DATE_ENDS_IN_PAST = 10;
   // PROP25-2690 (Create / Update / CreatePersonal): package_percents lists the same package twice
   DUPLICATE_PACKAGE_PERCENT = 11;
+  // PROP25-2690 CreatePersonalDiscountCode: usage_limit is set and below 1
+  INVALID_USAGE_LIMIT = 12;
+  // PROP25-2690 UpdateDiscountCode: owner_client_id on a code that belongs to a group (count_in_group > 1)
+  OWNER_NOT_ALLOWED_FOR_GROUP = 13;
 }
 
 message GetDiscountCodeForTradingPackageIdRequest {
@@ -322,8 +326,9 @@ message BulkUpdateDiscountCodesResponse {
 // The caller passes every setting; the service only generates the code.
 message CreatePersonalDiscountCodeRequest {
   // Idempotency key, unique per issuance of one code to one client (not a campaign / automation id).
-  // A repeat with the same request_id and the same request returns the code created by the first call;
-  // the same request_id with another owner or other settings returns REQUEST_ID_CONFLICT
+  // A repeat with the same request_id and the same request returns the code created by the first call
+  // in its current state (also when it was disabled since — check is_active); the same request_id with
+  // another owner or other settings returns REQUEST_ID_CONFLICT
   string request_id = 1;
   string owner_client_id = 2;
   // Optional, A-Z and 0-9 (case-insensitive). Code = PREFIX-XXXXXX (6 random chars); no prefix = 10 random chars
@@ -336,7 +341,7 @@ message CreatePersonalDiscountCodeRequest {
   int64 date_ends = 8;
   repeated string trading_package_ids = 9;
   bool is_all_trading_package_ids = 10;
-  // Absent = 1
+  // Absent = 1; below 1 = INVALID_USAGE_LIMIT
   optional int32 usage_limit = 11;
   DiscountCodeApplyType apply_type = 12;
   repeated DiscountCodePackagePercent package_percents = 13;
