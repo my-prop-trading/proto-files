@@ -89,6 +89,10 @@ enum SubscribeOrderError {
   // PROP25-2491 Bulk purchase: requested quantity is out of range or bulk is disabled for the
   // package. Mirrors orders.OrdersError.InvalidQuantity.
   AmountExceedsMax = 7;
+  // PROP25-2690: mirror orders.OrdersError.DiscountCodeWrongPlatform / OwnedByAnotherClient / AlreadyUsed
+  DiscountCodeWrongPlatform = 8;
+  DiscountCodeOwnedByAnotherClient = 9;
+  DiscountCodeAlreadyUsed = 10;
 }
 
 message SubscribeClientGrpcResponse {

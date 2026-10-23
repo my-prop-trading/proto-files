@@ -31,6 +31,21 @@ message DiscountCode {
     // Back-office user email (or tool name) that created / last changed the code; empty for codes made before it was tracked
     string created_by = 32;
     string updated_by = 33;
+    // PROP25-2690: per-package percents for Percent codes; empty = the base amount for every package
+    repeated DiscountCodePackagePercent package_percents = 34;
+    // PROP25-2690: platforms the code is valid on (platform ids); empty = all platforms, incl. ones added later
+    repeated int32 trading_platform_ids = 35;
+    // PROP25-2690: set = personal code, usable only by this client (limited by usage_limit only)
+    optional string owner_client_id = 36;
+}
+
+// PROP25-2690: percent overrides for one trading package of a Percent code.
+// An absent value = the code's base amount. Which value applies is picked by the order:
+// first_order_percent for the client's first order (the FIRST_PAYIN definition), else repeat_order_percent.
+message DiscountCodePackagePercent {
+    string trading_package_id = 1;
+    optional double first_order_percent = 2;
+    optional double repeat_order_percent = 3;
 }
 
 enum DiscountCodeSource {
@@ -76,6 +91,10 @@ message CreateDiscountCodeRequest{
     double addon_amount = 26;
     bool is_all_addon_ids = 27;
     string created_by = 28;
+    // PROP25-2690: see DiscountCode
+    repeated DiscountCodePackagePercent package_percents = 29;
+    repeated int32 trading_platform_ids = 30;
+    optional string owner_client_id = 31;
 }
 
 message CreateDiscountCodeResponse {
@@ -106,6 +125,10 @@ message UpdateDiscountCodeRequest{
     double addon_amount = 26;
     bool is_all_addon_ids = 27;
     string updated_by = 28;
+    // PROP25-2690: see DiscountCode
+    repeated DiscountCodePackagePercent package_percents = 29;
+    repeated int32 trading_platform_ids = 30;
+    optional string owner_client_id = 31;
 }
 
 message UpdateDiscountCodeResponse {
@@ -173,6 +196,8 @@ enum DiscountCodesError {
   CODE_ALREADY_EXISTS = 2;
   DATE_ENDS_BEFORE_DATE_STARTS = 3;
   NOTHING_TO_UPDATE = 4;
+  // PROP25-2690: a package percent is outside 0..100
+  INVALID_PERCENT = 5;
 }
 
 message GetDiscountCodeForTradingPackageIdRequest {
@@ -210,6 +235,10 @@ message GetDiscountCodeAggregatedByGroupRequest {
   optional string Code = 5;
   // Case-insensitive substring of code, group name or description; takes precedence over Code
   optional string search = 6;
+  // PROP25-2690: only personal codes of this client
+  optional string owner_client_id = 7;
+  // PROP25-2690: true = personal codes only, false = regular codes only, absent = both
+  optional bool is_personal = 8;
 }
 
 message GetDiscountCodeAggregatedByGroupCountRequest {
@@ -218,6 +247,9 @@ message GetDiscountCodeAggregatedByGroupCountRequest {
   optional string Code = 3;
   // Same filter as GetDiscountCodeAggregatedByGroupRequest.search
   optional string search = 4;
+  // PROP25-2690: same filters as GetDiscountCodeAggregatedByGroupRequest
+  optional string owner_client_id = 5;
+  optional bool is_personal = 6;
 }
 
 message GetDiscountCodeAggregatedByGroupCountResponse {
