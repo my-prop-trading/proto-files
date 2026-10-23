@@ -155,6 +155,8 @@ message PreviewOrderDiscountRequest {
   // PROP25-2491 Bulk purchase: quantity to preview. 0 or 1 previews a single account
   // (unchanged). Above 1 returns the per-account breakdown in BulkBreakdown.
   uint32 Quantity = 4;
+  // PROP25-2690: platform chosen on checkout; absent = the discount code platform filter is not checked
+  optional int32 PlatformId = 5;
 }
 
 message PreviewOrderDiscountResponse {
@@ -168,6 +170,12 @@ message PreviewOrderDiscountResponse {
     orders.PreviewBodyDiscountForAnotherPackageResponseBody BodyDiscountForAnotherPackage = 7;
     orders.PreviewOrderDiscountInvalidApplyTypeResponseBody BodyDiscountMustBeFirstPayin = 8;
     orders.PreviewOrderDiscountInvalidApplyTypeResponseBody BodyDiscountMustBeNextPayin = 9;
+    // PROP25-2690: the code is not valid on the chosen platform
+    orders.PreviewDiscountWrongPlatformResponseBody BodyDiscountWrongPlatform = 10;
+    // PROP25-2690: personal code of another client
+    orders.PreviewOrderDiscountInvalidResponseBody BodyDiscountOwnedByAnotherClient = 11;
+    // PROP25-2690: personal code that reached its usage limit
+    orders.PreviewOrderDiscountInvalidResponseBody BodyDiscountAlreadyUsed = 12;
   }
 }
 
@@ -222,6 +230,15 @@ message PreviewOrderDiscountInvalidResponseBody {
 
 message PreviewBodyDiscountForAnotherPackageResponseBody {
   repeated string TradingPackageIds = 1;
+}
+
+// PROP25-2690
+message PreviewDiscountWrongPlatformResponseBody {
+  int64 CreatedAt = 1;
+  double Price = 2;
+  string PriceCurrency = 3;
+  // Platforms the code is valid on
+  repeated int32 PlatformIds = 4;
 }
 
 message PreviewOrderDiscountInvalidApplyTypeResponseBody {
@@ -321,6 +338,10 @@ enum OrdersError {
   ActivationAlreadyPaid = 15;         // the fee is paid, the funded account is already on its way
   // Bulk purchase (PROP25-2491)
   InvalidQuantity = 16;               // requested quantity is out of range or bulk purchase is disabled for the package
+  // Discount codes (PROP25-2690)
+  DiscountCodeWrongPlatform = 17;         // the code is not valid on the order's platform
+  DiscountCodeOwnedByAnotherClient = 18;  // personal code of another client
+  DiscountCodeAlreadyUsed = 19;           // personal code that reached its usage limit
 }
 
 message GetPayinsPaginatedRequest {
