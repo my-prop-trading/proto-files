@@ -198,8 +198,9 @@ enum DiscountCodesError {
   CODE_ALREADY_EXISTS = 2;
   DATE_ENDS_BEFORE_DATE_STARTS = 3;
   NOTHING_TO_UPDATE = 4;
-  // PROP25-2690 (Create / Update / CreatePersonal): a percent is out of range —
-  // a package percent outside 0..100, or the base amount of a Percent code outside (0, 100]
+  // PROP25-2690 (Create / Update / CreatePersonal / groups): a percent outside 0..100 —
+  // a package percent, the base amount of a Percent code, or addon_amount of a Percent add-on discount.
+  // 0 is allowed (e.g. a code that discounts add-ons only)
   INVALID_PERCENT = 5;
   // PROP25-2690 CreatePersonalDiscountCode: required field is empty
   OWNER_CLIENT_ID_IS_EMPTY = 6;
@@ -228,14 +229,18 @@ message GetDiscountCodeForTradingPackageIdResponse {
 
 message CreateDiscountGroupRequest{
   // TemplateCode.created_by is stored as the author of every code in the group.
-  // PROP25-2690: TemplateCode.owner_client_id must be empty — groups cannot be personal (Status::invalid_argument)
+  // PROP25-2690: TemplateCode.owner_client_id must be empty — groups cannot be personal.
+  // The same checks as CreateDiscountCode (INVALID_PERCENT, DUPLICATE_PACKAGE_PERCENT; extra package percents
+  // are dropped). A failed check = Status::invalid_argument with the DiscountCodesError name in the message
   DiscountCode TemplateCode = 1;
   int64 Count = 2;
 }
 
 message UpdateDiscountGroupRequest{
   // TemplateCode.updated_by is stored as the last editor of every code in the group.
-  // PROP25-2690: TemplateCode.owner_client_id must be empty — groups cannot be personal (Status::invalid_argument)
+  // PROP25-2690: TemplateCode.owner_client_id must be empty — groups cannot be personal.
+  // The same checks as UpdateDiscountCode (INVALID_PERCENT, DUPLICATE_PACKAGE_PERCENT; extra package percents
+  // are dropped). A failed check = Status::invalid_argument with the DiscountCodesError name in the message
   DiscountCode TemplateCode = 1;
 }
 
@@ -327,7 +332,7 @@ message CreatePersonalDiscountCodeRequest {
   DiscountCodeType discount_type = 5;
   string description = 6;
   int64 date_starts = 7;
-  // Required, in the future (DATE_ENDS_IN_PAST otherwise); after date_starts
+  // Required and in the future (DATE_ENDS_IN_PAST otherwise); after date_starts (DATE_ENDS_BEFORE_DATE_STARTS otherwise)
   int64 date_ends = 8;
   repeated string trading_package_ids = 9;
   bool is_all_trading_package_ids = 10;
