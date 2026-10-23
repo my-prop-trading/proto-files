@@ -42,6 +42,8 @@ message DiscountCode {
 // PROP25-2690: percent overrides for one trading package of a Percent code.
 // An absent value = the code's base amount. Which value applies is picked by the order:
 // first_order_percent for the client's first order (the FIRST_PAYIN definition), else repeat_order_percent.
+// Saving rules: Percent codes only (dropped for Fixed); rows for packages not in the code are dropped
+// (unless is_all_trading_package_ids); a package listed twice = DUPLICATE_PACKAGE_PERCENT; values 0..100.
 message DiscountCodePackagePercent {
     string trading_package_id = 1;
     optional double first_order_percent = 2;
@@ -209,6 +211,8 @@ enum DiscountCodesError {
   REQUEST_ID_CONFLICT = 9;
   // PROP25-2690 CreatePersonalDiscountCode: date_ends is empty (0) or already in the past
   DATE_ENDS_IN_PAST = 10;
+  // PROP25-2690 (Create / Update / CreatePersonal): package_percents lists the same package twice
+  DUPLICATE_PACKAGE_PERCENT = 11;
 }
 
 message GetDiscountCodeForTradingPackageIdRequest {
