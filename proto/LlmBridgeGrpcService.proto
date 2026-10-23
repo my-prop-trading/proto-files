@@ -21,6 +21,8 @@ enum LlmProvider {
 // protobuf cannot express it across two flat fields.
 enum LlmModel {
   CLAUDE_HAIKU_4_5 = 0;
+  CLAUDE_SONNET_5 = 1;
+  CLAUDE_OPUS_5 = 2;
 }
 
 // Anthropic has no `system` role inside messages (system is a top-level field —
@@ -30,9 +32,18 @@ enum MessageRole {
   ASSISTANT = 1;
 }
 
+// An image attached to a message. MediaType: image/jpeg, image/png, image/gif
+// or image/webp; Data: the raw file bytes.
+message ChatImage {
+  string MediaType = 1;
+  bytes Data = 2;
+}
+
 message ChatMessage {
   MessageRole Role = 1;
   string Content = 2;
+  // Sent before Content within the message.
+  repeated ChatImage Images = 3;
 }
 
 message CreateMessageRequest {
