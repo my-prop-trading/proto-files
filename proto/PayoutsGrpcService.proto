@@ -96,6 +96,7 @@ message PayoutRequest {
     int64 ProcessedAt = 19;
     optional string OfficerId = 20;
     optional string ExternalAccountId = 21;
+    optional string PayoutMethod = 22;
 }
 
 message ProfitWidget {
@@ -204,6 +205,7 @@ message ApprovePayoutRequest {
     string Currency = 3;
     double Amount = 4;
     string OfficerId = 5;
+    optional string PayoutMethod = 6;
 }
 
 message ApprovePayoutResponse {
