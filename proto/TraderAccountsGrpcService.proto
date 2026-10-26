@@ -587,6 +587,36 @@ message ClosePositionsResponse {
   trader_accounts.TraderAccountError Result = 2;
 }
 
+// PROP25-2772: why an account is disabled from outside of trading-control.
+enum DisableTraderAccountReason {
+  DISABLE_TRADER_ACCOUNT_REASON_UNSPECIFIED = 0;
+  // The competition the account was created for is over.
+  DISABLE_TRADER_ACCOUNT_REASON_COMPETITION_ENDED = 1;
+}
+
+// PROP25-2772: ends an Active account the way a failed trading scenario does: trading is disabled
+// on the platform, open positions are closed and the status becomes Disabled. No trading scenario
+// event is published. Idempotent: an account that is no longer Active is left unchanged.
+message DisableTraderAccountRequest {
+  string TraderAccountId = 1;
+  trader_accounts.DisableTraderAccountReason Reason = 2;
+}
+
+message DisableTraderAccountResponse {
+  oneof response {
+    trader_accounts.DisableTraderAccountResponseBody Body = 1;
+    // NO_ACCOUNT when the account does not exist.
+    trader_accounts.TraderAccountError Error = 2;
+  }
+}
+
+message DisableTraderAccountResponseBody {
+  // True when this call disabled the account, false when it was not Active.
+  bool Disabled = 1;
+  // Account status after the call.
+  trader_accounts.TraderAccountStatusModel Status = 2;
+}
+
 message GetPageRequest {
   repeated trader_accounts.TraderAccountStatusModel Statuses = 1;
   uint64 Limit = 2;
@@ -722,6 +752,9 @@ service TraderAccountsGrpcService {
 
     // Close all positions on trading platform for trader account
     rpc ClosePositions(trader_accounts.ClosePositionsRequest) returns (trader_accounts.ClosePositionsResponse);
+
+    // Disable an Active account outside of trading-control (PROP25-2772: competition ended)
+    rpc DisableTraderAccount(trader_accounts.DisableTraderAccountRequest) returns (trader_accounts.DisableTraderAccountResponse);
 
     //Reactivate trader account
     rpc ReactivateTraderAccount(trader_accounts.ReactivateTraderAccountRequest) returns (trader_accounts.ReactivateTraderAccountResponse);
