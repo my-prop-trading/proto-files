@@ -146,6 +146,8 @@ message TraderPackage {
   // trader may buy is derived = len. Only meaningful when BulkPurchaseEnabled is true. Edited in the
   // BackOffice Bulk purchase section; stored on the package like the other per-package settings.
   repeated double BulkDiscountPercents = 85;
+  // Max positions a trader account may open per UTC day; 0 = rule off.
+  int32 MaxPositionsPerDay = 86;
 }
 
 message PlatformGroup {

@@ -194,6 +194,38 @@ message EnableAccountTradeResponse {
   bool Success = 1;
 }
 
+// Account-level trading permission; each platform maps a mode to its own mechanism.
+enum AccountTradeMode {
+  ACCOUNT_TRADE_MODE_FULL = 0;
+  // Open positions can be closed; opening new ones is rejected.
+  ACCOUNT_TRADE_MODE_CLOSE_ONLY = 1;
+  ACCOUNT_TRADE_MODE_DISABLED = 2;
+}
+
+// Sets the whole trading permission of the account, replacing the previous mode.
+message SetAccountTradeModeRequest {
+  string PlatformAccountId = 1;
+  string ProcessId = 2;
+  AccountType AccountType = 3;
+  int32 PlatformId = 4;
+  string TraderAccountId = 5;
+  string ClientId = 6;
+  AccountTradeMode Mode = 7;
+  // Cancel unfilled orders that would open a position; SL/TP and other closing orders are kept.
+  bool CancelPendingEntryOrders = 8;
+}
+
+message SetAccountTradeModeResponseBody {
+  int32 PendingEntryOrdersCancelled = 1;
+}
+
+message SetAccountTradeModeResponse {
+  oneof response {
+    SetAccountTradeModeResponseBody Body = 1;
+    TradingPlatformRouterError Error = 2;
+  }
+}
+
 message GetAccountsBalanceRequest {
   AccountType AccountType = 1;
   int32 PlatformId = 2;
@@ -424,6 +456,8 @@ service TradingPlatformRouterGrpcService {
   rpc DisableAccountTrade(DisableAccountTradeRequest) returns (DisableAccountTradeResponse);
 
   rpc EnableAccountTrade(EnableAccountTradeRequest) returns (EnableAccountTradeResponse);
+
+  rpc SetAccountTradeMode(SetAccountTradeModeRequest) returns (SetAccountTradeModeResponse);
 
   rpc GetAccountsBalance(GetAccountsBalanceRequest) returns (stream BalanceModel);
 

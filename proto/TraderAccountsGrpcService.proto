@@ -142,6 +142,9 @@ message TraderAccount {
     // StageCompleted with no trading data; the client account-list endpoint hides it so the
     // dashboard does not show a "Passed" card with empty metrics. The funded row stays false.
     bool IsManualSkipped = 105;
+
+    // Max positions opened per UTC day; 0 = rule off.
+    int32 MaxPositionsPerDay = 106;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.
@@ -175,6 +178,8 @@ enum TraderAccountTypeModel {
 enum TradeDisabledReasonModel {
   PAYOUT = 0;
   INTRADAY = 1;
+  // Close-only until the end of the UTC day; pending entry orders are cancelled.
+  DAILY_POSITIONS_LIMIT = 2;
 }
 
 enum TraderAccountStatusModel {
@@ -559,6 +564,8 @@ message SuspendTradingResponse {
 
 message SuspendTradingResponseBody {
   trader_accounts.TraderAccount TraderAccount = 1;
+  // Pending entry orders cancelled on the platform by this call.
+  int32 PendingEntryOrdersCancelled = 2;
 }
 
 message EnableTradingRequest {
