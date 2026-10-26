@@ -32,6 +32,11 @@ message PayoutOverride {
   double limit_profit_percent = 3;  // == PayoutSettings.excessive_profit_percent
 }
 
+message DailyPositionsLimitOverride {
+  bool enabled = 1;                 // on/off of the rule itself
+  int32 max_positions_per_day = 2;  // > 0 when enabled
+}
+
 // ===================== Entities =====================
 
 message RiskGroup {
@@ -44,6 +49,7 @@ message RiskGroup {
   int64 created_at = 7;
   int64 updated_at = 8;
   int32 assigned_count = 9;               // derived (for "Users assigned" column); ignored on write
+  DailyPositionsLimitOverride daily_positions_limit = 10; // absent = section not configured
 }
 
 message RiskGroupAssignment {
@@ -61,6 +67,7 @@ message RiskOverride {
   MarginRuleOverride margin_rule = 2;
   PayoutOverride payout = 3;
   string risk_group_id = 4;               // empty if the client is in no group
+  DailyPositionsLimitOverride daily_positions_limit = 5;
 }
 
 // ===================== Errors =====================

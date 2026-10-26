@@ -415,6 +415,77 @@ message GetAccountBreachesGrpcResponse {
   optional AccountBreachesGrpcModel item = 1;
 }
 
+// ===== Daily positions limit (per trader account, per UTC day) =====
+
+enum DailyPositionsLimitSourceGrpc {
+  LIMIT_SOURCE_PACKAGE = 0;
+  LIMIT_SOURCE_RISK_GROUP = 1;
+}
+
+enum DailyPositionsLimitEventKindGrpc {
+  DAILY_LIMIT_BLOCKED = 0;
+  DAILY_LIMIT_UNBLOCKED = 1;
+  DAILY_LIMIT_CHANGED = 2;
+}
+
+// Effective limit of an account: the package value or its Risk Group override.
+message DailyPositionsLimitGrpcModel {
+  optional int32 limit = 1;                     // unset = rule off
+  DailyPositionsLimitSourceGrpc source = 2;
+  string risk_group_id = 3;                     // set when source = RISK_GROUP
+}
+
+// A block, unblock or effective-limit change during the day.
+message DailyPositionsLimitEventGrpcModel {
+  int64 at = 1;
+  DailyPositionsLimitEventKindGrpc kind = 2;
+  DailyPositionsLimitGrpcModel limit = 3;       // effective limit after the event
+  int32 positions_opened = 4;                   // day count at the event
+  int32 pending_entry_orders_cancelled = 5;     // BLOCKED only
+}
+
+// One UTC day of an account with the rule active at some point of the day.
+message DailyPositionsLimitDayGrpcModel {
+  int64 day = 1;                                // UTC day start
+  DailyPositionsLimitGrpcModel limit = 2;       // effective limit at the latest event
+  int32 positions_opened = 3;
+  bool enforced = 4;                            // false = the platform has no close-only, never blocked
+  bool blocked = 5;                             // blocked at the end of the day, or now for today
+  optional int64 first_blocked_at = 6;
+  optional int64 last_unblocked_at = 7;
+  int32 pending_entry_orders_cancelled = 8;     // sum over the day
+  repeated DailyPositionsLimitEventGrpcModel events = 9;
+}
+
+message DailyPositionsLimitPositionGrpcModel {
+  string position_id = 1;
+  string symbol = 2;
+  int64 open_time = 3;
+}
+
+message GetDailyPositionsLimitGrpcRequest {
+  string trader_account_id = 1;
+}
+message GetDailyPositionsLimitGrpcResponse {
+  optional DailyPositionsLimitDayGrpcModel today = 1;  // unset = rule not active on the account today
+  int64 resets_at = 2;                                 // next UTC day start
+}
+
+message GetDailyPositionsLimitHistoryGrpcRequest {
+  string trader_account_id = 1;
+}
+message GetDailyPositionsLimitHistoryGrpcResponse {
+  repeated DailyPositionsLimitDayGrpcModel days = 1;   // newest first
+}
+
+message GetDailyPositionsLimitPositionsGrpcRequest {
+  string trader_account_id = 1;
+  int64 day = 2;                                       // UTC day start
+}
+message GetDailyPositionsLimitPositionsGrpcResponse {
+  repeated DailyPositionsLimitPositionGrpcModel items = 1;  // positions counted for the day
+}
+
 // ===== Trader Card (per-trader, lifetime across ALL of the trader's accounts) =====
 
 message GetTraderCardGrpcRequest {
@@ -495,6 +566,9 @@ service TradingControlGrpcService {
   rpc GetTradesMetrics(GetTradesMetricsGrpcRequest) returns (GetTradesMetricsGrpcResponse);
   rpc GetOpenTrades(GetOpenTradesGrpcRequest) returns (GetOpenTradesGrpcResponse);
   rpc GetAccountBreaches(GetAccountBreachesGrpcRequest) returns (GetAccountBreachesGrpcResponse);
+  rpc GetDailyPositionsLimit(GetDailyPositionsLimitGrpcRequest) returns (GetDailyPositionsLimitGrpcResponse);
+  rpc GetDailyPositionsLimitHistory(GetDailyPositionsLimitHistoryGrpcRequest) returns (GetDailyPositionsLimitHistoryGrpcResponse);
+  rpc GetDailyPositionsLimitPositions(GetDailyPositionsLimitPositionsGrpcRequest) returns (GetDailyPositionsLimitPositionsGrpcResponse);
 
   rpc GetTraderCard(GetTraderCardGrpcRequest) returns (GetTraderCardGrpcResponse);
   rpc GetHighlightedTrades(GetHighlightedTradesGrpcRequest) returns (GetHighlightedTradesGrpcResponse);
