@@ -442,6 +442,7 @@ message DailyPositionsLimitEventGrpcModel {
   DailyPositionsLimitGrpcModel limit = 3;       // effective limit after the event
   int32 positions_opened = 4;                   // day count at the event
   int32 pending_entry_orders_cancelled = 5;     // BLOCKED only
+  DailyPositionsLimitGrpcModel previous_limit = 6; // effective limit before the event; DAILY_LIMIT_CHANGED only
 }
 
 // One UTC day of an account with the rule active at some point of the day.
