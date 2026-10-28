@@ -145,6 +145,12 @@ message TraderAccount {
 
     // Max positions opened per UTC day; 0 = rule off.
     int32 MaxPositionsPerDay = 106;
+
+    // PROP25-2751 TrialPass: copied from the package. A Trial account that can pass.
+    bool TrialPassEnabled = 107;
+    // PROP25-2751: a TrialPass account closed as passed. The account itself ends Disabled (nothing
+    // follows the pass), so this is the only marker that tells a pass from a fail.
+    bool TrialPassed = 108;
 }
 
 // PROP25-2196 Profit Carryover breakdown for a trader account.

@@ -148,6 +148,9 @@ message TraderPackage {
   repeated double BulkDiscountPercents = 85;
   // Max positions a trader account may open per UTC day; 0 = rule off.
   int32 MaxPositionsPerDay = 86;
+  // PROP25-2751 TrialPass: a Trial package whose account can pass. Only valid with
+  // AccountLifeTimeType = TRIAL; the BackOffice shows the pair as the lifetime type "TrialPass".
+  bool TrialPassEnabled = 87;
 }
 
 message PlatformGroup {
