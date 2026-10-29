@@ -13,6 +13,8 @@ enum FailReason {
     FAIL_REASON_INACTIVITY = 3;
     FAIL_REASON_EXPOSURE_LOSS = 4;
     FAIL_REASON_MAX_MARGIN_UTILIZATION = 5;
+    // PROP25-2751: the trial period ran out. Only trial accounts close with it.
+    FAIL_REASON_TRIAL_ENDED = 6;
 }
 
 enum DeclineReasonType {
@@ -297,6 +299,35 @@ message SendCompetitionStartedRequest{
     string TraderAccountId = 6;
 }
 
+// PROP25-2751 Free Trial emails, one per TrialPass account (TrialAccountId is the idempotency key
+// source; empty skips the dedup). Placeholders are pre-formatted strings: AccountSize "10,000 USD",
+// TrialEndDate "15 September 2026 14:00 UTC".
+message SendTrialAccountCreatedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountSize = 4;
+    int32 TrialDays = 5;
+    string TrialEndDate = 6;
+}
+
+message SendTrialPassedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountSize = 4;
+}
+
+message SendTrialFailedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountSize = 4;
+    // Unspecified when the reason is not known (closed outside the trading rules); the email then
+    // leaves the reason out.
+    email_sender.FailReason FailReason = 5;
+}
+
 message SendAccountReviewReadyRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -491,4 +522,8 @@ service EmailSenderGrpcService {
     // PROP25-2491 Bulk purchase
     rpc SendBulkPaymentReceivedPhase1AccountsActive(SendBulkPaymentReceivedPhase1AccountsActiveRequest) returns (email_sender.EmailSentResponse);
     rpc SendBulkPaymentReceivedContractDetailsComingSoon(SendBulkPaymentReceivedContractDetailsComingSoonRequest) returns (email_sender.EmailSentResponse);
+    // PROP25-2751 Free Trial
+    rpc SendTrialAccountCreated(SendTrialAccountCreatedRequest) returns (email_sender.EmailSentResponse);
+    rpc SendTrialPassed(SendTrialPassedRequest) returns (email_sender.EmailSentResponse);
+    rpc SendTrialFailed(SendTrialFailedRequest) returns (email_sender.EmailSentResponse);
 }
