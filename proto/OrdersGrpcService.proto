@@ -558,6 +558,135 @@ message GetPaymentPageHtmlResponse {
   optional string Html = 1;
 }
 
+// ---- Free Trial (PROP25-2751) -----------------------------------------------------------------
+// One free TrialPass account per client, started by the client from the dashboard. Settings, the
+// once-per-client gate and the start live in orders; the account itself is an ordinary trader
+// account created from a zero-price order with payment method "Free Trial".
+
+// What the client sees. Activating covers the order without an account yet and an account still
+// waiting for its platform login; ActivationFailed is an account whose creation failed for good.
+enum FreeTrialState {
+  FreeTrialNotAvailable = 0;
+  FreeTrialAvailable = 1;
+  FreeTrialActivating = 2;
+  FreeTrialActivationFailed = 3;
+  FreeTrialActive = 4;
+  FreeTrialPassed = 5;
+  FreeTrialFailed = 6;
+}
+
+// Who may start a trial. Every client is in exactly one group; the trial account itself is not
+// counted. Paid = at least one order with money paid.
+enum FreeTrialClientGroup {
+  FreeTrialNewClient = 0;
+  FreeTrialFreeAccountsOnly = 1;
+  FreeTrialPaid = 2;
+}
+
+enum FreeTrialError {
+  FreeTrialNoError = 0;
+  FreeTrialDisabled = 1;         // switched off, or no package / platform configured
+  FreeTrialNotEligible = 2;      // the client's group is not allowed
+  FreeTrialBlockedCountry = 3;   // unknown country, or one on the blocked list
+  FreeTrialNameRequired = 4;     // first and last name are needed to create the account
+}
+
+// The trial rules shown before the start (from the package in the settings) and after it (from
+// the started order's package snapshot). A rule the package does not set is absent.
+message FreeTrialConditions {
+  double AccountBalance = 1;
+  string AccountBalanceCurrency = 2;
+  int32 PlatformId = 3;
+  int32 TrialDays = 4;
+  double ProfitTargetPercent = 5;
+  double DailyDrawdownPercent = 6;
+  double OverallDrawdownPercent = 7;
+  bool OverallDrawdownIsTrailing = 8;
+  optional int32 MinTradingDays = 9;
+  // Margin rule hard cap, when the rule is on.
+  optional double ExposurePercent = 10;
+  // Exposure loss hard cap, when the rule is on.
+  optional double ExposureLossPercent = 11;
+}
+
+message FreeTrialStateModel {
+  orders.FreeTrialState State = 1;
+  // Absent for NotAvailable.
+  optional orders.FreeTrialConditions Conditions = 2;
+  optional string TraderAccountId = 3;
+  // trading-control objective fail reason (TradingObjectiveFailReason), Failed only and when known.
+  optional int32 FailReason = 4;
+}
+
+message GetFreeTrialStateRequest {
+  string ClientId = 1;
+  // ISO-2 country of the request IP (CF-IPCountry) as received; empty when missing.
+  string Country = 2;
+}
+
+message StartFreeTrialRequest {
+  string ClientId = 1;
+  string Country = 2;
+  string Brand = 3;
+}
+
+// A client who already has a trial gets its state back, not an error: repeated clicks are safe.
+message StartFreeTrialResponse {
+  oneof Response {
+    orders.FreeTrialStateModel Body = 1;
+    orders.FreeTrialError Error = 2;
+  }
+}
+
+message FreeTrialSettings {
+  bool Enabled = 1;
+  string TradingPackageId = 2;
+  int32 PlatformId = 3;
+  // ISO-2, upper case.
+  repeated string BlockedCountries = 4;
+  repeated orders.FreeTrialClientGroup EligibleGroups = 5;
+  // Set by the service on save.
+  int64 UpdatedAt = 6;
+  string UpdatedBy = 7;
+}
+
+// Refused with INVALID_ARGUMENT when enabled without a TrialPass package or a platform.
+message SetFreeTrialSettingsRequest {
+  orders.FreeTrialSettings Settings = 1;
+  string UpdatedBy = 2;
+}
+
+// BackOffice Trials tab. Totals count every trial, not just the filtered page.
+message GetFreeTrialsRequest {
+  optional orders.FreeTrialState State = 1;
+  optional string ClientId = 2;
+  uint32 Limit = 3;
+  uint32 Offset = 4;
+}
+
+message FreeTrialModel {
+  string ClientId = 1;
+  string OrderId = 2;
+  int64 StartedAt = 3;
+  optional string TraderAccountId = 4;
+  orders.FreeTrialState State = 5;
+  optional int32 FailReason = 6;
+  // When the lifetime ends the account (created + trial days + 1 day); absent before the account exists.
+  optional int64 EndsAt = 7;
+  // When the account was closed (passed or failed).
+  optional int64 EndedAt = 8;
+}
+
+message GetFreeTrialsResponse {
+  repeated orders.FreeTrialModel Items = 1;
+  // Trials matching the filter, for paging.
+  uint32 FilteredCount = 2;
+  uint32 Started = 3;
+  uint32 Active = 4;
+  uint32 Passed = 5;
+  uint32 Failed = 6;
+}
+
 service OrdersGrpcService {
   rpc GetPayinsPaginated(orders.GetPayinsPaginatedRequest) returns (orders.GetPayinsPaginatedResponse);
 
@@ -590,6 +719,13 @@ service OrdersGrpcService {
 
   // Stored HTML payment page read from the primary MyNoSql, bypassing any lagging replica.
   rpc GetPaymentPageHtml(orders.GetPaymentPageHtmlRequest) returns (orders.GetPaymentPageHtmlResponse);
+
+  // Free Trial (PROP25-2751)
+  rpc GetFreeTrialState(orders.GetFreeTrialStateRequest) returns (orders.FreeTrialStateModel);
+  rpc StartFreeTrial(orders.StartFreeTrialRequest) returns (orders.StartFreeTrialResponse);
+  rpc GetFreeTrialSettings(google.protobuf.Empty) returns (orders.FreeTrialSettings);
+  rpc SetFreeTrialSettings(orders.SetFreeTrialSettingsRequest) returns (orders.FreeTrialSettings);
+  rpc GetFreeTrials(orders.GetFreeTrialsRequest) returns (orders.GetFreeTrialsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
