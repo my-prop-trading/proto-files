@@ -644,7 +644,8 @@ message StartFreeTrialResponse {
 message FreeTrialSettings {
   bool Enabled = 1;
   string TradingPackageId = 2;
-  int32 PlatformId = 3;
+  // Absent = not chosen (0 is a real platform id, MT4).
+  optional int32 PlatformId = 3;
   // ISO-2, upper case.
   repeated string BlockedCountries = 4;
   repeated orders.FreeTrialClientGroup EligibleGroups = 5;
@@ -685,9 +686,12 @@ message GetFreeTrialsResponse {
   // Trials matching the filter, for paging.
   uint32 FilteredCount = 2;
   uint32 Started = 3;
+  // Activating + Active: the trial is running or about to.
   uint32 Active = 4;
   uint32 Passed = 5;
   uint32 Failed = 6;
+  // Accounts whose creation failed for good; the client is stuck until support steps in.
+  uint32 ActivationFailed = 7;
 }
 
 service OrdersGrpcService {
