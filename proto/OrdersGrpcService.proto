@@ -616,6 +616,9 @@ message FreeTrialStateModel {
   optional string TraderAccountId = 3;
   // trading-control objective fail reason (TradingObjectiveFailReason), Failed only and when known.
   optional int32 FailReason = 4;
+  // When the lifetime ends the account (created + trial days + 1 day); once the account exists.
+  // With TraderAccountId the client area marks the trial account and shows the time left.
+  optional int64 EndsAt = 5;
 }
 
 message GetFreeTrialStateRequest {
