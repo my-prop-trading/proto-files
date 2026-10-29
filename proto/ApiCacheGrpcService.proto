@@ -43,6 +43,12 @@ message TraderAccountApiGrpcModel {
   // phase an operator marked completed in the back office rather than traded; the client
   // account-list endpoint hides such rows (StageCompleted with no trading data).
   bool is_manual_skipped = 32;
+  // PROP25-2751 Free Trial: mirrors TraderAccount.TrialPassEnabled; the client area marks the
+  // account as a Free Trial.
+  bool trial_pass_enabled = 33;
+  // PROP25-2751: when the trial lifetime ends the account (created + trial days + 1 day), RFC 3339
+  // like the other dates. TrialPass accounts only.
+  optional string trial_ends_at = 34;
 }
 
 message GetTraderAccountsGrpcRequest {
