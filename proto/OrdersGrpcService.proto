@@ -587,7 +587,7 @@ enum FreeTrialError {
   FreeTrialNoError = 0;
   FreeTrialDisabled = 1;         // switched off, or no package / platform configured
   FreeTrialNotEligible = 2;      // the client's group is not allowed
-  FreeTrialBlockedCountry = 3;   // unknown country, or one on the blocked list
+  FreeTrialBlockedCountry = 3;   // unknown country, a blocked one, or the trial platform is not available there
   FreeTrialNameRequired = 4;     // first and last name are needed to create the account
 }
 
@@ -641,10 +641,18 @@ message StartFreeTrialResponse {
   }
 }
 
+// Countries that get this platform instead of the default one.
+message FreeTrialCountryRule {
+  // ISO-2, upper case.
+  repeated string Countries = 1;
+  int32 PlatformId = 2;
+}
+
 message FreeTrialSettings {
   bool Enabled = 1;
   string TradingPackageId = 2;
-  // Absent = not chosen (0 is a real platform id, MT4).
+  // The default platform: for countries without a rule. Absent = not chosen (0 is a real platform
+  // id, MT4).
   optional int32 PlatformId = 3;
   // ISO-2, upper case.
   repeated string BlockedCountries = 4;
@@ -652,9 +660,13 @@ message FreeTrialSettings {
   // Set by the service on save.
   int64 UpdatedAt = 6;
   string UpdatedBy = 7;
+  // A country is in at most one rule and never in BlockedCountries. A platform restricted in a
+  // country (platform RestrictedCountries) is never given there: such clients get no trial.
+  repeated orders.FreeTrialCountryRule CountryRules = 8;
 }
 
-// Refused with INVALID_ARGUMENT when enabled without a TrialPass package or a platform.
+// Refused with INVALID_ARGUMENT when enabled without a TrialPass package or a platform, or when the
+// country rules break the FreeTrialSettings constraints.
 message SetFreeTrialSettingsRequest {
   orders.FreeTrialSettings Settings = 1;
   string UpdatedBy = 2;
@@ -679,6 +691,9 @@ message FreeTrialModel {
   optional int64 EndsAt = 7;
   // When the account was closed (passed or failed).
   optional int64 EndedAt = 8;
+  // ISO-2 IP country at the start; empty for trials started before the country was stored.
+  string Country = 9;
+  int32 PlatformId = 10;
 }
 
 message GetFreeTrialsResponse {
