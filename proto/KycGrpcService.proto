@@ -450,6 +450,73 @@ message GetContractorCheckMetricsResponse {
     }
 }
 
+// SES auto-approve check results (PROP25-2695). One row per challenge phase per auto-approve run,
+// written only when the SES calculation actually ran (not when the master switch is off, the
+// manual-KYC gate skipped it, or a data source was unavailable).
+enum ContractorCheckResultType {
+    AUTO_APPROVED = 0;
+    MANUAL_REVIEW = 1;
+}
+
+// Value one scored check measured on a phase and whether it gave a point.
+message ContractorCheckValueModel {
+    // 1..10, as numbered on the back-office settings page.
+    int32 CheckNumber = 1;
+    // The number the trigger compares against its threshold: flagged days, flagged-days share in
+    // percent, no-SL share in percent or unique login countries, depending on the check.
+    double Value = 2;
+    bool Point = 3;
+    // Human-readable breakdown, e.g. "4 of 6 counted days flagged (66.7%)".
+    string Details = 4;
+}
+
+message ContractorCheckResultModel {
+    string Id = 1;
+    string ClientId = 2;
+    string AggregatedId = 3;
+    string TraderAccountId = 4;
+    int32 Phase = 5;
+    int32 PlatformId = 6;
+    int64 CheckedAt = 7;
+    int64 ContractId = 8;
+    int32 ActiveDays = 9;
+    // false when the phase has fewer active days than the minimum: no points are given and the
+    // challenge goes to manual review.
+    bool IsEvaluated = 10;
+    repeated kyc.ContractorCheckValueModel Checks = 11;
+    int32 SesScore = 12;
+    // Blocking check (not part of the score), measured once per challenge.
+    int32 OtherClientsSharingLoginIps = 13;
+    bool Blocked = 14;
+    // Challenge-level outcome and reason (the same on every phase row of one run).
+    kyc.ContractorCheckResultType Result = 15;
+    string Reason = 16;
+    // Settings the run was calculated with.
+    repeated kyc.ContractorCheckSettingModel Settings = 17;
+}
+
+message GetContractorCheckResultsRequest {
+    uint64 Limit = 1;
+    uint64 Offset = 2;
+    optional string ClientId = 3;
+    optional string TraderAccountId = 4;
+    optional kyc.ContractorCheckResultType Result = 5;
+    optional int64 FromDate = 6;
+    optional int64 ToDate = 7;
+}
+
+message GetContractorCheckResultsResponseBody {
+    repeated kyc.ContractorCheckResultModel Items = 1;
+    uint64 TotalCount = 2;
+}
+
+message GetContractorCheckResultsResponse {
+    oneof response {
+        kyc.GetContractorCheckResultsResponseBody Body = 1;
+        kyc.KycError Error = 2;
+    }
+}
+
 message GetClientProofsRequest {
     string ClientId = 1;
 }   
@@ -609,6 +676,10 @@ service KycGrpcService {
     // Measured per-phase contractor-check values for the NEW_CONTRACTOR Slack alert (PROP25-2361)
     rpc GetContractorCheckMetrics(kyc.GetContractorCheckMetricsRequest)
     returns (kyc.GetContractorCheckMetricsResponse);
+
+    // SES auto-approve check results per phase for the back-office Check results page (PROP25-2695)
+    rpc GetContractorCheckResults(kyc.GetContractorCheckResultsRequest)
+    returns (kyc.GetContractorCheckResultsResponse);
 
     rpc ManualProof(kyc.ManualProofRequest)
     returns (google.protobuf.Empty);
