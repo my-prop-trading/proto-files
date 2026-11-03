@@ -20,6 +20,9 @@ enum Error {
   NEWS_IS_OUTDATED = 1;
   NEWS_ALREADY_EXIST = 2;
   NO_SUCH_NEWS = 3;
+  NO_SUCH_EVENT = 4;
+  INVALID_REQUEST = 5;
+  NO_SUCH_INSTRUMENT = 6;
 }
 
 message NewsModel {
@@ -329,6 +332,211 @@ message GetNewsPlatformTotalResponseBody {
   uint64 Total = 1;
 }
 
+// Rule settings. Every save is a new version; the one in force at a moment is the latest with
+// EffectiveFrom at or before it.
+message RuleSettingsModel {
+  int64 EffectiveFrom = 1;
+  bool Enabled = 2;
+  int32 BeforeMinutes = 3;
+  int32 AfterMinutes = 4;
+  AccountTypeRestrictions AccountScope = 5;
+  double InWindowDeductionPercent = 6;
+  int32 LongHoldMinutes = 7;
+  double LongHoldDeductionPercent = 8;
+  repeated ImpactType Impacts = 9;
+  string ChangedBy = 10;
+}
+
+message SaveRuleSettingsRequest {
+  bool Enabled = 1;
+  int32 BeforeMinutes = 2;
+  int32 AfterMinutes = 3;
+  AccountTypeRestrictions AccountScope = 4;
+  double InWindowDeductionPercent = 5;
+  int32 LongHoldMinutes = 6;
+  double LongHoldDeductionPercent = 7;
+  repeated ImpactType Impacts = 8;
+  string ChangedBy = 9;
+}
+
+message RuleSettingsResponse {
+  oneof response {
+    RuleSettingsModel Body = 1;
+    Error Error = 2;
+  }
+}
+
+message GetRuleSettingsHistoryRequest {
+  uint64 Limit = 1;
+  uint64 Offset = 2;
+}
+
+enum NewsEventSource {
+  EVENT_SOURCE_PROVIDER = 0;
+  EVENT_SOURCE_CSV = 1;
+  EVENT_SOURCE_MANUAL = 2;
+}
+
+enum NewsEventStatus {
+  EVENT_STATUS_ACTIVE = 0;
+  EVENT_STATUS_CANCELLED = 1;
+}
+
+// What a caller supplies for an event; ReleaseTime is UTC.
+message NewsEventFields {
+  string Title = 1;
+  string Country = 2;
+  string Currency = 3;
+  ImpactType Impact = 4;
+  int64 ReleaseTime = 5;
+  bool ExactTime = 6;
+}
+
+message NewsEventModel {
+  string Id = 1;
+  NewsEventSource Source = 2;
+  optional string ProviderEventId = 3;
+  NewsEventFields Event = 4;
+  NewsEventStatus Status = 5;
+  // Edited or cancelled in the back office; a provider refresh leaves it alone.
+  bool Locked = 6;
+  int64 UpdatedAt = 7;
+  string UpdatedBy = 8;
+}
+
+message GetEventsRequest {
+  int64 FromDate = 1;
+  int64 ToDate = 2;
+  optional string Currency = 3;
+  optional ImpactType Impact = 4;
+  optional NewsEventStatus Status = 5;
+  uint64 Limit = 6;
+  uint64 Offset = 7;
+}
+
+message GetEventsTotalResponse {
+  oneof response {
+    uint64 Total = 1;
+    Error Error = 2;
+  }
+}
+
+message CreateEventRequest {
+  NewsEventFields Event = 1;
+  string ChangedBy = 2;
+}
+
+message UpdateEventRequest {
+  string Id = 1;
+  NewsEventFields Event = 2;
+  string ChangedBy = 3;
+}
+
+message CancelEventRequest {
+  string Id = 1;
+  string ChangedBy = 2;
+}
+
+message NewsEventResponse {
+  oneof response {
+    NewsEventModel Body = 1;
+    Error Error = 2;
+  }
+}
+
+message ImportEventsRequest {
+  repeated NewsEventFields Events = 1;
+  string ChangedBy = 2;
+}
+
+message ImportEventsResponse {
+  oneof response {
+    ImportEventsResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message ImportEventsResponseBody {
+  uint32 Created = 1;
+  uint32 Updated = 2;
+  // Already present unchanged, locked, or outside the impacts in scope.
+  uint32 Skipped = 3;
+}
+
+enum NewsInstrumentStatus {
+  INSTRUMENT_STATUS_AUTO = 0;
+  INSTRUMENT_STATUS_NEEDS_MAPPING = 1;
+  INSTRUMENT_STATUS_MAPPED = 2;
+  INSTRUMENT_STATUS_IGNORED = 3;
+}
+
+// An instrument is affected by events whose currency is in Currencies or country in Countries.
+message NewsInstrumentModel {
+  int32 PlatformId = 1;
+  string Symbol = 2;
+  string PlatformBase = 3;
+  string PlatformQuote = 4;
+  repeated string Currencies = 5;
+  repeated string Countries = 6;
+  NewsInstrumentStatus Status = 7;
+  bool Active = 8;
+  int64 FirstSeenAt = 9;
+  int64 LastSeenAt = 10;
+  int64 UpdatedAt = 11;
+  string UpdatedBy = 12;
+}
+
+message GetInstrumentsRequest {
+  optional int32 PlatformId = 1;
+  optional NewsInstrumentStatus Status = 2;
+  optional bool Active = 3;
+  optional string Search = 4;
+  uint64 Limit = 5;
+  uint64 Offset = 6;
+}
+
+message GetInstrumentsTotalResponse {
+  oneof response {
+    uint64 Total = 1;
+    Error Error = 2;
+  }
+}
+
+// Ignored = true marks the instrument as unaffected by any news; otherwise at least one
+// currency or country is required.
+message UpdateInstrumentMappingRequest {
+  int32 PlatformId = 1;
+  string Symbol = 2;
+  repeated string Currencies = 3;
+  repeated string Countries = 4;
+  bool Ignored = 5;
+  string ChangedBy = 6;
+}
+
+message NewsInstrumentResponse {
+  oneof response {
+    NewsInstrumentModel Body = 1;
+    Error Error = 2;
+  }
+}
+
+message SyncInstrumentsResponse {
+  oneof response {
+    SyncInstrumentsResponseBody Body = 1;
+    Error Error = 2;
+  }
+}
+
+message SyncInstrumentsResponseBody {
+  uint32 Added = 1;
+  uint32 Deactivated = 2;
+  uint32 Reactivated = 3;
+  // Added in this run and waiting for a mapping.
+  uint32 NeedsMapping = 4;
+  // Platforms whose instrument list could not be read; nothing was deactivated on them.
+  repeated int32 FailedPlatformIds = 5;
+}
+
 service NewsTradingGrpcService {
     rpc CreateNews(CreateNewsRequest) returns (CreateNewsResponse);
     rpc UpdateNews(UpdateNewsRequest) returns (UpdateNewsResponse);
@@ -351,5 +559,18 @@ service NewsTradingGrpcService {
     rpc GetNewsPlatformPaginated(GetNewsPlatformPaginatedRequest) returns (stream NewsPlatformModel);
     rpc GetNewsPlatformTotal(GetNewsPlatformTotalRequest) returns (GetNewsPlatformTotalResponse);
 
+    rpc GetRuleSettings(google.protobuf.Empty) returns (RuleSettingsResponse);
+    rpc GetRuleSettingsHistory(GetRuleSettingsHistoryRequest) returns (stream RuleSettingsModel);
+    rpc SaveRuleSettings(SaveRuleSettingsRequest) returns (RuleSettingsResponse);
+    rpc GetEvents(GetEventsRequest) returns (stream NewsEventModel);
+    rpc GetEventsTotal(GetEventsRequest) returns (GetEventsTotalResponse);
+    rpc CreateEvent(CreateEventRequest) returns (NewsEventResponse);
+    rpc UpdateEvent(UpdateEventRequest) returns (NewsEventResponse);
+    rpc CancelEvent(CancelEventRequest) returns (NewsEventResponse);
+    rpc ImportEvents(ImportEventsRequest) returns (ImportEventsResponse);
+    rpc GetInstruments(GetInstrumentsRequest) returns (stream NewsInstrumentModel);
+    rpc GetInstrumentsTotal(GetInstrumentsRequest) returns (GetInstrumentsTotalResponse);
+    rpc UpdateInstrumentMapping(UpdateInstrumentMappingRequest) returns (NewsInstrumentResponse);
+    rpc SyncInstruments(google.protobuf.Empty) returns (SyncInstrumentsResponse);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
