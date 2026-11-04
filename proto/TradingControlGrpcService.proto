@@ -83,6 +83,8 @@ message TradingMetricsGrpcModel {
   // Net P&L of profitable days only (completed ones plus the running day while it is green) —
   // the denominator of the ProfitableDaysOnly consistency ratio.
   double profitable_days_profit = 51;
+  // Profit the news trading rule withholds; already taken out of every profit field above.
+  double news_removed_total = 52;
 }
 
 enum BestDayRuleStatusGrpc {
@@ -360,6 +362,7 @@ message OpenTradeGrpc {
   double enter_price = 9;
   double pnl = 10;
   double fee = 11;
+  optional NewsAdjustmentGrpcModel news_adjustment = 12; // set when the position is in a news window
 }
 
 message GetTradesMetricsGrpcRequest {
@@ -553,6 +556,86 @@ message IgnoreAccountGrpcRequest {
 
 message IgnoreAccountGrpcResponse {}
 
+// ===== News trading rule (profit withheld from positions traded around news) =====
+
+enum NewsCaseGrpc {
+  NEWS_CASE_OPENED_IN_WINDOW = 0;            // A
+  NEWS_CASE_CLOSED_IN_WINDOW = 1;            // B: opened within the long-hold period of the release
+  NEWS_CASE_LONG_HOLD_CLOSED_IN_WINDOW = 2;  // C
+}
+
+enum NewsAdjustmentStatusGrpc {
+  NEWS_ADJUSTMENT_FLAGGED = 0;         // part of the position is still open
+  NEWS_ADJUSTMENT_DEDUCTED = 1;
+  NEWS_ADJUSTMENT_NOT_APPLICABLE = 2;  // closed with nothing to withhold
+  NEWS_ADJUSTMENT_REVERSED = 3;
+}
+
+// What the news rule withheld from one position and why. Times are unix microseconds, UTC.
+message NewsAdjustmentGrpcModel {
+  string trader_account_id = 1;
+  string position_id = 2;
+  string client_id = 3;
+  int32 platform_id = 4;
+  int32 account_type = 5;                // 0 = demo, 1 = live
+  string platform_account_id = 6;
+  string symbol = 7;
+  TradeSideGrpc side = 8;
+  double lots = 9;
+  int64 open_time = 10;
+  optional int64 close_time = 11;        // unset while part of the position is open
+  string event_id = 12;
+  string event_title = 13;
+  int64 release_time = 14;
+  int64 window_start = 15;
+  int64 window_end = 16;
+  NewsCaseGrpc news_case = 17;
+  double percent = 18;                   // share of the counted profit withheld, 0..100
+  int32 long_hold_minutes = 19;          // in force at the release
+  int64 settings_effective_from = 20;    // settings version in force at the release
+  double original_profit = 21;           // profit of every closed part
+  double removed = 22;
+  NewsAdjustmentStatusGrpc status = 23;
+  int64 created_at = 24;
+  int64 updated_at = 25;
+  optional int64 reversed_at = 26;
+  optional string reversed_by = 27;
+  optional string reverse_comment = 28;
+}
+
+message GetNewsAdjustmentsGrpcRequest {
+  optional string trader_account_id = 1;
+  optional string client_id = 2;
+  optional NewsAdjustmentStatusGrpc status = 3;
+  optional int64 release_from = 4;
+  optional int64 release_to = 5;
+  int32 take = 6;
+  int32 skip = 7;
+}
+message GetNewsAdjustmentsGrpcResponse {
+  repeated NewsAdjustmentGrpcModel items = 1;  // newest release first
+  int64 total = 2;
+}
+
+enum ReverseNewsAdjustmentResultGrpc {
+  REVERSE_NEWS_ADJUSTMENT_OK = 0;
+  REVERSE_NEWS_ADJUSTMENT_NOT_FOUND = 1;
+  REVERSE_NEWS_ADJUSTMENT_ALREADY_REVERSED = 2;
+  REVERSE_NEWS_ADJUSTMENT_COMMENT_REQUIRED = 3;
+}
+
+// Returns the withheld profit to the account; the record stays, marked reversed.
+message ReverseNewsAdjustmentGrpcRequest {
+  string trader_account_id = 1;
+  string position_id = 2;
+  string reversed_by = 3;
+  string comment = 4;
+}
+message ReverseNewsAdjustmentGrpcResponse {
+  ReverseNewsAdjustmentResultGrpc result = 1;
+  optional NewsAdjustmentGrpcModel item = 2;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -575,6 +658,9 @@ service TradingControlGrpcService {
   rpc GetHighlightedTrades(GetHighlightedTradesGrpcRequest) returns (GetHighlightedTradesGrpcResponse);
 
   rpc IgnoreAccount(IgnoreAccountGrpcRequest) returns (IgnoreAccountGrpcResponse);
+
+  rpc GetNewsAdjustments(GetNewsAdjustmentsGrpcRequest) returns (GetNewsAdjustmentsGrpcResponse);
+  rpc ReverseNewsAdjustment(ReverseNewsAdjustmentGrpcRequest) returns (ReverseNewsAdjustmentGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
