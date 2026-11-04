@@ -69,6 +69,9 @@ enum EmailType {
     TRIAL_ACCOUNT_CREATED = 60;
     TRIAL_PASSED = 61;
     TRIAL_FAILED = 62;
+    // PROP25-2684 News trading rule: daily digest of deductions, and a reversal by risk.
+    NEWS_TRADING_ADJUSTMENT = 63;
+    NEWS_TRADING_ADJUSTMENT_REVERSED = 64;
 }
 
 enum Error {

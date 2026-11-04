@@ -328,6 +328,32 @@ message SendTrialFailedRequest{
     email_sender.FailReason FailReason = 5;
 }
 
+// PROP25-2684 News trading emails. Placeholders are pre-formatted strings: NewsDate
+// "6 November 2026", TotalRemoved "120.50 USD", PositionsList an HTML list. DigestId and
+// PositionId are the idempotency key sources.
+message SendNewsTradingAdjustmentRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountLogin = 4;
+    string NewsDate = 5;
+    string PositionsList = 6;
+    string TotalRemoved = 7;
+    string RuleLink = 8;
+    string DigestId = 9;
+}
+
+message SendNewsTradingAdjustmentReversedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountLogin = 4;
+    string PositionId = 5;
+    string Symbol = 6;
+    string CloseTime = 7;
+    string OriginalProfit = 8;
+}
+
 message SendAccountReviewReadyRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -526,4 +552,7 @@ service EmailSenderGrpcService {
     rpc SendTrialAccountCreated(SendTrialAccountCreatedRequest) returns (email_sender.EmailSentResponse);
     rpc SendTrialPassed(SendTrialPassedRequest) returns (email_sender.EmailSentResponse);
     rpc SendTrialFailed(SendTrialFailedRequest) returns (email_sender.EmailSentResponse);
+    // PROP25-2684 News trading rule
+    rpc SendNewsTradingAdjustment(SendNewsTradingAdjustmentRequest) returns (email_sender.EmailSentResponse);
+    rpc SendNewsTradingAdjustmentReversed(SendNewsTradingAdjustmentReversedRequest) returns (email_sender.EmailSentResponse);
 }
