@@ -602,6 +602,7 @@ message NewsAdjustmentGrpcModel {
   optional string reversed_by = 27;
   optional string reverse_comment = 28;
   repeated string trade_ids = 29;        // account history rows of the position
+  optional int64 counted_close_time = 30; // latest close among the parts the case counts
 }
 
 message GetNewsAdjustmentsGrpcRequest {
