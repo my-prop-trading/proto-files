@@ -66,11 +66,29 @@ message SetUserGroupResponse {
   string Group = 3;
 }
 
+message GetQuotesRequest {
+  Mt5Server Server = 1;
+  repeated string Symbols = 2;
+}
+
+message QuoteModel {
+  string Symbol = 1;
+  double Bid = 2;
+  double Ask = 3;
+  int64 Time = 4;
+}
+
+message GetQuotesResponse {
+  repeated QuoteModel Quotes = 1;
+}
+
 // MT5 diagnostics and support operations. All timestamps are unix microseconds, UTC.
 service Metatrader5DiagnosticsGrpcService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
   // Moves a user to another group of the same trade server.
   rpc SetUserGroup(SetUserGroupRequest) returns (SetUserGroupResponse);
   rpc GetServerJournal(GetServerJournalRequest) returns (GetServerJournalResponse);
+  // Last quotes of the symbols; a symbol the server has no quote for yet is left out.
+  rpc GetQuotes(GetQuotesRequest) returns (GetQuotesResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
