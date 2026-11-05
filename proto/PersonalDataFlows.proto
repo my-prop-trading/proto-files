@@ -185,6 +185,49 @@ message SetPublicProfileResponse {
     optional pd.PublicProfileModel PublicProfile = 2;
 }
 
+// MARKETING CONSENT: set by support when the client did not sign the marketing consent
+// page of the live-account contract. Such a client's name, certificates and payouts
+// must not be used in marketing (Live Payouts Discord posts, the website payouts block).
+
+message MarketingConsentModel {
+    bool NoMarketingConsent = 1;
+    // Unix micros of the last change. Null when the flag was never changed.
+    optional int64 UpdatedAt = 2;
+    // Back office officer id of the last change. Null when the flag was never changed.
+    optional string UpdatedBy = 3;
+}
+
+message GetMarketingConsentRequest {
+    string ClientId = 1;
+}
+
+message GetMarketingConsentResponse {
+    // A client without personal data is returned as not flagged.
+    pd.MarketingConsentModel MarketingConsent = 1;
+}
+
+message SetMarketingConsentRequest {
+    string ClientId = 1;
+    bool NoMarketingConsent = 2;
+    string OfficerId = 3;
+    // Why the flag changed, written to the audit log (e.g. "Contract 123 received without marketing consent").
+    string Reason = 4;
+}
+
+message SetMarketingConsentResponse {
+    // The saved state. Fails with FAILED_PRECONDITION when the client has no personal data.
+    pd.MarketingConsentModel MarketingConsent = 1;
+}
+
+message GetNoMarketingConsentClientsRequest {
+    repeated string ClientIds = 1;
+}
+
+message GetNoMarketingConsentClientsResponse {
+    // The subset of the requested clients that have the flag set.
+    repeated string ClientIds = 1;
+}
+
 service PersonalDataService {
     rpc Get(pd.GetPersonalDataRequest) returns (pd.GetPersonalDataResponse);
     rpc Set(pd.SetPersonalDataRequest) returns (google.protobuf.Empty);
@@ -201,6 +244,11 @@ service PersonalDataService {
     rpc GetPublicProfile(pd.GetPublicProfileRequest) returns (pd.GetPublicProfileResponse);
     rpc ValidateNickname(pd.ValidateNicknameRequest) returns (pd.ValidateNicknameResponse);
     rpc SetPublicProfile(pd.SetPublicProfileRequest) returns (pd.SetPublicProfileResponse);
+
+    //marketing consent
+    rpc GetMarketingConsent(pd.GetMarketingConsentRequest) returns (pd.GetMarketingConsentResponse);
+    rpc SetMarketingConsent(pd.SetMarketingConsentRequest) returns (pd.SetMarketingConsentResponse);
+    rpc GetNoMarketingConsentClients(pd.GetNoMarketingConsentClientsRequest) returns (pd.GetNoMarketingConsentClientsResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

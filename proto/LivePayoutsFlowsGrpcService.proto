@@ -267,6 +267,7 @@ message PayoutRow {
   // Service fields (empty in Draft; filled at publication — later ticket).
   optional int32 certificate_status = 12;
   optional string certificate_url = 13;
+  // 1 sent / 2 error / 3 skipped / 4 not published: the client has no marketing consent.
   optional int32 discord_status = 14;
   optional string discord_url = 15;
   optional int32 retry_count = 16;
@@ -274,6 +275,10 @@ message PayoutRow {
   optional int64 last_attempt_at = 18;
   int64 created_at = 19;
   int64 updated_at = 20;
+  // Real payout of a client who did not sign the marketing consent (PROP25-2723):
+  // the client's current flag in personal data, read when the rows are returned.
+  // Always false for generated (fake) rows.
+  bool no_marketing_consent = 21;
 }
 
 message GetDraftWeeksResponse {
