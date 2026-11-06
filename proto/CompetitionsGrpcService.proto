@@ -363,6 +363,19 @@ message GetLeaderboardResponse {
   uint64 total = 2;
 }
 
+// --- Enrollment by trading account (PROP25-2698, ActiveCampaign events) ---
+
+message GetEnrollmentByTraderAccountIdRequest {
+  string trader_account_id = 1;
+}
+
+// Both absent when no enrollment has this account (not a competition account, or the
+// account is not attached to its enrollment yet).
+message GetEnrollmentByTraderAccountIdResponse {
+  optional competitions.CompetitionEnrollment enrollment = 1;
+  optional competitions.Competition competition = 2;
+}
+
 service CompetitionsGrpcService {
   // Competition management (Backoffice — sees every status, incl. Draft)
   rpc GetPaginated(competitions.GetPaginatedCompetitionsRequest) returns (competitions.GetPaginatedCompetitionsResponse);
@@ -385,6 +398,9 @@ service CompetitionsGrpcService {
   // starts_at..ends_at, gated by the account limit. Idempotent (repeated clicks /
   // reload never create a second account).
   rpc ActivateAccount(competitions.ActivateAccountRequest) returns (competitions.ActivateAccountResponse);
+  // The enrollment a competition trading account belongs to, with its competition
+  // (PROP25-2698: ActiveCampaign competition events). Any competition status.
+  rpc GetEnrollmentByTraderAccountId(competitions.GetEnrollmentByTraderAccountIdRequest) returns (competitions.GetEnrollmentByTraderAccountIdResponse);
 
   // Leaderboard
   rpc GetLeaderboard(competitions.GetLeaderboardRequest) returns (competitions.GetLeaderboardResponse);
