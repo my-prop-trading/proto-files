@@ -260,6 +260,12 @@ message PublishGroupRequest { string TraderPackageGroupId = 1; }
 
 message PublishGroupResponse { bool Success = 1; }
 
+// Removes the published copy of the group; the draft stays. Packages of the group stay published
+// and keep their group id, so the catalog stops offering them until the group is published again.
+message UnPublishGroupRequest { string TraderPackageGroupId = 1; }
+
+message UnPublishGroupResponse { bool Success = 1; }
+
 message GetTraderPackageRequest {
   string id = 1;
   bool is_published = 2;
@@ -297,6 +303,8 @@ service TraderPackagesGrpcService {
       returns (trader_packages.DeleteGroupResponse);
   rpc PublishGroup(trader_packages.PublishGroupRequest)
       returns (trader_packages.PublishGroupResponse);
+  rpc UnPublishGroup(trader_packages.UnPublishGroupRequest)
+      returns (trader_packages.UnPublishGroupResponse);
 
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
