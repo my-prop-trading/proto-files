@@ -50,6 +50,7 @@ message BlogPostContent {
   repeated string Tags = 9;
   string Author = 10;
   optional int64 PublishedAt = 11;  // date shown on the site; the first publish sets it when absent
+  string CategorySlug = 12;         // URL segment of the category: /blog/<CategorySlug>/<Slug>/
 }
 
 message BlogPostModel {
@@ -73,6 +74,7 @@ message BlogPostSummaryModel {
   optional int64 PublishedAt = 7;
   int64 UpdatedAt = 8;
   string UpdatedBy = 9;
+  string CategorySlug = 10;
 }
 
 message BlogCheckModel {
