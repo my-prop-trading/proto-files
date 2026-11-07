@@ -1,0 +1,169 @@
+syntax = "proto3";
+package blog;
+import "google/protobuf/empty.proto";
+
+// Blog posts: Markdown source the service renders to sanitized HTML.
+// Every write carries the version it read; a stale one is refused with the current post.
+// Timestamps are unix microseconds, UTC.
+
+enum BlogPostStatus {
+  BLOG_POST_STATUS_DRAFT = 0;
+  BLOG_POST_STATUS_PUBLISHED = 1;
+}
+
+enum BlogCheckLevel {
+  BLOG_CHECK_LEVEL_PASS = 0;
+  BLOG_CHECK_LEVEL_WARN = 1;
+  BLOG_CHECK_LEVEL_FAIL = 2;   // blocks publishing and saving a published post
+}
+
+enum BlogWriteStatus {
+  BLOG_WRITE_STATUS_OK = 0;
+  BLOG_WRITE_STATUS_NOT_FOUND = 1;
+  BLOG_WRITE_STATUS_CONFLICT = 2;        // changed meanwhile; Post holds the current one
+  BLOG_WRITE_STATUS_SLUG_TAKEN = 3;      // another post has the slug, now or as an old URL
+  BLOG_WRITE_STATUS_INVALID = 4;         // Message says what
+  BLOG_WRITE_STATUS_CHECKS_FAILED = 5;   // Checks lists the failed ones
+  BLOG_WRITE_STATUS_NOT_A_DRAFT = 6;     // only a draft can be deleted
+}
+
+enum BlogImageUsage {
+  BLOG_IMAGE_USAGE_BODY = 0;
+  BLOG_IMAGE_USAGE_COVER = 1;
+}
+
+enum BlogUploadStatus {
+  BLOG_UPLOAD_STATUS_OK = 0;
+  BLOG_UPLOAD_STATUS_NOT_AN_IMAGE = 1;   // not a PNG, JPEG or WebP
+  BLOG_UPLOAD_STATUS_TOO_LARGE = 2;      // over the byte or pixel limit
+}
+
+message BlogPostContent {
+  string Title = 1;
+  string Slug = 2;                  // path after /blog/: lowercase letters, digits, single hyphens
+  string SeoTitle = 3;
+  string MetaDescription = 4;
+  string BodyMarkdown = 5;
+  string CoverUrl = 6;              // empty when there is no cover
+  string CoverAlt = 7;
+  string Category = 8;
+  repeated string Tags = 9;
+  string Author = 10;
+  optional int64 PublishedAt = 11;  // date shown on the site; the first publish sets it when absent
+}
+
+message BlogPostModel {
+  string Id = 1;
+  BlogPostContent Content = 2;
+  BlogPostStatus Status = 3;
+  int64 Version = 4;
+  int64 CreatedAt = 5;
+  int64 UpdatedAt = 6;
+  string UpdatedBy = 7;
+  repeated string OldSlugs = 8;     // old URLs that redirect here
+}
+
+message BlogPostSummaryModel {
+  string Id = 1;
+  string Title = 2;
+  string Slug = 3;
+  BlogPostStatus Status = 4;
+  string Category = 5;
+  string Author = 6;
+  optional int64 PublishedAt = 7;
+  int64 UpdatedAt = 8;
+  string UpdatedBy = 9;
+}
+
+message BlogCheckModel {
+  BlogCheckLevel Level = 1;
+  string Label = 2;
+  string Hint = 3;
+}
+
+message GetPostsResponse {
+  repeated BlogPostSummaryModel Items = 1;   // last updated first
+}
+
+message GetPostRequest {
+  string Id = 1;     // either Id or Slug; Slug also finds a post by an old URL
+  string Slug = 2;
+}
+
+message GetPostResponse {
+  optional BlogPostModel Post = 1;
+}
+
+message SavePostRequest {
+  string Id = 1;                    // empty creates a draft
+  int64 Version = 2;                // version the editor read; ignored on create
+  BlogPostContent Content = 3;
+  string Editor = 4;                // who saves, shown as the last editor
+}
+
+message PostActionRequest {
+  string Id = 1;
+  int64 Version = 2;
+  string Editor = 3;
+}
+
+message BlogWriteResponse {
+  BlogWriteStatus Status = 1;
+  string Message = 2;
+  optional BlogPostModel Post = 3;          // the written post; the current one on CONFLICT
+  repeated BlogCheckModel Checks = 4;       // on CHECKS_FAILED
+}
+
+message RenderPostRequest {
+  BlogPostContent Content = 1;
+}
+
+message RenderPostResponse {
+  string Html = 1;                  // body only, without the title
+  repeated BlogCheckModel Checks = 2;
+  int32 WordCount = 3;
+  int32 ReadingMinutes = 4;
+}
+
+message ImportHtmlRequest {
+  string Html = 1;
+  bool TakeTitle = 2;               // move the first H1 (or <title>) out of the body into Title
+}
+
+message ImportHtmlResponse {
+  string Markdown = 1;
+  string Title = 2;
+  string MetaDescription = 3;       // from <meta name="description">
+  int32 ScriptsRemoved = 4;
+  int32 EventHandlersRemoved = 5;
+  int32 EmbedsRemoved = 6;
+  int32 StylesDropped = 7;          // stylesheets and inline styles
+  int32 ImagesStored = 8;           // external images copied to our storage
+  repeated string ImagesFailed = 9; // sources left as they were
+}
+
+message UploadImageRequest {
+  bytes Content = 1;                // PNG, JPEG or WebP
+  BlogImageUsage Usage = 2;
+}
+
+message UploadImageResponse {
+  BlogUploadStatus Status = 1;
+  string Url = 2;
+  int32 Width = 3;
+  int32 Height = 4;
+}
+
+// Without configured image storage UploadImage answers UNAVAILABLE and ImportHtml leaves images as they were.
+service BlogGrpcService {
+  rpc GetPosts(google.protobuf.Empty) returns (GetPostsResponse);
+  rpc GetPost(GetPostRequest) returns (GetPostResponse);
+  rpc SavePost(SavePostRequest) returns (BlogWriteResponse);
+  rpc PublishPost(PostActionRequest) returns (BlogWriteResponse);
+  rpc UnpublishPost(PostActionRequest) returns (BlogWriteResponse);
+  rpc DeletePost(PostActionRequest) returns (BlogWriteResponse);
+  rpc RenderPost(RenderPostRequest) returns (RenderPostResponse);
+  rpc ImportHtml(ImportHtmlRequest) returns (ImportHtmlResponse);
+  rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
