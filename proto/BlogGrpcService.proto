@@ -38,6 +38,11 @@ enum BlogUploadStatus {
   BLOG_UPLOAD_STATUS_TOO_LARGE = 2;      // over the byte or pixel limit
 }
 
+message BlogFaqItem {
+  string Question = 1;              // plain text
+  string AnswerMarkdown = 2;
+}
+
 message BlogPostContent {
   string Title = 1;
   string Slug = 2;                  // path after /blog/: lowercase letters, digits, single hyphens
@@ -51,6 +56,7 @@ message BlogPostContent {
   string Author = 10;
   optional int64 PublishedAt = 11;  // date shown on the site; the first publish sets it when absent
   string CategorySlug = 12;         // URL segment of the category: /blog/<CategorySlug>/<Slug>/
+  repeated BlogFaqItem Faq = 13;    // questions under the body, also published as FAQPage schema
 }
 
 message BlogPostModel {
@@ -120,11 +126,17 @@ message RenderPostRequest {
   BlogPostContent Content = 1;
 }
 
+message BlogRenderedFaqItem {
+  string Question = 1;
+  string AnswerHtml = 2;
+}
+
 message RenderPostResponse {
   string Html = 1;                  // body only, without the title
   repeated BlogCheckModel Checks = 2;
   int32 WordCount = 3;
   int32 ReadingMinutes = 4;
+  repeated BlogRenderedFaqItem Faq = 5;   // Content.Faq without empty items, in its order
 }
 
 message ImportHtmlRequest {
