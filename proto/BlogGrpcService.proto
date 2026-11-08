@@ -25,11 +25,13 @@ enum BlogWriteStatus {
   BLOG_WRITE_STATUS_INVALID = 4;         // Message says what
   BLOG_WRITE_STATUS_CHECKS_FAILED = 5;   // Checks lists the failed ones
   BLOG_WRITE_STATUS_NOT_A_DRAFT = 6;     // only a draft can be deleted
+  BLOG_WRITE_STATUS_AUTHOR_IN_USE = 7;   // posts are signed by the author
 }
 
 enum BlogImageUsage {
   BLOG_IMAGE_USAGE_BODY = 0;
   BLOG_IMAGE_USAGE_COVER = 1;
+  BLOG_IMAGE_USAGE_AVATAR = 2;
 }
 
 enum BlogUploadStatus {
@@ -53,7 +55,7 @@ message BlogPostContent {
   string CoverAlt = 7;
   string Category = 8;
   repeated string Tags = 9;
-  string Author = 10;
+  string AuthorSlug = 10;           // slug of an author from GetAuthors
   optional int64 PublishedAt = 11;  // date shown on the site; the first publish sets it when absent
   string CategorySlug = 12;         // URL segment of the category: /blog/<CategorySlug>/<Slug>/
   repeated BlogFaqItem Faq = 13;    // questions under the body, also published as FAQPage schema
@@ -76,11 +78,21 @@ message BlogPostSummaryModel {
   string Slug = 3;
   BlogPostStatus Status = 4;
   string Category = 5;
-  string Author = 6;
+  string AuthorSlug = 6;
   optional int64 PublishedAt = 7;
   int64 UpdatedAt = 8;
   string UpdatedBy = 9;
   string CategorySlug = 10;
+}
+
+message BlogAuthorModel {
+  string Slug = 1;                  // path after /blog/author/; set on create, cannot change
+  string Name = 2;
+  string AvatarUrl = 3;             // empty when there is no photo
+  string Bio = 4;
+  string LinkedinUrl = 5;           // empty when there is none
+  int64 UpdatedAt = 6;              // set by the service
+  string UpdatedBy = 7;             // set by the service
 }
 
 message BlogCheckModel {
@@ -120,6 +132,26 @@ message BlogWriteResponse {
   string Message = 2;
   optional BlogPostModel Post = 3;          // the written post; the current one on CONFLICT
   repeated BlogCheckModel Checks = 4;       // on CHECKS_FAILED
+}
+
+message GetAuthorsResponse {
+  repeated BlogAuthorModel Items = 1;        // by name
+}
+
+message SaveAuthorRequest {
+  BlogAuthorModel Author = 1;       // creates the author when no author has the slug
+  string Editor = 2;
+}
+
+message DeleteAuthorRequest {
+  string Slug = 1;
+  string Editor = 2;
+}
+
+message BlogAuthorWriteResponse {
+  BlogWriteStatus Status = 1;       // OK, INVALID or AUTHOR_IN_USE
+  string Message = 2;
+  optional BlogAuthorModel Author = 3;      // the saved author
 }
 
 message RenderPostRequest {
@@ -179,5 +211,8 @@ service BlogGrpcService {
   rpc RenderPost(RenderPostRequest) returns (RenderPostResponse);
   rpc ImportHtml(ImportHtmlRequest) returns (ImportHtmlResponse);
   rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
+  rpc GetAuthors(google.protobuf.Empty) returns (GetAuthorsResponse);
+  rpc SaveAuthor(SaveAuthorRequest) returns (BlogAuthorWriteResponse);
+  rpc DeleteAuthor(DeleteAuthorRequest) returns (BlogAuthorWriteResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
