@@ -44,7 +44,7 @@ message DiscountCode {
 }
 
 // PROP25-2768: state of a code at the moment it is read. Checked in this order:
-// DISABLED = is_active is false; EXPIRED = date_ends has passed (lifetime codes never expire);
+// DISABLED = is_active is false; EXPIRED = date_ends has passed (as checked at checkout);
 // USED = usage_limit is set and usage_count reached it; ACTIVE = none of the above
 enum DiscountCodeStatus {
     ACTIVE = 0;
