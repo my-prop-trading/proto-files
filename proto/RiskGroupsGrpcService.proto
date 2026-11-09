@@ -185,6 +185,7 @@ enum AbuseEventType {
 enum AbuseKeyType {
   ABUSE_KEY_TYPE_UNKNOWN = 0;
   ABUSE_KEY_TYPE_IP = 1;
+  ABUSE_KEY_TYPE_CLIENT = 2;  // client id; manual only, refuses the client's login and session refresh
 }
 
 enum AbuseRuleMode {
@@ -288,7 +289,7 @@ message GetAbuseRestrictionsResponse {
 
 message SetAbuseRestrictionRequest {
   AbuseKeyType key_type = 1;
-  string key_value = 2;            // plain IP or an already normalized counter key
+  string key_value = 2;            // plain IP, client id, or an already normalized counter key
   int32 restriction_secs = 3;      // from now; a manual decision overrides whatever a rule set
   string reason = 4;
   string created_by = 5;
