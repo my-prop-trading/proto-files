@@ -242,7 +242,7 @@ enum DiscountCodesError {
   INVALID_PROMO_CAMPAIGN_KEY = 17;
   // PROP25-2768 Create / UpdatePromoCampaign: name is empty
   PROMO_CAMPAIGN_NAME_IS_EMPTY = 18;
-  // PROP25-2768 Create / UpdatePromoCampaign: lifetime_hours below 1
+  // PROP25-2768 Create / UpdatePromoCampaign: lifetime_hours outside 1..8760
   INVALID_LIFETIME = 19;
   // PROP25-2768 Create / UpdatePromoCampaign: no packages selected and is_all_trading_package_ids is false
   TRADING_PACKAGES_ARE_EMPTY = 20;
@@ -401,7 +401,7 @@ message PromoCampaign {
     string name = 2;
     // Percent discount of an issued code, 0 < percent <= 100 (INVALID_PERCENT otherwise)
     double percent = 3;
-    // An issued code expires lifetime_hours after it is issued; at least 1
+    // An issued code expires lifetime_hours after it is issued; 1..8760 (a year), INVALID_LIFETIME otherwise
     int32 lifetime_hours = 4;
     repeated string trading_package_ids = 5;
     bool is_all_trading_package_ids = 6;
