@@ -191,6 +191,7 @@ message ImportHtmlResponse {
 message UploadImageRequest {
   bytes Content = 1;                // PNG, JPEG or WebP
   BlogImageUsage Usage = 2;
+  string SourceUrl = 3;             // http(s) image the service downloads in place of Content
 }
 
 message UploadImageResponse {
