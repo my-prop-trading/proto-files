@@ -217,11 +217,20 @@ message ImportWordPressPostResponse {
   int32 FaqCount = 7;
 }
 
+message GetImageRequest {
+  string Key = 1;                   // file name from an image URL
+}
+
+message GetImageResponse {
+  optional bytes Content = 1;       // absent when no image has the key
+  string ContentType = 2;
+}
+
 message BlogSiteResponse {
   string PublicUrl = 1;             // origin this environment serves the blog on, without a trailing slash
 }
 
-// Without configured image storage UploadImage answers UNAVAILABLE and ImportHtml leaves images as they were.
+// Without configured image storage UploadImage and GetImage answer UNAVAILABLE and ImportHtml leaves images as they were.
 service BlogGrpcService {
   rpc GetPosts(google.protobuf.Empty) returns (GetPostsResponse);
   rpc GetPost(GetPostRequest) returns (GetPostResponse);
@@ -237,6 +246,7 @@ service BlogGrpcService {
   rpc GetAuthors(google.protobuf.Empty) returns (GetAuthorsResponse);
   rpc SaveAuthor(SaveAuthorRequest) returns (BlogAuthorWriteResponse);
   rpc DeleteAuthor(DeleteAuthorRequest) returns (BlogAuthorWriteResponse);
+  rpc GetImage(GetImageRequest) returns (GetImageResponse);
   rpc GetSite(google.protobuf.Empty) returns (BlogSiteResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
