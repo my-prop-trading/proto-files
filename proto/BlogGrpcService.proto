@@ -83,6 +83,7 @@ message BlogPostSummaryModel {
   int64 UpdatedAt = 8;
   string UpdatedBy = 9;
   string CategorySlug = 10;
+  int32 FailedChecks = 11;          // checks that block publishing
 }
 
 message BlogAuthorModel {
@@ -201,6 +202,21 @@ message UploadImageResponse {
   int32 Height = 4;
 }
 
+message ImportWordPressPostRequest {
+  string Url = 1;                   // address of a post on a WordPress site
+  string Editor = 2;
+}
+
+message ImportWordPressPostResponse {
+  BlogWriteStatus Status = 1;       // OK, SLUG_TAKEN or INVALID
+  string Message = 2;
+  optional BlogPostModel Post = 3;  // the new draft
+  int32 ImagesStored = 4;           // body and cover images copied to our storage
+  repeated string ImagesFailed = 5; // sources left as they were
+  bool AuthorCreated = 6;           // the author was missing and was added from WordPress
+  int32 FaqCount = 7;
+}
+
 // Without configured image storage UploadImage answers UNAVAILABLE and ImportHtml leaves images as they were.
 service BlogGrpcService {
   rpc GetPosts(google.protobuf.Empty) returns (GetPostsResponse);
@@ -212,6 +228,8 @@ service BlogGrpcService {
   rpc RenderPost(RenderPostRequest) returns (RenderPostResponse);
   rpc ImportHtml(ImportHtmlRequest) returns (ImportHtmlResponse);
   rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
+  // Creates a draft from a WordPress post: body, SEO fields, date, category, cover, author and FAQ.
+  rpc ImportWordPressPost(ImportWordPressPostRequest) returns (ImportWordPressPostResponse);
   rpc GetAuthors(google.protobuf.Empty) returns (GetAuthorsResponse);
   rpc SaveAuthor(SaveAuthorRequest) returns (BlogAuthorWriteResponse);
   rpc DeleteAuthor(DeleteAuthorRequest) returns (BlogAuthorWriteResponse);
