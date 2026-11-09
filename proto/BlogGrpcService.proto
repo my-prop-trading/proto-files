@@ -217,6 +217,10 @@ message ImportWordPressPostResponse {
   int32 FaqCount = 7;
 }
 
+message BlogSiteResponse {
+  string PublicUrl = 1;             // origin this environment serves the blog on, without a trailing slash
+}
+
 // Without configured image storage UploadImage answers UNAVAILABLE and ImportHtml leaves images as they were.
 service BlogGrpcService {
   rpc GetPosts(google.protobuf.Empty) returns (GetPostsResponse);
@@ -233,5 +237,6 @@ service BlogGrpcService {
   rpc GetAuthors(google.protobuf.Empty) returns (GetAuthorsResponse);
   rpc SaveAuthor(SaveAuthorRequest) returns (BlogAuthorWriteResponse);
   rpc DeleteAuthor(DeleteAuthorRequest) returns (BlogAuthorWriteResponse);
+  rpc GetSite(google.protobuf.Empty) returns (BlogSiteResponse);
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
