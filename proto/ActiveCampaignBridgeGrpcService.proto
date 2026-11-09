@@ -10,8 +10,42 @@ message CreateContactRequest {
 
 message CreateContactResponse { }
 
+// PROP25-2768: an ActiveCampaign automation asks for a personal promo code (webhook).
+// The bridge issues it from the promo campaign and writes it into the contact fields promo_* (+ event promo-issued)
+message IssuePromoCodeRequest {
+  // Promo campaign key from the webhook URL
+  string CampaignKey = 1;
+  // Our client id, from the contact field client_id
+  string ClientId = 2;
+  // ActiveCampaign contact id, for logs
+  string AcContactId = 3;
+}
+
+enum IssuePromoCodeStatus {
+  // A new code was issued
+  PROMO_CODE_ISSUED = 0;
+  // The client already had an active code of this campaign; it is returned and written to the contact again
+  PROMO_CODE_EXISTING = 1;
+  PROMO_CAMPAIGN_UNKNOWN = 2;
+  PROMO_CAMPAIGN_OFF = 3;
+  // internal_clients type INTERNAL, FRAUD or CARDER
+  PROMO_CLIENT_EXCLUDED = 4;
+  // Campaign key or client id is empty
+  PROMO_REQUEST_INVALID = 5;
+}
+
+// A technical failure is a gRPC error status, not a response
+message IssuePromoCodeResponse {
+  IssuePromoCodeStatus Status = 1;
+  // Set for PROMO_CODE_ISSUED and PROMO_CODE_EXISTING
+  string Code = 2;
+}
+
 service ActiveCampaignBridgeGrpcService {
     rpc CreateContact(CreateContactRequest) returns (CreateContactResponse);
+
+    // PROP25-2768
+    rpc IssuePromoCode(IssuePromoCodeRequest) returns (IssuePromoCodeResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
