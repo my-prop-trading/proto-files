@@ -453,9 +453,13 @@ message CreatePaidTraderAccountOrderRequest {
   optional string psp_order_id = 13;
   optional PaymentProvider payment_provider = 14;
   // Fair Shot (PROP25-2225): id of the originating order. Set only for Fair Shot
-  // grants so the orders side can enforce once-per-purchase and no-chaining
-  // against the source order. Empty for all other order creations.
+  // grants so the orders side can enforce no-chaining against the source order.
+  // Empty for all other order creations.
   optional string source_order_id = 15;
+  // Fair Shot (PROP25-2856): aggregated id of the failed account that earned the grant.
+  // A bulk order has several accounts, and each one can earn its own Fair Shot, so the
+  // orders side grants once per account against this id. Set only for Fair Shot grants.
+  optional string source_trader_account_aggregated_id = 16;
 }
 
 message CreatePaidTraderAccountOrderResponse {
