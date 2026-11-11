@@ -106,8 +106,6 @@ message CreateTraderAccountOrderRequest {
   // Accept-Language / lang cookie by orders-rest-api. Forwarded to the Billerix checkout page so the
   // embedded SDK renders the form in that language. Absent -> provider default.
   optional string language = 22;
-  // ISO-2 country of the request IP (CF-IPCountry) as received; empty when missing.
-  string ip_country = 23;
 }
 
 message CreateTraderAccountOrderResponse {
@@ -482,8 +480,6 @@ message CreateActivationOrderRequest {
   string Brand = 3;
   string ProcessId = 4;
   string ip = 5;
-  // ISO-2 country of the request IP (CF-IPCountry) as received; empty when missing.
-  string ip_country = 6;
 }
 
 message CreateActivationOrderResponse {
