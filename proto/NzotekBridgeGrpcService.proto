@@ -2,12 +2,13 @@ syntax = "proto3";
 package nzotek_bridge;
 import "google/protobuf/empty.proto";
 
-// Hosted-page deposit for one order: priced in `currency`, charged in the Nzotek market currency.
+// Hosted-page deposit for one order, charged in the Nzotek market currency.
 message GeneratePaymentPageGrpcRequest {
     // Nzotek rejects a repeated order id.
     string order_id = 1;
     string client_id = 2;
-    double amount = 3;
+    // Whole units of `currency`.
+    int64 amount = 3;
     // ISO 4217 code of `amount`.
     string currency = 4;
     bool is_first_purchase = 5;
@@ -29,12 +30,6 @@ message PaymentPageGrpcModel {
     string form_url = 1;
     // Nzotek order id.
     string provider_order_id = 2;
-    // ISO 4217 code of the charged amount.
-    string charged_currency = 3;
-    // Whole units of `charged_currency`.
-    int64 charged_amount = 4;
-    // Units of `charged_currency` per one unit of the request currency.
-    double fx_rate = 5;
 }
 
 service NzotekBridgeGrpcService {
