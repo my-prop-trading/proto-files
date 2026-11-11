@@ -19,6 +19,7 @@ enum JournalRecordKind {
 message GetAccountStateRequest {
   string PlatformAccountId = 1;
   AccountType AccountType = 2;
+  int32 PlatformId = 3; // routes the request to the platform's service
 }
 
 message GetAccountStateResponse {
@@ -36,6 +37,7 @@ message GetAccountJournalRequest {
   int64 From = 3;
   int64 To = 4;
   uint32 Limit = 5; // newest records kept; 0 for the platform default
+  int32 PlatformId = 6; // routes the request to the platform's service
 }
 
 message AccountJournalRecord {
@@ -50,8 +52,9 @@ message GetAccountJournalResponse {
   uint32 Total = 2; // records in the window before Limit was applied
 }
 
-// Live account data a trading platform reports about itself; each platform service implements it.
-// Unimplemented rpcs answer UNIMPLEMENTED. All timestamps are unix microseconds, UTC.
+// Live account data a trading platform reports about itself; each platform service implements it,
+// and the trading platform router forwards it by PlatformId. Unimplemented rpcs answer
+// UNIMPLEMENTED. All timestamps are unix microseconds, UTC.
 service TradingPlatformAccessGrpcService {
   rpc GetAccountState(GetAccountStateRequest) returns (GetAccountStateResponse);
   rpc GetAccountJournal(GetAccountJournalRequest) returns (GetAccountJournalResponse);

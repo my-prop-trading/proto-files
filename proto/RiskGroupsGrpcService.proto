@@ -358,6 +358,107 @@ message GetAbuseEventsResponse {
   repeated AbuseEvent events = 1;
 }
 
+// ===================== Account access =====================
+// Logins to a trading platform account, collected from every platform. Counts cover successful
+// logins unless named failed.
+
+enum AccessDeviceType {
+  ACCESS_DEVICE_TYPE_UNKNOWN = 0;
+  ACCESS_DEVICE_TYPE_DESKTOP = 1;
+  ACCESS_DEVICE_TYPE_WEB = 2;
+  ACCESS_DEVICE_TYPE_ANDROID = 3;
+  ACCESS_DEVICE_TYPE_IOS = 4;
+}
+
+enum AccessSignalType {
+  ACCESS_SIGNAL_TYPE_UNKNOWN = 0;
+  ACCESS_SIGNAL_TYPE_MULTIPLE_DEVICES = 1;
+  ACCESS_SIGNAL_TYPE_DEVICE_SHARED = 2;     // a device of the account logged in to another client's account
+  ACCESS_SIGNAL_TYPE_IP_SHARED = 3;         // an IP of the account logged in to another client's account
+  ACCESS_SIGNAL_TYPE_HOSTING_NETWORK = 4;   // the platform marked an IP as a data centre or VPN
+  ACCESS_SIGNAL_TYPE_COUNTRY_MISMATCH = 5;  // a login from outside the registration country
+  ACCESS_SIGNAL_TYPE_IMPOSSIBLE_TRAVEL = 6;
+}
+
+enum AccessSignalStatus {
+  ACCESS_SIGNAL_STATUS_OK = 0;
+  ACCESS_SIGNAL_STATUS_REVIEW = 1;
+  ACCESS_SIGNAL_STATUS_FLAG = 2;
+  ACCESS_SIGNAL_STATUS_NOT_AVAILABLE = 3;   // the data the check needs is missing
+}
+
+message AccessAccountRef {
+  string trader_account_id = 1;
+  string client_id = 2;
+  string platform_account_id = 3;
+}
+
+message AccessDevice {
+  string device_id = 1;
+  AccessDeviceType device_type = 2;
+  string app_build = 3;            // of the latest login
+  int64 first_seen_at = 4;
+  int64 last_seen_at = 5;
+  uint32 logins = 6;
+  uint32 failed_logins = 7;
+  uint32 ips = 8;
+  repeated AccessAccountRef also_used_on = 9;   // other accounts, of any client, that logged in from it
+}
+
+message AccessIp {
+  string ip = 1;
+  string country = 2;
+  string city = 3;
+  string provider = 4;
+  repeated string network_flags = 5;
+  uint32 logins = 6;
+  int64 first_seen_at = 7;
+  int64 last_seen_at = 8;
+  uint32 other_clients = 9;        // distinct other clients that logged in from it
+}
+
+message AccessProvider {
+  string provider = 1;
+  uint32 logins = 2;
+  uint32 ips = 3;
+  repeated string cities = 4;
+  repeated string network_flags = 5;
+}
+
+message AccessDay {
+  int64 day = 1;                   // start of the UTC day
+  string device_id = 2;
+  uint32 logins = 3;
+}
+
+message AccessSignal {
+  AccessSignalType type = 1;
+  AccessSignalStatus status = 2;
+  string rule = 3;                 // the threshold the check applies
+  string details = 4;              // what matched; empty when nothing did
+}
+
+// The window applies to the account's logins and to the other accounts they are matched against.
+message GetAccountAccessRequest {
+  string trader_account_id = 1;
+  int64 from = 2;
+  int64 to = 3;
+}
+
+message GetAccountAccessResponse {
+  int32 platform_id = 1;
+  string platform_account_id = 2;  // empty when the account has no logins in the window
+  uint32 logins = 3;
+  uint32 failed_logins = 4;
+  repeated string countries = 5;
+  string registration_country = 6; // empty when unknown
+  repeated AccessDevice devices = 7;
+  repeated AccessIp ips = 8;
+  repeated AccessProvider providers = 9;
+  repeated AccessDay days = 10;
+  repeated AccessSignal signals = 11;
+}
+
 service RiskGroupsGrpcService {
   rpc GetGroups(GetGroupsRequest) returns (GetGroupsResponse);
   rpc GetGroup(GetGroupRequest) returns (GetGroupResponse);
@@ -383,6 +484,8 @@ service RiskGroupsGrpcService {
   rpc DeleteAbuseAllowlistEntry(DeleteAbuseAllowlistEntryRequest) returns (DeleteAbuseAllowlistEntryResponse);
 
   rpc GetAbuseEvents(GetAbuseEventsRequest) returns (GetAbuseEventsResponse);
+
+  rpc GetAccountAccess(GetAccountAccessRequest) returns (GetAccountAccessResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
