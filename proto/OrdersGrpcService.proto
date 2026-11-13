@@ -136,6 +136,7 @@ enum PaymentPageProvider {
   PAYMENT_PAGE_PROVIDER_WOOCOMMERCE = 0;
   PAYMENT_PAGE_PROVIDER_BRIDGERPAY = 1;
   PAYMENT_PAGE_PROVIDER_BILLERIX = 2;
+  PAYMENT_PAGE_PROVIDER_NZOTEK = 3;
 }
 
 enum PaymentPageDisplayMode {
@@ -753,5 +754,58 @@ service OrdersGrpcService {
   rpc SetFreeTrialSettings(orders.SetFreeTrialSettingsRequest) returns (orders.FreeTrialSettings);
   rpc GetFreeTrials(orders.GetFreeTrialsRequest) returns (orders.GetFreeTrialsResponse);
 
+  // Exchange rates used to charge in another asset than the order currency (PROP25-2887)
+  rpc GetExchangeRates(google.protobuf.Empty) returns (orders.GetExchangeRatesResponse);
+  rpc SaveExchangeRate(orders.SaveExchangeRateRequest) returns (orders.ExchangeRateModel);
+  rpc DeleteExchangeRate(orders.DeleteExchangeRateRequest) returns (google.protobuf.Empty);
+
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+enum ExchangeRateSource {
+  EXCHANGE_RATE_SOURCE_MANUAL = 0;
+  // ECB reference rates, refreshed by the service.
+  EXCHANGE_RATE_SOURCE_ECB = 1;
+}
+
+// Price of one unit of BaseAsset in QuoteAsset. Assets are upper-case codes: ISO 4217 or a ticker.
+message ExchangeRateModel {
+  string BaseAsset = 1;
+  string QuoteAsset = 2;
+  orders.ExchangeRateSource Source = 3;
+  // The rate as the source gives it.
+  double SourceRate = 4;
+  double MarkupPercent = 5;
+  // SourceRate with the markup; amounts are converted at it.
+  double Rate = 6;
+  // When the source set SourceRate.
+  int64 RateDate = 7;
+  // A rate older than this is not used.
+  uint32 MaxAgeHours = 8;
+  // Set by the service on save.
+  int64 UpdatedAt = 9;
+  string UpdatedBy = 10;
+}
+
+message GetExchangeRatesResponse {
+  repeated orders.ExchangeRateModel Rates = 1;
+}
+
+// Refused with INVALID_ARGUMENT on a malformed asset, a markup that leaves no positive rate, a zero
+// max age, a manual source without a positive rate, or when the source has no rate for the pair.
+message SaveExchangeRateRequest {
+  string BaseAsset = 1;
+  string QuoteAsset = 2;
+  orders.ExchangeRateSource Source = 3;
+  // Manual source only; a refreshed source is fetched on save.
+  optional double SourceRate = 4;
+  double MarkupPercent = 5;
+  uint32 MaxAgeHours = 6;
+  string UpdatedBy = 7;
+}
+
+message DeleteExchangeRateRequest {
+  string BaseAsset = 1;
+  string QuoteAsset = 2;
+  string UpdatedBy = 3;
 }
