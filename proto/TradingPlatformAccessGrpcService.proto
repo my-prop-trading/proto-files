@@ -1,0 +1,62 @@
+syntax = "proto3";
+package trading_platform_access;
+
+import "google/protobuf/empty.proto";
+
+enum AccountType {
+  DEMO = 0;
+  LIVE = 1;
+}
+
+enum JournalRecordKind {
+  JOURNAL_RECORD_KIND_OTHER = 0;
+  JOURNAL_RECORD_KIND_LOGIN = 1; // connections, logouts and refused logins
+  JOURNAL_RECORD_KIND_TRADE = 2;
+  JOURNAL_RECORD_KIND_ADMIN = 3; // done to the account by a manager or the platform admin
+  JOURNAL_RECORD_KIND_ERROR = 4;
+}
+
+message GetAccountStateRequest {
+  string PlatformAccountId = 1;
+  AccountType AccountType = 2;
+  int32 PlatformId = 3; // routes the request to the platform's service
+}
+
+message GetAccountStateResponse {
+  string Group = 1;
+  bool Enabled = 2; // allowed to connect
+  bool TradeDisabled = 3;
+  int64 RegisteredAt = 4;
+  optional int64 LastAccessAt = 5; // unset if the account never connected
+  string LastIp = 6;
+}
+
+message GetAccountJournalRequest {
+  string PlatformAccountId = 1;
+  AccountType AccountType = 2;
+  int64 From = 3;
+  int64 To = 4;
+  uint32 Limit = 5; // newest records kept; 0 for the platform default
+  int32 PlatformId = 6; // routes the request to the platform's service
+}
+
+message AccountJournalRecord {
+  int64 Time = 1;
+  JournalRecordKind Kind = 2;
+  string Message = 3; // platform wording
+  string Source = 4; // originating IP, or the platform subsystem for server-side records
+}
+
+message GetAccountJournalResponse {
+  repeated AccountJournalRecord Records = 1;
+  uint32 Total = 2; // records in the window before Limit was applied
+}
+
+// Live account data a trading platform reports about itself; each platform service implements it,
+// and the trading platform router forwards it by PlatformId. Unimplemented rpcs answer
+// UNIMPLEMENTED. All timestamps are unix microseconds, UTC.
+service TradingPlatformAccessGrpcService {
+  rpc GetAccountState(GetAccountStateRequest) returns (GetAccountStateResponse);
+  rpc GetAccountJournal(GetAccountJournalRequest) returns (GetAccountJournalResponse);
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

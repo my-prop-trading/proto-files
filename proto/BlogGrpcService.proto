@@ -11,6 +11,12 @@ enum BlogPostStatus {
   BLOG_POST_STATUS_PUBLISHED = 1;
 }
 
+// Part of the site a post belongs to.
+enum BlogSection {
+  BLOG_SECTION_BLOG = 0;      // /blog/<CategorySlug>/<Slug>/
+  BLOG_SECTION_ACADEMY = 1;   // a lesson, /academy/<CategorySlug>/<Slug>/: the category is its module; no author or FAQ
+}
+
 enum BlogCheckLevel {
   BLOG_CHECK_LEVEL_PASS = 0;
   BLOG_CHECK_LEVEL_WARN = 1;
@@ -59,6 +65,8 @@ message BlogPostContent {
   optional int64 PublishedAt = 11;  // date shown on the site; the first publish sets it when absent
   string CategorySlug = 12;         // URL segment of the category: /blog/<CategorySlug>/<Slug>/
   repeated BlogFaqItem Faq = 13;    // questions under the body, also published as FAQPage schema
+  BlogSection Section = 14;         // fixed once the post has been published
+  int32 Position = 15;              // order of a lesson in its module, ascending; 0 on a blog post
 }
 
 message BlogPostModel {
@@ -84,6 +92,8 @@ message BlogPostSummaryModel {
   string UpdatedBy = 9;
   string CategorySlug = 10;
   int32 FailedChecks = 11;          // checks that block publishing
+  BlogSection Section = 12;
+  int32 Position = 13;
 }
 
 message BlogAuthorModel {
@@ -203,7 +213,7 @@ message UploadImageResponse {
 }
 
 message ImportWordPressPostRequest {
-  string Url = 1;                   // address of a post on a WordPress site
+  string Url = 1;                   // address of a post or an /academy/ lesson on a WordPress site
   string Editor = 2;
 }
 
@@ -241,7 +251,8 @@ service BlogGrpcService {
   rpc RenderPost(RenderPostRequest) returns (RenderPostResponse);
   rpc ImportHtml(ImportHtmlRequest) returns (ImportHtmlResponse);
   rpc UploadImage(UploadImageRequest) returns (UploadImageResponse);
-  // Creates a draft from a WordPress post: body, SEO fields, date, category, cover, author and FAQ.
+  // Creates a draft from a WordPress post (body, SEO fields, date, category, cover, author and FAQ)
+  // or academy lesson (body, SEO fields, date, module, position and cover).
   rpc ImportWordPressPost(ImportWordPressPostRequest) returns (ImportWordPressPostResponse);
   rpc GetAuthors(google.protobuf.Empty) returns (GetAuthorsResponse);
   rpc SaveAuthor(SaveAuthorRequest) returns (BlogAuthorWriteResponse);

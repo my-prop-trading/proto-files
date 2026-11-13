@@ -354,6 +354,31 @@ message SendNewsTradingAdjustmentReversedRequest{
     string OriginalProfit = 8;
 }
 
+// PROP25-2781 Manual grant emails, one per grant (TraderAccountId = the aggregated id, the
+// idempotency key source; empty skips the dedup).
+// PhaseNumber is the challenge phase the account was granted at (1 = no phase skipped).
+message SendAccountGrantedRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+    string TraderAccountId = 4;
+    int32 PhaseNumber = 5;
+}
+
+message SendAccountGrantedLiveKycRequiredRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+    string TraderAccountId = 4;
+}
+
+message SendAccountGrantedLiveContractRequiredRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderPackagesName = 3;
+    string TraderAccountId = 4;
+}
+
 message SendAccountReviewReadyRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -555,4 +580,8 @@ service EmailSenderGrpcService {
     // PROP25-2684 News trading rule
     rpc SendNewsTradingAdjustment(SendNewsTradingAdjustmentRequest) returns (email_sender.EmailSentResponse);
     rpc SendNewsTradingAdjustmentReversed(SendNewsTradingAdjustmentReversedRequest) returns (email_sender.EmailSentResponse);
+    // PROP25-2781 Manual grant
+    rpc SendAccountGranted(SendAccountGrantedRequest) returns (email_sender.EmailSentResponse);
+    rpc SendAccountGrantedLiveKycRequired(SendAccountGrantedLiveKycRequiredRequest) returns (email_sender.EmailSentResponse);
+    rpc SendAccountGrantedLiveContractRequired(SendAccountGrantedLiveContractRequiredRequest) returns (email_sender.EmailSentResponse);
 }

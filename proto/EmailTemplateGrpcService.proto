@@ -72,6 +72,10 @@ enum EmailType {
     // PROP25-2684 News trading rule: daily digest of deductions, and a reversal by risk.
     NEWS_TRADING_ADJUSTMENT = 63;
     NEWS_TRADING_ADJUSTMENT_REVERSED = 64;
+    // PROP25-2781 Manual grant: sent instead of the payment emails for a manually granted package.
+    ACCOUNT_GRANTED = 65;
+    ACCOUNT_GRANTED_LIVE_KYC_REQUIRED = 66;
+    ACCOUNT_GRANTED_LIVE_CONTRACT_REQUIRED = 67;
 }
 
 enum Error {

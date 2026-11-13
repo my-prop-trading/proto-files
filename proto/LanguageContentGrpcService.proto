@@ -8,6 +8,12 @@ enum Error {
     DEFAULT_LANGUAGE_CANNOT_BE_DELETED = 2;
 }
 
+// Dictionary a request works on; each one has its own languages and keys.
+enum LanguageScope {
+    APP = 0;
+    SITE = 1;
+}
+
 message TranslateModel {
     string Key = 1;
     string Value = 2;
@@ -23,6 +29,7 @@ message LanguageContentModel {
 
 message GetLanguageContentRequest {
     optional string LanguageIso2 = 1;
+    LanguageScope Scope = 2;
 }
 
 message GetLanguageContentResponse {
@@ -31,6 +38,7 @@ message GetLanguageContentResponse {
 
 message UpdateLanguageContentRequest {
     LanguageContentModel Content = 1;
+    LanguageScope Scope = 2;
 }
 
 message UpdateLanguageContentResponse {
@@ -46,6 +54,7 @@ message UpdateLanguageContentResponseBody {
 
 message AddLanguageContentRequest {
     string LanguageIso2 = 1;
+    LanguageScope Scope = 2;
 }
 
 message AddLanguageContentResponse {
@@ -61,6 +70,7 @@ message AddLanguageContentResponseBody {
 
 message DeleteLanguageContentRequest {
     string LanguageIso2 = 1;
+    LanguageScope Scope = 2;
 }
 
 message DeleteLanguageContentResponse {
@@ -75,6 +85,7 @@ message DeleteLanguageContentResponseBody {
 
 message AddKeyLanguageContentRequest {
     TranslateModel Content  = 1;
+    LanguageScope Scope = 2;
 }
 
 message AddKeyLanguageContentResponse {
@@ -89,6 +100,7 @@ message AddKeyLanguageContentResponseBody {
 
 message AddMissingKeysLanguageContentRequest {
     repeated TranslateModel Content = 1;
+    LanguageScope Scope = 2;
 }
 
 message AddMissingKeysLanguageContentResponse {
