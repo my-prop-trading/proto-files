@@ -189,6 +189,29 @@ message GetTemplateEditLinkResponseBody {
     optional string EditLink = 1;
 }
 
+message SendEmailRequest {
+    string EmailFrom = 1;
+    optional string EmailFromName = 2;
+    repeated string EmailTo = 3;
+    // Address the recipient's "Reply" goes to, e.g. a site visitor's email.
+    optional string ReplyTo = 4;
+    optional string ReplyToName = 5;
+    string Subject = 6;
+    // Sent as text/plain, no template.
+    string PlainContent = 7;
+    string ProcessId = 8;
+}
+
+message SendEmailResponse {
+    oneof response {
+        SendEmailResponseBody Body = 1;
+        Error Error = 2;
+    }
+}
+
+message SendEmailResponseBody {
+}
+
 service EmailBridgeGrpcService {
     rpc SendTemplate(SendTemplateRequest)
     returns (SendTemplateResponse);
@@ -204,6 +227,9 @@ service EmailBridgeGrpcService {
 
     rpc GetTemplateEditLink(GetTemplateEditLinkRequest)
     returns (GetTemplateEditLinkResponse);
+
+    rpc SendEmail(SendEmailRequest)
+    returns (SendEmailResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
