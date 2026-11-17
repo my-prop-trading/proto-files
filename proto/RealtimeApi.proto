@@ -66,28 +66,16 @@ enum RealtimeTopic {
 
 // ---------- Topic payloads ----------
 
-enum NotificationEventKind {
-    NOTIFICATION_EVENT_KIND_UNSPECIFIED = 0;
-    // A notification was created.
-    NOTIFICATION_EVENT_KIND_CREATED = 1;
-    // A notification became unread again and moved to the top (soft breach rollup, pin re-sent).
-    NOTIFICATION_EVENT_KIND_UPDATED = 2;
-    // Read state changed: one notification clicked or "Mark all as read", on any device.
-    NOTIFICATION_EVENT_KIND_READ_STATE_CHANGED = 3;
-    // A pinned notification was resolved.
-    NOTIFICATION_EVENT_KIND_PIN_RESOLVED = 4;
-    // The action button of a notification appeared or disappeared.
-    NOTIFICATION_EVENT_KIND_ACTION_AVAILABILITY_CHANGED = 5;
-}
-
 // A signal, not the data: the browser updates the bell badge from unread_count and has_open_pins,
-// and reloads the notification list over REST when the panel is open.
+// plays the bell animation when is_new is set, and reloads the first page of the notification
+// list over REST when the panel is open.
 message NotificationsEvent {
-    NotificationEventKind kind = 1;
-    // The affected notification. Not set for "Mark all as read".
-    optional string notification_id = 2;
     // Unread notifications after the change.
-    int32 unread_count = 3;
+    int32 unread_count = 1;
     // Whether the client has unresolved pinned notifications.
-    bool has_open_pins = 4;
+    bool has_open_pins = 2;
+    // A notification appeared on top: created, shown after its account was activated, bumped
+    // (soft breach rollup) or pinned again. False when only the badge changed: read on any
+    // device, pin resolved, button shown or hidden.
+    bool is_new = 3;
 }
