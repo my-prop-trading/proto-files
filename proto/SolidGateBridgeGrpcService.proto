@@ -119,6 +119,26 @@ message GetCardOrderGrpcRequest {
     string order_id = 1;
 }
 
+// The data the SolidGate payment form is initialized with, for a one-time payment.
+message InitPaymentFormGrpcRequest {
+    string order_id = 1;                       // unique, chosen by the caller
+    string description = 2;
+    optional string product_id = 3;            // SolidGate one-time product; its price applies
+    int64 amount = 4;                          // smallest currency unit; used without a product
+    string currency = 5;
+    string customer_email = 6;
+    string customer_account_id = 7;
+    string ip = 8;
+    optional string success_url = 9;
+    optional string fail_url = 10;
+}
+
+message PaymentFormGrpcModel {
+    string merchant = 1;
+    string payment_intent = 2;
+    string signature = 3;
+}
+
 service SolidGateBridgeGrpcService {
     rpc CancelSubscription(CancelSubscriptionGrpcRequest) returns (google.protobuf.Empty);
     rpc RestoreSubscription(RestoreSubscriptionGrpcRequest) returns (google.protobuf.Empty);
@@ -128,5 +148,6 @@ service SolidGateBridgeGrpcService {
     rpc DeleteWebhookEndpoint(DeleteWebhookEndpointGrpcRequest) returns (google.protobuf.Empty);
     rpc ChargeOneClick(ChargeOneClickGrpcRequest) returns (ChargeOneClickGrpcResponse);
     rpc GetCardOrder(GetCardOrderGrpcRequest) returns (CardOrderGrpcModel);
+    rpc InitPaymentForm(InitPaymentFormGrpcRequest) returns (PaymentFormGrpcModel);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
