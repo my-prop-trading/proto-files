@@ -603,6 +603,8 @@ message NewsAdjustmentGrpcModel {
   optional string reverse_comment = 28;
   repeated string trade_ids = 29;        // account history rows of the position
   optional int64 counted_close_time = 30; // latest close among the parts the case counts
+  bool instant_funding = 31;             // account from an Instant Funding package
+  bool flag_only = 32;                   // judged but not deducted: removed is what would have been withheld
 }
 
 message GetNewsAdjustmentsGrpcRequest {
@@ -613,6 +615,8 @@ message GetNewsAdjustmentsGrpcRequest {
   optional int64 release_to = 5;
   int32 take = 6;
   int32 skip = 7;
+  bool include_flag_only = 8;            // flag-only records are left out unless set
+  optional bool instant_funding = 9;
 }
 message GetNewsAdjustmentsGrpcResponse {
   repeated NewsAdjustmentGrpcModel items = 1;  // newest release first
