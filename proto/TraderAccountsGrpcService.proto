@@ -635,7 +635,10 @@ message GetPageRequest {
   uint64 Limit = 2;
   uint64 Offset = 3;
   repeated trader_accounts.TraderAccountTypeModel Types = 4;
-
+  // Empty = any lifetime type.
+  repeated trader_accounts.AccountLifeTimeType LifeTimeTypes = 5;
+  // Unset = any. true = Free Trial accounts only (with LifeTimeTypes TRIAL); false = without it.
+  optional bool TrialPassEnabled = 6;
 }
 
 message GetPageResponse {
