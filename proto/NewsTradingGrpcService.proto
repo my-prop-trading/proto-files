@@ -345,6 +345,8 @@ message RuleSettingsModel {
   double LongHoldDeductionPercent = 8;
   repeated ImpactType Impacts = 9;
   string ChangedBy = 10;
+  // Instant Funding accounts are out of the rule when set.
+  bool ExcludeInstantFunding = 11;
 }
 
 message SaveRuleSettingsRequest {
@@ -357,6 +359,7 @@ message SaveRuleSettingsRequest {
   double LongHoldDeductionPercent = 7;
   repeated ImpactType Impacts = 8;
   string ChangedBy = 9;
+  bool ExcludeInstantFunding = 10;
 }
 
 message RuleSettingsResponse {
