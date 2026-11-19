@@ -89,6 +89,7 @@ message CardOrderGrpcModel {
     CardOrderStatusGrpc status = 2;
     optional string verify_url = 3;
     optional string decline_reason = 4;  // of the last transaction
+    optional string payment_method = 5;  // card, apple-pay, google-pay, ...
 }
 
 // Pays a one-time product with the card of an earlier payment of the subscription (1-click).
@@ -131,6 +132,7 @@ message InitPaymentFormGrpcRequest {
     string ip = 8;
     optional string success_url = 9;
     optional string fail_url = 10;
+    optional string language = 11;             // of the form and the receipt, 2-3 letters
 }
 
 message PaymentFormGrpcModel {
