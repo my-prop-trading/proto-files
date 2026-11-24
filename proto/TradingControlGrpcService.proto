@@ -708,6 +708,12 @@ message RptViolationGrpcModel {
   optional int64 reversed_at = 25;
   optional string reversed_by = 26;
   optional string reverse_comment = 27;
+  repeated RptDeductionGrpcModel deductions = 28;  // what each payout request deducted
+}
+
+message RptDeductionGrpcModel {
+  string payout_id = 1;
+  double amount = 2;
 }
 
 // RPT state of an account as the trader may see it.
@@ -878,6 +884,16 @@ message ReverseRptDeductionGrpcResponse {
   repeated RptViolationGrpcModel items = 2;
 }
 
+// Undoes the deduction of a payout request that is not paid out: its violations get the amount
+// back to deduct. Idempotent: a request without a deduction, or a reversed one, changes nothing.
+message UndoRptDeductionGrpcRequest {
+  string trader_account_id = 1;
+  string payout_id = 2;
+}
+message UndoRptDeductionGrpcResponse {
+  repeated RptViolationGrpcModel items = 1;  // violations the amount went back to
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -913,6 +929,7 @@ service TradingControlGrpcService {
   rpc GetRptToDeduct(GetRptToDeductGrpcRequest) returns (GetRptToDeductGrpcResponse);
   rpc ApplyRptDeduction(ApplyRptDeductionGrpcRequest) returns (ApplyRptDeductionGrpcResponse);
   rpc ReverseRptDeduction(ReverseRptDeductionGrpcRequest) returns (ReverseRptDeductionGrpcResponse);
+  rpc UndoRptDeduction(UndoRptDeductionGrpcRequest) returns (UndoRptDeductionGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
