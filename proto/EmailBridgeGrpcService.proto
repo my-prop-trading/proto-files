@@ -76,6 +76,10 @@ enum EmailType {
     ACCOUNT_GRANTED = 65;
     ACCOUNT_GRANTED_LIVE_KYC_REQUIRED = 66;
     ACCOUNT_GRANTED_LIVE_CONTRACT_REQUIRED = 67;
+    // PROP25-2924 Risk Per Trade Idea: demo violation notices.
+    RPT_WARNING = 68;
+    RPT_WARNING_SHORT = 69;
+    RPT_FUNDED_LIMIT = 70;
 }
 
 enum Error {

@@ -97,6 +97,7 @@ enum TradingMetricWarningGrpc {
   EXPOSURE_LOSS_SOFT_BREACH = 0;
   MARGIN_RULE_SOFT_BREACH = 1;
   MARGIN_RULE_PER_IDEA_SOFT_BREACH = 2;
+  RPT_VIOLATION = 3;
 }
 
 message GetTradingMetricsGrpcRequest {
@@ -258,6 +259,7 @@ message TradeIdeaGrpcModel {
   double used_margin_close = 11;
   double used_margin_high = 12;
   double used_margin_low = 13;
+  optional RptIdeaGrpcModel rpt = 14;    // unset = the idea is not under the RPT rule
 }
 
 message GetTradeIdeasGrpcRequest {
@@ -410,6 +412,8 @@ message AccountBreachesGrpcModel {
   optional int64 exposure_loss_last_soft_breach_at = 8;
   bool margin_rule_soft_breach_active = 9;
   optional int64 margin_rule_last_soft_breach_at = 10;
+  // Unset = RPT off or a live account: the trader is told nothing about RPT on funded.
+  optional RptBreachesGrpcModel rpt = 11;
 }
 message GetAccountBreachesGrpcRequest {
   string trader_account_id = 1;
@@ -642,6 +646,238 @@ message ReverseNewsAdjustmentGrpcResponse {
   optional NewsAdjustmentGrpcModel item = 2;
 }
 
+// ===== Risk Per Trade Idea (RPT) =====
+// Percents are of the account's initial balance. A trade idea is keyed by its account and the id
+// of its first position. Times are unix microseconds, UTC.
+
+enum RptNoticeGrpc {
+  RPT_NOTICE_NONE = 0;            // live: the trader is told nothing
+  RPT_NOTICE_WARNING = 1;         // demo, within the allowed number of the evaluation
+  RPT_NOTICE_RESTRICTING = 2;     // demo, the first one over the allowed number
+  RPT_NOTICE_WARNING_SHORT = 3;   // demo, past the restricting one or the client already restricted
+}
+
+enum RptDeductionStatusGrpc {
+  RPT_DEDUCTION_NOT_APPLICABLE = 0;    // demo
+  RPT_DEDUCTION_IDEA_OPEN = 1;         // net profit is final only when the idea ends
+  RPT_DEDUCTION_PENDING = 2;
+  RPT_DEDUCTION_PARTIAL = 3;
+  RPT_DEDUCTION_DEDUCTED = 4;
+  RPT_DEDUCTION_NOTHING_TO_DEDUCT = 5; // net profit is not positive
+  RPT_DEDUCTION_REVERSED = 6;          // never deducted again
+}
+
+// RPT side of a trade idea. Limit and timer are fixed by the settings in force at its first
+// position.
+message RptIdeaGrpcModel {
+  string first_position_id = 1;
+  int64 started_at = 2;
+  double limit_percent = 3;
+  int32 timer_minutes = 4;
+  double loss_percent = 5;        // now; 0 when the idea is not losing
+  double peak_loss_percent = 6;
+  bool violated = 7;
+}
+
+message RptViolationGrpcModel {
+  string trader_account_id = 1;
+  string first_position_id = 2;
+  string client_id = 3;
+  string aggregated_id = 4;              // evaluation the account belongs to
+  int32 phase = 5;
+  int32 account_type = 6;                // 0 = demo, 1 = live
+  int32 platform_id = 7;
+  string platform_account_id = 8;
+  string symbol = 9;
+  int32 direction = 10;
+  repeated string trade_ids = 11;        // account history rows of the idea's positions
+  int64 started_at = 12;
+  int64 violated_at = 13;
+  optional int64 ended_at = 14;          // unset while the idea runs
+  double peak_loss_percent = 15;
+  double limit_percent = 16;
+  int32 timer_minutes = 17;
+  int64 settings_effective_from = 18;    // settings version the idea was judged by
+  RptNoticeGrpc notice = 19;
+  // Live: restricted the client. Demo: flagged the evaluation.
+  bool restricting = 20;
+  double net_profit = 21;                // profit + swap + commission of every position of the idea
+  double deducted = 22;
+  RptDeductionStatusGrpc deduction_status = 23;
+  repeated string payout_ids = 24;       // payout requests the profit was deducted on
+  optional int64 reversed_at = 25;
+  optional string reversed_by = 26;
+  optional string reverse_comment = 27;
+}
+
+// RPT state of an account as the trader may see it.
+message RptBreachesGrpcModel {
+  double limit_percent = 1;                     // for ideas starting now
+  int32 warnings_used = 2;                      // violations of the evaluation, all demo phases
+  int32 warnings_allowed = 3;
+  double restricted_limit_percent = 4;
+  bool active = 5;                              // an idea is above its limit on the latest tick
+  optional RptViolationGrpcModel last_violation = 6;
+}
+
+message RptLimitsGrpcModel {
+  double limit_percent = 1;
+  int32 allowed_violations = 2;   // over this number the client is restricted
+  int32 timer_minutes = 3;        // 0 = only overlapping positions form an idea
+}
+
+// Rule settings. Every save is a new version; the one in force at a moment is the latest with
+// effective_from at or before it.
+message RptSettingsGrpcModel {
+  int64 effective_from = 1;
+  repeated string package_ids = 2;       // packages with RPT on
+  RptLimitsGrpcModel demo = 3;           // allowed violations are counted per evaluation
+  RptLimitsGrpcModel live = 4;           // allowed violations are counted per account
+  double restricted_limit_percent = 5;   // live limit of a restricted client
+  string changed_by = 6;
+}
+
+message GetRptSettingsGrpcRequest {}
+message GetRptSettingsGrpcResponse {
+  optional RptSettingsGrpcModel item = 1;  // unset = never saved, the rule is off
+}
+
+message GetRptSettingsHistoryGrpcRequest {
+  int32 take = 1;
+  int32 skip = 2;
+}
+message GetRptSettingsHistoryGrpcResponse {
+  repeated RptSettingsGrpcModel items = 1;  // newest first
+  int64 total = 2;
+}
+
+enum SaveRptSettingsResultGrpc {
+  SAVE_RPT_SETTINGS_OK = 0;
+  SAVE_RPT_SETTINGS_INVALID = 1;
+}
+
+message SaveRptSettingsGrpcRequest {
+  repeated string package_ids = 1;
+  RptLimitsGrpcModel demo = 2;
+  RptLimitsGrpcModel live = 3;
+  double restricted_limit_percent = 4;
+  string changed_by = 5;
+}
+message SaveRptSettingsGrpcResponse {
+  SaveRptSettingsResultGrpc result = 1;
+  optional RptSettingsGrpcModel item = 2;
+  optional string error = 3;                // what is invalid
+}
+
+message GetRptViolationsGrpcRequest {
+  optional string trader_account_id = 1;
+  optional string client_id = 2;
+  optional int32 account_type = 3;
+  optional RptDeductionStatusGrpc deduction_status = 4;
+  optional int64 violated_from = 5;
+  optional int64 violated_to = 6;
+  int32 take = 7;
+  int32 skip = 8;
+}
+
+message RptCountersGrpcModel {
+  int32 monitored_accounts = 1;   // active accounts under the rule
+  int64 violations = 2;
+  int32 restricted_clients = 3;
+  double to_deduct = 4;
+}
+
+message GetRptViolationsGrpcResponse {
+  repeated RptViolationGrpcModel items = 1;  // newest first
+  int64 total = 2;
+  RptCountersGrpcModel counters = 3;         // whole rule, regardless of the filters
+}
+
+message RptRestrictionGrpcModel {
+  string client_id = 1;
+  int64 since = 2;
+  // Violation that caused the restriction.
+  string cause_trader_account_id = 3;
+  string cause_first_position_id = 4;
+}
+
+// An evaluation whose demo violations went over the allowed number: its funded account restricts
+// the client.
+message RptPendingEvaluationGrpcModel {
+  string aggregated_id = 1;
+  int64 since = 2;
+  int32 violations = 3;
+}
+
+message GetRptClientStateGrpcRequest {
+  string client_id = 1;
+}
+message GetRptClientStateGrpcResponse {
+  optional RptRestrictionGrpcModel restriction = 1;  // unset = not restricted
+  repeated RptPendingEvaluationGrpcModel pending = 2;
+}
+
+enum LiftRptRestrictionResultGrpc {
+  LIFT_RPT_RESTRICTION_OK = 0;
+  LIFT_RPT_RESTRICTION_NOT_RESTRICTED = 1;
+  LIFT_RPT_RESTRICTION_COMMENT_REQUIRED = 2;
+}
+
+message LiftRptRestrictionGrpcRequest {
+  string client_id = 1;
+  string lifted_by = 2;
+  string comment = 3;
+}
+message LiftRptRestrictionGrpcResponse {
+  LiftRptRestrictionResultGrpc result = 1;
+}
+
+message GetRptToDeductGrpcRequest {
+  string trader_account_id = 1;
+}
+message GetRptToDeductGrpcResponse {
+  // Live violations with profit left to deduct, oldest first.
+  repeated RptViolationGrpcModel items = 1;
+  double total = 2;
+}
+
+enum ApplyRptDeductionResultGrpc {
+  APPLY_RPT_DEDUCTION_OK = 0;
+  APPLY_RPT_DEDUCTION_EXCEEDS_TO_DEDUCT = 1;
+}
+
+// Records a deduction made on a payout request, spread over the account's violations oldest first.
+// Idempotent per payout: a repeated call returns the first result.
+message ApplyRptDeductionGrpcRequest {
+  string trader_account_id = 1;
+  string payout_id = 2;
+  double amount = 3;
+  string deducted_by = 4;
+}
+message ApplyRptDeductionGrpcResponse {
+  ApplyRptDeductionResultGrpc result = 1;
+  repeated RptViolationGrpcModel items = 2;  // violations the amount went to
+}
+
+enum ReverseRptDeductionResultGrpc {
+  REVERSE_RPT_DEDUCTION_OK = 0;
+  REVERSE_RPT_DEDUCTION_NOT_FOUND = 1;
+  REVERSE_RPT_DEDUCTION_ALREADY_REVERSED = 2;
+  REVERSE_RPT_DEDUCTION_COMMENT_REQUIRED = 3;
+}
+
+// Undoes the deduction of a payout request; its violations stay, marked reversed.
+message ReverseRptDeductionGrpcRequest {
+  string trader_account_id = 1;
+  string payout_id = 2;
+  string reversed_by = 3;
+  string comment = 4;
+}
+message ReverseRptDeductionGrpcResponse {
+  ReverseRptDeductionResultGrpc result = 1;
+  repeated RptViolationGrpcModel items = 2;
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -667,6 +903,16 @@ service TradingControlGrpcService {
 
   rpc GetNewsAdjustments(GetNewsAdjustmentsGrpcRequest) returns (GetNewsAdjustmentsGrpcResponse);
   rpc ReverseNewsAdjustment(ReverseNewsAdjustmentGrpcRequest) returns (ReverseNewsAdjustmentGrpcResponse);
+
+  rpc GetRptSettings(GetRptSettingsGrpcRequest) returns (GetRptSettingsGrpcResponse);
+  rpc GetRptSettingsHistory(GetRptSettingsHistoryGrpcRequest) returns (GetRptSettingsHistoryGrpcResponse);
+  rpc SaveRptSettings(SaveRptSettingsGrpcRequest) returns (SaveRptSettingsGrpcResponse);
+  rpc GetRptViolations(GetRptViolationsGrpcRequest) returns (GetRptViolationsGrpcResponse);
+  rpc GetRptClientState(GetRptClientStateGrpcRequest) returns (GetRptClientStateGrpcResponse);
+  rpc LiftRptRestriction(LiftRptRestrictionGrpcRequest) returns (LiftRptRestrictionGrpcResponse);
+  rpc GetRptToDeduct(GetRptToDeductGrpcRequest) returns (GetRptToDeductGrpcResponse);
+  rpc ApplyRptDeduction(ApplyRptDeductionGrpcRequest) returns (ApplyRptDeductionGrpcResponse);
+  rpc ReverseRptDeduction(ReverseRptDeductionGrpcRequest) returns (ReverseRptDeductionGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

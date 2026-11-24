@@ -379,6 +379,24 @@ message SendAccountGrantedLiveContractRequiredRequest{
     string TraderAccountId = 4;
 }
 
+// PROP25-2924 Risk Per Trade Idea demo violation emails. Placeholders are pre-formatted strings:
+// Direction "Buy" / "Sell", percents without the sign. TraderAccountId + FirstPositionId identify
+// the violation and are the idempotency key source.
+message SendRptViolationRequest{
+    email_sender.EmailDestination Destination = 1;
+    string ClientId = 2;
+    string TraderAccountId = 3;
+    string AccountLogin = 4;
+    string FirstPositionId = 5;
+    string Symbol = 6;
+    string Direction = 7;
+    string RptLoss = 8;
+    string RptLimit = 9;
+    string RptRestrictedLimit = 10;
+    string RptWarningsUsed = 11;
+    string RptWarningsAllowed = 12;
+}
+
 message SendAccountReviewReadyRequest{
     email_sender.EmailDestination Destination = 1;
     string ClientId = 2;
@@ -584,4 +602,8 @@ service EmailSenderGrpcService {
     rpc SendAccountGranted(SendAccountGrantedRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountGrantedLiveKycRequired(SendAccountGrantedLiveKycRequiredRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountGrantedLiveContractRequired(SendAccountGrantedLiveContractRequiredRequest) returns (email_sender.EmailSentResponse);
+    // PROP25-2924 Risk Per Trade Idea
+    rpc SendRptWarning(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
+    rpc SendRptWarningShort(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
+    rpc SendRptFundedLimit(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
 }
