@@ -379,6 +379,13 @@ message SendAccountGrantedLiveContractRequiredRequest{
     string TraderAccountId = 4;
 }
 
+// PROP25-2924 Which Risk Per Trade Idea email a demo violation gets.
+enum RptViolationEmail {
+    RPT_VIOLATION_EMAIL_WARNING = 0;
+    RPT_VIOLATION_EMAIL_WARNING_SHORT = 1;   // past the allowed number, or the client restricted
+    RPT_VIOLATION_EMAIL_FUNDED_LIMIT = 2;    // the funded account will get the restricted limit
+}
+
 // PROP25-2924 Risk Per Trade Idea demo violation emails. Placeholders are pre-formatted strings:
 // Direction "Buy" / "Sell", percents without the sign. TraderAccountId + FirstPositionId identify
 // the violation and are the idempotency key source.
@@ -395,6 +402,7 @@ message SendRptViolationRequest{
     string RptRestrictedLimit = 10;
     string RptWarningsUsed = 11;
     string RptWarningsAllowed = 12;
+    RptViolationEmail Email = 13;
 }
 
 message SendAccountReviewReadyRequest{
@@ -603,7 +611,5 @@ service EmailSenderGrpcService {
     rpc SendAccountGrantedLiveKycRequired(SendAccountGrantedLiveKycRequiredRequest) returns (email_sender.EmailSentResponse);
     rpc SendAccountGrantedLiveContractRequired(SendAccountGrantedLiveContractRequiredRequest) returns (email_sender.EmailSentResponse);
     // PROP25-2924 Risk Per Trade Idea
-    rpc SendRptWarning(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
-    rpc SendRptWarningShort(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
-    rpc SendRptFundedLimit(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
+    rpc SendRptViolation(SendRptViolationRequest) returns (email_sender.EmailSentResponse);
 }
