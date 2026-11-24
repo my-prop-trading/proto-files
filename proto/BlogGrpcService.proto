@@ -67,6 +67,7 @@ message BlogPostContent {
   repeated BlogFaqItem Faq = 13;    // questions under the body, also published as FAQPage schema
   BlogSection Section = 14;         // fixed once the post has been published
   int32 Position = 15;              // order of a lesson in its module, ascending; 0 on a blog post
+  optional int64 ModifiedAt = 16;   // "updated" date shown on the site; the last edit when absent
 }
 
 message BlogPostModel {

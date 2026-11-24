@@ -20,6 +20,8 @@ enum PayoutType {
     RevenueShare = 0;
     Withdrawal = 1;
     ExcessiveProfit = 2;
+    // PROP25-2924 Risk Per Trade Idea: profit of violating trade ideas taken off the withdrawal.
+    RptDeduction = 3;
 }
 
 enum PaymentMethod {
@@ -97,6 +99,10 @@ message PayoutRequest {
     optional string OfficerId = 20;
     optional string ExternalAccountId = 21;
     optional string PayoutMethod = 22;
+    // PROP25-2924 Withdrawal line only. RptToDeduct: RPT profit to deduct when the request was
+    // created, unset = none.
+    optional double RptToDeduct = 23;
+    double RptDeducted = 24;
 }
 
 message ProfitWidget {
@@ -228,6 +234,36 @@ message DeclinePayoutResponse {
     }
 }
 
+// PROP25-2924 Moves RPT profit out of the withdrawal of a pending request into its RptDeduction
+// line. PayoutId is the Withdrawal line; the response carries it after the change.
+message DeductRptProfitRequest {
+    string PayoutId = 1;
+    double Amount = 2;
+    string OfficerId = 3;
+    string Comment = 4;
+}
+
+message DeductRptProfitResponse {
+     oneof response {
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceError Error = 2;
+    }
+}
+
+// PROP25-2924 Returns the RPT deduction of a request to its withdrawal.
+message ReverseRptDeductionRequest {
+    string PayoutId = 1;
+    string OfficerId = 2;
+    string Comment = 3;
+}
+
+message ReverseRptDeductionResponse {
+     oneof response {
+        PayoutRequest Payout = 1;
+        PayoutsGrpcServiceError Error = 2;
+    }
+}
+
 message GetPayoutsStatisticRequest {}
 
 message GetPayoutsStatisticResponse {
@@ -311,6 +347,10 @@ enum PayoutsGrpcServiceError {
     USER_HAS_OPEN_POSITIONS = 6;
     LESS_THAN_MIN_VALUE = 7;
     EXCEEDS_MAX_VALUE = 8;
+    RPT_COMMENT_REQUIRED = 9;
+    RPT_EXCEEDS_TO_DEDUCT = 10;
+    RPT_EXCEEDS_WITHDRAWAL = 11;
+    RPT_NOT_DEDUCTED = 12;
 }
 
 message PayoutsGrpcServiceErrorWithMessage {
@@ -446,6 +486,8 @@ service PayoutsGrpcService {
     rpc CreatePayout(CreatePayoutRequest) returns (CreatePayoutResponse);
     rpc ApprovePayout(ApprovePayoutRequest) returns (ApprovePayoutResponse);
     rpc DeclinePayout(DeclinePayoutRequest) returns (DeclinePayoutResponse);
+    rpc DeductRptProfit(DeductRptProfitRequest) returns (DeductRptProfitResponse);
+    rpc ReverseRptDeduction(ReverseRptDeductionRequest) returns (ReverseRptDeductionResponse);
 
     rpc GetProfitWidget(GetProfitWidgetRequest) returns (GetProfitWidgetResponse);
     rpc GetResolvedPayoutTerms(GetResolvedPayoutTermsRequest) returns (GetResolvedPayoutTermsResponse);

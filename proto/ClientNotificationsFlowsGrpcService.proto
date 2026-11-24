@@ -1,0 +1,379 @@
+syntax = "proto3";
+package client_notifications;
+
+import "google/protobuf/empty.proto";
+
+// Client zone bell notifications (PROP25-2846, epic PROP25-2845).
+//
+// The service owns the notifications: it subscribes to domain events, creates and updates the
+// items, resolves pins and publishes the badge to realtime-api (RealtimeApi.proto,
+// NotificationsEvent). This contract is what the dashboard REST API and BackOffice call.
+//
+// Texts are rendered by the service in the requested language: the client gets ready title,
+// text, account line and button text, and never sees templates or variables.
+//
+// All timestamps are unix microseconds (UTC).
+service ClientNotificationsFlowsGrpcService {
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+    // ---------- Client zone (dashboard REST API) ----------
+
+    // One page of the feed. The first page (no cursor) also returns all open pins and
+    // read_all_up_to. Only the visible window (ClientNotificationsVisibleDays) is returned;
+    // items waiting for their account activation are not.
+    rpc GetFeed(GetFeedRequest) returns (GetFeedResponse);
+    rpc GetBadge(GetBadgeRequest) returns (BadgeResponse);
+    // The client opened the bell panel: stores the open for analytics and marks the unread
+    // items as seen. Does not change the badge.
+    rpc RegisterBellOpen(RegisterBellOpenRequest) returns (BadgeResponse);
+    // Row or button click. Idempotent: an unknown id or another client's id is a no-op.
+    rpc MarkRead(MarkReadRequest) returns (google.protobuf.Empty);
+    // "Mark all as read": every unread item of the client not newer than up_to, not only the
+    // loaded page.
+    rpc MarkAllRead(MarkAllReadRequest) returns (google.protobuf.Empty);
+
+    // ---------- BackOffice ----------
+
+    // Everything stored for the client (up to ClientNotificationsDeleteAfterDays), newest
+    // first, with the analytics fields. Texts in English.
+    rpc GetClientNotificationsForBackoffice(GetClientNotificationsForBackofficeRequest) returns (GetClientNotificationsForBackofficeResponse);
+    // All notification types from the catalog with their enabled state.
+    rpc GetTypeSettings(google.protobuf.Empty) returns (GetTypeSettingsResponse);
+    // Enables or disables a type and writes the change log. A disabled type stops new items
+    // and bumps only; resolving pins, hiding buttons and marking read keep working.
+    rpc SetTypeEnabled(SetTypeEnabledRequest) returns (google.protobuf.Empty);
+    rpc GetTypeSettingChanges(GetTypeSettingChangesRequest) returns (GetTypeSettingChangesResponse);
+
+    // ---------- Debug (alpha only) ----------
+
+    // Runs one core operation exactly as an event handler would. Refused unless the
+    // ClientNotificationsDebugApplyEnabled setting is on (off on prod).
+    rpc DebugApply(DebugApplyRequest) returns (DebugApplyResponse);
+}
+
+// ---------- Catalog ----------
+
+// Values are the event numbers of the PRD (client-notifications-prd §3), so code, BackOffice
+// and the frontend use one number per type.
+enum ClientNotificationType {
+    CLIENT_NOTIFICATION_TYPE_UNSPECIFIED = 0;
+    CLIENT_NOTIFICATION_TYPE_CONTRACT_SENT = 1;
+    CLIENT_NOTIFICATION_TYPE_KYC_REQUIRED = 2;
+    CLIENT_NOTIFICATION_TYPE_ACTIVATION_FEE_REQUIRED = 3;
+    CLIENT_NOTIFICATION_TYPE_PAYMENT_FAILED = 4;
+    CLIENT_NOTIFICATION_TYPE_SOFT_BREACH = 5;
+    CLIENT_NOTIFICATION_TYPE_ACCOUNT_CLOSED = 6;
+    CLIENT_NOTIFICATION_TYPE_PHASE_PASSED = 7;
+    CLIENT_NOTIFICATION_TYPE_LIVE_ACCOUNT_GRANTED = 8;
+    CLIENT_NOTIFICATION_TYPE_INACTIVITY_WARNING = 9;
+    CLIENT_NOTIFICATION_TYPE_TRIAL_ENDING = 10;
+    CLIENT_NOTIFICATION_TYPE_ACCOUNT_BLOCKED = 11;
+    CLIENT_NOTIFICATION_TYPE_PAYOUT_REQUESTED = 12;
+    CLIENT_NOTIFICATION_TYPE_PAYOUT_PAID = 13;
+    CLIENT_NOTIFICATION_TYPE_PAYOUT_DECLINED = 14;
+    CLIENT_NOTIFICATION_TYPE_PAYMENT_RECEIVED = 15;
+    CLIENT_NOTIFICATION_TYPE_CERTIFICATE_UNLOCKED = 16;
+    CLIENT_NOTIFICATION_TYPE_FREE_ACCOUNT_GRANTED = 17;
+    CLIENT_NOTIFICATION_TYPE_ACCOUNT_REVIEW_READY = 18;
+    CLIENT_NOTIFICATION_TYPE_COMPETITION = 19;
+    CLIENT_NOTIFICATION_TYPE_PAYOUT_AVAILABLE = 20;
+    CLIENT_NOTIFICATION_TYPE_CONSISTENCY = 21;
+    CLIENT_NOTIFICATION_TYPE_PROFIT_TARGET_HALFWAY = 22;
+    CLIENT_NOTIFICATION_TYPE_RESTART_AVAILABLE = 23;
+    CLIENT_NOTIFICATION_TYPE_RESTART_ENDING = 24;
+    CLIENT_NOTIFICATION_TYPE_REFER_A_FRIEND_AVAILABLE = 25;
+}
+
+// Tile color on the frontend.
+enum ClientNotificationPriority {
+    CLIENT_NOTIFICATION_PRIORITY_UNSPECIFIED = 0;
+    CLIENT_NOTIFICATION_PRIORITY_CRITICAL = 1;
+    CLIENT_NOTIFICATION_PRIORITY_IMPORTANT = 2;
+    CLIENT_NOTIFICATION_PRIORITY_INFO = 3;
+}
+
+// Where a row click leads. The frontend owns the routes and builds the URL from the target and
+// the link params.
+enum ClientNotificationLinkTarget {
+    // Not clickable (#1, #11).
+    CLIENT_NOTIFICATION_LINK_TARGET_NONE = 0;
+    CLIENT_NOTIFICATION_LINK_TARGET_ACCOUNT = 1;
+    CLIENT_NOTIFICATION_LINK_TARGET_ACCOUNT_CONSISTENCY = 2;
+    CLIENT_NOTIFICATION_LINK_TARGET_ORDERS = 3;
+    CLIENT_NOTIFICATION_LINK_TARGET_PAYOUTS = 4;
+    CLIENT_NOTIFICATION_LINK_TARGET_KYC = 5;
+    CLIENT_NOTIFICATION_LINK_TARGET_ACTIVATION_PAYMENT = 6;
+    CLIENT_NOTIFICATION_LINK_TARGET_NEW_ORDER = 7;
+    CLIENT_NOTIFICATION_LINK_TARGET_CHALLENGES_HOME = 8;
+    CLIENT_NOTIFICATION_LINK_TARGET_CERTIFICATE = 9;
+    CLIENT_NOTIFICATION_LINK_TARGET_ACCOUNT_REVIEW = 10;
+    CLIENT_NOTIFICATION_LINK_TARGET_COMPETITION = 11;
+    CLIENT_NOTIFICATION_LINK_TARGET_REFER_A_FRIEND = 12;
+}
+
+// What the item button does.
+enum ClientNotificationAction {
+    CLIENT_NOTIFICATION_ACTION_NONE = 0;
+    CLIENT_NOTIFICATION_ACTION_START_VERIFICATION = 1;
+    CLIENT_NOTIFICATION_ACTION_PAY_ACTIVATION_FEE = 2;
+    CLIENT_NOTIFICATION_ACTION_ACTIVATE_COMPETITION_ACCOUNT = 3;
+    CLIENT_NOTIFICATION_ACTION_REQUEST_PAYOUT = 4;
+    CLIENT_NOTIFICATION_ACTION_RESTART = 5;
+    CLIENT_NOTIFICATION_ACTION_GET_REFERRAL_LINK = 6;
+}
+
+enum ClientNotificationReadVia {
+    CLIENT_NOTIFICATION_READ_VIA_UNSPECIFIED = 0;
+    CLIENT_NOTIFICATION_READ_VIA_ROW_CLICK = 1;
+    CLIENT_NOTIFICATION_READ_VIA_BUTTON_CLICK = 2;
+    CLIENT_NOTIFICATION_READ_VIA_MARK_ALL = 3;
+    // The pin was resolved while the item was unread.
+    CLIENT_NOTIFICATION_READ_VIA_PIN_RESOLVED = 4;
+    // Marked read by a domain event (e.g. Restart paid).
+    CLIENT_NOTIFICATION_READ_VIA_EVENT = 5;
+}
+
+enum ClientNotificationPinState {
+    CLIENT_NOTIFICATION_PIN_STATE_NOT_PINNED = 0;
+    CLIENT_NOTIFICATION_PIN_STATE_OPEN = 1;
+    CLIENT_NOTIFICATION_PIN_STATE_RESOLVED = 2;
+}
+
+enum ClientNotificationPinResolution {
+    CLIENT_NOTIFICATION_PIN_RESOLUTION_UNSPECIFIED = 0;
+    CLIENT_NOTIFICATION_PIN_RESOLUTION_DONE = 1;
+    CLIENT_NOTIFICATION_PIN_RESOLUTION_NO_LONGER_NEEDED = 2;
+    CLIENT_NOTIFICATION_PIN_RESOLUTION_TIMEOUT = 3;
+}
+
+// ---------- Item ----------
+
+message ClientNotificationLink {
+    ClientNotificationLinkTarget target = 1;
+    // traderAccountId, competitionId, orderId, certificateId and the like.
+    map<string, string> params = 2;
+}
+
+message ClientNotificationActionGrpcModel {
+    ClientNotificationAction kind = 1;
+    // Rendered button text.
+    string text = 2;
+    // Whether the button is shown now. Computed by the service, including
+    // action_available_until.
+    bool available = 3;
+}
+
+message ClientNotificationGrpcModel {
+    string id = 1;
+    ClientNotificationType notification_type = 2;
+    // Text variant inside the type, e.g. next_phase / last_phase for #7. Empty for most types.
+    string variant = 3;
+    ClientNotificationPriority priority = 4;
+    // Rendered in the requested language.
+    string title = 5;
+    string text = 6;
+    // "$50K · Phase 1 · #5012345". Not set for notifications not about an account.
+    optional string account_line = 7;
+    optional string trader_account_id = 8;
+    ClientNotificationLink link = 9;
+    optional ClientNotificationActionGrpcModel action = 10;
+    // Time shown in the feed and the sort key: creation or the latest bump.
+    int64 time = 11;
+    int64 created_at = 12;
+    bool is_read = 13;
+    bool is_pinned = 14;
+}
+
+// ---------- Client zone ----------
+
+message GetFeedRequest {
+    string client_id = 1;
+    // ISO 639-1 code of the dashboard language. Empty or unknown = English.
+    string language = 2;
+    // next_cursor of the previous page. Not set = first page.
+    optional string cursor = 3;
+    // Capped by ClientNotificationsFeedMaxLimit.
+    int32 limit = 4;
+}
+
+message GetFeedResponse {
+    // Open pins, first page only.
+    repeated ClientNotificationGrpcModel pinned = 1;
+    // Newest first, open pins excluded.
+    repeated ClientNotificationGrpcModel items = 2;
+    // Not set on the last page.
+    optional string next_cursor = 3;
+    // First page only: the newest time among pinned and items, to pass to MarkAllRead.
+    // Not set when the feed is empty.
+    optional int64 read_all_up_to = 4;
+}
+
+message GetBadgeRequest {
+    string client_id = 1;
+}
+
+message BadgeResponse {
+    int32 unread_count = 1;
+    bool has_open_pins = 2;
+}
+
+message RegisterBellOpenRequest {
+    string client_id = 1;
+}
+
+message MarkReadRequest {
+    string client_id = 1;
+    string notification_id = 2;
+    // ROW_CLICK or BUTTON_CLICK.
+    ClientNotificationReadVia via = 3;
+}
+
+message MarkAllReadRequest {
+    string client_id = 1;
+    // read_all_up_to of the first feed page the client saw. Items created or bumped after it
+    // stay unread.
+    int64 up_to = 2;
+}
+
+// ---------- BackOffice ----------
+
+message GetClientNotificationsForBackofficeRequest {
+    string client_id = 1;
+    int32 offset = 2;
+    int32 limit = 3;
+}
+
+message BackofficeClientNotificationGrpcModel {
+    string id = 1;
+    string notification_key = 2;
+    ClientNotificationType notification_type = 3;
+    string variant = 4;
+    ClientNotificationPriority priority = 5;
+    // English.
+    string title = 6;
+    string text = 7;
+    optional string account_line = 8;
+    optional string trader_account_id = 9;
+    ClientNotificationLink link = 10;
+    optional ClientNotificationActionGrpcModel action = 11;
+    int64 created_at = 12;
+    int64 sort_time = 13;
+    // Created, but hidden from the client until the account is activated.
+    bool waiting_for_account_activation = 14;
+    optional int64 read_at = 15;
+    ClientNotificationReadVia read_via = 16;
+    optional int64 seen_at = 17;
+    optional int64 clicked_at = 18;
+    ClientNotificationPinState pin_state = 19;
+    ClientNotificationPinResolution pin_resolution = 20;
+    optional int64 pinned_at = 21;
+    optional int64 pin_expires_at = 22;
+    optional int64 pin_resolved_at = 23;
+}
+
+message GetClientNotificationsForBackofficeResponse {
+    repeated BackofficeClientNotificationGrpcModel items = 1;
+    int64 total = 2;
+}
+
+message TypeSettingGrpcModel {
+    ClientNotificationType notification_type = 1;
+    // Short English name from the catalog, e.g. "Payout request received".
+    string name = 2;
+    ClientNotificationPriority default_priority = 3;
+    bool pinnable = 4;
+    // BackOffice asks for confirmation before disabling (#1-3).
+    bool disable_requires_confirmation = 5;
+    bool enabled = 6;
+    // Not set while the type was never changed (enabled by default).
+    optional string changed_by = 7;
+    optional int64 changed_at = 8;
+}
+
+message GetTypeSettingsResponse {
+    repeated TypeSettingGrpcModel items = 1;
+}
+
+message SetTypeEnabledRequest {
+    ClientNotificationType notification_type = 1;
+    bool enabled = 2;
+    // BackOffice user id.
+    string changed_by = 3;
+}
+
+message GetTypeSettingChangesRequest {
+    int32 offset = 1;
+    int32 limit = 2;
+}
+
+message TypeSettingChangeGrpcModel {
+    string id = 1;
+    ClientNotificationType notification_type = 2;
+    bool enabled = 3;
+    string changed_by = 4;
+    int64 changed_at = 5;
+}
+
+message GetTypeSettingChangesResponse {
+    // Newest first.
+    repeated TypeSettingChangeGrpcModel items = 1;
+    int64 total = 2;
+}
+
+// ---------- Debug ----------
+
+enum DebugApplyOperation {
+    DEBUG_APPLY_OPERATION_UNSPECIFIED = 0;
+    DEBUG_APPLY_OPERATION_CREATE_ONCE = 1;
+    DEBUG_APPLY_OPERATION_CREATE_OR_BUMP = 2;
+    DEBUG_APPLY_OPERATION_OPEN_PIN = 3;
+    DEBUG_APPLY_OPERATION_RESOLVE_PIN = 4;
+    DEBUG_APPLY_OPERATION_SET_ACTION_AVAILABLE = 5;
+    DEBUG_APPLY_OPERATION_MARK_READ_BY_KEY = 6;
+    DEBUG_APPLY_OPERATION_RESOLVE_PINS_BY_CLIENT = 7;
+}
+
+message DebugActionDraft {
+    ClientNotificationAction kind = 1;
+    bool available = 2;
+    // The button disappears by itself after this time.
+    optional int64 available_until = 3;
+}
+
+// Fields an operation does not use are ignored.
+message DebugApplyRequest {
+    DebugApplyOperation operation = 1;
+    string client_id = 2;
+    string notification_key = 3;
+    ClientNotificationType notification_type = 4;
+    // Create, bump, pin: the variant to render. RESOLVE_PIN / RESOLVE_PINS_BY_CLIENT: the new
+    // variant, empty = keep the current one.
+    string variant = 5;
+    // Not set = default from the catalog.
+    optional ClientNotificationPriority priority = 6;
+    optional string trader_account_id = 7;
+    // Already formatted values for the template placeholders.
+    map<string, string> variables = 8;
+    ClientNotificationLink link = 9;
+    optional DebugActionDraft action = 10;
+    // The source event time used for ordering. 0 = now.
+    int64 source_event_time = 11;
+    // OPEN_PIN: overrides the catalog pin timeout, to test the timer in a minute.
+    optional int64 pin_timeout_secs = 12;
+    // RESOLVE_PIN, RESOLVE_PINS_BY_CLIENT.
+    ClientNotificationPinResolution resolution = 13;
+    // SET_ACTION_AVAILABLE.
+    bool available = 14;
+    // CREATE_ONCE: hide the item until the account is activated.
+    bool wait_for_account_activation = 15;
+}
+
+message DebugApplyResponse {
+    // The operation changed at least one row.
+    bool applied = 1;
+    // Why nothing was applied when the request itself is invalid: debug disabled, no template
+    // for the type and variant, a missing variable, an unknown account.
+    optional string error = 2;
+    // The item the operation created or changed, when it is a single one.
+    optional string notification_id = 3;
+}
