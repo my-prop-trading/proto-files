@@ -415,6 +415,22 @@ message AccessIp {
   int64 first_seen_at = 7;
   int64 last_seen_at = 8;
   uint32 other_clients = 9;        // distinct other clients that logged in from it
+  repeated AccessAccountRef also_used_on = 10;  // other accounts, of any client, that logged in from it
+}
+
+// One login attempt as the platform reported it.
+message AccessLogin {
+  int64 occurred_at = 1;
+  bool success = 2;
+  string failure_reason = 3;       // empty on success
+  string ip = 4;
+  string device_id = 5;
+  AccessDeviceType device_type = 6;
+  string app_build = 7;
+  string country = 8;
+  string city = 9;
+  string provider = 10;
+  repeated string network_flags = 11;
 }
 
 message AccessProvider {
@@ -457,6 +473,67 @@ message GetAccountAccessResponse {
   repeated AccessProvider providers = 9;
   repeated AccessDay days = 10;
   repeated AccessSignal signals = 11;
+  repeated AccessLogin login_history = 12;  // newest first
+}
+
+// Ordered by strength: a stronger match has a greater value.
+enum AccessMatchType {
+  ACCESS_MATCH_TYPE_UNKNOWN = 0;
+  ACCESS_MATCH_TYPE_IP = 1;
+  ACCESS_MATCH_TYPE_DEVICE = 2;
+  ACCESS_MATCH_TYPE_DEVICE_AND_IP = 3;
+}
+
+message AccessDeviceRef {
+  string device_id = 1;
+  AccessDeviceType device_type = 2;
+}
+
+message AccessIpRef {
+  string ip = 1;
+  string provider = 2;
+  repeated string network_flags = 3;
+}
+
+message AccessMatchedLogin {
+  AccessAccountRef account = 1;
+  AccessMatchType match_type = 2;
+  repeated string countries = 3;
+}
+
+// A trading login and the logins of other clients that share its devices or IPs.
+message AccessOverlap {
+  int32 platform_id = 1;
+  AccessAccountRef account = 2;
+  repeated string countries = 3;
+  repeated AccessDeviceRef devices = 4;
+  repeated AccessIpRef ips = 5;
+  repeated string matched_device_ids = 6;
+  repeated string matched_ips = 7;
+  repeated AccessMatchedLogin matched_logins = 8;
+  AccessMatchType match_type = 9;  // the strongest of matched_logins
+  uint32 matched_clients = 10;     // distinct other clients among matched_logins
+}
+
+// Without device_id and ip: the logins that share a device or IP with another client's login in the window.
+// With either: every login that used it in the window.
+message GetAccessOverlapsRequest {
+  int64 from = 1;
+  int64 to = 2;
+  string device_id = 3;
+  string ip = 4;
+  int32 platform_id = 5;               // 0 = any
+  AccessMatchType min_match_type = 6;  // UNKNOWN = any
+  bool flagged_networks_only = 7;      // logins from an IP the platform marked as VPN or data centre
+  string country = 8;                  // empty = any
+  uint32 offset = 9;
+  uint32 limit = 10;                   // 0 = the service default
+}
+
+message GetAccessOverlapsResponse {
+  repeated AccessOverlap overlaps = 1;  // strongest match first, then most matched clients
+  uint32 total = 2;                     // matching the filters, before offset and limit
+  int64 data_as_of = 3;                 // the latest stored login; 0 when none
 }
 
 service RiskGroupsGrpcService {
@@ -486,6 +563,7 @@ service RiskGroupsGrpcService {
   rpc GetAbuseEvents(GetAbuseEventsRequest) returns (GetAbuseEventsResponse);
 
   rpc GetAccountAccess(GetAccountAccessRequest) returns (GetAccountAccessResponse);
+  rpc GetAccessOverlaps(GetAccessOverlapsRequest) returns (GetAccessOverlapsResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
