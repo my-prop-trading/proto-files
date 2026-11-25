@@ -81,6 +81,9 @@ message ClientNotificationRule {
 message ClientNotificationSettings {
   ClientNotificationRule ExposureLossSoftBreach = 1;
   ClientNotificationRule MarginRuleSoftBreach = 2;
+  // PROP25-2924 Risk Per Trade Idea warning on demo; unset = not configured, the warning is not
+  // filtered.
+  ClientNotificationRule RptViolation = 3;
 }
 
 message GetClientNotificationSettingsRequest {}
