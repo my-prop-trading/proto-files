@@ -127,6 +127,18 @@ message GetClosedTradesByCursorResponse {
   repeated AccountTradeModel Items = 1;
 }
 
+// Closed Buy/Sell trades of every account, oldest close first. A page never splits trades closed
+// at the same moment, so it may hold more than Limit rows; an empty page is the end.
+message GetClosedTradesByCloseTimeRequest {
+  int64 AfterCloseTime = 1;        // exclusive, unix micros; next page: the last row's CloseTime
+  optional int64 ToCloseTime = 2;  // inclusive; absent = no upper bound
+  uint64 Limit = 3;
+}
+
+message GetClosedTradesByCloseTimeResponse {
+  repeated AccountTradeModel Items = 1;
+}
+
 service AccountHistoryGrpcService {
     rpc GetByTraderAccountId(GetByTraderAccountIdRequest) returns (GetByTraderAccountIdResponse);
     rpc GetByTraderAccountIdWithTotalCount(GetByTraderAccountIdWithTotalCountRequest) returns (GetByTraderAccountIdWithTotalCountResponse);
@@ -135,6 +147,7 @@ service AccountHistoryGrpcService {
     rpc CloseAll(CloseAllTradesRequest) returns (CloseAllTradesResponse);
     rpc GetTradesPage(GetTradesPageRequest) returns (GetTradesPageResponse);
     rpc GetClosedTradesByCursor(GetClosedTradesByCursorRequest) returns (GetClosedTradesByCursorResponse);
+    rpc GetClosedTradesByCloseTime(GetClosedTradesByCloseTimeRequest) returns (GetClosedTradesByCloseTimeResponse);
 
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

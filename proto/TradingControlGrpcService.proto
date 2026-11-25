@@ -894,6 +894,257 @@ message UndoRptDeductionGrpcResponse {
   repeated RptViolationGrpcModel items = 1;  // violations the amount went back to
 }
 
+// ===== Risk Detection (alerts on prohibited trading strategies; accounts are never changed) =====
+// Times are unix microseconds. Trade times and observation windows are in the account's platform
+// time, as in its trade history; every other time is UTC.
+
+enum RiskDetectorGrpc {
+  RISK_DETECTOR_QUICK_STRIKE = 0;
+  RISK_DETECTOR_TICK_SCALPING = 1;
+  RISK_DETECTOR_GRID = 2;
+  RISK_DETECTOR_GAMBLING = 3;
+  RISK_DETECTOR_HFT = 4;
+  RISK_DETECTOR_HYPERACTIVITY = 5;
+  RISK_DETECTOR_LATENCY = 6;
+  RISK_DETECTOR_ARBITRAGE = 7;
+}
+
+// Listed from the most urgent.
+enum RiskAlertStatusGrpc {
+  RISK_ALERT_NEW = 0;
+  RISK_ALERT_UNDER_REVIEW = 1;
+  RISK_ALERT_CONFIRMED = 2;
+  RISK_ALERT_NOT_CONFIRMED = 3;
+  RISK_ALERT_CLOSED = 4;
+}
+
+// How a value is shown. DURATION is in seconds, TIME in unix microseconds.
+enum RiskValueKindGrpc {
+  RISK_VALUE_TEXT = 0;
+  RISK_VALUE_NUMBER = 1;
+  RISK_VALUE_MONEY = 2;
+  RISK_VALUE_PERCENT = 3;
+  RISK_VALUE_DURATION = 4;
+  RISK_VALUE_TIME = 5;
+}
+
+// Quick Strike: profit made mainly from positions held a very short time.
+message RiskQuickStrikeParamsGrpcModel {
+  int32 holding_duration_secs = 1;         // short-duration trade: held less than this
+  int32 high_priority_duration_secs = 2;   // shown separately in the alert, not a condition
+  int32 repeated_short_trades = 3;
+  double profit_contribution_percent = 4;  // 0..100, of all positive profit in the window
+  int32 observation_period_hours = 5;
+}
+
+// Settings of one detector. Every save is a new version; the one in force at a moment is the
+// latest with effective_from at or before it.
+message RiskDetectorSettingsGrpcModel {
+  RiskDetectorGrpc detector = 1;
+  int64 effective_from = 2;           // 0 = never saved
+  string changed_by = 3;
+  bool enabled_demo = 4;
+  bool enabled_live = 5;
+  repeated int32 platform_ids = 6;
+  int32 min_alert_interval_secs = 7;  // hits within it are appended to the last alert; 0 = none
+  oneof params {                      // the detector's own
+    RiskQuickStrikeParamsGrpcModel quick_strike = 8;
+  }
+}
+
+// One condition of a detector on the trades an alert counts. Met at or above the threshold.
+message RiskConditionGrpcModel {
+  string name = 1;          // the setting name
+  double value = 2;
+  double threshold = 3;
+  RiskValueKindGrpc kind = 4;
+  bool met = 5;
+  bool not_applicable = 6;  // the platform gives no data for it
+}
+
+message RiskEvidenceColumnGrpcModel {
+  string title = 1;
+  RiskValueKindGrpc kind = 2;
+}
+
+// Cells follow the columns; a number is a plain decimal.
+message RiskEvidenceRowGrpcModel {
+  repeated string cells = 1;
+  optional string trade_id = 2;          // account history row of the line
+  optional string earlier_alert_id = 3;  // already counted by that alert, shown as context
+}
+
+message RiskEvidenceTableGrpcModel {
+  string title = 1;
+  repeated RiskEvidenceColumnGrpcModel columns = 2;
+  repeated RiskEvidenceRowGrpcModel rows = 3;
+}
+
+// One detection an alert holds: the first, or one appended within the minimum interval.
+message RiskAlertHitGrpcModel {
+  int64 at = 1;
+  int64 window_from = 2;
+  int64 window_to = 3;
+  int64 settings_effective_from = 4;  // settings version the hit was judged by
+  repeated RiskConditionGrpcModel conditions = 5;
+  repeated RiskEvidenceTableGrpcModel tables = 6;
+}
+
+message RiskAlertGrpcModel {
+  string id = 1;
+  RiskDetectorGrpc detector = 2;
+  string trader_account_id = 3;
+  string client_id = 4;
+  int32 platform_id = 5;
+  string platform_account_id = 6;
+  int32 account_type = 7;                // 0 = demo, 1 = live
+  string trading_package_id = 8;
+  int32 phase = 9;
+  int64 created_at = 10;
+  int64 last_hit_at = 11;
+  int32 hit_count = 12;
+  RiskAlertStatusGrpc status = 13;
+  optional bool confirmed = 14;          // review outcome; kept when the alert is closed
+  repeated RiskConditionGrpcModel conditions = 15;  // of the first hit
+}
+
+// A status change, a comment, or both, made at once.
+message RiskAlertEventGrpcModel {
+  int64 at = 1;
+  string by = 2;
+  optional RiskAlertStatusGrpc status = 3;  // the new status
+  optional string comment = 4;
+}
+
+// Alerts of one account by one detector.
+message RiskAlertGroupGrpcModel {
+  string trader_account_id = 1;
+  RiskDetectorGrpc detector = 2;
+  int32 alert_count = 3;
+  int64 last_created_at = 4;
+  RiskAlertStatusGrpc most_urgent_status = 5;
+  repeated RiskAlertGrpcModel items = 6;  // newest first
+}
+
+message GetRiskDetectionSettingsGrpcRequest {}
+message GetRiskDetectionSettingsGrpcResponse {
+  // In force now, one per detector the service runs. A detector never saved is off, with default
+  // parameters.
+  repeated RiskDetectorSettingsGrpcModel items = 1;
+}
+
+message GetRiskDetectionSettingsHistoryGrpcRequest {
+  RiskDetectorGrpc detector = 1;
+  int32 take = 2;
+  int32 skip = 3;
+}
+message GetRiskDetectionSettingsHistoryGrpcResponse {
+  repeated RiskDetectorSettingsGrpcModel items = 1;  // newest first
+  int64 total = 2;
+}
+
+enum SaveRiskDetectionSettingsResultGrpc {
+  SAVE_RISK_DETECTION_SETTINGS_OK = 0;
+  SAVE_RISK_DETECTION_SETTINGS_INVALID = 1;
+}
+
+// Saves a new version of the detector's settings; the service sets effective_from.
+message SaveRiskDetectionSettingsGrpcRequest {
+  RiskDetectorSettingsGrpcModel item = 1;
+}
+message SaveRiskDetectionSettingsGrpcResponse {
+  SaveRiskDetectionSettingsResultGrpc result = 1;
+  optional RiskDetectorSettingsGrpcModel item = 2;
+  optional string error = 3;  // what is invalid
+}
+
+message GetRiskAlertsGrpcRequest {
+  optional RiskDetectorGrpc detector = 1;
+  optional int32 account_type = 2;
+  optional int32 platform_id = 3;
+  optional RiskAlertStatusGrpc status = 4;
+  optional int64 created_from = 5;
+  optional int64 created_to = 6;
+  optional string client_id = 7;
+  optional string trader_account_id = 8;
+  bool grouped = 9;  // pages groups by account and detector instead of alerts
+  int32 take = 10;
+  int32 skip = 11;
+}
+message GetRiskAlertsGrpcResponse {
+  repeated RiskAlertGrpcModel items = 1;        // not grouped: newest first
+  repeated RiskAlertGroupGrpcModel groups = 2;  // grouped: latest alert first
+  int64 total = 3;                              // alerts or groups
+}
+
+message GetRiskAlertGrpcRequest {
+  string id = 1;
+}
+message GetRiskAlertGrpcResponse {
+  optional RiskAlertGrpcModel item = 1;           // unset = not found
+  repeated RiskAlertHitGrpcModel hits = 2;        // oldest first
+  repeated RiskAlertEventGrpcModel events = 3;    // oldest first
+  repeated RiskAlertGrpcModel client_alerts = 4;  // other alerts of the client, newest first
+}
+
+enum UpdateRiskAlertResultGrpc {
+  UPDATE_RISK_ALERT_OK = 0;
+  UPDATE_RISK_ALERT_NOT_FOUND = 1;
+  UPDATE_RISK_ALERT_NOTHING_TO_UPDATE = 2;  // neither a new status nor a comment
+}
+
+// Changes the status, adds a comment, or both, as one event.
+message UpdateRiskAlertGrpcRequest {
+  string id = 1;
+  optional RiskAlertStatusGrpc status = 2;
+  optional string comment = 3;
+  string by = 4;
+}
+message UpdateRiskAlertGrpcResponse {
+  UpdateRiskAlertResultGrpc result = 1;
+  optional RiskAlertGrpcModel item = 2;
+}
+
+message GetRiskAlertCountsGrpcRequest {
+  optional string client_id = 1;
+  optional string trader_account_id = 2;
+}
+message GetRiskAlertCountsGrpcResponse {
+  int32 open = 1;       // new or under review
+  int32 confirmed = 2;  // review outcome confirmed, whatever the status now
+}
+
+enum RunRiskReplayResultGrpc {
+  RUN_RISK_REPLAY_OK = 0;
+  RUN_RISK_REPLAY_INVALID = 1;
+  RUN_RISK_REPLAY_PERIOD_TOO_LONG = 2;
+  RUN_RISK_REPLAY_NOT_SUPPORTED = 3;  // the detector's data is not stored
+}
+
+// Runs a detector with the given settings over trades closed in a past period; creates nothing.
+// enabled_demo, enabled_live and platform_ids of the settings pick the accounts.
+message RunRiskReplayGrpcRequest {
+  RiskDetectorSettingsGrpcModel settings = 1;
+  int64 from = 2;
+  int64 to = 3;
+}
+
+message RiskReplayAccountGrpcModel {
+  string trader_account_id = 1;
+  string client_id = 2;
+  int32 platform_id = 3;
+  int32 account_type = 4;  // 0 = demo, 1 = live
+  int32 alert_count = 5;
+}
+
+message RunRiskReplayGrpcResponse {
+  RunRiskReplayResultGrpc result = 1;
+  optional string error = 2;                         // what is invalid
+  int32 account_count = 3;
+  int32 alert_count = 4;
+  repeated RiskReplayAccountGrpcModel accounts = 5;  // most alerts first
+}
+
 service TradingControlGrpcService {
   rpc GetTradingMetrics(GetTradingMetricsGrpcRequest) returns (GetTradingMetricsGrpcResponse);
   rpc GetAccountPeaks(GetAccountPeaksGrpcRequest) returns (GetAccountPeaksGrpcResponse);
@@ -930,6 +1181,15 @@ service TradingControlGrpcService {
   rpc ApplyRptDeduction(ApplyRptDeductionGrpcRequest) returns (ApplyRptDeductionGrpcResponse);
   rpc ReverseRptDeduction(ReverseRptDeductionGrpcRequest) returns (ReverseRptDeductionGrpcResponse);
   rpc UndoRptDeduction(UndoRptDeductionGrpcRequest) returns (UndoRptDeductionGrpcResponse);
+
+  rpc GetRiskDetectionSettings(GetRiskDetectionSettingsGrpcRequest) returns (GetRiskDetectionSettingsGrpcResponse);
+  rpc GetRiskDetectionSettingsHistory(GetRiskDetectionSettingsHistoryGrpcRequest) returns (GetRiskDetectionSettingsHistoryGrpcResponse);
+  rpc SaveRiskDetectionSettings(SaveRiskDetectionSettingsGrpcRequest) returns (SaveRiskDetectionSettingsGrpcResponse);
+  rpc GetRiskAlerts(GetRiskAlertsGrpcRequest) returns (GetRiskAlertsGrpcResponse);
+  rpc GetRiskAlert(GetRiskAlertGrpcRequest) returns (GetRiskAlertGrpcResponse);
+  rpc UpdateRiskAlert(UpdateRiskAlertGrpcRequest) returns (UpdateRiskAlertGrpcResponse);
+  rpc GetRiskAlertCounts(GetRiskAlertCountsGrpcRequest) returns (GetRiskAlertCountsGrpcResponse);
+  rpc RunRiskReplay(RunRiskReplayGrpcRequest) returns (RunRiskReplayGrpcResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
