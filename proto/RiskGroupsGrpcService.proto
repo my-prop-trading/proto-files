@@ -403,6 +403,7 @@ message AccessDevice {
   uint32 failed_logins = 7;
   uint32 ips = 8;
   repeated AccessAccountRef also_used_on = 9;   // other accounts, of any client, that logged in from it
+  uint32 orders = 10;              // orders sent from it
 }
 
 message AccessIp {
@@ -416,6 +417,8 @@ message AccessIp {
   int64 last_seen_at = 8;
   uint32 other_clients = 9;        // distinct other clients that logged in from it
   repeated AccessAccountRef also_used_on = 10;  // other accounts, of any client, that logged in from it
+  AccessNetworkType network_type = 11;
+  uint32 orders = 12;              // orders sent from it
 }
 
 // One login attempt as the platform reported it.
@@ -474,6 +477,7 @@ message GetAccountAccessResponse {
   repeated AccessDay days = 10;
   repeated AccessSignal signals = 11;
   repeated AccessLogin login_history = 12;  // newest first
+  repeated AccessOrder orders = 13;         // newest first
 }
 
 // Ordered by strength: a stronger match has a greater value.
@@ -482,6 +486,51 @@ enum AccessMatchType {
   ACCESS_MATCH_TYPE_IP = 1;
   ACCESS_MATCH_TYPE_DEVICE = 2;
   ACCESS_MATCH_TYPE_DEVICE_AND_IP = 3;
+}
+
+// Ordered by strength: a stronger level has a greater value.
+enum AccessSignalLevel {
+  ACCESS_SIGNAL_LEVEL_UNKNOWN = 0;
+  ACCESS_SIGNAL_LEVEL_WEAK = 1;
+  ACCESS_SIGNAL_LEVEL_MEDIUM = 2;
+  ACCESS_SIGNAL_LEVEL_STRONG = 3;
+}
+
+// Kind of network behind an IP, by the provider the platform names for it.
+enum AccessNetworkType {
+  ACCESS_NETWORK_TYPE_FIXED = 0;       // home or office broadband, hosting
+  ACCESS_NETWORK_TYPE_MOBILE = 1;      // mobile carrier: one IP serves many unrelated people
+  ACCESS_NETWORK_TYPE_PUBLIC_VPN = 2;
+}
+
+enum AccessOrderKind {
+  ACCESS_ORDER_KIND_UNKNOWN = 0;
+  ACCESS_ORDER_KIND_MARKET = 1;
+  ACCESS_ORDER_KIND_CLOSE = 2;
+  ACCESS_ORDER_KIND_PENDING = 3;
+  ACCESS_ORDER_KIND_MODIFY = 4;
+  ACCESS_ORDER_KIND_CANCEL = 5;
+}
+
+enum AccessOrderSide {
+  ACCESS_ORDER_SIDE_UNKNOWN = 0;
+  ACCESS_ORDER_SIDE_BUY = 1;
+  ACCESS_ORDER_SIDE_SELL = 2;
+}
+
+// A trade request a client sent from a terminal; the platform's own executions are not included.
+message AccessOrder {
+  int64 occurred_at = 1;
+  AccessAccountRef account = 2;
+  AccessOrderKind kind = 3;
+  AccessOrderSide side = 4;
+  string symbol = 5;
+  double volume = 6;               // lots
+  string ticket = 7;               // the position or order it refers to; empty for a new order
+  string ip = 8;
+  string device_id = 9;            // the terminal logged in from the IP at the time; empty when unknown
+  AccessDeviceType device_type = 10;
+  string source_text = 11;
 }
 
 message AccessDeviceRef {
@@ -493,12 +542,16 @@ message AccessIpRef {
   string ip = 1;
   string provider = 2;
   repeated string network_flags = 3;
+  AccessNetworkType network_type = 4;
+  uint32 orders = 5;               // orders sent from it
 }
 
 message AccessMatchedLogin {
   AccessAccountRef account = 1;
   AccessMatchType match_type = 2;
   repeated string countries = 3;
+  AccessSignalLevel level = 4;
+  bool both_traded = 5;            // both logins sent orders from a device or IP they share
 }
 
 // A trading login and the logins of other clients that share its devices or IPs.
@@ -513,6 +566,7 @@ message AccessOverlap {
   repeated AccessMatchedLogin matched_logins = 8;
   AccessMatchType match_type = 9;  // the strongest of matched_logins
   uint32 matched_clients = 10;     // distinct other clients among matched_logins
+  AccessSignalLevel level = 11;    // the highest of matched_logins
 }
 
 // Without device_id and ip: the logins that share a device or IP with another client's login in the window.
@@ -528,12 +582,61 @@ message GetAccessOverlapsRequest {
   string country = 8;                  // empty = any
   uint32 offset = 9;
   uint32 limit = 10;                   // 0 = the service default
+  repeated AccessSignalLevel levels = 11;  // empty = any
 }
 
 message GetAccessOverlapsResponse {
-  repeated AccessOverlap overlaps = 1;  // strongest match first, then most matched clients
+  repeated AccessOverlap overlaps = 1;  // highest level first, then most matched clients
   uint32 total = 2;                     // matching the filters, before offset and limit
   int64 data_as_of = 3;                 // the latest stored login; 0 when none
+}
+
+// A device or IP one login of the client shares with one login of another client.
+message AccessSharedKey {
+  AccessAccountRef account = 1;          // the client's login
+  AccessAccountRef other_account = 2;
+  int32 platform_id = 3;
+  int32 other_platform_id = 4;
+  AccessDeviceRef device = 5;            // unset for a shared IP
+  AccessIpRef ip = 6;                    // unset for a shared device
+  bool both_traded = 7;                  // both logins sent orders from it
+  int64 first_shared_at = 8;             // the earliest time both logins had used it
+  int64 last_shared_at = 9;
+}
+
+// Another client who used a device or IP of the client.
+message AccessClientOverlap {
+  string other_client_id = 1;
+  AccessSignalLevel level = 2;
+  bool both_traded = 3;
+  int64 first_shared_at = 4;
+  int64 last_shared_at = 5;
+  repeated AccessSharedKey shared = 6;   // device matches first
+}
+
+// The window and the scope apply to the client's logins; trader_account_id narrows them to one account.
+message GetClientAccessOverlapsRequest {
+  string client_id = 1;
+  string trader_account_id = 2;          // empty = every account of the client
+  int64 from = 3;
+  int64 to = 4;
+}
+
+message GetClientAccessOverlapsResponse {
+  repeated AccessClientOverlap overlaps = 1;  // highest level first, then latest shared
+}
+
+// Orders of the two clients sent from a device or IP they share, in the window.
+message GetSharedOrdersRequest {
+  string client_id = 1;
+  string other_client_id = 2;
+  string trader_account_id = 3;          // empty = every account of the client
+  int64 from = 4;
+  int64 to = 5;
+}
+
+message GetSharedOrdersResponse {
+  repeated AccessOrder orders = 1;       // oldest first
 }
 
 service RiskGroupsGrpcService {
@@ -564,6 +667,8 @@ service RiskGroupsGrpcService {
 
   rpc GetAccountAccess(GetAccountAccessRequest) returns (GetAccountAccessResponse);
   rpc GetAccessOverlaps(GetAccessOverlapsRequest) returns (GetAccessOverlapsResponse);
+  rpc GetClientAccessOverlaps(GetClientAccessOverlapsRequest) returns (GetClientAccessOverlapsResponse);
+  rpc GetSharedOrders(GetSharedOrdersRequest) returns (GetSharedOrdersResponse);
 
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
