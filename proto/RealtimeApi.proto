@@ -1,0 +1,81 @@
+syntax = "proto3";
+package realtime_api;
+
+// Browser <-> realtime-api WebSocket protocol (PROP25-2846).
+//
+// realtime-api pushes events to the open browser connections of a client. Sources publish
+// client-realtime-event to the service bus (prop-engine-sb-contracts, ClientRealtimeEventSbModel):
+// client_id, topic (a RealtimeTopic value) and data (an encoded topic payload message from this
+// file). realtime-api routes by client_id and passes topic and data to the browser as is, without
+// decoding them, so adding a topic does not require a realtime-api release.
+//
+// Transport: binary WebSocket frames only, one message per frame: ClientMessage from the browser,
+// ServerMessage from realtime-api. A text frame or a frame that does not decode closes the
+// connection with code 4003.
+//
+// Connecting: POST /api/realtime/v1/ticket (Bearer session token) returns a one-time ticket, then
+// the browser opens /api/realtime/v1/ws?ticket=<ticket>. The ticket is checked before the upgrade,
+// so there is no authentication message in this protocol.
+//
+// Delivery is best effort. After every (re)connect the browser loads the current state over REST.
+//
+// All timestamps are unix microseconds (UTC).
+
+// ---------- Browser -> realtime-api ----------
+
+message ClientMessage {
+    oneof message {
+        Ping ping = 1;
+    }
+}
+
+// Sent every 25 seconds. realtime-api answers with Pong and closes a connection that sends no
+// frames for 60 seconds.
+message Ping {}
+
+// ---------- realtime-api -> browser ----------
+
+message ServerMessage {
+    oneof message {
+        Pong pong = 1;
+        Event event = 2;
+    }
+}
+
+message Pong {
+    int64 server_time = 1;
+}
+
+message Event {
+    // A browser on an older version of this file may receive a topic it does not know: it skips
+    // such an event.
+    RealtimeTopic topic = 1;
+    int64 event_time = 2;
+    // Topic payload, the message listed for the topic in RealtimeTopic. Empty = no payload.
+    bytes data = 3;
+}
+
+// ---------- Topic registry ----------
+
+// Each topic has a payload message in this file. A new topic is added together with its payload.
+enum RealtimeTopic {
+    REALTIME_TOPIC_UNSPECIFIED = 0;
+    // Bell notifications. data = NotificationsEvent. Source: client notifications service.
+    REALTIME_TOPIC_NOTIFICATIONS = 1;
+}
+
+// ---------- Topic payloads ----------
+
+// A signal, not the data: the browser updates the bell badge from unread_count and has_open_pins,
+// plays the bell animation when is_new is set, and reloads the first page of the notification
+// list over REST when the panel is open.
+message NotificationsEvent {
+    // Unread notifications after the change.
+    int32 unread_count = 1;
+    // Whether the client has unresolved pinned notifications.
+    bool has_open_pins = 2;
+    // A notification appeared on top: created, shown after its account was activated, bumped
+    // (soft breach rollup) or pinned again. False when only the badge changed: read on any
+    // device, pin resolved, button shown or hidden.
+    bool is_new = 3;
+}

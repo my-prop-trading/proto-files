@@ -71,6 +71,76 @@ message DeleteWebhookEndpointGrpcRequest {
     string id = 1;
 }
 
+// Card order status as SolidGate reports it.
+enum CardOrderStatusGrpc {
+    CARD_ORDER_UNKNOWN = 0;           // a status newer than this contract; not final
+    CARD_ORDER_PROCESSING = 1;
+    CARD_ORDER_THREE_DS_VERIFY = 2;   // waits for the customer at verify_url
+    CARD_ORDER_AUTH_OK = 3;
+    CARD_ORDER_AUTH_FAILED = 4;
+    CARD_ORDER_SETTLE_OK = 5;
+    CARD_ORDER_PARTIAL_SETTLED = 6;
+    CARD_ORDER_VOID_OK = 7;
+    CARD_ORDER_REFUNDED = 8;
+}
+
+message CardOrderGrpcModel {
+    string order_id = 1;
+    CardOrderStatusGrpc status = 2;
+    optional string verify_url = 3;
+    optional string decline_reason = 4;  // of the last transaction
+    optional string payment_method = 5;  // card, apple-pay, google-pay, ...
+}
+
+// Pays a one-time product with the card of an earlier payment of the subscription (1-click).
+message ChargeOneClickGrpcRequest {
+    string subscription_id = 1;
+    string order_id = 2;              // unique, chosen by the caller
+    int64 amount = 3;                 // smallest currency unit
+    string currency = 4;
+    string product_id = 5;            // SolidGate one-time product
+    string description = 6;
+    string customer_email = 7;
+    string ip = 8;
+    optional string success_url = 9;  // where the customer returns after 3DS
+    optional string fail_url = 10;
+}
+
+enum ChargeOneClickStatusGrpc {
+    CHARGE_ONE_CLICK_SENT = 0;        // the order exists; see order
+    CHARGE_ONE_CLICK_NO_CARD = 1;     // nothing to charge: a wallet or another method paid, or nothing was paid
+}
+
+message ChargeOneClickGrpcResponse {
+    ChargeOneClickStatusGrpc status = 1;
+    optional CardOrderGrpcModel order = 2;  // with SENT
+}
+
+message GetCardOrderGrpcRequest {
+    string order_id = 1;
+}
+
+// The data the SolidGate payment form is initialized with, for a one-time payment.
+message InitPaymentFormGrpcRequest {
+    string order_id = 1;                       // unique, chosen by the caller
+    string description = 2;
+    optional string product_id = 3;            // SolidGate one-time product; its price applies
+    int64 amount = 4;                          // smallest currency unit; used without a product
+    string currency = 5;
+    string customer_email = 6;
+    string customer_account_id = 7;
+    string ip = 8;
+    optional string success_url = 9;
+    optional string fail_url = 10;
+    optional string language = 11;             // of the form and the receipt, 2-3 letters
+}
+
+message PaymentFormGrpcModel {
+    string merchant = 1;
+    string payment_intent = 2;
+    string signature = 3;
+}
+
 service SolidGateBridgeGrpcService {
     rpc CancelSubscription(CancelSubscriptionGrpcRequest) returns (google.protobuf.Empty);
     rpc RestoreSubscription(RestoreSubscriptionGrpcRequest) returns (google.protobuf.Empty);
@@ -78,5 +148,8 @@ service SolidGateBridgeGrpcService {
     rpc ListWebhookEndpoints(ListWebhookEndpointsGrpcRequest) returns (ListWebhookEndpointsGrpcResponse);
     rpc UpdateWebhookEndpoint(UpdateWebhookEndpointGrpcRequest) returns (UpdateWebhookEndpointGrpcResponse);
     rpc DeleteWebhookEndpoint(DeleteWebhookEndpointGrpcRequest) returns (google.protobuf.Empty);
+    rpc ChargeOneClick(ChargeOneClickGrpcRequest) returns (ChargeOneClickGrpcResponse);
+    rpc GetCardOrder(GetCardOrderGrpcRequest) returns (CardOrderGrpcModel);
+    rpc InitPaymentForm(InitPaymentFormGrpcRequest) returns (PaymentFormGrpcModel);
     rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

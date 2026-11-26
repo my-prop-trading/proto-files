@@ -1,0 +1,38 @@
+syntax = "proto3";
+package nzotek_bridge;
+import "google/protobuf/empty.proto";
+
+// Hosted-page deposit for one order, charged in the Nzotek market currency.
+message GeneratePaymentPageGrpcRequest {
+    // Nzotek rejects a repeated order id.
+    string order_id = 1;
+    string client_id = 2;
+    // Whole units of `currency`.
+    int64 amount = 3;
+    // ISO 4217 code of `amount`.
+    string currency = 4;
+    bool is_first_purchase = 5;
+    optional string email = 6;
+    optional string first_name = 7;
+    optional string last_name = 8;
+    optional string phone = 9;
+}
+
+message GeneratePaymentPageGrpcResponse {
+    oneof result {
+        PaymentPageGrpcModel page = 1;
+        // Nzotek cannot take the order; the caller falls back to another provider.
+        string unavailable_reason = 2;
+    }
+}
+
+message PaymentPageGrpcModel {
+    string form_url = 1;
+    // Nzotek order id.
+    string provider_order_id = 2;
+}
+
+service NzotekBridgeGrpcService {
+    rpc GeneratePaymentPage(GeneratePaymentPageGrpcRequest) returns (GeneratePaymentPageGrpcResponse);
+    rpc Ping(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

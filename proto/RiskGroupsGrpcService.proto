@@ -37,6 +37,12 @@ message DailyPositionsLimitOverride {
   int32 max_positions_per_day = 2;  // > 0 when enabled
 }
 
+// Risk Per Trade Idea on the client's live accounts; demo keeps the limit of the RPT settings.
+message RptOverride {
+  bool enabled = 1;                 // on/off of the rule itself
+  double live_limit_percent = 2;    // the lower of this and the client's restriction applies
+}
+
 // ===================== Entities =====================
 
 message RiskGroup {
@@ -50,6 +56,7 @@ message RiskGroup {
   int64 updated_at = 8;
   int32 assigned_count = 9;               // derived (for "Users assigned" column); ignored on write
   DailyPositionsLimitOverride daily_positions_limit = 10; // absent = section not configured
+  RptOverride rpt = 11;                   // absent = section not configured
 }
 
 message RiskGroupAssignment {
@@ -68,6 +75,7 @@ message RiskOverride {
   PayoutOverride payout = 3;
   string risk_group_id = 4;               // empty if the client is in no group
   DailyPositionsLimitOverride daily_positions_limit = 5;
+  RptOverride rpt = 6;
 }
 
 // ===================== Errors =====================
